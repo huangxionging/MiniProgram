@@ -1,0 +1,4 @@
+<!--pages/ViewController/ViewController1.wxml-->
+ <text>第一个控制器</text>
+ <view>Hello {{name}}</view>
+ <button bindtap='changeName'>Click Me</button>
