@@ -1,5 +1,6 @@
 //app.js
 App({
+  // 生命周期
   onLaunch: function (options) {
     // options 是启动参数
     // path 代开小程序的路径
