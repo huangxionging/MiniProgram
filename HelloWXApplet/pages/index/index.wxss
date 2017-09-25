@@ -19,3 +19,16 @@
 .usermotto{
   margin-top: 200rpx;
 }
+
+.user-input{
+  display: flex;
+  flex-direction: line;
+}
+.user{
+  color: #aaa;
+}
+
+.button{
+  margin-top: 20rpx;
+  color: #ff0000;
+}

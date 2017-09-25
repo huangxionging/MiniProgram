@@ -10,9 +10,11 @@
   <view class='usermotto'>
     <text class='user-motto'>{{motto}}</text>
   </view>
-  <view>
-    <label class='user'>输入框</label>
+  <view class='user'>
+    <view class='user-input'>
+    <label class='user'>手机号:</label>
     <input class='input'></input>
+    </view>
     <button class='button' bindtap='submit'>提交</button>
   </view>
 </view>
