@@ -4,5 +4,5 @@
     "navigationBarTitleText": "API",
     "backgroundColor": "#eeeeee",
     "backgroundTextStyle": "light",
-    "enablePullDownRefresh": false
+    "enablePullDownRefresh": true
 }

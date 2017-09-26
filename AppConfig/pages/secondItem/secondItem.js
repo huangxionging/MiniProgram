@@ -47,7 +47,16 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    wx.request({
+      url: "https://www.baidu.com",
+      success: res => {
+        console.log(res.data)
+      },
+      complete: res => {
+        wx.hideNavigationBarLoading()
+        wx.stopPullDownRefresh()
+      }
+    })
   },
 
   /**
