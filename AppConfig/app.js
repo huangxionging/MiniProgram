@@ -33,6 +33,9 @@ App({
       }
     })
   },
+  onError: function (e) {
+    console.log(e)
+  },
   globalData: {
     userInfo: null
   }
