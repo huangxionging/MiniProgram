@@ -55,6 +55,11 @@ Page({
       complete: res => {
         wx.hideNavigationBarLoading()
         wx.stopPullDownRefresh()
+        wx.scanCode({
+          success: res => {
+            console.log(res)
+          }
+        })
       }
     })
   },
@@ -70,6 +75,5 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
   }
 })
