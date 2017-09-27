@@ -1,1 +1,34 @@
 /* pages/secondItem/secondItem.wxss */
+
+.flex-wrp{
+  margin-top: 60rpx;
+  display: flex;
+  align-items: center;
+}
+
+.flex-item{
+  width: 200rpx;
+  height: 200rpx;
+  font-size: 26rpx;
+  content: center;
+  align-items: center;
+  text-align: center;
+}
+.flex-item-V{
+  margin: 0 auto;
+  width: 300rpx;
+  height: 200rpx;
+  
+}
+
+.bc_green{
+  background-color: green;
+}
+
+.bc_red{
+  background-color: red;
+}
+
+.bc_blue{
+  background-color: blue;
+}
