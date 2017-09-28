@@ -1,0 +1,10 @@
+<!--pages/scrollView/scrollView.wxml-->
+<view class='section'>
+  <view class='scetion__title'>vertical scroll</view>
+  <scroll-view class='scroll' scroll-x='true' scroll-y='true' style='height: 200rpx;' bindscrolltoupper='upper'
+  bindscrolltolower='lower' bindscroll='scroll'  scroll-top='{{scrollTop}}'>
+    <view id='green' class='scroll-view-item'></view>
+    <view id='red' class='scroll-view-item'></view>
+    <view id='blue' class='scroll-view-item'></view> 
+  </scroll-view>
+</view>

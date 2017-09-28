@@ -2,29 +2,32 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/secondItem/secondItem"
+    "pages/secondItem/secondItem",
+    "pages/scrollView/scrollView"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小程序",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#ff0000",
-    "backgroundTextStyle": "dark",
     "enablePullDownRefresh": true
   },
   "tabBar": {
-    "list": [{
-      "pagePath": "pages/index/index",
-      "text": "组件",
-      "iconPath": "resource/index/icon_component.png",
-      "selectedIconPath": "resource/index/icon_component_HL.png"
-    }, {
-      "pagePath":"pages/secondItem/secondItem",
-      "text": "API",
-      "iconPath": "resource/secondItem/icon_API.png",
-      "selectedIconPath": "resource/secondItem/icon_API_HL.png"
-    }]
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "组件",
+        "iconPath": "resource/index/icon_component.png",
+        "selectedIconPath": "resource/index/icon_component_HL.png"
+      },
+      {
+        "pagePath": "pages/secondItem/secondItem",
+        "text": "API",
+        "iconPath": "resource/secondItem/icon_API.png",
+        "selectedIconPath": "resource/secondItem/icon_API_HL.png"
+      }
+    ]
   },
   "networkTimeout": {
     "request": 30000,

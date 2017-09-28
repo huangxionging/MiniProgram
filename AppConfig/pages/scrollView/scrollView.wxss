@@ -1,0 +1,33 @@
+/* pages/scrollView/scrollView.wxss */
+
+#green{
+  height: 200rpx;
+  background-color: green;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 36rpx;
+}
+
+#red{
+  height: 200rpx;
+  background-color: red;
+}
+
+#blue{
+  height: 200rpx;
+  background-color: blue;
+}
+
+
+.demo-text-1{
+  
+}
+#green:before{
+  content: 'A';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

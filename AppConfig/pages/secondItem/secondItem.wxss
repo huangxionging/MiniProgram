@@ -1,9 +1,11 @@
 /* pages/secondItem/secondItem.wxss */
-
+.section{
+ 
+}
 .flex-wrp{
   margin-top: 60rpx;
-  display: flex;
-  align-items: center;
+  display: flex; 
+  
 }
 
 .flex-item{
@@ -13,22 +15,60 @@
   content: center;
   align-items: center;
   text-align: center;
-}
-.flex-item-V{
-  margin: 0 auto;
-  width: 300rpx;
-  height: 200rpx;
   
 }
-
-.bc_green{
-  background-color: green;
+.flex-item-V{
+  margin-left: 0rpx;
+  width: 200rpx;
+  height: 200rpx;
+  align-items: center;
+  text-align: center;
 }
 
-.bc_red{
-  background-color: red;
+.demo-text-1{
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: #1AAD19;
+  color: #FFFFFF;
+  font-size: 36rpx;
+}
+.demo-text-1:before{
+  content: 'A';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.bc_blue{
+.demo-text-2{
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff0000;
+  color: #FFFFFF;
+  font-size: 36rpx;
+}
+.demo-text-2:before{
+  content: 'B';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.demo-text-3{
+  position: relative;
+  align-items: center;
+  justify-content: center;
   background-color: blue;
+  color: #FFFFFF;
+  font-size: 36rpx;
+}
+.demo-text-3:before{
+  content: 'C';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
