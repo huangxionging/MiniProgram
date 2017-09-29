@@ -1,33 +1,91 @@
 /* pages/scrollView/scrollView.wxss */
 
 #green{
-  height: 200rpx;
   background-color: green;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  font-size: 36rpx;
 }
 
 #red{
-  height: 200rpx;
   background-color: red;
 }
 
 #blue{
-  height: 200rpx;
   background-color: blue;
 }
-
-
-.demo-text-1{
-  
+#white{
+  background-color: white;
 }
-#green:before{
+
+#green::before{
   content: 'A';
+}
+
+#red::before{
+  content: 'B';
+}
+
+#blue::before{
+  content: 'C';
+}
+
+#white::before{
+  content: 'D';
+}
+
+.scroll-view-item{
+  height: 200rpx;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 36rpx;
+}
+
+.scroll-view-item::before{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.scroll-view-item-Horizon{
+  width: 200rpx;
+  height: 200rpx;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 36rpx;
+}
+
+.scroll-view-item-Horizon::before{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.scroll-view_H{
+  white-space: nowrap;
+}
+.scroll-view-item{
+  height: 300rpx;
+}
+.scroll-view-item_H{
+  display: inline-block;
+  width: 100%;
+  height: 300rpx;
+}
+
+
+.scroll-Horizon{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  display: inline-block;
+  width: 100%;
+}
+
+.btn-area{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

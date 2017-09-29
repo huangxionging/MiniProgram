@@ -1,10 +1,25 @@
 <!--pages/scrollView/scrollView.wxml-->
 <view class='section'>
   <view class='scetion__title'>vertical scroll</view>
-  <scroll-view class='scroll' scroll-x='true' scroll-y='true' style='height: 200rpx;' bindscrolltoupper='upper'
-  bindscrolltolower='lower' bindscroll='scroll'  scroll-top='{{scrollTop}}'>
+  <scroll-view class='scroll' scroll-y='true' style='height: 200rpx;' bindscrolltoupper='upper'
+  bindscrolltolower='lower' bindscroll='scroll'  scroll-top='{{scrollTop}}' scroll-into-view='{{toView}}'>
     <view id='green' class='scroll-view-item'></view>
     <view id='red' class='scroll-view-item'></view>
     <view id='blue' class='scroll-view-item'></view> 
+    <view id='white' class='scroll-view-item'></view> 
+  </scroll-view>
+</view>
+<view class='btn-area'>
+  <button size='mini' bindtap='tap'> click me to scroll into view</button>
+  <button size='mini' bindtap='tapMove'>click me scroll</button>
+</view>
+<view class='section'>
+  <view class='scetion__title'>Horizon scroll</view>
+  <scroll-view class='scroll-Horizon' scroll-x='true' style='width: 100%;' bindscrolltoupper='upper'
+  bindscrolltolower='lower' bindscroll='scroll'  scroll-left='{{scrollTop}}' scroll-into-view='{{toView}}'>
+    <view id='green' class='scroll-view-item-Horizon'></view>
+    <view id='red' class='scroll-view-item-Horizon'></view>
+    <view id='blue' class='scroll-view-item-Horizon'></view> 
+    <view id='white' class='scroll-view-item-Horizon'></view> 
   </scroll-view>
 </view>
