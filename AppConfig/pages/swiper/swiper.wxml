@@ -1,18 +1,18 @@
 <!--pages/swiper/swiper.wxml-->
 <view class='container'>
   <view class='page-body'>
-     <view class='page-section  swiper'> 
-    <swiper indicator-dots='{{indicatorDots}}' autoplay='{{autoplay}}' interval='{{interval}}' duration='{{duration}}'>
-      <block wx:for='{{background}}' wx:key='*this'>
-        <swiper-item>
-          <view class='swiper-item' id='{{item}}'></view>
-        </swiper-item>
-      </block>
-    </swiper>
-    <button bindtap='changeIndicatorDots'>是否显示指示: {{indicatorDots}}</button>
-    <button bindtap='changeAutoplay'>自动播放 : {{autoplay}}</button>
-    <slider bindchange='intervalChange' show-value='true' min='500' max='2000' value='{{interval}}'>间隔时间: interval</slider>
-    <slider bindchange='durationChange' show-value='true' min='100' max='10000' value='{{duration}}'>持续时长: duration</slider>
+    <view class='page-section  swiper'> 
+      <swiper indicator-dots='{{indicatorDots}}' autoplay='{{autoplay}}' interval='{{interval}}' duration='{{duration}}'>
+        <block wx:for='{{background}}' wx:key='*this'>
+          <swiper-item>
+            <view class='swiper-item' id='{{item}}'></view>
+          </swiper-item>
+        </block>
+      </swiper>
+      <button bindtap='changeIndicatorDots'>是否显示指示: {{indicatorDots}}</button>
+      <button bindtap='changeAutoplay'>自动播放 : {{autoplay}}</button>
+      <slider bindchange='intervalChange' show-value='true' min='500' max='2000' value='{{interval}}'>间隔时间: interval</slider>
+      <slider bindchange='durationChange' show-value='true' min='100' max='10000' value='{{duration}}'>持续时长: duration</slider>
     </view> 
   </view>
 </view>

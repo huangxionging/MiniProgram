@@ -1,1 +1,6 @@
 /* pages/text/text.wxss */
+.text{
+  /* padding: 0 80rpx; */
+  height: 300rpx;
+  background-color: white;
+}

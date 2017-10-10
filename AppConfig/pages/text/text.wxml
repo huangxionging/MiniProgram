@@ -1,2 +1,9 @@
 <!--pages/text/text.wxml-->
 <text>pages/text/text.wxml</text>
+<view class='container'>
+  <view class='page-body'>
+    <view class='page-section'>
+    <text class='text'></text>
+    </view>
+  </view>
+</view>

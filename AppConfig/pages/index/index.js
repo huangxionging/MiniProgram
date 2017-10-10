@@ -53,11 +53,22 @@ Page({
   },
   tap: function(e){
     var str = e['currentTarget']['id']
+    /**
+     * 学习 switch 语句
+     */
     switch (str) {
       case 'swiper':
         wx.navigateTo({
           url: '../swiper/swiper'
         })
+        break
+      case 'text': 
+        wx.navigateTo({
+          url: '../text/text'
+        })
+        break
+      case 'icon': 
+
     }
   }
 })
