@@ -50,5 +50,14 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  },
+  tap: function(e){
+    var str = e['currentTarget']['id']
+    switch (str) {
+      case 'swiper':
+        wx.navigateTo({
+          url: '../swiper/swiper'
+        })
+    }
   }
 })

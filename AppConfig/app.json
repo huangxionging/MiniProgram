@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/secondItem/secondItem",
-    "pages/scrollView/scrollView"
+    "pages/scrollView/scrollView",
+    "pages/swiper/swiper",
+    "pages/text/text"
   ],
   "window": {
     "backgroundTextStyle": "dark",

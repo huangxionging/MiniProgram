@@ -1,0 +1,48 @@
+/* pages/swiper/swiper.wxss */
+.swiper-item{
+  display: block;
+  height: 300rpx;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 36rpx;
+}
+
+#green{
+  background-color: green;
+}
+
+#red{
+  background-color: red;
+}
+
+#blue{
+  background-color: blue;
+}
+#white{
+  background-color: white;
+}
+
+#green::before{
+  content: 'A';
+}
+
+#red::before{
+  content: 'B';
+}
+
+#blue::before{
+  content: 'C';
+}
+
+#white::before{
+  content: 'D';
+}
+
+.swiper-item:before{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

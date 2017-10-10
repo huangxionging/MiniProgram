@@ -10,4 +10,8 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <view id='swiper' class='item' bindtap='tap'>swiper</view>
+  <view id='text' class='item' bindtap='tap'>text</view>
+  <view id='icon' class='item' bindtap='tap'>icon</view>
+  <view id='progress' class='item' bindtap='tap'>progress</view>
 </view>

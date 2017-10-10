@@ -48,21 +48,32 @@
 }
 
 .scroll-view-item-Horizon{
-  width: 200rpx;
-  height: 200rpx;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  font-size: 36rpx;
+  display: inline-block;
+  width: 100%;
+  height: 300rpx;
 }
 
 .scroll-view-item-Horizon::before{
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
+
+.scroll-Horizon{
+   white-space: nowrap;
+}
+
+.btn-area{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-section-spacing{
+  margin-top: 60rpx;
+}
 .scroll-view_H{
   white-space: nowrap;
 }
@@ -73,19 +84,4 @@
   display: inline-block;
   width: 100%;
   height: 300rpx;
-}
-
-
-.scroll-Horizon{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  display: inline-block;
-  width: 100%;
-}
-
-.btn-area{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }

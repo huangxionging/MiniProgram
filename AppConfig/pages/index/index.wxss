@@ -19,3 +19,15 @@
 .usermotto {
   margin-top: 200px;
 }
+
+#swiper{
+  background-color: sandybrown;
+  width: 100%;
+  text-align: center;
+}
+
+#text{
+  background-color: gainsboro;
+  width: 100%;
+  text-align: center;
+}

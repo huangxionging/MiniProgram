@@ -15,7 +15,7 @@
 </view>
 <view class='section'>
   <view class='scetion__title'>Horizon scroll</view>
-  <scroll-view class='scroll-Horizon' scroll-x='true' style='width: 100%;' bindscrolltoupper='upper'
+  <scroll-view class='scroll-Horizon' scroll-x='true' style='width: 100%' bindscrolltoupper='upper'
   bindscrolltolower='lower' bindscroll='scroll'  scroll-left='{{scrollTop}}' scroll-into-view='{{toView}}'>
     <view id='green' class='scroll-view-item-Horizon'></view>
     <view id='red' class='scroll-view-item-Horizon'></view>
@@ -23,3 +23,5 @@
     <view id='white' class='scroll-view-item-Horizon'></view> 
   </scroll-view>
 </view>
+
+
