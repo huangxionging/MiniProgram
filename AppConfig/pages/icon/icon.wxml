@@ -1,0 +1,5 @@
+<!--pages/icon/icon.wxml-->
+<text>pages/icon/icon.wxml</text>
+<view class='container'>
+<button type='primary'></button>
+</view>

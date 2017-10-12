@@ -31,3 +31,15 @@
   width: 100%;
   text-align: center;
 }
+
+#icon{
+  background-color: indianred;
+  width: 100%;
+  text-align: center;
+}
+
+#progress{
+  background-color: pink;
+  width: 100%;
+  text-align: center;
+}

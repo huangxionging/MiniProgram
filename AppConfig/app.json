@@ -5,7 +5,8 @@
     "pages/secondItem/secondItem",
     "pages/scrollView/scrollView",
     "pages/swiper/swiper",
-    "pages/text/text"
+    "pages/text/text",
+    "pages/icon/icon"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -1,9 +1,12 @@
 <!--pages/text/text.wxml-->
-<text>pages/text/text.wxml</text>
 <view class='container'>
   <view class='page-body'>
-    <view class='page-section'>
-    <text class='text'></text>
+    <view class='page-section page-section-spacing'>
+      <view class='text-box' scroll-y='true' scroll-top='{{scrollTop}}'>
+        <text>{{text}}</text>
+      </view>
+      <button disabled='{{!canAdd}}' bindtap='addLine'>addLine</button>
+      <button disabled='{{!canRemove}}' bindtap='removeLine'>removeLine</button>
     </view>
   </view>
 </view>

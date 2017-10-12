@@ -57,18 +57,24 @@ Page({
      * 学习 switch 语句
      */
     switch (str) {
-      case 'swiper':
+      case 'swiper': {
         wx.navigateTo({
           url: '../swiper/swiper'
         })
         break
-      case 'text': 
+      }
+      case 'text': {
         wx.navigateTo({
           url: '../text/text'
         })
         break
-      case 'icon': 
-
+      }
+      case 'icon': {
+        wx.navigateTo({
+          url: '../icon/icon'
+        })
+        break
+      }
     }
   }
 })

@@ -1,4 +1,4 @@
-// pages/secondItem/secondItem.js
+// pages/icon/icon.js
 Page({
 
   /**
@@ -47,26 +47,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    wx.request({
-      url: "https://dev-dos.32teeth.cn/api/doctor/getBlogBrowseIcopic",
-      data: {
-        memberId: '1',
-        acess_token: '1',
-        articleId:'10'
-      },
-      success: res => {
-        console.log(res.data)
-      },
-      complete: res => {
-        wx.hideNavigationBarLoading()
-        wx.stopPullDownRefresh()
-        wx.scanCode({
-          success: res => {
-            console.log(res)
-          }
-        })
-      }
-    })
+  
   },
 
   /**
@@ -80,5 +61,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+  
   }
 })

@@ -1,6 +1,14 @@
 /* pages/text/text.wxss */
-.text{
-  /* padding: 0 80rpx; */
-  height: 300rpx;
-  background-color: white;
+
+.text-box{
+  margin-bottom: 70rpx;
+  padding: 40rpx 0;
+  display: flex;
+  min-height: 300rpx;
+  background-color: #FFF;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 30rpx;
+  color: #353535;
 }
