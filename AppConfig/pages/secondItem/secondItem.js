@@ -48,7 +48,7 @@ Page({
    */
   onPullDownRefresh: function () {
     wx.request({
-      url: "https://dev-dos.32teeth.cn/api/doctor/getBlogBrowseIcopic",
+      url: "https://dos.32teeth.cn/api/doctor/getBlogBrowseIcopic",
       data: {
         memberId: '1',
         acess_token: '1',
