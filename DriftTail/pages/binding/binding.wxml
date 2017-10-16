@@ -1,0 +1,30 @@
+<!--pages/binding/binding.wxml-->
+<view class='binding-container'>
+  <view class='userinfo'>
+  
+     <block wx:if='{{!hasUserInfo && canIUse}}'>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="../../resource/money@2x.png" background-size="cover"></image>
+      <text class="userinfo-nickname">我的名字</text>
+      <text class="binding-tips">绑定手机号, 同步 APP 刷牙数据</text>
+    </block> 
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+    <view class='binding-tel'>
+      <text class='binding-tel-label'>手机号码</text>
+      <input class='binding-tel-input' placeholder='填写手机号码'></input>
+    </view>
+    <view class='binding-verify-view'>
+      <view class='binding-verify'>
+        <text class='binding-verify-label'>验证码</text>
+        <input class='binding-verify-input' placeholder='输入验证码'></input>
+      </view>
+      <button class='binding-verify-button main-button' hover-class='hover-main-button'>{{verifyTitle}}</button>
+    </view>
+  </view>
+
+  <button  class='main-button binding-next-button' hover-class='hover-main-button'>下一步</button> 
+    
+</view>
+

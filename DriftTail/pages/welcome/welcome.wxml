@@ -1,0 +1,11 @@
+<!--pages/welcome/welcome.wxml-->
+
+<view class='container'>
+  <view class='welcome-text'>
+    <text class='welcome-font main-text-color'>欢迎加入漂流尾巴计划</text>
+  </view>
+  <view class='join-drift-tail'>
+    <button class='main-button' hover-class='hover-main-button' bindtap='joinDriftTailPlan'>加入</button>
+  </view>
+  
+</view>

@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/binding/binding",
+    "pages/index/index",
+    
+    "pages/welcome/welcome"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "漂流尾巴",
+    "navigationBarTextStyle": "black"
+  }
+}

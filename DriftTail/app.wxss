@@ -1,0 +1,28 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+
+.main-text-color{
+  color: #333333;
+}
+
+.main-button{
+  width: 400rpx;
+  height: 80rpx;
+  color: #ffffff;
+  background-color: #ec7b6c;
+}
+
+.hover-main-button{
+  width: 400rpx;
+  height: 80rpx;
+  color: #f4a8a8; 
+  background-color: #c9695c;
+}
