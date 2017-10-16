@@ -1,0 +1,45 @@
+/* pages/scanQRCode/scanQRCode.wxss */
+
+.head {
+  height: 720rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.backgrond{
+  width: 100%;
+  height: 650rpx;
+}
+.userinfo-avatar {
+  margin-top: -70rpx; 
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+}
+
+.scan-plan{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scan-verpflichtungsgeld-button{
+  margin-top: 70rpx;
+  width: 400rpx;
+  height: 80rpx;
+  font-size: 30rpx;
+}
+
+#scan-plan-tips{
+  font-size: 26rpx;
+  margin-top: 30rpx;
+  color: #666;
+}
+
+#scan-tips{
+  font-size: 26rpx;
+  margin-top: 120rpx;
+  color: #999;
+  text-align: center;
+  justify-content: center;
+}

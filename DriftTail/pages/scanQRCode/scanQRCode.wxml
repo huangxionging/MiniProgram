@@ -1,0 +1,12 @@
+<!--pages/scanQRCode/scanQRCode.wxml-->
+<view class='scanQRCode-container'>
+  <view class='head'>
+    <image class='backgrond' src='../../resource/Illustration@2x.png'></image>
+    <image class="userinfo-avatar" src="../../resource/money@2x.png" background-size="cover"></image>
+  </view>
+  <view class='scan-plan'>
+    <button  class='main-button scan-verpflichtungsgeld-button' hover-class='hover-main-button'>扫码支付承诺金</button>
+    <text id='scan-plan-tips'>扫描产品上的二维码加入漂流尾巴计划</text>
+    <text id='scan-tips'>温馨提示:\n 在您将尾巴归还回诊所或传递给朋友时, 承诺押金在2个 \n 工作日内归还</text>
+  </view>
+</view>

@@ -1,9 +1,10 @@
 {
   "pages": [
+    "pages/scanQRCode/scanQRCode",
     "pages/binding/binding",
     "pages/index/index",
-    
-    "pages/welcome/welcome"
+    "pages/welcome/welcome",
+    "pages/payBackTip/payBackTip"
   ],
   "window": {
     "backgroundTextStyle": "light",
