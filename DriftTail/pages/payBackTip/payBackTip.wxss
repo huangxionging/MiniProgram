@@ -1,1 +1,19 @@
 /* pages/payBackTip/payBackTip.wxss */
+.pay-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 50rpx 20rpx;
+  box-sizing: border-box;
+}
+
+#tip-title{
+  font-size: 30rpx;
+  color: #333;
+}
+
+#tip-text{
+  font-size: 28rpx;
+  color: #333;
+}

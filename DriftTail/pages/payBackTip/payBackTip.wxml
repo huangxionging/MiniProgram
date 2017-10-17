@@ -1,2 +1,11 @@
 <!--pages/payBackTip/payBackTip.wxml-->
-<text>pages/payBackTip/payBackTip.wxml</text>
+<view class='pay-container'>
+  <text id='tip-title'>漂流尾巴规则:\n</text>
+  <text id='tip-text'>
+    一. 前往诊所归还尾巴
+    二. 将尾巴传递给朋友圈的伙伴. 接收的伙伴用漂流尾
+    巴小程序扫描包装二维码, 支付承诺押金后, 尾巴
+    传递成功.
+    三. 归还或传递成功后, 承诺押金在一个工作日内返还.
+  </text>
+</view>

@@ -1,7 +1,10 @@
 {
   "pages": [
+<<<<<<< Updated upstream
     "pages/payMoney/payMoney",
     "pages/verpflichtung/verpflichtung",
+=======
+>>>>>>> Stashed changes
     "pages/payBackTip/payBackTip",
     "pages/scanQRCode/scanQRCode",
     "pages/binding/binding",
