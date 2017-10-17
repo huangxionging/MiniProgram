@@ -1,0 +1,24 @@
+/* pages/verpflichtung/verpflichtung.wxss */
+#verpflichtung-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+}
+
+#verpflichtung-text{
+  margin-top: 250rpx;
+  color: #333;
+  font-size: 30rpx;
+}
+
+#verpflichtung-button-view{
+  margin-top: 380rpx;
+  width: 100%;
+}
+
+#agree{
+  margin-top: 30rpx;
+}

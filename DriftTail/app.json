@@ -1,10 +1,12 @@
 {
   "pages": [
+    "pages/payMoney/payMoney",
+    "pages/verpflichtung/verpflichtung",
+    "pages/payBackTip/payBackTip",
     "pages/scanQRCode/scanQRCode",
     "pages/binding/binding",
     "pages/index/index",
-    "pages/welcome/welcome",
-    "pages/payBackTip/payBackTip"
+    "pages/welcome/welcome"
   ],
   "window": {
     "backgroundTextStyle": "light",

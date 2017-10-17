@@ -1,0 +1,12 @@
+<!--pages/payMoney/payMoney.wxml-->
+<view id='paymoney-container'>
+  <view id='paymoney-main-view'>
+    <text id='paymoney-number'>99</text>
+    <text id='paymoney-title'>押金金额 (元)</text>
+    <text id='paymoney-tips'>
+      说明:
+      开始使用7天免费期. 免费期过后, 每天扣费1元
+    </text>
+  </view>
+  <button class='main-button' hover-class='hover-main-button'>确认支付</button>
+</view>

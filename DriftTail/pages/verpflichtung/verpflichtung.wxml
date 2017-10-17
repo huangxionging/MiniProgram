@@ -1,0 +1,12 @@
+<!--pages/verpflichtung/verpflichtung.wxml-->
+<view id='verpflichtung-container'>
+  <text id='verpflichtung-text'>
+    我承诺我将认真学习巴氏刷牙法
+    并在学会后将此方法介绍给最要好的朋友
+  </text>
+  <view id='verpflichtung-button-view'>
+    <button id='not-agree' class='main-nomal-button' hover-class='hover-main-nomal-button' >不同意</button>
+    <button id='agree' class='main-button' hover-class='hover-main-button'>同意</button>
+  </view>
+  
+</view>

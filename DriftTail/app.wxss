@@ -20,9 +20,20 @@
   background-color: #ec7b6c;
 }
 
-.hover-main-button{
+.main-nomal-button{
   width: 400rpx;
   height: 80rpx;
+  color: #ec7b6c;
+  background-color: #ffffff;
+  border-color: #ec7b6c;
+}
+
+.hover-main-nomal-button{
+  color: #f4a8a8; 
+  background-color: #ddd;
+}
+
+.hover-main-button{
   color: #f4a8a8; 
   background-color: #c9695c;
 }
