@@ -1,0 +1,17 @@
+<!--pages/personCenter/personCenter.wxml-->
+<view id='personal-container'>
+  <view id='avatar-view'>
+    <image bindtap="bindViewTap" class="userinfo-avatar" src="../../resource/money@2x.png" background-size="cover"></image>
+    <text class="userinfo-nickname">我的名字</text>
+  </view>
+  <view>
+    <block wx:for='{{configArray}}'  wx:for-item='{{item}}'>
+      <view>
+        <image></image>
+        <text></text>
+        <image></image>
+      </view>
+    </block>
+  </view>
+</view>
+

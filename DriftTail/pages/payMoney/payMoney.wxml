@@ -8,5 +8,5 @@
       开始使用7天免费期. 免费期过后, 每天扣费1元
     </text>
   </view>
-  <button class='main-button' hover-class='hover-main-button'>确认支付</button>
+  <button id='paymoney-confirm-button' class='main-button' hover-class='hover-main-button'>确认支付</button>
 </view>
