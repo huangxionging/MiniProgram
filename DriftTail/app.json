@@ -2,6 +2,7 @@
   "pages": [
     "pages/personalCenter/personalCenter",
     "pages/payMoney/payMoney",
+    "pages/verpflichtung/verpflichtung",
     "pages/payBackTip/payBackTip",
     "pages/verpflichtung/verpflichtung",
     "pages/scanQRCode/scanQRCode",
