@@ -1,0 +1,18 @@
+<!--pages/personalDetail/personalDetail.wxml-->
+<view id='personal-container'>
+  <view id='personal-main-view'>
+    <text id='personal-number'>99</text>
+    <text id='personal-title'>押金金额 (元)</text>
+  </view>
+  <view id='pesonal-white'></view>
+  <view id='personal-detail'>
+    <block wx:for='{{dataArray}}' wx:for-item='item' wx:key='unique'>
+      <view class='personal-item-cell'>
+        <text id='personal-name'>{{item.name}}</text>
+        <text id='personal-date'>{{item.date}}</text>
+        <text id='personal-point'>{{item.money}}</text>
+      </view>
+    </block> 
+  </view>
+</view>
+

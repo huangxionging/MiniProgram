@@ -4,12 +4,12 @@
     <image bindtap="bindViewTap" class="userinfo-avatar" src="../../resource/money@2x.png" background-size="cover"></image>
     <text class="userinfo-nickname">我的名字</text>
   </view>
-  <view>
-    <block wx:for='{{configArray}}'  wx:for-item='{{item}}'>
-      <view>
-        <image></image>
-        <text></text>
-        <image></image>
+  <view id='table-view'>
+    <block wx:for='{{configArray}}'  wx:for-item='item' wx:key='*this'>
+      <view class='item-View' id='{{item.id}}' hover-class='hover-item-view'>
+        <image class='icon' src='{{item.src}}'></image>
+        <text class='item-text'>{{item.title}}</text> 
+        <text class='item-arrow'>></text> 
       </view>
     </block>
   </view>

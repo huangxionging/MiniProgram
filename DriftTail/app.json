@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/personalDetail/personalDetail",
     "pages/personalCenter/personalCenter",
     "pages/payMoney/payMoney",
     "pages/verpflichtung/verpflichtung",
     "pages/payBackTip/payBackTip",
-    "pages/verpflichtung/verpflichtung",
     "pages/scanQRCode/scanQRCode",
     "pages/binding/binding",
     "pages/index/index",

@@ -5,7 +5,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    configArray: [
+      {
+        id: 'myTail',
+        src: '../../resource/money@2x.png',
+        title: '我的尾巴漂流记',
+      }, 
+      {
+        id: 'contact',
+        src: '../../resource/scan@2x.png',
+        title: '联系漂流小仙女',
+      }
+    ]
   },
 
   /**
