@@ -8,5 +8,4 @@
     <button id='not-agree' class='main-nomal-button' hover-class='hover-main-nomal-button' >不同意</button>
     <button id='agree' class='main-button' hover-class='hover-main-button'>同意</button>
   </view>
-  
 </view>
