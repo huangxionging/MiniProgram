@@ -1,26 +1,57 @@
 //app.js
-App({
-  onLaunch: function () {
-  
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-    console.log('ddd')
 
-    var loginState = wx.getStorageSync('state')
-    if (loginState) {
-      wx.redirectTo({
-        url: '../../pages/binding/binding',
+var baseURL = 'https://dev-dos.32teeth.cn/mini/doctorOfflinegame/'
+var debug = true
+if (!debug) {
+  baseURL = 'https://dos.32teeth.cn/mini/doctorOfflinegame/'
+}
+
+App({
+  onLaunch: function (e) {
+  
+  /**
+   * 检查登录状态
+   */
+  wx.checkSession({
+    success: function(res) {
+      console.log('res')
+      console.log(res)
+      // var sessionKey = 
+    },
+    fail: function() {
+      // 检查登录状态失败, 重新登录
+      wx.login({
+        success: res => {
+
+        },
+        fail: res => {
+
+        }
       })
-    } else {
-      wx.setStorageSync('state', true)
     }
-    // 登录
+  })
+    
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log(res)
+        console.log(baseURL + 'getWxUserInfo')
+        
+      //   wx.request({
+      //     url: baseURL + 'getWxUserInfo',
+      //     data: {
+      //       'code': res.code
+      //     },
+      //     success: res => {
+      //       console.log(res)
+      //     },
+      //     complete: res => {
+      //       console.log(res)
+      //     },
+      //     fail: res => {
+      //       console.log(res)
+      //     }
+      //   })
       }
     })
     // 获取用户信息
@@ -45,23 +76,32 @@ App({
           wx.authorize({
             scope: 'userInfo',
             success: res => {
-
-            }
-          })
-          wx.getUserInfo({
-            withCredentials: true,
-            success: res => {
-              console.log(res.userInfo)
+              console.log(res)
             },
             fail: res => {
               console.log(res)
             }
           })
+          // wx.getUserInfo({
+          //   withCredentials: true,
+          //   success: res => {
+          //     console.log(res.userInfo)
+          //   },
+          //   fail: res => {
+          //     console.log(res)
+          //   }
+          // })
         }
       }
     })
   },
   globalData: {
     userInfo: null
+  },
+  /**
+   * 获取用户信息
+   */
+  getUserInfo: function() {
+
   }
 })
