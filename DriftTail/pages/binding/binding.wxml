@@ -13,14 +13,20 @@
     </block>
     <view class='binding-tel'>
       <text class='binding-tel-label'>手机号码</text>
-      <input class='binding-tel-input' placeholder='填写手机号码' type='number' confirm-type='next'></input>
+      <input class='binding-tel-input' maxlength='11' bindinput='getInputContent' placeholder='填写手机号码' type='number' confirm-type='next'></input>
     </view>
     <view class='binding-verify-view'>
       <view class='binding-verify'>
         <text class='binding-verify-label'>验证码</text>
-        <input class='binding-verify-input' placeholder='输入验证码' type='number'></input>
+        <input class='binding-verify-input' placeholder='输入验证码' type='number' ></input>
       </view>
-      <button class='binding-verify-button main-button' hover-class='hover-main-button'>{{verifyTitle}}</button>
+      <view wx:if='{{verifyCodeDisabled}}' class='binding-getVerifyCode-view'>
+        {{verifyTitle}}
+      </view>
+      <view wx:else class='binding-getVerifyCode-nomal-view' hover-class='hover-main-view' bindtap='getVerifyCode'>
+        {{verifyTitle}} 
+      </view>
+
     </view>
   </view>
 

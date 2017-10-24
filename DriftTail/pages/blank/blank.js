@@ -1,4 +1,4 @@
-// pages/welcome/welcome.js
+// pages/blank/blank.js
 Page({
 
   /**
@@ -12,8 +12,20 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.login({
-      
+    wx.showNavigationBarLoading()
+    wx.checkSession({
+      success: res => {
+        wx.hideNavigationBarLoading()
+        wx.redirectTo({
+          url: '../binding/binding',
+        })
+      },
+      fail: res => {
+        wx.hideNavigationBarLoading()
+        wx.login({
+          
+        })
+      }
     })
   },
 
@@ -65,9 +77,7 @@ Page({
   onShareAppMessage: function () {
   
   },
-  joinDriftTailPlan: function() {
-    wx.redirectTo({
-      url: '../binding/binding',
-    })
+  showNavigationBarLoading() {
+    wx.showNavigationBarLoading()
   }
 })

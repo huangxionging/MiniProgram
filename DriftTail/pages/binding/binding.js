@@ -1,5 +1,13 @@
 // pages/binding/binding.js
+
+
 const app = getApp()
+// 手机号码
+var telphoneNumber = ''
+// 验证码
+var verifyCode = ''
+// 是否正在进行倒计时
+var isTimeCountDown = false
 Page({
 
   /**
@@ -9,13 +17,17 @@ Page({
     userInfo: {}, 
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    verifyTitle: '获取验证码'
+    verifyTitle: '获取验证码',
+    verifyCodeDisabled: true,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // 获取 url 信息
+    var url = app.globalData.baseConfig.getBaseURL()
+    console.log(url)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -32,6 +44,7 @@ Page({
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
+
       wx.getUserInfo({
         success: res => {
           app.globalData.userInfo = res.userInfo
@@ -92,8 +105,102 @@ Page({
   onShareAppMessage: function () {
   
   },
+  /**
+   * 获取验证码
+   */
+  getVerifyCode: function() {
+    const that = this
+    console.log(telphoneNumber)
+    // 电话号码
+    if (telphoneNumber.length != 11) {
+      wx.showToast({
+        title: '输入正确的手机号',
+        duration: 2000,
+        icon: 'loading'
+      })
+      return
+    }
+
+    // 倒计时开始
+    isTimeCountDown = true
+    // 重新渲染按钮
+    that.setData({
+      verifyCodeDisabled: true
+    })
+
+    // 倒计时 60s
+    that.timeCountDown(60)
+
+    // 获取验证码接口
+    wx.request({
+      url: app.globalData.baseConfig.getBaseURL() + 'api/smscode/generate',
+      data: {
+
+      }
+    })
+  },
+  /**
+   * 获得输入内容, 以改变
+   */
+  getInputContent: function(e) {
+    console.log(e)
+    // 获得输入框内容
+    const that = this
+    // 获得手机号
+    telphoneNumber = e.detail.value
+    // 检查是否是11位
+    if (telphoneNumber.length == 11) {
+      // 检查是否已经在倒计时
+      if (!isTimeCountDown) {
+        // 如果不是, 重新渲染按钮到可以点击状态
+        that.setData({
+          verifyCodeDisabled: false,
+        });
+      }
+      
+    } else {
+      // 不是11位则渲染成初始状态
+      that.setData({
+        verifyCodeDisabled: true
+      });
+    }
+  },
+  /**
+   * 倒计时定时器
+   */
+  timeCountDown: function (timeCount) {
+    var that = this
+    // 自减一
+    timeCount--
+    // 更新倒计时按钮文本内容
+    this.setData({
+      verifyTitle: '倒计时 ' + timeCount + ' 秒'
+    })
+
+    // 计数为 0
+    if (timeCount == 0) {
+      // 更新倒计时状态
+      isTimeCountDown = false
+      if (telphoneNumber.length == 11) {
+        if (!isTimeCountDown) {
+          that.setData({
+            verifyCodeDisabled: false,
+          });
+        }
+      }
+      // 渲染标题
+      this.setData({
+        verifyTitle: '获取验证码'
+      })
+
+      return
+    }
+    // 继续执行定时器
+    setTimeout(function (){that.timeCountDown(timeCount)}, 1000)
+  },
   getUserInfo: function (e) {
     console.log(e)
+    
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,

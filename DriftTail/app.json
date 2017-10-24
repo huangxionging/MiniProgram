@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/blank/blank",
     "pages/welcome/welcome",
     "pages/personalDetail/personalDetail",
     "pages/personalCenter/personalCenter",
