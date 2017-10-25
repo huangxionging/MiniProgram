@@ -2,6 +2,7 @@
 
 
 const app = getApp()
+const baseConfig = require('../../utils/baseURL.js')
 // 手机号码
 var telphoneNumber = ''
 // 验证码
@@ -26,8 +27,8 @@ Page({
    */
   onLoad: function (options) {
     // 获取 url 信息
-    var url = app.globalData.baseConfig.getBaseURL()
-    console.log(url)
+
+
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -112,30 +113,58 @@ Page({
     const that = this
     console.log(telphoneNumber)
     // 电话号码
-    if (telphoneNumber.length != 11) {
-      wx.showToast({
-        title: '输入正确的手机号',
-        duration: 2000,
-        icon: 'loading'
-      })
+    if (telphoneNumber.length == 11) {
+      wx.showModal({
+        title: '提示',
+        content: '手机号码给事不正确啊啊不正确手机号码给事不正确啊啊不正确',
+        showCancel: true,
+        success: function (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      });
       return
     }
 
-    // 倒计时开始
-    isTimeCountDown = true
-    // 重新渲染按钮
-    that.setData({
-      verifyCodeDisabled: true
-    })
-
-    // 倒计时 60s
-    that.timeCountDown(60)
+    
 
     // 获取验证码接口
-    wx.request({
-      url: app.globalData.baseConfig.getBaseURL() + 'api/smscode/generate',
-      data: {
+    // mini / doctorOfflinegame /
+    // wx.request({
+    //   url: baseConfig.baseURL() + 'api/smscode/generate',
+    //   data: {
+    //     'openId': 'oyxMh0RfiPM8Jg2brZcnAOjQtHL0',
+    //     'telephone': telphoneNumber,
+    //   },
+    //   success: res => {
+    //     console.log(res)
+    //     // 倒计时开始
+    //     isTimeCountDown = true
+    //     // 重新渲染按钮
+    //     that.setData({
+    //       verifyCodeDisabled: true
+    //     })
 
+    //     // 倒计时 60s
+    //     that.timeCountDown(60)
+    //   },
+    //   fail: res => {
+    //     console.log(res)
+    //   }
+    // })
+
+    wx.request({
+      url: baseConfig.baseURL() + 'mini/doctorOfflinegame/' + 'bindPhoneNumber',
+      data: {
+        'openId': 'oyxMh0RfiPM8Jg2brZcnAOjQtHL0',
+        'phone': telphoneNumber,
+        'validcode' : '3863' 
+      },
+      success: res => {
+        console.log(res)
       }
     })
   },
@@ -157,7 +186,6 @@ Page({
           verifyCodeDisabled: false,
         });
       }
-      
     } else {
       // 不是11位则渲染成初始状态
       that.setData({

@@ -30,7 +30,7 @@
     </view>
   </view>
 
-  <button  class='main-button binding-next-button' hover-class='hover-main-button'>下一步</button> 
+  <button  class='main-button binding-next-button' hover-class='hover-main-button' bindtap=''>下一步</button> 
     
 </view>
 

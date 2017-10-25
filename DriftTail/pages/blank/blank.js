@@ -1,4 +1,7 @@
 // pages/blank/blank.js
+
+const baseTool = require('../../utils/baseTool.js')
+
 Page({
 
   /**
@@ -12,15 +15,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    baseTool.print('aaa')
     wx.showNavigationBarLoading()
     wx.checkSession({
       success: res => {
+        baseTool.print(res)
         wx.hideNavigationBarLoading()
         wx.redirectTo({
           url: '../binding/binding',
         })
       },
       fail: res => {
+        baseTool.print((res))
         wx.hideNavigationBarLoading()
         wx.login({
           
@@ -40,14 +46,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    baseTool.print('页面出现')
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    baseTool.print('页面隐藏')
   },
 
   /**
@@ -75,7 +81,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+    
   },
   showNavigationBarLoading() {
     wx.showNavigationBarLoading()
