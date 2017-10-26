@@ -21,9 +21,9 @@ Page({
       success: res => {
         baseTool.print(res)
         wx.hideNavigationBarLoading()
-        wx.redirectTo({
-          url: '../binding/binding',
-        })
+        // wx.redirectTo({
+        //   url: '../binding/binding',
+        // })
       },
       fail: res => {
         baseTool.print((res))
