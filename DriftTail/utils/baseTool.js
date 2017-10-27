@@ -9,7 +9,7 @@ var systemInfo = wx.getSystemInfoSync()
 var brand = String(systemInfo.brand).toLowerCase()
 // 是否模拟器
 var isSimulator = (brand == 'devtools')
-// 
+//  sessionKey 获得
 var sessionKey = wx.getStorageSync('sessionKey')
 
 
@@ -34,5 +34,20 @@ module.exports = {
    * 系统信息
    */
   systemInfo: systemInfo,
-  sessionKey:
+  /**
+   * 通过 key 获得值
+   */
+  valueForKey: function(key) {
+    if (typeof(key) == 'string') {
+      return wx.getStorageSync(key)
+    } else {
+      return null
+    }
+  },
+  /**
+   * 设置键值对
+   */
+  setValueForKey: function(value, key) {
+    wx.setStorageSync(key, value)
+  }
 }

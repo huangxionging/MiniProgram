@@ -1,5 +1,6 @@
 <!--pages/icon/icon.wxml-->
-<text>pages/icon/icon.wxml</text>
-<view class='container'>
-<button type='primary'></button>
+<view class='icon-container'>
+  <block wx:for='{{iconSizes}}'wx:key='item'>
+    <icon type='success' size='{{item}}'></icon>
+  </block>
 </view>

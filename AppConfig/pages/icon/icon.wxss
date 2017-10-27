@@ -1,1 +1,4 @@
 /* pages/icon/icon.wxss */
+.icon-container{
+  flex-wrap: nowrap;
+}
