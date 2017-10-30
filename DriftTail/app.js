@@ -8,7 +8,14 @@ var isLogin = false
 
 App({
   onLaunch: function (e) {
-    
+    // baseTool.setValueForKey('黄雄')
+    // var value =  baseTool.valueForKey()
+    // baseTool.print(value)
+    // baseTool.removeAllObjects()
+    baseTool.removeObjectForKey('dd')
+    wx.vibrateLong({
+      
+    })
   },
   globalData: {
     userInfo: null,
