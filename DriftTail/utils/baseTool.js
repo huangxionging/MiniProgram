@@ -53,5 +53,29 @@ module.exports = {
    */
   removeAllObjects: function() {
     wx.clearStorageSync()
-  }
+  },
+  /**
+   * 震动
+   */
+  vibrate: function() {
+    var that = this
+    wx.vibrateLong({
+      success: function (res) {
+        that.print(res)
+       },
+      fail: function (res) { 
+        that.print(res) 
+      }
+    })
+  },
+  getNet: function () {
+    var that = this
+    wx.onNetworkStatusChange(function(res){
+      that.print(res)
+      wx.showModal({
+        title: '网络改变',
+        content: res.networkType,
+      })
+    })
+  },
 }

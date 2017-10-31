@@ -10,12 +10,14 @@ App({
   onLaunch: function (e) {
     // baseTool.setValueForKey('黄雄')
     // var value =  baseTool.valueForKey()
-    // baseTool.print(value)
+    baseTool.netChange(
+      function (res) {
+        baseTool.print(res)
+      }
+    )
     // baseTool.removeAllObjects()
     baseTool.removeObjectForKey('dd')
-    wx.vibrateLong({
-      
-    })
+  
   },
   globalData: {
     userInfo: null,
