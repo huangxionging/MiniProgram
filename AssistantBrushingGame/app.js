@@ -1,11 +1,15 @@
 //app.js
+const wechat = require('./utils/baseWeChat.js')
 App({
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
+    wechat.login().then( res => {
+      // while(1)
+      // console.log(res)
+    })
     // 登录
     wx.login({
       success: res => {
