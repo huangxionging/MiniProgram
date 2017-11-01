@@ -10,11 +10,7 @@ App({
   onLaunch: function (e) {
     // baseTool.setValueForKey('黄雄')
     // var value =  baseTool.valueForKey()
-    baseTool.netChange(
-      function (res) {
-        baseTool.print(res)
-      }
-    )
+  
     // baseTool.removeAllObjects()
     baseTool.removeObjectForKey('dd')
   
