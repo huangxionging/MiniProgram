@@ -1,21 +1,15 @@
 //app.js
 const wechat = require('./utils/baseWeChat.js')
+const loginManager = require('./manager/loginManager.js')
 App({
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-    wechat.login().then( res => {
-      // while(1)
-      // console.log(res)
-    })
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
+    
+    loginManager.checkState()
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
