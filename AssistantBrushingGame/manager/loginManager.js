@@ -27,8 +27,7 @@ module.exports = {
       // 
     }, (res) => {
       // 失败
-      return login
+      baseTool.print(res)
     })
-  })
   }
 }
