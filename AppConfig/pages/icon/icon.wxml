@@ -1,6 +1,18 @@
 <!--pages/icon/icon.wxml-->
 <view class='icon-container'>
-  <block wx:for='{{iconSizes}}'wx:key='item'>
-    <icon type='success' size='{{item}}'></icon>
-  </block>
+  <view class='group'>
+    <block wx:for='{{iconSizes}}'wx:key='item'>
+      <icon type='success' size='{{item}}'></icon>
+    </block>
+  </view>
+  <view class='group'>
+    <block wx:for='{{iconColors}}' wx:key='item'>
+      <icon type='success' color='{{item}}' size='45'></icon>
+    </block>
+  </view>
+  <view class='group'>
+    <block wx:for='{{iconTypes}}' wx:key='item'>
+      <icon type='{{item}}' size='45'></icon>
+    </block>
+  </view>
 </view>

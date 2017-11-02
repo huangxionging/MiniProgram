@@ -4,10 +4,12 @@ const app = getApp()
 
 Page({
   data: {
+    components: ['swiper', 'text', 'icon', 'progress', 'button', 'form', 'input', 'checkbox', 'radio', 'picker', 'slider', 'switch', 'label'],
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    color: 'rgb(255, 255, 0)'
   },
   //事件处理函数
   bindViewTap: function() {
@@ -74,6 +76,12 @@ Page({
           url: '../icon/icon'
         })
         break
+      }
+      case 'progress': {
+        wx.navigateTo({
+          url: '../progress/progress',
+        })
+        break;
       }
     }
   }

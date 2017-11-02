@@ -12,13 +12,14 @@
 	"projectname": "AppConfig",
 	"condition": {
 		"weapp": {
-			"current": 0,
+			"current": -1,
 			"list": [
 				{
-					"id": -1,
-					"name": "调试 icon",
-					"pathName": "pages/icon/icon",
-					"query": ""
+					"id": 0,
+					"name": "调试 progress",
+					"pathName": "pages/progress/progress",
+					"query": "name=progress&id=1987",
+					"scene": "1011"
 				}
 			]
 		},

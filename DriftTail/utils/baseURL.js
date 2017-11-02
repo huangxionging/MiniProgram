@@ -17,7 +17,7 @@ module.exports = {
   /**
    * 基本路径
    */
-  basePath: '/mini/doctorOfflinegame/',
+  basePath: 'mini/doctorOfflinegame/',
   /**
    * 现在处于正式环境还是测试状态
    */

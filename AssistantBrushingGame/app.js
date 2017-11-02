@@ -1,6 +1,9 @@
 //app.js
 const wechat = require('./utils/baseWeChat.js')
 const loginManager = require('./manager/loginManager.js')
+const baseWechat = require('./utils/baseWeChat.js')
+const baseURL = require('./utils/baseURL.js')
+const baseTool = require('./utils/baseTool.js')
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -8,7 +11,22 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
     
-    loginManager.checkState()
+    var checkSession = baseWechat.checkSession()
+    var login = baseWechat.login()
+    checkSession.then(checkSession.all((res) => {
+      
+    })).catch((err) => {
+      return login
+    }).then((res) => {
+      // 有 code 表示重新登录
+      if (res.code) {
+        baseTool.print(res)
+      } else {
+        // 没有表示从别的来
+        baseTool.print(res)
+
+      }
+    })
 
     // 获取用户信息
     wx.getSetting({

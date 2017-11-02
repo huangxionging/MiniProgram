@@ -43,3 +43,8 @@
   width: 100%;
   text-align: center;
 }
+
+.item {
+  width: 100%;
+  text-align: center;
+}

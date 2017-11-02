@@ -6,7 +6,8 @@
     "pages/scrollView/scrollView",
     "pages/swiper/swiper",
     "pages/text/text",
-    "pages/icon/icon"
+    "pages/icon/icon",
+    "pages/progress/progress"
   ],
   "window": {
     "backgroundTextStyle": "dark",

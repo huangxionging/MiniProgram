@@ -1,0 +1,5 @@
+/* pages/progress/progress.wxss */
+.progress-container {
+  display: flex;
+  flex-direction: column;
+}
