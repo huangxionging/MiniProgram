@@ -1,12 +1,26 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/binding/binding",
+    "pages/logs/logs",
+    "pages/contest/contest"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小小牙医刷牙比赛助手",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/contest/contest",
+        "text": "比赛"
+      },
+      {
+        "pagePath": "pages/contest/contest",
+        "text": "比赛"
+      }
+    ]
   }
 }

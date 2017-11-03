@@ -1,0 +1,32 @@
+<!--pages/binding/binding.wxml-->
+<view class='binding-container'>
+  <view class='userinfo'>
+  
+     
+    <block>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+    <view class='binding-tel'>
+      <text class='binding-tel-label'>手机号码</text>
+      <input class='binding-tel-input' maxlength='11' bindinput='getInputContent' placeholder='填写手机号码' type='number' confirm-type='next'></input>
+    </view>
+    <view class='binding-verify-view'>
+      <view class='binding-verify'>
+        <text class='binding-verify-label'>验证码</text>
+        <input class='binding-verify-input' placeholder='输入验证码' type='number' ></input>
+      </view>
+      <view wx:if='{{verifyCodeDisabled}}' class='binding-getVerifyCode-view'>
+        {{verifyTitle}}
+      </view>
+      <view wx:else class='binding-getVerifyCode-nomal-view' hover-class='hover-main-view' bindtap='getVerifyCode'>
+        {{verifyTitle}} 
+      </view>
+
+    </view>
+  </view>
+
+  <button  class='main-button binding-next-button' hover-class='hover-main-button' bindtap='nextStep'>下一步</button> 
+    
+</view>
+

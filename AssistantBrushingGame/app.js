@@ -11,23 +11,14 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
     
-    var checkSession = baseWechat.checkSession()
-    var login = baseWechat.login()
-    checkSession.then(checkSession.all((res) => {
-      
-    })).catch((err) => {
-      return login
-    }).then((res) => {
-      // 有 code 表示重新登录
-      if (res.code) {
-        baseTool.print(res)
-      } else {
-        // 没有表示从别的来
-        baseTool.print(res)
-
-      }
+    // 检查登录状态
+    loginManager.checkState().then(res => {
+      baseTool.print(res)
+    }).then(loginManager.reLauch).catch(loginManager.login()).then(res => {
+      baseTool.print(sscsc)
     })
 
+    baseTool.print('sscsc')
     // 获取用户信息
     wx.getSetting({
       success: res => {
