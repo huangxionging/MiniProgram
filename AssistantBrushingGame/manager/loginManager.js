@@ -9,6 +9,9 @@ const baseApiList = require('../utils/baseApiList.js')
  */
 function getUserInfo(code, userInfo) {
   return new Promise((resolve, reject) => {
+    baseWechat.getUserInfo().then(res => {
+
+    }).catch(reject)
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getWxUserInfo
     wx.request({
       url: url,
@@ -37,6 +40,7 @@ function login() {
   return new Promise((resolve, reject) => {
     baseWechat.login().then(res => {
       baseTool.print(res)
+      return 
     }).catch(err => {
       wx.showModal({
         title: '网络错误',
@@ -47,7 +51,7 @@ function login() {
         complete: function(res) {},
       })
       reject
-    }).then
+    }).then()
     // var getUserInfo = login.then((res) => {
     //   // 有 code 表示重新登录
     //     baseWechat.getUserInfo().then(res => {
