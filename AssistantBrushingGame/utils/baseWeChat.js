@@ -32,8 +32,6 @@ module.exports = {
   getUserInfo: () => {
     return new Promise((resolve, reject) => {
       wx.getUserInfo({
-        withCredentials: true,
-        lang: '',
         success: resolve,
         fail: reject,
         complete: function(res) {},

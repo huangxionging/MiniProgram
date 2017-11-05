@@ -12,6 +12,7 @@ function getUserInfo(code, userInfo) {
     baseWechat.getUserInfo().then(res => {
 
     }).catch(reject)
+
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getWxUserInfo
     wx.request({
       url: url,
@@ -39,8 +40,8 @@ function login() {
 
   return new Promise((resolve, reject) => {
     baseWechat.login().then(res => {
-      baseTool.print(res)
-      return 
+      // baseTool.print(res.code)
+      resolve(res)
     }).catch(err => {
       wx.showModal({
         title: '网络错误',
@@ -51,7 +52,7 @@ function login() {
         complete: function(res) {},
       })
       reject
-    }).then()
+    })
     // var getUserInfo = login.then((res) => {
     //   // 有 code 表示重新登录
     //     baseWechat.getUserInfo().then(res => {
@@ -80,6 +81,7 @@ function checkState() {
       // 获取 memberId
       var memberId = baseTool.valueForKey('memberId')
       // 如果 存在则结束流程
+      memberId = 'fff'
       if (memberId) {
         resolve(memberId)
       } else {

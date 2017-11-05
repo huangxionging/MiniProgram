@@ -12,16 +12,48 @@ App({
     wx.setStorageSync('logs', logs)
     
     // 检查登录状态
-    loginManager.checkState().then(res => {
-      baseTool.print(res)
-    }).then(loginManager.reLauch).catch(loginManager.login()).then(res => {
-      baseTool.print(sscsc)
+    // loginManager.checkState().then(res => {
+    //   baseTool.print(res)
+    // }).then(loginManager.reLauch).catch(res => {
+    //   return loginManager.login()
+    // }).then(res => {
+    //   baseTool.print('ddd')
+    //   baseTool.print(res)
+    // })
+
+    var checkState = loginManager.checkState().then()
+    var checS = checkState.then(res => {
+      
     })
 
-    baseTool.print('sscsc')
+    checS.then(res => {
+      baseTool.print('dddkkkk')
+      baseTool.print(checS)
+    }).then(res => {
+      baseTool.print('ddd')
+      baseTool.print('hung')
+    })
+
+    var login = checkState.then().catch(res => {
+      baseTool.print('dkdkdkkdkkdkdkk')
+      return loginManager.login()
+    })
+
+    baseTool.print(login)
+    login.then(res => {
+      baseTool.print(login)
+      baseTool.print('ggg')
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print('ddeeed')
+    })
+
+    
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
+        baseTool.print(res.authSetting)
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
@@ -36,8 +68,19 @@ App({
               }
             }
           })
+        } else {
+          // wx.openSetting({
+          //   success: function (res) {
+          //     baseTool.print('ddd')
+          //     wx.redirectTo({
+          //       url: '/pages/index/index',
+          //     })
+          //   },
+          //   fail: function (res) { baseTool.print(res)},
+          //   complete: function (res) { baseTool.print(res)},
+          // })
         }
-      }
+      }, 
     })
   },
   globalData: {
