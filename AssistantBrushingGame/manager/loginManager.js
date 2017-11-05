@@ -85,9 +85,16 @@ function checkState() {
       if (memberId) {
         resolve(memberId)
       } else {
-        reject
+        reject({
+          reson : 'memberId 为空',
+          code : '123'})
       }
-    }).catch(reject)
+    }).catch(res => {
+      reject({
+        reson: 'memberId 为空',
+        code: '123'
+      })
+    })
   })
 }
 

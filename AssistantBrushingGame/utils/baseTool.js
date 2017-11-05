@@ -78,4 +78,15 @@ module.exports = {
       })
     })
   },
+  /**
+   * 默认的 Promise
+   */
+  defaultPromise: new Promise((resolve, reject) => {}),
+  setCatchPromise: (promise, promiseCatch) => {
+    return promise.then(res => {
+      return new Promise((resolve, reject) => {})
+    }).catch(res => {
+      return promiseCatch
+    })
+  }
 }

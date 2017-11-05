@@ -21,32 +21,24 @@ App({
     //   baseTool.print(res)
     // })
 
-    var checkState = loginManager.checkState().then()
-    var checS = checkState.then(res => {
-      
-    })
+    var checkState = loginManager.checkState()
 
-    checS.then(res => {
-      baseTool.print('dddkkkk')
-      baseTool.print(checS)
-    }).then(res => {
-      baseTool.print('ddd')
-      baseTool.print('hung')
-    })
+    var login = loginManager.login()
 
-    var login = checkState.then().catch(res => {
-      baseTool.print('dkdkdkkdkkdkdkk')
-      return loginManager.login()
-    })
+    // var p1 = checkState.then(res => {
+    //   return baseTool.defaultPromise
+    // }).catch(res => {
+    //   baseTool.print(res)
+    //   return login
+    // })
+    var p1 = baseTool.setCatchPromise(checkState, login)
 
-    baseTool.print(login)
-    login.then(res => {
-      baseTool.print(login)
-      baseTool.print('ggg')
+    p1.then(res => {
+      baseTool.print('dgggjgjkkkkkkk')
       baseTool.print(res)
-    }).catch(res => {
-      baseTool.print('ddeeed')
+      baseTool.print(res)
     })
+    
 
     
 
