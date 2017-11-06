@@ -2,7 +2,10 @@
 
 
 const app = getApp()
-const baseConfig = require('../../utils/baseURL.js')
+const loginManager = require('../../manager/loginManager.js')
+const baseWechat = require('../../utils/baseWeChat.js')
+const baseURL = require('../../utils/baseURL.js')
+const baseTool = require('../../utils/baseTool.js')
 // 手机号码
 var telphoneNumber = ''
 // 验证码
@@ -113,7 +116,7 @@ Page({
     const that = this
     console.log(telphoneNumber)
     // 电话号码
-    if (telphoneNumber.length == 11) {
+    if (telphoneNumber.length != 11) {
       wx.showModal({
         title: '提示',
         content: '手机号码给事不正确啊啊不正确手机号码给事不正确啊啊不正确',
@@ -129,43 +132,19 @@ Page({
       return
     }
 
-    
-
     // 获取验证码接口
-    // mini / doctorOfflinegame /
-    // wx.request({
-    //   url: baseConfig.baseURL() + 'api/smscode/generate',
-    //   data: {
-    //     'openId': 'oyxMh0RfiPM8Jg2brZcnAOjQtHL0',
-    //     'telephone': telphoneNumber,
-    //   },
-    //   success: res => {
-    //     console.log(res)
-    //     // 倒计时开始
-    //     isTimeCountDown = true
-    //     // 重新渲染按钮
-    //     that.setData({
-    //       verifyCodeDisabled: true
-    //     })
+    var getVerifyCodeAction = loginManager.getVerifyCode(telphoneNumber)
+    getVerifyCodeAction.then(res => {
+      console.log(res)
+      // 倒计时开始
+      isTimeCountDown = true
+      // 重新渲染按钮
+      that.setData({
+        verifyCodeDisabled: true
+      })
 
-    //     // 倒计时 60s
-    //     that.timeCountDown(60)
-    //   },
-    //   fail: res => {
-    //     console.log(res)
-    //   }
-    // })
-
-    wx.request({
-      url: baseConfig.baseURL() + 'mini/doctorOfflinegame/' + 'bindPhoneNumber',
-      data: {
-        'openId': 'oyxMh0RfiPM8Jg2brZcnAOjQtHL0',
-        'phone': telphoneNumber,
-        'validcode' : '3863' 
-      },
-      success: res => {
-        console.log(res)
-      }
+      // 倒计时 60s
+      that.timeCountDown(60)
     })
   },
   /**
@@ -235,9 +214,17 @@ Page({
       hasUserInfo: true
     })
   },
+  getInputVerifyCode: function(e) {
+    console.log(e)
+    // 获得输入框内容
+    const that = this
+    // 获得手机号
+    verifyCode = e.detail.value
+  },
   nextStep:function () {
-    wx.reLaunch({
-      url: '../contest/contest',
+    var bindingTelphoneAction = loginManager.bindingTelphone(telphoneNumber, verifyCode)
+    bindingTelphoneAction.then(res => {
+      console.log(res)
     })
   }
 })

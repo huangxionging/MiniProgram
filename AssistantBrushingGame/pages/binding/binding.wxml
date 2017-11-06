@@ -14,7 +14,7 @@
     <view class='binding-verify-view'>
       <view class='binding-verify'>
         <text class='binding-verify-label'>验证码</text>
-        <input class='binding-verify-input' placeholder='输入验证码' type='number' ></input>
+        <input class='binding-verify-input' placeholder='输入验证码' type='number' bindinput='getInputVerifyCode'></input>
       </view>
       <view wx:if='{{verifyCodeDisabled}}' class='binding-getVerifyCode-view'>
         {{verifyTitle}}

@@ -5,14 +5,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    /**
+     * 是否加载完成
+     */
+    loadingDone: false,
+    hasData: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    
   },
 
   /**
@@ -26,7 +30,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    
   },
 
   /**

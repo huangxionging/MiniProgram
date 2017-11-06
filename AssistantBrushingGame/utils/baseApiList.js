@@ -10,5 +10,5 @@ module.exports = {
   /**
    * 获取用户信息
    */
-  getWxUserInfo:'getWxUserInfo'
+  login:'login'
 }

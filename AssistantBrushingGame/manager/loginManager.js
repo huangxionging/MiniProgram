@@ -7,29 +7,12 @@ const baseApiList = require('../utils/baseApiList.js')
  * @param code 登录状态码
  * @param userInfo 用户信息
  */
-function getUserInfo(code, userInfo) {
+function getUserInfo() {
   return new Promise((resolve, reject) => {
     baseWechat.getUserInfo().then(res => {
-
+      baseTool.print(res)
+      resolve(res)
     }).catch(reject)
-
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getWxUserInfo
-    wx.request({
-      url: url,
-      data: {
-        code: code,
-        headPic: userInfo
-      },
-      header: {},
-      method: 'POST',
-      dataType: 'json',
-      success: res => {
-        baseTool.print(res)
-        resolve(res)
-      },
-      fail: reject,
-      complete: function (res) { },
-    })
   })
 }
 
@@ -53,21 +36,6 @@ function login() {
       })
       reject
     })
-    // var getUserInfo = login.then((res) => {
-    //   // 有 code 表示重新登录
-    //     baseWechat.getUserInfo().then(res => {
-    //       baseTool.print(res)
-    //       return getUserInfo(code, res.userInfo)
-    //     }).then(res => {
-    //       baseTool.print(res)
-    //       resolve(res)
-    //     })
-    // }).catch(res => {
-    //   baseTool.print(res)
-    // })
-    // getUserInfo.then(res => {
-    //   baseTool.print(res)
-    // })
   })
 }
 
@@ -81,21 +49,77 @@ function checkState() {
       // 获取 memberId
       var memberId = baseTool.valueForKey('memberId')
       // 如果 存在则结束流程
-      memberId = 'fff'
+      // memberId = 'fff'
       if (memberId) {
         resolve(memberId)
       } else {
         reject({
-          reson : 'memberId 为空',
+          reason : 'memberId 为空',
           code : '123'})
       }
     }).catch(res => {
       reject({
-        reson: 'memberId 为空',
+        reason: 'memberId 为空',
         code: '123'
       })
     })
   })
+}
+
+function checkUserBindingState(code = '', userInfo = {}) {
+  return new Promise((resolve, reject) => {
+
+    baseTool.print('sdcsdcs')
+    baseTool.print(code)
+    baseTool.print(userInfo)
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.login
+
+    var data = {'code': code}
+    // 头像
+    if (userInfo.avatarUrl) {
+      data.headimgurl = userInfo.avatarUrl
+    }
+    // 昵称
+    if (userInfo.nickName) {
+      data.nickname = userInfo.nickName
+    }
+    // 性别
+    if (userInfo.gender) {
+      data.sex = userInfo.gender
+    }
+    // 语言
+    if (userInfo.language) {
+      data.language = userInfo.language
+    }
+    // 国家
+    if (userInfo.country) {
+      data.country = userInfo.country
+    }
+    // 省份
+    if (userInfo.province) {
+      data.province = userInfo.province
+    }
+    // 城市
+    if (userInfo.city) {
+      data.city = userInfo.city
+    }
+    // 参数
+    baseTool.print(data)
+    // url
+    baseTool.print(url)
+    wx.request({
+      url: url,
+      data: data,
+      
+      success: res => {
+        // baseTool.print(res)
+        resolve(res)
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+  
 }
 
 /**
@@ -103,17 +127,68 @@ function checkState() {
  */
 function reLauch() {
   wx.reLaunch({
-    url: 'pages/contest/contest',
+    url: '/pages/contest/contest',
     success: function (res) { },
     fail: function (res) { },
     complete: function (res) { },
   })
 }
 
+/**
+ * 根据手机号获取验证码
+ */
+function getVerifyCode(telphoneNumber = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseApiList.getVerifyCode
+    var data = { 'telephone': telphoneNumber}
+    var openid = baseTool.valueForKey('openid')
+    if (openid) {
+      data.openid = openid
+    }
+    wx.request({
+      url: url,
+      data: data,
+
+      success: res => {
+        // baseTool.print(res)
+        resolve(res)
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+
+function bindingTelphone(telphoneNumber = '', validcode = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindPhoneNumber
+    var data = { 'telephone': telphoneNumber, 'validcode': validcode}
+    var openid = baseTool.valueForKey('openid')
+    if (openid) {
+      data.openid = openid
+    }
+    wx.request({
+      url: url,
+      data: data,
+
+      success: res => {
+        // baseTool.print(res)
+        resolve(res)
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+
 module.exports = {
   checkState: checkState,
   login: login,
   getUserInfo: getUserInfo,
-  reLauch: reLauch
-    
+  reLauch: reLauch,
+  checkUserBindingState: checkUserBindingState,
+  getVerifyCode: getVerifyCode,
+  bindingTelphone: bindingTelphone,
 }

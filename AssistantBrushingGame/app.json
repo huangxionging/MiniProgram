@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/contest/contest",
     "pages/binding/binding",
-    "pages/logs/logs",
-    "pages/contest/contest"
+    "pages/logs/logs"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",

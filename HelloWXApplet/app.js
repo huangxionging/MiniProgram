@@ -8,6 +8,11 @@ App({
    */
   onLaunch: function (options) {
     // 控制台日志
+    wx.getUserInfo({
+      success: function (res) { console.log(res) },
+      fail: function (res) { console.log(res) },
+      complete: function (res) { console.log(res) },
+    })
     console.log(options)
     // 定义一个 logs 数组
     var logs = wx.getStorageSync('logs') || []
@@ -16,6 +21,8 @@ App({
 
     // 将数组存入本地存储块
     wx.setStorageSync('logs', logs)
+
+    
     // this.getUserInfo()
   },
   /**
@@ -34,6 +41,7 @@ App({
       // 获取用户信息
       wx.getSetting({
         success: res => {
+          console.log(res)
           if (res.authSetting['scope.userInfo']) {
             // 已经授权, 可以直接调用 getUserInfo, 不会弹框
             wx.getUserInfo({
@@ -42,7 +50,9 @@ App({
                 this.globalData.userInfo = res.userInfo
                 // 由于 getUserInfo 是网络请求, 可能会在Page. onLoad 之后才返回
                 // 所以此处假如 callback
+                console.log(res)
                 if (this.userInfoReadyCallback) {
+                  console.log(res)
                   this.userInfoReadyCallback(res)
                 }
               }
