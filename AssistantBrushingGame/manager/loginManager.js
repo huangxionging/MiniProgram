@@ -10,7 +10,6 @@ const baseApiList = require('../utils/baseApiList.js')
 function getUserInfo() {
   return new Promise((resolve, reject) => {
     baseWechat.getUserInfo().then(res => {
-      baseTool.print(res)
       resolve(res)
     }).catch(reject)
   })
@@ -20,10 +19,9 @@ function getUserInfo() {
  * 登录接口
  */
 function login() {
-
   return new Promise((resolve, reject) => {
     baseWechat.login().then(res => {
-      // baseTool.print(res.code)
+      baseTool.print(res)
       resolve(res)
     }).catch(err => {
       wx.showModal({
@@ -68,8 +66,6 @@ function checkState() {
 
 function checkUserBindingState(code = '', userInfo = {}) {
   return new Promise((resolve, reject) => {
-
-    baseTool.print('sdcsdcs')
     baseTool.print(code)
     baseTool.print(userInfo)
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.login
@@ -159,7 +155,9 @@ function getVerifyCode(telphoneNumber = '') {
   })
 }
 
-
+/**
+ * 绑定手机号
+ */
 function bindingTelphone(telphoneNumber = '', validcode = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindPhoneNumber
@@ -182,6 +180,63 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
   })
 }
 
+/**
+ * 登陆流程
+ */
+function loginFlow() {
+  return new Promise((resolve, reject) => {
+    // 检查状态
+    var checkStateAction = checkState()
+    // 成功
+    checkStateAction.then(res => {
+      baseTool.print(res)
+      reLauch()
+      getUserInfo().then(res => {
+        const app = getApp()
+        app.globalData.userInfo = res.userInfo
+        resolve(res)
+      })
+    }).catch(res => {
+      baseTool.print(res)
+    })
+
+    // 会话过期需要登录
+    var loginAction = baseTool.bindCatchPromise(checkStateAction, login)
+
+    var code
+    // 登录成功, 获得 code
+    loginAction.then(res => {
+      baseTool.print(res)
+      code = res.code
+    })
+    // 登录成功之后获取用户信息 loginManager.getUserInfo()
+    var getUserInfoAction = baseTool.bindThenPromise(loginAction, getUserInfo)
+    // 读取用户信息成功之后与服务器进行通讯
+    var checkUserBindingStateAction = getUserInfoAction.then(res => {
+      baseTool.print(res)
+      const app = getApp()
+      app.globalData.userInfo = res.userInfo
+      return checkUserBindingState(code, res.userInfo)
+    })
+
+    // 和服务器通信结果
+    checkUserBindingStateAction.then(res => {
+      baseTool.print(res.data.data)
+      // 表示已经绑定
+      var wxUser = res.data.data.wxUser
+      if (wxUser.memberId) {
+        baseTool.setValueForKey(wxUser.memberId, 'memberId')
+        reLauch()
+      } else if (wxUser.openid) {
+        baseTool.setValueForKey(wxUser.openid, 'openid')
+        wx.redirectTo({
+          url: '/pages/binding/binding',
+        })
+      }
+      resolve(wxUser)
+    })
+  })
+}
 
 module.exports = {
   checkState: checkState,
@@ -191,4 +246,5 @@ module.exports = {
   checkUserBindingState: checkUserBindingState,
   getVerifyCode: getVerifyCode,
   bindingTelphone: bindingTelphone,
+  loginFlow: loginFlow,
 }

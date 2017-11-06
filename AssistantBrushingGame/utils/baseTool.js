@@ -82,10 +82,12 @@ function defaultThenPromise() {
 
 /**
  * 将 thenPromise 绑定到主 Promise 的 then
+ * @parma masterPromise 是父 Promise, 一般是函数调用产生的
+ * @param thenPromise 是对应的 Promise 的名字, 不会发生提前调用, 注意传参
  */
-function bindThenPromise(masterPromise = defaultThenPromise(), thenPromise = defaultThenPromise()) {
+function bindThenPromise(masterPromise = defaultThenPromise(), thenPromise = defaultThenPromise) {
   return masterPromise.then(res => {
-    return thenPromise
+    return thenPromise()
   }).catch(res => {
     return defaultPromise()
   })
@@ -93,12 +95,13 @@ function bindThenPromise(masterPromise = defaultThenPromise(), thenPromise = def
 
 /**
  * 将 catchPromise 绑定到主 Promise 的 catch
+ * @parame catchPromise 是 catchPromise对应函数的名字, 不会发生提前调用
  */
-function bindCatchPromise(masterPromise = defaultPromise(), catchPromise = defaultPromise()) {
+function bindCatchPromise(masterPromise = defaultPromise(), catchPromise = defaultPromise) {
   return masterPromise.then(res => {
     return defaultPromise()
   }).catch(res => {
-    return catchPromise
+    return catchPromise()
   })
 }
 
@@ -139,5 +142,4 @@ module.exports = {
   bindThenPromise: bindThenPromise,
   // 绑定 catch Promise 到 master Promise
   bindCatchPromise: bindCatchPromise,
-  
 }

@@ -1,4 +1,10 @@
 // pages/contest/contest.js
+const app = getApp()
+const loginManager = require('../../manager/loginManager.js')
+const baseWechat = require('../../utils/baseWeChat.js')
+const baseURL = require('../../utils/baseURL.js')
+const baseTool = require('../../utils/baseTool.js')
+
 Page({
 
   /**
@@ -8,29 +14,27 @@ Page({
     /**
      * 是否加载完成
      */
-    loadingDone: false,
-    hasData: false
+    loadingDone: true,
+    hasData: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    baseTool.print(app.globalData.userInfo)
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
   },
 
   /**
