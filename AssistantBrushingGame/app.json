@@ -1,10 +1,10 @@
 {
   "pages": [
-    "pages/contest/contest",
-    "pages/index/index",
-    "pages/binding/binding",
-    "pages/logs/logs"
-    
+    "pages/blank/blankIndex",
+    "pages/contest/contest/contest",
+    "pages/login/binding/binding",
+    "pages/contest/createContest/createContest",
+    "pages/my/myIndex/myIndex"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -13,14 +13,20 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "color": "#999",
+    "selectedColor": "#00a0e9",
     "list": [
       {
-        "pagePath": "pages/contest/contest",
-        "text": "比赛"
+        "pagePath": "pages/contest/contest/contest",
+        "text": "比赛",
+        "iconPath": "resource/contest_normal.png",
+        "selectedIconPath": "resource/contest_select.png"
       },
       {
-        "pagePath": "pages/contest/contest",
-        "text": "比赛"
+        "pagePath": "pages/my/myIndex/myIndex",
+        "iconPath": "resource/my_normal.png",
+        "selectedIconPath": "resource/my_select.png",
+        "text": "我的"
       }
     ]
   }

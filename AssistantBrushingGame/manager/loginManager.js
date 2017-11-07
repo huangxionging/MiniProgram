@@ -123,7 +123,7 @@ function checkUserBindingState(code = '', userInfo = {}) {
  */
 function reLauch() {
   wx.reLaunch({
-    url: '/pages/contest/contest',
+    url: '/pages/contest/contest/contest',
     success: function (res) { },
     fail: function (res) { },
     complete: function (res) { },
@@ -230,7 +230,7 @@ function loginFlow() {
       } else if (wxUser.openid) {
         baseTool.setValueForKey(wxUser.openid, 'openid')
         wx.redirectTo({
-          url: '/pages/binding/binding',
+          url: '/pages/login/binding/binding',
         })
       }
       resolve(wxUser)

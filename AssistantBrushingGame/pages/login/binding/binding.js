@@ -2,10 +2,10 @@
 
 
 const app = getApp()
-const loginManager = require('../../manager/loginManager.js')
-const baseWechat = require('../../utils/baseWeChat.js')
-const baseURL = require('../../utils/baseURL.js')
-const baseTool = require('../../utils/baseTool.js')
+const loginManager = require('../../../manager/loginManager.js')
+const baseWechat = require('../../../utils/baseWeChat.js')
+const baseURL = require('../../../utils/baseURL.js')
+const baseTool = require('../../../utils/baseTool.js')
 // 手机号码
 var telphoneNumber = ''
 // 验证码
@@ -100,13 +100,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
   
   },
   /**

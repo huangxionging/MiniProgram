@@ -28,9 +28,9 @@ App({
       console.log('res')
       console.log(res)
       // var sessionKey = 
-      wx.redirectTo({
-        url: '../../pages/payMoney/payMoney',
-      })
+      // wx.redirectTo({
+      //   url: '../../pages/payMoney/payMoney',
+      // })
     },
     fail: function() {
       // 检查登录状态失败, 重新登录

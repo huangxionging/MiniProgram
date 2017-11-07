@@ -29,7 +29,8 @@
         "pagePath": "pages/secondItem/secondItem",
         "text": "API",
         "iconPath": "resource/secondItem/icon_API.png",
-        "selectedIconPath": "resource/secondItem/icon_API_HL.png"
+        "selectedIconPath": "resource/secondItem/icon_API_HL.png",
+        "selectedTextColor": "#00a0e9"
       }
     ]
   },

@@ -8,3 +8,15 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 } 
+
+.main-button{
+  width: 400rpx;
+  background-color: #00a0e9;
+  color: #fff;
+  font-size: 30rpx;
+}
+
+.hover-main-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
