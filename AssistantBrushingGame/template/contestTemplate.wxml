@@ -1,0 +1,17 @@
+<template name='contestUserScoreItem'>
+  <view class="item {{(rank==1)?'':'item-orthers'}}">
+    <text id='item-rank' style='color:{{color}}'>{{rank}}</text>
+    <view id='item-name-tail'>
+      <text id='item-name'>{{name}}</text>
+      <text id='item-tail'>{{tail}}</text>
+    </view>
+    <text id='item-score'>{{score}}</text>
+  </view>
+</template>
+
+<template name='contestUserItem'>
+  <view class="item {{(id==1)?'':'item-orthers'}}">
+    <text id='item-name'>{{name}}</text>
+    <image src='../../resource/right_arrow.png'></image>
+  </view>
+</template>

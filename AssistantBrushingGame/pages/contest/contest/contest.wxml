@@ -1,10 +1,11 @@
 <!--pages/contest/contest.wxml-->
+<import src='../../../template/contestTemplate.wxml'/>
 <view class='contest-container' wx:if='{{loadingDone}}'>
   <block wx:if='{{!hasData}}'>
     <view class='contest-content-view'>
-      <image src='../../../resource/contest_user.png' id='contest-user'></image>
+      <image src='../../../resource/contest_user.png' id='contest-user' bindtap='contestUserClick'></image>
       <view id='contest-no-contest-view'>
-        <image src='../../../resource/001.png' id='contest-no-contest-image'></image>
+        <image src='../../../resource/contest_no_contest.png' id='contest-no-contest-image'></image>
         <text id='contest-no-contest-text'>暂无比赛, 快去创建比赛吧</text>
       </view>
       <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest'>创建比赛</button>
@@ -14,8 +15,8 @@
     <view class='contest-content-view'>
       <view id='contest-main-view'>
         <image id='contest-background' src='../../../resource/contest_background.png'></image>
-        <image src='../../../resource/contest_user.png' id='contest-create-image'></image>
-        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'></image>
+        <image  src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image>
+        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image' bindtap='contestReSyn'></image>
         <view id='contest-info-view' background-size='cover'>
           <text id='contest-title'>{{contestTitle}}</text>
           <text id='contest-date'>{{contestDate}}</text>
@@ -27,10 +28,10 @@
           <button id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
         </block>
       </view>
-      <view>
-        <block wx:for='{{dataList}}' wx:ke='id' wx:item='dd'>
-          <view></view>
-        </block>
+      <view id='contest-table-view'>
+         <block wx:for='{{dataList}}' wx:ke='id' wx:item='item'>
+          <template is='contestUserScoreItem' data='{{...item}}'></template>
+        </block> 
       </view>
     </view>
   </block>

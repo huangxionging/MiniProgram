@@ -4,7 +4,9 @@
     "pages/contest/contest/contest",
     "pages/login/binding/binding",
     "pages/contest/createContest/createContest",
-    "pages/my/myIndex/myIndex"
+    "pages/my/myIndex/myIndex",
+    "pages/contest/contestUser/contestUser",
+    "pages/contest/addContestUser/addContestUser"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -13,6 +15,7 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "backgroundColor": "#ffffff",
     "color": "#999",
     "selectedColor": "#00a0e9",
     "list": [

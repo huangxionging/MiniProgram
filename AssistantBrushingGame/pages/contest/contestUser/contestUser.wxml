@@ -1,0 +1,21 @@
+<!--pages/contest/contestUser/contestUser.wxml-->
+<view class='contest-user-container' wx:if='{{loadingDone}}'>
+  <block wx:if='{{!hasData}}'>
+    <view class='contest-content-view'>
+      <view id='contest-no-user-view'>
+        <image src='../../../resource/contest_no_user.png' id='contest-no-contest-image'></image>
+        <text id='contest-no-contest-text'>开始添加第一个参赛者吧</text>
+      </view>
+      <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest'>添加参赛者</button>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='contest-content-view'>
+      <view id='contest-table-view'>
+         <block wx:for='{{dataList}}' wx:ke='id' wx:item='item'>
+          <template is='contestUserScoreItem' data='{{...item}}'></template>
+        </block> 
+      </view>
+    </view>
+  </block>
+</view>

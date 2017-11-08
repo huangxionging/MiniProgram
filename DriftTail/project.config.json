@@ -26,7 +26,7 @@
 				{
 					"id": 0,
 					"name": "滴滴",
-					"pathName": "pages/scanQRCode/scanQRCode",
+					"pathName": "pages/personalCenter/personalCenter",
 					"query": ""
 				}
 			]

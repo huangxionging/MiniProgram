@@ -1,4 +1,4 @@
-<!--pages/personalDetail/personalDetail.wxml-->
+<!-- pages/personalDetail/personalDetail.wxml -->
 <view id='personal-container'>
   <view id='personal-main-view'>
     <text id='personal-number'>99</text>
@@ -12,7 +12,7 @@
         <text id='personal-date'>{{item.date}}</text>
         <text id='personal-point'>{{item.money}}</text>
       </view>
-    </block> 
+    </block>
   </view>
 </view>
 
