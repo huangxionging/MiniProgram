@@ -6,7 +6,9 @@
     "pages/contest/createContest/createContest",
     "pages/my/myIndex/myIndex",
     "pages/contest/contestUser/contestUser",
-    "pages/contest/addContestUser/addContestUser"
+    "pages/contest/addContestUser/addContestUser",
+    "pages/contest/contestUserDetail/contestUserDetail",
+    "pages/my/brushContest/brushContest"
   ],
   "window": {
     "backgroundTextStyle": "light",

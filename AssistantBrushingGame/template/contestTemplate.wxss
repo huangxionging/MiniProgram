@@ -48,3 +48,17 @@
   font-size: 26rpx;
   color: #999;
 }
+
+#user-arrow{
+  width: 44rpx;
+  height: 44rpx;
+  position: absolute;
+  right: 30rpx;
+}
+
+#user-item-name{
+  position: absolute;
+  left: 30rpx;
+  font-size: 28rpx;
+  color: #333;
+}

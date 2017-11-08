@@ -10,8 +10,19 @@
 </template>
 
 <template name='contestUserItem'>
-  <view class="item {{(id==1)?'':'item-orthers'}}">
-    <text id='item-name'>{{name}}</text>
-    <image src='../../resource/right_arrow.png'></image>
+  <navigator url='../contestUserDetail/contestUserDetail?id={{id}}'>
+    <view class="item {{(id==1)?'':'item-orthers'}}">
+      <text id='user-item-name'>{{name}}</text>
+      <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
+    </view>
+  </navigator>
+</template>
+
+<template name='myItem'>
+  <view class="my-item {{(id==1)?'':'my-item-orthers'}}">
+    <image></image>
+    <text></text>
+    <text></text>
+    <image></image>
   </view>
 </template>

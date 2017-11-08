@@ -1,4 +1,5 @@
 <!--pages/contest/contestUser/contestUser.wxml-->
+<import src='../../../template/contestTemplate.wxml'/>
 <view class='contest-user-container' wx:if='{{loadingDone}}'>
   <block wx:if='{{!hasData}}'>
     <view class='contest-content-view'>
@@ -11,11 +12,12 @@
   </block>
   <block wx:else>
     <view class='contest-content-view'>
-      <view id='contest-table-view'>
+      <scroll-view scroll-y='true' id='contest-table-view'>
          <block wx:for='{{dataList}}' wx:ke='id' wx:item='item'>
-          <template is='contestUserScoreItem' data='{{...item}}'></template>
+          <template is='contestUserItem' data='{{...item}}'></template>
         </block> 
-      </view>
+      </scroll-view>
+      <view id='add-contest-user' bindtap='addContestUser'>添加参赛者</view>
     </view>
   </block>
 </view>
