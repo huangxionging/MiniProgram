@@ -1,0 +1,10 @@
+<template name='myItem'>
+  <navigator url='../{{url}}'>
+    <view class="my-item {{(id==1)?'':'item-orthers'}}">
+      <image src='../../../resource/{{icon}}' id='my-item-icon'></image>
+      <text id='my-item-title'>{{title}}</text>
+      <text id='my-item-quantity'>{{quantity}}</text>
+      <image src='../../../resource/right_arrow.png' id='my-item-arrow'></image>
+    </view>
+  </navigator>
+</template>

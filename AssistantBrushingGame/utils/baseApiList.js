@@ -10,5 +10,9 @@ module.exports = {
   /**
    * 获取用户信息
    */
-  login:'login'
+  login:'login',
+  /**
+   * 添加参赛者
+   */
+  addContestUser : 'doctorOfflinegameaddPlayer'
 }

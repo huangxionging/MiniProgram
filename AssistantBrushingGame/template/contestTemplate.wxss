@@ -62,3 +62,17 @@
   font-size: 28rpx;
   color: #333;
 }
+
+.selectButton-image{
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+}
+
+#userInfo-view{
+  margin-top: 120rpx;
+  width: 630rpx;
+  height: 800rpx;
+  border-radius: 15rpx;
+  background-color: #fff;
+}

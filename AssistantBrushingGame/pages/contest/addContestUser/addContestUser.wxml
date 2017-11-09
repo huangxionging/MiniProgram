@@ -1,2 +1,5 @@
 <!--pages/contest/addContestUser/addContestUser.wxml-->
-<text>pages/contest/addContestUser/addContestUser.wxml</text>
+<import src='../../../template/contestTemplate.wxml'/>
+<view class='add-user-container'>
+  <template is='userInfoView'></template>
+</view>

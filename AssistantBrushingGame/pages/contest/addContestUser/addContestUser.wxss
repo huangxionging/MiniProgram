@@ -1,1 +1,13 @@
 /* pages/contest/addContestUser/addContestUser.wxss */
+@import '../../../template/contestTemplate.wxss';
+
+.add-user-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: lighter; 
+}

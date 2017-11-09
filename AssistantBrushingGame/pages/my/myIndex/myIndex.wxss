@@ -1,4 +1,5 @@
 /* pages/my/myIndex/myIndex.wxss */
+@import '../../../template/myTemplate.wxss';
 .my-container{
   width: 100%;
   height: 100;
@@ -7,4 +8,24 @@
   align-content: center;
   align-items: center;
   justify-content: center;
+}
+#my-info-view{
+  margin-top: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+#my-userinfo-nickname{
+  margin-top: 24rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+#my-userinfo-avatar{
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+}
+#my-table-view{
+  width: 100%;
+  margin-top: 80rpx;
 }

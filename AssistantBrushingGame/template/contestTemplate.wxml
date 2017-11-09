@@ -18,11 +18,26 @@
   </navigator>
 </template>
 
-<template name='myItem'>
-  <view class="my-item {{(id==1)?'':'my-item-orthers'}}">
-    <image></image>
-    <text></text>
-    <text></text>
-    <image></image>
+<template name='userInfoView'>
+  <view id='userInfo-view'>
+    <view>
+      <image></image>
+      <input></input>
+    </view>
+    <view>
+      <text></text>
+      <template is='selectButton' data='{{...select}}'></template>
+    </view>
+  </view>
+</template>
+
+<template name='selectButton'>
+  <view class='{{selectButton}}'>
+    <block wx:if='{{select}}'>
+      <image src='../../../resource/box-selected.png' class='selectButton-image'></image>
+    </block>
+    <block wx:else>
+      <image src='../../../resource/box-normal.png' class='selectButton-image'></image>
+    </block>
   </view>
 </template>

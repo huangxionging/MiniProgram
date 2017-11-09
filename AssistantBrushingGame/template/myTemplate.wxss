@@ -1,0 +1,40 @@
+.my-item{
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 80rpx;
+  background-color: #fff;
+  display: flex;
+ 
+}
+.item-orthers{
+  margin-top: 8rpx;
+}
+#my-item-icon{
+  position: absolute;
+  width: 44rpx;
+  height: 44rpx;
+  left: 30rpx;
+}
+#my-item-title{
+  position: absolute;
+  left: 104rpx;
+  font-size: 28rpx;
+  color: #333; 
+}
+#my-item-quantity{
+  position: absolute;
+  right: 74rpx;
+  font-size: 28rpx;
+  color: #999;
+  font-weight: lighter;
+}
+
+#my-item-arrow{
+  width: 44rpx;
+  height: 44rpx;
+  position: absolute;
+  right: 30rpx;
+}

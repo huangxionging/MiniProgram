@@ -1,10 +1,13 @@
 <!--pages/my/myIndex/myIndex.wxml-->
-<text>pages/my/myIndex/myIndex.wxml</text>
+<import src='../../../template/myTemplate.wxml'/>
 <view class='my-container'>
   <view id='my-info-view'>
-    <image></image>
-    <text>我的名字</text>
+    <image id="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <text id="my-userinfo-nickname">{{userInfo.nickName}}</text>
   </view>
-  <view>
+  <view id='my-table-view'>
+    <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+      <template is='myItem' data='{{...item}}'></template>
+    </block>
   </view>
 </view>
