@@ -11,3 +11,12 @@
   justify-content: center;
   font-weight: lighter; 
 }
+
+.userInfo-brush-select-item{
+  height: 80rpx;
+  background-color: #f5f5f5;
+  border-radius: 40rpx;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}

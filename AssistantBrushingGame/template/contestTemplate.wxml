@@ -20,24 +20,38 @@
 
 <template name='userInfoView'>
   <view id='userInfo-view'>
-    <view>
-      <image></image>
-      <input></input>
+    <view id='userInfo-name-view'>
+      <image src='../../../resource/box-person.png' id='userInfo-name-image'></image>
+      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' bindinput='getInputUserName'></input>
+      <view id='userInfo-name-line'></view>
     </view>
-    <view>
-      <text></text>
-      <template is='selectButton' data='{{...select}}'></template>
+    <view id='userInfo-brush-view'>
+      <text id='userInfo-brush-title'>选择参赛刷牙方法</text>
+      <view id='userInfo-brush-select-view'>
+        <block wx:for='{{selects}}' wx:item='item'>
+          <template is='selectButton' data='{{...item}}'></template>
+        </block>
+      </view>
+    </view>
+    <view id='userInfo-save-view'>
+      <block wx:if='{{!isNext}}'>
+        <button class='main-button' hover-class='hover-main-button' bindtap='userInfoSave'>保存</button>
+      </block>
+      <block wx:else>
+        <button class='main-button' hover-class='hover-main-button' bindtap='userInfoSave'>下一个</button>
+      </block>
     </view>
   </view>
 </template>
 
 <template name='selectButton'>
-  <view class='{{selectButton}}'>
+  <view class="{{selectButton}} {{(id==1)?'':'select-orthers'}}">
+    <text id='select-title'>{{title}}</text>
     <block wx:if='{{select}}'>
-      <image src='../../../resource/box-selected.png' class='selectButton-image'></image>
+      <image src='../../../resource/box-selected.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
     </block>
     <block wx:else>
-      <image src='../../../resource/box-normal.png' class='selectButton-image'></image>
+      <image src='../../../resource/box-normal.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
     </block>
   </view>
 </template>

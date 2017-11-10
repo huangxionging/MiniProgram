@@ -1,5 +1,5 @@
 <!--pages/contest/addContestUser/addContestUser.wxml-->
 <import src='../../../template/contestTemplate.wxml'/>
 <view class='add-user-container'>
-  <template is='userInfoView'></template>
+  <template is='userInfoView' data='{{...item}}'></template>
 </view>
