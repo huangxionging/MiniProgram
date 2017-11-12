@@ -55,3 +55,21 @@
     </block>
   </view>
 </template>
+
+<template name='createContestDeviceItem' data='{{...item}}'>
+  <navigator>
+    <view id="contest-device-view {{(id==1)?'':'item-orthers'}}">
+      <view id='contest-device-tail-view'>
+        <text id='contest-device-tail'></text>
+        <image id='contet-device-power' src='{{imageUrl}}'></image>
+        <text id='contest-device-power-number'></text>
+      </view>
+      <text id='contest-device-tip'></text>
+      <image id='user-arrow'></image>
+    </view>
+  </navigator>
+  
+</template>
+
+<template name=''>
+</template>

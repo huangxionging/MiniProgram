@@ -141,3 +141,26 @@
   position: absolute;
   bottom: 100rpx;
 }
+#contest-device-view{
+  width: 100%;
+  height: 120rpx;
+  background-color: #fff
+}
+
+#contest-device-tail-view{
+  position: absolute;
+  left: 30rpx;
+}
+#contest-device-tail{
+  margin-left: 0;
+  font-size: 26rpx;
+  color: #333;
+}
+#contet-device-power{
+  margin-left: 16rpx;
+  width: 47rpx;
+  height: 24rpx;
+}
+#contest-device-power-number{
+  margin-left: 16rpx;
+}

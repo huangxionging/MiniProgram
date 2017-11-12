@@ -1,2 +1,11 @@
 <!--pages/createContest/createContest.wxml-->
-<text>pages/createContest/createContest.wxml</text>
+<view class='create-contest-container'>
+  <view id='create-name-view'>
+  </view>
+  <view id='create-total-device-view'></view>
+  <view id='create-device-list-view'>
+    <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+      <template is=''></template>
+    </block>
+  </view>
+</view>

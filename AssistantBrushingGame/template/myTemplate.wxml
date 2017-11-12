@@ -1,5 +1,5 @@
 <template name='myItem'>
-  <navigator url='../{{url}}'>
+  <navigator url='{{url}}'>
     <view class="my-item {{(id==1)?'':'item-orthers'}}">
       <image src='../../../resource/{{icon}}' id='my-item-icon'></image>
       <text id='my-item-title'>{{title}}</text>
