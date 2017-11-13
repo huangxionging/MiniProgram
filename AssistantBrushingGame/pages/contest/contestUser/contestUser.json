@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "参赛者名单"
+  "navigationBarTitleText": "参赛者名单",
+  "enablePullDownRefresh": true
 }

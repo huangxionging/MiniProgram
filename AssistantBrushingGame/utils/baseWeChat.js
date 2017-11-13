@@ -31,6 +31,56 @@ function getUserInfo() {
   })
 }
 
+/**
+ * 打开蓝牙适配器
+ */
+function openBluetoothAdapter() {
+  return new Promise((resolve, reject) => {
+    wx.openBluetoothAdapter({
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 获取蓝牙状态
+ */
+function getBluetoothAdapterState() {
+  return new Promise((resolve, reject) => {
+    wx.getBluetoothAdapterState({
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 开始发现蓝牙设备
+ */
+function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = false, interval = 0) {
+  return new Promise((resolve, reject) => {
+    wx.startBluetoothDevicesDiscovery({
+      services: services,
+      allowDuplicatesKey: false,
+      interval: interval,
+      success: resolve,
+      fail: reject,
+      complete: function(res) {},
+    })
+  })
+}
+
+function onBluetoothDeviceFound() {
+  return new Promise((resolve, reject) => {
+    wx.onBluetoothDeviceFound(function(res){
+      baseTool.print(res)
+    })
+  })
+}
+
 module.exports = {
   /**
    * 检查会话是否过期
@@ -44,5 +94,11 @@ module.exports = {
   /**
    * 获得用户信息
    */
-  getUserInfo: getUserInfo
+  getUserInfo: getUserInfo,
+  // 打开蓝牙适配器
+  openBluetoothAdapter: openBluetoothAdapter,
+  // 获得蓝牙适配器状态
+  getBluetoothAdapterState: getBluetoothAdapterState,
+  // 开始搜索
+  startBluetoothDevicesDiscovery: startBluetoothDevicesDiscovery,
 }

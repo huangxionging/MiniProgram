@@ -1,5 +1,5 @@
 // pages/contest/contestUser/contestUser.js
-const loginManager = require('../../../manager/loginManager.js')
+const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
@@ -10,50 +10,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loadingDone: true,
-    hasData: true,
-    dataList: [
-      {
-        id: 1,
-        name: '林🐔',
-      },
-      {
-        id: 2,
-        name: '林🐔',
-      },
-      {
-        id: 3,
-        name: '林🐔',
-      },
-      {
-        id: 4,
-        name: '林🐔',
-      },
-      {
-        id: 5,
-        name: '林🐔',
-      },
-      {
-        id: 6,
-        name: '林🐔',
-      },
-      {
-        id: 7,
-        name: '林🐔',
-      },
-      {
-        id: 8,
-        name: '林🐔',
-      },
-      {
-        id: 9,
-        name: '林🐔',
-      },
-      {
-        id: 10,
-        name: '林🐔',
-      },
-    ],
+    loadingDone: false,
+    hasData: false,
+    dataList: [],
   },
 
   /**
@@ -61,6 +20,8 @@ Page({
    */
   onLoad: function (options) {
     baseTool.print(options)
+    var that = this
+    that.loadData()
   },
 
   /**
@@ -90,12 +51,45 @@ Page({
   onUnload: function () {
 
   },
-
+  loadData: function() {
+    var that = this
+    wx.showNavigationBarLoading()
+    contestManager.getContestUserList().then(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      if (res.length > 0) {
+        var data = []
+        for (var index = 0; index < res.length; ++index) {
+          data.push({
+            id: index + 1, // 主key
+            name: res[index].name, // 名字
+            playerId: res[index].playerId // 参赛者的 id
+          })
+        }
+        that.setData({
+          loadingDone: true,
+          hasData: true,
+          dataList: data,
+        })
+      } else {
+        that.setData({
+          loadingDone: true,
+          hasData: false,
+        })
+      }
+      
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+    })
+  },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    var that = this
+    that.loadData()
   },
 
   /**

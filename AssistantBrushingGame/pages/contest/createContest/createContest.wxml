@@ -1,11 +1,15 @@
 <!--pages/createContest/createContest.wxml-->
+<import src='../../../template/contestTemplate.wxml'/>
 <view class='create-contest-container'>
   <view id='create-name-view'>
+    <text id='create-name-title'>比赛名称</text>
+    <input type='text' id='create-input'></input>
+    <view id='create-line'></view>
   </view>
-  <view id='create-total-device-view'></view>
+  <view id='create-total-device-view'>{{total}}</view>
   <view id='create-device-list-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
-      <template is=''></template>
+      <template is='createContestDeviceItem' data='{{...item}}'></template>
     </block>
   </view>
 </view>

@@ -1,5 +1,4 @@
-// pages/blank/blankIndex.js
-const loginManager = require('../../manager/loginManager.js')
+// pages/contest/selectContestUser/selectContestUser.js
 Page({
 
   /**
@@ -27,7 +26,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    loginManager.loginFlow()
+  
   },
 
   /**
@@ -57,4 +56,11 @@ Page({
   onReachBottom: function () {
   
   },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+  
+  }
 })

@@ -8,10 +8,11 @@
     "pages/contest/contestUser/contestUser",
     "pages/contest/addContestUser/addContestUser",
     "pages/contest/contestUserDetail/contestUserDetail",
-    "pages/my/brushContest/brushContest"
+    "pages/my/brushContest/brushContest",
+    "pages/contest/selectContestUser/selectContestUser"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小小牙医刷牙比赛助手",
     "navigationBarTextStyle": "black"

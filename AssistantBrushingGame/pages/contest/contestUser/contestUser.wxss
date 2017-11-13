@@ -57,6 +57,7 @@
 
 #contest-table-view{
   width: 100%;
+  margin-top: 2rpx;
   margin-bottom: 98rpx;
 }
 

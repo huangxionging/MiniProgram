@@ -1,6 +1,5 @@
 // pages/contest/addContestUser/addContestUser.js
 const app = getApp()
-const loginManager = require('../../../manager/loginManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
@@ -9,7 +8,8 @@ const contestManager = require('../../../manager/contestManager.js')
 var select = true
 var contestUserName = ''
 var item = {
-  isNext: false, 
+  isNext: false,
+  name: '',
   selects: [
     {
       selectButton: 'userInfo-brush-select-item',
@@ -118,21 +118,39 @@ Page({
       return
     }
 
-    item.isNext = true
-    // 终于渲染成功了
-    that.setData({
-      item: item
-    })
 
     var brushMethod = 'a002c7680a5f4f8ea0b1b47fa3f2b947'
     if(!select) {
       brushMethod = '6827c45622b141ef869c955e0c51f9f8'
     }
 
+    wx.showLoading({
+      title: '正在添加',
+      mask: true,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
     contestManager.addContestUser(contestUserName, brushMethod).then(res => {
       baseTool.print(res)
+      wx.hideLoading()
+      item.isNext = true
+      item.name = ''
+      // 终于渲染成功了
+      that.setData({
+        item: item
+      })
     }).catch(res => {
       baseTool.print(res)
+      wx.hideLoading()
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     })
   },
   getInputUserName: function (e){

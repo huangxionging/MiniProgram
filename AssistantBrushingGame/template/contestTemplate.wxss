@@ -53,7 +53,7 @@
   width: 44rpx;
   height: 44rpx;
   position: absolute;
-  right: 30rpx;
+  right: 15rpx;
 }
 
 #user-item-name{
@@ -141,10 +141,15 @@
   position: absolute;
   bottom: 100rpx;
 }
-#contest-device-view{
+.contest-device-view{
   width: 100%;
   height: 120rpx;
-  background-color: #fff
+  background-color: #fff;
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #contest-device-tail-view{
@@ -162,5 +167,22 @@
   height: 24rpx;
 }
 #contest-device-power-number{
-  margin-left: 16rpx;
+  margin-left: 8rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+#contest-tip-view{
+  position: absolute;
+  right: 15rpx;
+  display: flex;
+  align-items: center;
+}
+#contest-device-tip{
+  font-size: 26rpx;
+  color: #00a0e9;
+}
+#contest-device-arrow{
+  width: 44rpx;
+  height: 44rpx;
+  margin-left: 8rpx;
 }

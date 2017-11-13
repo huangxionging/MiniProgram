@@ -10,7 +10,7 @@
 </template>
 
 <template name='contestUserItem'>
-  <navigator url='../contestUserDetail/contestUserDetail?id={{id}}'>
+  <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}'>
     <view class="item {{(id==1)?'':'item-orthers'}}">
       <text id='user-item-name'>{{name}}</text>
       <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
@@ -22,7 +22,7 @@
   <view id='userInfo-view'>
     <view id='userInfo-name-view'>
       <image src='../../../resource/box-person.png' id='userInfo-name-image'></image>
-      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' bindinput='getInputUserName'></input>
+      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' bindinput='getInputUserName' value='{{name}}'></input>
       <view id='userInfo-name-line'></view>
     </view>
     <view id='userInfo-brush-view'>
@@ -56,19 +56,20 @@
   </view>
 </template>
 
-<template name='createContestDeviceItem' data='{{...item}}'>
-  <navigator>
-    <view id="contest-device-view {{(id==1)?'':'item-orthers'}}">
+<template name='createContestDeviceItem'>
+  <navigator url='{{navigateUrl}}'>
+    <view class="contest-device-view {{(id==1)?'':'item-orthers'}}">
       <view id='contest-device-tail-view'>
-        <text id='contest-device-tail'></text>
+        <text id='contest-device-tail'>{{tail}}</text>
         <image id='contet-device-power' src='{{imageUrl}}'></image>
-        <text id='contest-device-power-number'></text>
+        <text id='contest-device-power-number'>75%</text>
       </view>
-      <text id='contest-device-tip'></text>
-      <image id='user-arrow'></image>
+      <view id='contest-tip-view'>
+        <text id='contest-device-tip'>参赛</text>
+        <image id='contest-device-arrow' src='../../../resource/right_arrow.png'></image>
+      </view>
     </view>
   </navigator>
-  
 </template>
 
 <template name=''>

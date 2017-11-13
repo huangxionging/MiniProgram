@@ -14,5 +14,9 @@ module.exports = {
   /**
    * 添加参赛者
    */
-  addContestUser : 'doctorOfflinegameaddPlayer'
+  addContestUser : 'addPlayer',
+  /**
+   * 获取参赛者列表
+   */
+  getContestUserList : 'getPlayers',
 }

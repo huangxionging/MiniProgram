@@ -142,4 +142,6 @@ module.exports = {
   bindThenPromise: bindThenPromise,
   // 绑定 catch Promise 到 master Promise
   bindCatchPromise: bindCatchPromise,
+  // 网络失败提示
+  errorMsg: '网络错误',
 }
