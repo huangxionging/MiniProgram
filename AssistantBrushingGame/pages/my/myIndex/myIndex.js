@@ -18,14 +18,14 @@ Page({
         icon: 'icon_contest.png',
         title: '刷牙比赛',
         quantity: 10,
-        url: '../../contest/contestUser/contestUser'
+        url: '../brushContest/brushContest'
       },
       {
         id: 2,
         icon: 'icon_user.png',
         title: '参赛者',
         quantity: 50,
-        url: '../brushContest/brushContest'
+        url: '../../contest/contestUser/contestUser'
       }
     ]
   },

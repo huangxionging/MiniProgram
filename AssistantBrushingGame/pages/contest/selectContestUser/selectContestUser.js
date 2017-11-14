@@ -5,7 +5,72 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    loadingDone: true,
+    hasData: true,
+    dataList: [
+      {
+        id: 1,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 2,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 3,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 4,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 5,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 6,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 7,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      },
+      {
+        id: 8,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      }, {
+        id: 9,
+        name: '滴滴',
+        item: {
+          isSelect: false
+        }
+      }
+    ],
   },
 
   /**

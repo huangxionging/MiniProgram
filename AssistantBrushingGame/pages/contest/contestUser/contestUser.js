@@ -57,7 +57,8 @@ Page({
     contestManager.getContestUserList().then(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      if (res.length > 0) {
+      baseTool.print(typeof (res))
+      if (typeof(res) != 'undefined' && res.length > 0) {
         var data = []
         for (var index = 0; index < res.length; ++index) {
           data.push({

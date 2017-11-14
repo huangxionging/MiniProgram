@@ -60,7 +60,7 @@
   <navigator url='{{navigateUrl}}'>
     <view class="contest-device-view {{(id==1)?'':'item-orthers'}}">
       <view id='contest-device-tail-view'>
-        <text id='contest-device-tail'>{{tail}}</text>
+        <text id='contest-device-tail'>{{name}}</text>
         <image id='contet-device-power' src='{{imageUrl}}'></image>
         <text id='contest-device-power-number'>75%</text>
       </view>
@@ -72,5 +72,22 @@
   </navigator>
 </template>
 
-<template name=''>
+<template name='selectComponent'>
+  <block wx:if='{{isSelect}}'>
+    <image src='../../../resource/box-selected.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+  </block>
+  <block wx:else>
+    <image src='../../../resource/box-normal.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+  </block>
+</template>
+
+<template name='selectContestUserItem'>
+  <view class="select-item-view {{(id==1)?'':'item-orthers'}}">
+    <view id='select-item-button'>
+      <template is='selectComponent' data='{{...item}}'></template>
+    </view>
+    <text id='select-item-name'>{{name}}</text>
+  
+    <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
+  </view>
 </template>

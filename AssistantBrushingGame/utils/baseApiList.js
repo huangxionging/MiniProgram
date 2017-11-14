@@ -19,4 +19,8 @@ module.exports = {
    * 获取参赛者列表
    */
   getContestUserList : 'getPlayers',
+  /**
+   * 首页接口
+   */
+  homePage: 'homePage'
 }

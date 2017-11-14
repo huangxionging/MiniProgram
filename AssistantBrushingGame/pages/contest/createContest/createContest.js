@@ -4,36 +4,39 @@ const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
+
+
 var data = {
   total: '比赛设备15支',
   dataList: [
     {
       id: 1,
-      tail: 1234567,
+      name: 1234567,
       imageUrl: '../../../resource/power25.png',
       navigateUrl: '../selectContestUser/selectContestUser'
     },
     {
       id: 2,
-      tail: 1234567,
+      name: 1234567,
       imageUrl: '../../../resource/power25.png',
       navigateUrl: '../selectContestUser/selectContestUser'
     },
     {
       id: 3,
-      tail: 1234567,
+      name: 1234567,
       imageUrl: '../../../resource/power25.png',
       navigateUrl: '../selectContestUser/selectContestUser'
     },
     {
       id: 4,
-      tail: 1234567,
+      name: 1234567,
       imageUrl: '../../../resource/power25.png',
       navigateUrl: '../selectContestUser/selectContestUser'
     },
     {
       id: 5,
-      tail: 1234567,
+      deviceId: 'ddd',
+      name: 1234567,
       imageUrl: '../../../resource/power25.png',
       navigateUrl: '../selectContestUser/selectContestUser'
     }
@@ -50,7 +53,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    bluetoothManager.searchBluetoothDevice()
+    var that = this
+    var searchBluetoothDevicePromise = bluetoothManager.searchBluetoothDevice()
+    searchBluetoothDevicePromise.then(res => {
+      that.foundDevices()
+    })
   },
 
   /**
@@ -100,5 +107,19 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  foundDevices: function () {
+    var that = this
+    bluetoothManager.foundDevice(res => {
+      var dataList = data.dataList
+      var index = dataList.length
+      res.id = index + 1
+      res.imageUrl = '../../../resource/power25.png'
+      res.navigateUrl = '../selectContestUser/selectContestUser'
+      dataList.push(res)
+      data.total = '比赛设备 ' + (index + 1) + '支'
+      that.setData(data)
+
+    })
   }
 })

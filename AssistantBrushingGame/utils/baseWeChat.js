@@ -60,11 +60,11 @@ function getBluetoothAdapterState() {
 /**
  * 开始发现蓝牙设备
  */
-function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = false, interval = 0) {
+function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = false, interval = 100) {
   return new Promise((resolve, reject) => {
     wx.startBluetoothDevicesDiscovery({
       services: services,
-      allowDuplicatesKey: false,
+      allowDuplicatesKey: allowDuplicatesKey,
       interval: interval,
       success: resolve,
       fail: reject,
@@ -73,12 +73,35 @@ function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = fals
   })
 }
 
-function onBluetoothDeviceFound() {
+/**
+ * 发现设备
+ */
+function onBluetoothDeviceFound(callback) {
+  wx.onBluetoothDeviceFound(callback)
+}
+
+function closeBluetoothAdapter(){
   return new Promise((resolve, reject) => {
-    wx.onBluetoothDeviceFound(function(res){
-      baseTool.print(res)
+    wx.closeBluetoothAdapter({
+      success: resolve,
+      fail: reject,
+      complete: function (res) {},
     })
   })
+}
+
+/**
+ * 停止发现设备
+ */
+function stopBluetoothDevicesDiscovery() {
+  return new Promise((resolve, reject) => {
+    wx.stopBluetoothDevicesDiscovery({
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+  
 }
 
 module.exports = {
@@ -101,4 +124,9 @@ module.exports = {
   getBluetoothAdapterState: getBluetoothAdapterState,
   // 开始搜索
   startBluetoothDevicesDiscovery: startBluetoothDevicesDiscovery,
+  // 发现设备
+  onBluetoothDeviceFound: onBluetoothDeviceFound,
+  // 停止发现设备
+  stopBluetoothDevicesDiscovery, stopBluetoothDevicesDiscovery,
+  closeBluetoothAdapter, closeBluetoothAdapter,
 }

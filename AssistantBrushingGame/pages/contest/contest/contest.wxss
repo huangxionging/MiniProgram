@@ -31,8 +31,6 @@
   top: 60rpx;
 }
 
-
-
 #contest-no-contest-view {
   margin-top: 238rpx;
   display: flex;

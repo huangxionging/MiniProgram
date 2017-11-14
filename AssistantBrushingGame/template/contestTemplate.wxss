@@ -186,3 +186,31 @@
   height: 44rpx;
   margin-left: 8rpx;
 }
+
+.select-item-view{
+  width: 100%;
+  height: 120rpx;
+  background-color: white;
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#select-item-button{
+  position:  absolute;
+  left: 30rpx;
+  width: 44rpx;
+  height: 44rpx;
+}
+#select-item-name{
+  position: absolute;
+  left: 54rpx;
+}
+#select-device-arrow{
+  width: 44rpx;
+  height: 44rpx;
+  position: absolute;
+  right: 15rpx;
+}
