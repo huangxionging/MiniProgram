@@ -1,15 +1,37 @@
 // pages/contest/contestUserDetail/contestUserDetail.js
-const loginManager = require('../../../manager/loginManager.js')
+const app = getApp()
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
+const contestManager = require('../../../manager/contestManager.js')
+
+var select = true
+var contestUserName = ''
+var item = {
+  isNext: false,
+  name: '',
+  selects: [
+    {
+      selectButton: 'userInfo-brush-select-item',
+      title: '标准巴氏刷牙法 (6岁以上)',
+      id: 1,
+      select: true
+    },
+    {
+      selectButton: 'userInfo-brush-select-item',
+      title: '圆弧刷牙法 (6岁以下)',
+      id: 2,
+      select: false
+    }
+  ]
+}
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    item: item
   },
 
   /**
@@ -66,5 +88,74 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  selectClick: function (e) {
+    var that = this
+    // baseTool.print(e)
+    select = 2 - e.target.id
+    baseTool.print(select)
+    baseTool.print(item)
+    item.selects[0].select = select
+    item.selects[1].select = !select
+    baseTool.print(item)
+    // 终于渲染成功了
+    that.setData({
+      item: item
+    })
+  },
+  userInfoSave: function () {
+    var that = this
+    baseTool.print(contestUserName)
+    if (contestUserName == '') {
+      wx.showModal({
+        title: '提示',
+        content: '未输入参赛者名字',
+        showCancel: false,
+        confirmText: '确定',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
+
+
+    var brushMethod = 'a002c7680a5f4f8ea0b1b47fa3f2b947'
+    if (!select) {
+      brushMethod = '6827c45622b141ef869c955e0c51f9f8'
+    }
+
+    wx.showLoading({
+      title: '正在添加',
+      mask: true,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+    contestManager.addContestUser(contestUserName, brushMethod).then(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      item.isNext = true
+      item.name = ''
+      // 终于渲染成功了
+      that.setData({
+        item: item
+      })
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+    })
+  },
+  getInputUserName: function (e) {
+    baseTool.print(e)
+    contestUserName = e.detail.value
   }
 })

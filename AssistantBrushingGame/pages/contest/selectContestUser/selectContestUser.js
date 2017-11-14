@@ -127,5 +127,15 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  addContestUser: () => {
+    wx.navigateTo({
+      url: '../addContestUser/addContestUser',
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+  selectClick: function(e) {
   }
 })

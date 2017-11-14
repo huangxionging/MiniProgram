@@ -198,6 +198,12 @@
   justify-content: center;
 }
 
+.select-component-image{
+  width: 44rpx;
+  height:  44rpx;
+  border-radius: 50%;
+}
+
 #select-item-button{
   position:  absolute;
   left: 30rpx;
@@ -206,7 +212,7 @@
 }
 #select-item-name{
   position: absolute;
-  left: 54rpx;
+  left: 74rpx;
 }
 #select-device-arrow{
   width: 44rpx;

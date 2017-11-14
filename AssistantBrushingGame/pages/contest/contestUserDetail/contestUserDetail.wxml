@@ -1,2 +1,5 @@
 <!--pages/contest/contestUserDetail/contestUserDetail.wxml-->
-<text>pages/contest/contestUserDetail/contestUserDetail.wxml</text>
+<import src='../../../template/contestTemplate.wxml'/>
+<view class='add-user-container'>
+  <template is='userInfoView' data='{{...item}}'></template>
+</view>

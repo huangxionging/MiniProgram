@@ -9,7 +9,7 @@ var data = {
   /**
     * 是否加载完成
     */
-  loadingDone: true,
+  loadingDone: false,
   hasData: false,
   gameId: '',
   contestTitle: '刷牙比赛1',

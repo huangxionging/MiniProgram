@@ -74,20 +74,22 @@
 
 <template name='selectComponent'>
   <block wx:if='{{isSelect}}'>
-    <image src='../../../resource/box-selected.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+    <image src='../../../resource/box-selected.png' class='select-component-image' bindtap='selectClick' id='{{id}}'></image>
   </block>
   <block wx:else>
-    <image src='../../../resource/box-normal.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+    <image src='../../../resource/box-normal.png' class='select-component-image' bindtap='selectClick' id='{{id}}'></image>
   </block>
 </template>
 
 <template name='selectContestUserItem'>
+<navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}'>
   <view class="select-item-view {{(id==1)?'':'item-orthers'}}">
     <view id='select-item-button'>
       <template is='selectComponent' data='{{...item}}'></template>
     </view>
     <text id='select-item-name'>{{name}}</text>
-  
     <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
   </view>
+</navigator>
+  
 </template>
