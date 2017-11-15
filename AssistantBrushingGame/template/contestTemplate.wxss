@@ -212,11 +212,19 @@
 }
 #select-item-name{
   position: absolute;
-  left: 74rpx;
+  left: 84rpx;
+  font-size: 26rpx;
 }
 #select-device-arrow{
   width: 44rpx;
   height: 44rpx;
   position: absolute;
   right: 15rpx;
+}
+#select-navigate{
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

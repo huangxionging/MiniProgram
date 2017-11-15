@@ -57,7 +57,7 @@
 </template>
 
 <template name='createContestDeviceItem'>
-  <navigator url='{{navigateUrl}}'>
+  <navigator url='../selectContestUser/selectContestUser?gameId={{gameId}}'>
     <view class="contest-device-view {{(id==1)?'':'item-orthers'}}">
       <view id='contest-device-tail-view'>
         <text id='contest-device-tail'>{{name}}</text>
@@ -82,14 +82,13 @@
 </template>
 
 <template name='selectContestUserItem'>
-<navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}'>
-  <view class="select-item-view {{(id==1)?'':'item-orthers'}}">
+  <view class="select-item-view {{(item.id==1)?'':'item-orthers'}}">
     <view id='select-item-button'>
       <template is='selectComponent' data='{{...item}}'></template>
     </view>
     <text id='select-item-name'>{{name}}</text>
-    <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
+    <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}' id='select-navigate'>
+      <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
+    </navigator>
   </view>
-</navigator>
-  
 </template>

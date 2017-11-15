@@ -22,5 +22,17 @@ module.exports = {
   /**
    * 首页接口
    */
-  homePage: 'homePage'
+  homePage: 'homePage',
+  /** 
+   * 选择参赛者
+   */
+  selectContestUser: 'choosePlayers',
+  /**
+   * 添加比赛
+   */
+  addContest: 'addGame',
+  /**
+   * 删除比赛
+   */
+  deleteContest: 'delGame',
 }

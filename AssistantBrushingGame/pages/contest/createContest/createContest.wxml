@@ -3,7 +3,7 @@
 <view class='create-contest-container'>
   <view id='create-name-view'>
     <text id='create-name-title'>比赛名称</text>
-    <input type='text' id='create-input'></input>
+    <input type='text' id='create-input' value='{{name}}' bindinput='getInputName'></input>
     <view id='create-line'></view>
   </view>
   <view id='create-total-device-view'>{{total}}</view>
