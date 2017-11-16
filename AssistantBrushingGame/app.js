@@ -6,7 +6,7 @@ const baseURL = require('./utils/baseURL.js')
 const baseTool = require('./utils/baseTool.js')
 App({
   onLaunch: function () {
-    loginManager.loginFlow()
+    // loginManager.loginFlow()
   },
   globalData: {
     userInfo: null

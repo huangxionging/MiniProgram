@@ -79,8 +79,60 @@
   height: 120rpx;
   width: 100%;
   background-color: #fcfcfc;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .my-brush-contest-cell-orthers{
   margin-top: 2rpx;
+}
+
+#my-brush-contest-cell-select-view{
+  position: absolute;
+  left: 45rpx;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#my-brush-contest-cell-title{
+  position: absolute;
+  left: 110rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+#my-brush-contest-cell-right{
+  height: 100%;
+  position: absolute;
+  right: 15rpx;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+#my-brush-contest-cell-time{
+  position: absolute;
+  right: 60rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+#my-brush-contest-cell-navigate{
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#user-arrow{
+  width: 44rpx;
+  height: 44rpx;
 }

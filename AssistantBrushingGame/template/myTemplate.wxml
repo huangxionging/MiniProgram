@@ -28,13 +28,19 @@
 </template>
 
 <template name='myBrushContestCell'>
-  <navigator url='../brushContestDetail/brushContestDetail'>
-    <view class="my-brush-contest-cell-content {{(id==1)?'':'my-brush-contest-cell-orthers'}}">
-      <view >
-        <template is='selectComponent'></template>
-        <text>{{name}}</text>
+ 
+  <view class="my-brush-contest-cell-content {{(id==1)?'':'my-brush-contest-cell-orthers'}}">
+      <view id='my-brush-contest-cell-select-view'>
+        <template is='selectComponent' data='{{...row}}'></template>
       </view>
-      <text>{{time}}</text>
-    </view>
-  </navigator>
+      <text id='my-brush-contest-cell-title'>{{name}}</text>
+      <view id='my-brush-contest-cell-right'>
+        
+         <navigator url='../brushContestDetail/brushContestDetail' id='my-brush-contest-cell-navigate'>
+           <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
+         </navigator>
+         <text id='my-brush-contest-cell-time'>{{time}}</text>
+        
+      </view>
+  </view>
 </template>

@@ -1,13 +1,22 @@
 // pages/my/brushContest/brushContest.js
+const app = getApp()
+const loginManager = require('../../../manager/loginManager.js')
+const baseWechat = require('../../../utils/baseWeChat.js')
+const baseURL = require('../../../utils/baseURL.js')
+const baseTool = require('../../../utils/baseTool.js')
 var data = {
   dataList: [
     {
-      id: 1,
+      item: {
+        id: 1,
+      },
       isSelect: false,
       date: '20141000',
       contestList: [
         {
-          id: 1,
+          row: {
+            id: 1 * 10000 + 1
+          },
           name: '刷牙比赛',
           time: '10:23'
         },
@@ -146,5 +155,8 @@ Page({
    */
   onShareAppMessage: function () {
   
+  }, 
+  selectClick: function (e) {
+    baseTool.print(e)
   }
 })
