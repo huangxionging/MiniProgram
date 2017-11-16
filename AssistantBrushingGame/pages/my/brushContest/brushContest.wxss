@@ -1,1 +1,21 @@
 /* pages/my/brushContest/brushContest.wxss */
+@import '../../../template/myTemplate.wxss';
+.my-brush-contest-container{
+  width: 100%;
+  height: 100;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-brush-table-view{
+  margin-top: 2rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}

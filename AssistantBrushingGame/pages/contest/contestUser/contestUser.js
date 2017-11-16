@@ -4,16 +4,21 @@ const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 
+var data = {
+  loadingDone: false,
+  hasData: false,
+  gameId: '',
+  deviceId: '',
+  deviceName: '',
+  dataList: []
+}
+
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: {
-    loadingDone: false,
-    hasData: false,
-    dataList: [],
-  },
+  data: data,
 
   /**
    * 生命周期函数--监听页面加载

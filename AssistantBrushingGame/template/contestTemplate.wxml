@@ -10,7 +10,7 @@
 </template>
 
 <template name='contestUserItem'>
-  <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}'>
+  <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}&brushingMethodId={{brushingMethodId}}'>
     <view class="item {{(id==1)?'':'item-orthers'}}">
       <text id='user-item-name'>{{name}}</text>
       <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
@@ -28,7 +28,7 @@
     <view id='userInfo-brush-view'>
       <text id='userInfo-brush-title'>选择参赛刷牙方法</text>
       <view id='userInfo-brush-select-view'>
-        <block wx:for='{{selects}}' wx:item='item'>
+        <block wx:for='{{selects}}' wx:key='id' wx:item='item'>
           <template is='selectButton' data='{{...item}}'></template>
         </block>
       </view>
@@ -57,7 +57,7 @@
 </template>
 
 <template name='createContestDeviceItem'>
-  <navigator url='../selectContestUser/selectContestUser?gameId={{gameId}}'>
+  <navigator url='../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}'>
     <view class="contest-device-view {{(id==1)?'':'item-orthers'}}">
       <view id='contest-device-tail-view'>
         <text id='contest-device-tail'>{{name}}</text>
@@ -87,7 +87,7 @@
       <template is='selectComponent' data='{{...item}}'></template>
     </view>
     <text id='select-item-name'>{{name}}</text>
-    <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}' id='select-navigate'>
+    <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}&brushingMethodId={{brushingMethodId}}' id='select-navigate'>
       <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
     </navigator>
   </view>

@@ -13,31 +13,35 @@ var data = {
   dataList: [
     {
       id: 1,
+      deviceId: 'DD5412201FE3',
       name: 1234567,
       imageUrl: '../../../resource/power25.png',
       gameId: '',
     },
     {
       id: 2,
+      deviceId: 'DD5412201FE3',
       name: 1234567,
       imageUrl: '../../../resource/power25.png',
       gameId: '',
     },
     {
       id: 3,
+      deviceId: 'DD5412201FE3',
       name: 1234567,
       imageUrl: '../../../resource/power25.png',
       gameId: '',
     },
     {
       id: 4,
+      deviceId: 'DD5412201FE3',
       name: 1234567,
       imageUrl: '../../../resource/power25.png',
       gameId: '',
     },
     {
       id: 5,
-      deviceId: 'ddd',
+      deviceId: 'DD5412201FE3',
       name: 1234567,
       imageUrl: '../../../resource/power25.png',
       gameId: '',

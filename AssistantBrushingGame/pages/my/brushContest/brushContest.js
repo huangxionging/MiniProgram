@@ -1,12 +1,96 @@
 // pages/my/brushContest/brushContest.js
+var data = {
+  dataList: [
+    {
+      id: 1,
+      isSelect: false,
+      date: '20141000',
+      contestList: [
+        {
+          id: 1,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 2,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 3,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 4,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 5,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 6,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 7,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 8,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+        {
+          id: 9,
+          name: '刷牙比赛',
+          time: '10:23'
+        },
+      ]
+    },
+    {
+      id: 2,
+      isSelect: false,
+      date: '20141000',
+      contestList: []
+    },
+    {
+      id: 3,
+      isSelect: false,
+      date: '20141000',
+      contestList: []
+    },
+    {
+      id: 4,
+      isSelect: false,
+      date: '20141000',
+      contestList: []
+    },
+    {
+      id: 5,
+      isSelect: false,
+      date: '20141000',
+      contestList: []
+    },
+    {
+      id: 6,
+      isSelect: false,
+      date: '20141000',
+      contestList: []
+    }
+  ]
+}
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: {
-  
-  },
+  data: data,
 
   /**
    * 生命周期函数--监听页面加载

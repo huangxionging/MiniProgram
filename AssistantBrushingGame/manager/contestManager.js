@@ -93,10 +93,13 @@ function selectContestUser(gameId = '') {
       memberId: baseTool.valueForKey('memberId'),
       gameId: gameId
     }
+    baseTool.print(data)
+    baseTool.print(url)
     wx.request({
       url: url,
       data: data,
       success: function (res) {
+        baseTool.print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
@@ -174,6 +177,36 @@ function deleteContest(gameId = '') {
   })
 }
 
+function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindContestUser
+    var data = {
+      memberId: baseTool.valueForKey('memberId'),
+      gameId: gameId,
+      player: player,
+      playerId: playerId,
+      macAddress: macAddress,
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        baseTool.print(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
+      },
+      fail: function () {
+        reject(baseTool.errorMsg)
+      },
+      complete: function (res) { },
+    })
+  })
+}
+
 module.exports = {
   // 首页接口
   getHomePage: getHomePage,
@@ -187,4 +220,6 @@ module.exports = {
   selectContestUser: selectContestUser,
   // 删除比赛
   deleteContest: deleteContest,
+  // 绑定参赛者
+  bindContestUser: bindContestUser,
 }

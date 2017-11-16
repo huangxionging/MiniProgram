@@ -1,3 +1,5 @@
+<import src='./contestTemplate.wxml'/>
+
 <template name='myItem'>
   <navigator url='{{url}}'>
     <view class="my-item {{(id==1)?'':'item-orthers'}}">
@@ -5,6 +7,34 @@
       <text id='my-item-title'>{{title}}</text>
       <text id='my-item-quantity'>{{quantity}}</text>
       <image src='../../../resource/right_arrow.png' id='my-item-arrow'></image>
+    </view>
+  </navigator>
+</template>
+
+<template name='myBrushContestSection'>
+  <view class="my-brush-section {{(id==1)?'':'my-brush-item-orthers'}}">
+    <view class='my-brush-section-header'>
+      <view id='my-brush-section-select'>
+        <template is='selectComponent' data='{{...item}}'></template>
+      </view>
+      <text id='my-brush-section-date'>{{date}}</text>
+    </view>
+    <view class='my-brush-section-content'>
+      <block wx:for='{{contestList}}' wx:key='id' wx:item='item'>
+        <template is='myBrushContestCell' data='{{...item}}'></template>
+      </block>
+    </view>
+  </view>
+</template>
+
+<template name='myBrushContestCell'>
+  <navigator url='../brushContestDetail/brushContestDetail'>
+    <view class="my-brush-contest-cell-content {{(id==1)?'':'my-brush-contest-cell-orthers'}}">
+      <view >
+        <template is='selectComponent'></template>
+        <text>{{name}}</text>
+      </view>
+      <text>{{time}}</text>
     </view>
   </navigator>
 </template>

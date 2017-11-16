@@ -5,7 +5,7 @@
     <view class='select-content-view'>
       <view id='select-no-user-view'>
         <image src='../../../resource/contest_no_user.png' id='select-no-select-image'></image>
-        <text id='select-no-select-text'>开始添加第一个参赛者吧</text>
+        <text id='select-no-select-text'>今天暂时没有参赛名单, 开始添加参赛名单吧</text>
       </view>
       <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='addContestUser'>添加参赛者</button>
     </view>

@@ -1,2 +1,9 @@
 <!--pages/my/brushContest/brushContest.wxml-->
-<text>pages/my/brushContest/brushContest.wxml</text>
+<import src='../../../template/myTemplate.wxml'/>
+<view class='my-brush-contest-container'>
+  <view class='my-brush-table-view'>
+    <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+      <template is='myBrushContestSection' data='{{...item}}'></template>
+    </block>
+  </view>
+</view>

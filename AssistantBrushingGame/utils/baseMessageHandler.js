@@ -20,6 +20,7 @@ function addMessageHandler(name, instance, messageHandler) {
       })
       resolve({
         code: true,
+        name: name,
         msg: '添加成功'
       })
     } else {
@@ -37,6 +38,7 @@ function addMessageHandler(name, instance, messageHandler) {
       if (isCorrect === false) {
         reject({
           code: false,
+          name: name,
           msg: '重复添加'
         })
       } else {
@@ -46,6 +48,7 @@ function addMessageHandler(name, instance, messageHandler) {
         })
         resolve({
           code: true,
+          name: name,
           msg: '添加成功'
         })
       }
@@ -58,6 +61,7 @@ function sendMessage(name = '', message) {
     if (typeof (allMessageHandler[name]) === 'undefined') {
       reject({
         code: false,
+        name: name,
         msg: '该消息未注册'
       })
     } else {
@@ -69,6 +73,7 @@ function sendMessage(name = '', message) {
       }
       resolve({
         code: true,
+        name: name,
         msg: '消息发送成功'
       })
     }
@@ -83,12 +88,14 @@ function removeAllMessageHandler(name = '') {
     if (typeof (allMessageHandler[name]) === 'undefined') {
       reject({
         code: false,
+        name: name,
         msg: '该消息未注册'
       })
     } else {
       delete allMessageHandler[name]
       resolve({
         code: true,
+        name: name,
         msg: '删除成功'
       })
     }
@@ -103,6 +110,7 @@ function removeSpecificInstanceMessageHandler(name = '', instance) {
     if (typeof (allMessageHandler[name]) === 'undefined') {
       reject({
         code: false,
+        name: name,
         msg: '该消息未注册'
       })
     } else {
@@ -123,11 +131,13 @@ function removeSpecificInstanceMessageHandler(name = '', instance) {
       if (isCorrect == true) {
         resolve({
           code: true,
+          name: name,
           msg: '删除成功'
         })
       } else {
         reject({
           code: false,
+          name: name,
           msg: '该消息未注册'
         })
       }

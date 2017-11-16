@@ -35,4 +35,8 @@ module.exports = {
    * 删除比赛
    */
   deleteContest: 'delGame',
+  /**
+   * 绑定用户
+   */
+  bindContestUser: 'joinMatch',
 }

@@ -4,7 +4,7 @@ const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
-
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 var select = true
 var contestUserName = ''
 var item = {
@@ -139,6 +139,13 @@ Page({
       // 终于渲染成功了
       that.setData({
         item: item
+      })
+
+      baseMessageHandler.sendMessage('selectRefresh', {
+        code: true,
+        msg: '添加成功需要刷新'
+      }).then(res => {
+
       })
     }).catch(res => {
       baseTool.print(res)
