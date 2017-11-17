@@ -1,4 +1,3 @@
-@import './contestTemplate.wxss';
 .my-item{
   display: flex;
   align-items: center;
@@ -135,4 +134,9 @@
 #user-arrow{
   width: 44rpx;
   height: 44rpx;
+}
+.select-component-image{
+  width: 44rpx;
+  height:  44rpx;
+  border-radius: 50%;
 }

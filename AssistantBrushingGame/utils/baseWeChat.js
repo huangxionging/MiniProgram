@@ -128,5 +128,6 @@ module.exports = {
   onBluetoothDeviceFound: onBluetoothDeviceFound,
   // 停止发现设备
   stopBluetoothDevicesDiscovery, stopBluetoothDevicesDiscovery,
+  // 关闭蓝牙适配器
   closeBluetoothAdapter, closeBluetoothAdapter,
 }

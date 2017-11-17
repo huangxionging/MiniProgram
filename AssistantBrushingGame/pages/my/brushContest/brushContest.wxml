@@ -1,9 +1,16 @@
 <!--pages/my/brushContest/brushContest.wxml-->
 <import src='../../../template/myTemplate.wxml'/>
-<view class='my-brush-contest-container'>
+<view class='my-brush-contest-container' wx:if='{{loadingDone}}'>
   <view class='my-brush-table-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
       <template is='myBrushContestSection' data='{{...item}}'></template>
     </block>
+  </view>
+  <view class='merge-contest-data'>
+    <view id='my-brush-merge-select'>
+      <template is='selectComponent' data='{{id:-100, section:-100, row: -100, isSelect}}'></template>
+    </view>
+    <text id='my-brush-merge-all'>全选</text>
+    <view class='my-brush-merge-button' hover-class='hover-main-button'>合并数据</view>
   </view>
 </view>

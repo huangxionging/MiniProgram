@@ -39,4 +39,8 @@ module.exports = {
    * 绑定用户
    */
   bindContestUser: 'joinMatch',
+  /**
+   * 我的历史刷牙比赛
+   */
+  pageQueryContest: 'pageQueryGames',
 }

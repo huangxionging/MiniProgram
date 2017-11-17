@@ -1,6 +1,7 @@
 <!--pages/my/brushContestDetail/brushContestDetail.wxml-->
 <import src='../../../template/contestTemplate.wxml'/>
 <view class='my-brush-contest-detail-container'>
+
   <view id='contest-table-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
       <template is='contestUserScoreItem' data='{{...item}}'></template>

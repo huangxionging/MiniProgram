@@ -1,4 +1,3 @@
-<import src='./contestTemplate.wxml'/>
 
 <template name='myItem'>
   <navigator url='{{url}}'>
@@ -15,7 +14,7 @@
   <view class="my-brush-section {{(id==1)?'':'my-brush-item-orthers'}}">
     <view class='my-brush-section-header'>
       <view id='my-brush-section-select'>
-        <template is='selectComponent' data='{{...item}}'></template>
+        <template is='selectComponent' data='{{id, section: -100, row: -100, isSelect}}'></template>
       </view>
       <text id='my-brush-section-date'>{{date}}</text>
     </view>
@@ -28,19 +27,25 @@
 </template>
 
 <template name='myBrushContestCell'>
- 
   <view class="my-brush-contest-cell-content {{(id==1)?'':'my-brush-contest-cell-orthers'}}">
       <view id='my-brush-contest-cell-select-view'>
-        <template is='selectComponent' data='{{...row}}'></template>
+        <template is='selectComponent' data='{{id: -100, section, row, isSelect}}'></template>
       </view>
       <text id='my-brush-contest-cell-title'>{{name}}</text>
       <view id='my-brush-contest-cell-right'>
-        
          <navigator url='../brushContestDetail/brushContestDetail' id='my-brush-contest-cell-navigate'>
            <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
          </navigator>
          <text id='my-brush-contest-cell-time'>{{time}}</text>
-        
       </view>
   </view>
+</template>
+
+<template name='selectComponent'>
+  <block wx:if='{{isSelect}}'>
+    <image src='../../../resource/box-selected.png' class='select-component-image' bindtap='selectClick' data-id='{{id}}' data-section='{{section}}' data-row='{{row}}'></image>
+  </block>
+  <block wx:else>
+    <image src='../../../resource/box-normal.png' class='select-component-image' bindtap='selectClick' data-id='{{id}}' data-section='{{section}}' data-row='{{row}}'></image>
+  </block>
 </template>

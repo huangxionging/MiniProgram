@@ -17,7 +17,7 @@
           <template is='contestUserItem' data='{{...item}}'></template>
         </block> 
       </view>
-      <view id='add-contest-user' bindtap='addContestUser'>添加参赛者</view>
+      <view class='add-contest-user' hover-class='hover-main-button' bindtap='addContestUser' >添加参赛者</view>
     </view>
   </block>
 </view>
