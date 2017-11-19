@@ -6,7 +6,6 @@ const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 var select = true
-var contestUserName = ''
 var item = {
   isNext: false,
   name: '',
@@ -38,7 +37,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    baseTool.print(item)
   },
 
   /**
@@ -66,6 +65,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+
   },
 
   /**
@@ -104,8 +104,8 @@ Page({
   },
   userInfoSave: function() {
     var that = this
-    baseTool.print(contestUserName)
-    if (contestUserName == '') {
+    baseTool.print(item.name)
+    if (item.name == '') {
       wx.showModal({
         title: '提示',
         content: '未输入参赛者名字',
@@ -131,7 +131,7 @@ Page({
       fail: function(res) {},
       complete: function(res) {},
     })
-    contestManager.addContestUser(contestUserName, brushMethod).then(res => {
+    contestManager.addContestUser(item.name, brushMethod).then(res => {
       baseTool.print(res)
       wx.hideLoading()
       item.isNext = true
@@ -162,6 +162,6 @@ Page({
   },
   getInputUserName: function (e){
     baseTool.print(e)
-    contestUserName = e.detail.value
+    item.name = e.detail.value
   }
 })

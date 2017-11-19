@@ -8,10 +8,12 @@ const myManager = require('../../../manager/myManager.js')
 
 var data = {
   pageNo: 1,
-  isSelect: true,
+  isSelect: false,
   loadingDone: false,
   dataList: []
 }
+
+
 Page({
 
   /**
@@ -64,6 +66,7 @@ Page({
     data.pageNo = 1
     data.loadingDone = false
     this.loadData()
+    data.isSelect = false;
   },
 
   /**
@@ -94,17 +97,16 @@ Page({
           if (!data.dataList[section]) {
             data.dataList.push({
               id: (section + 1),
-              isSelect: false,
+              isSelect: data.isSelect,
               date: dict.date,
               contestList: [
                 {
-                  tag: row + 1,
                   name: dict.name,
                   time: dict.time,
                   gameId: dict.gameId,
                   createTime: dict.createTime,
                   date: dict.date,
-                  isSelect: false,
+                  isSelect: data.isSelect,
                   section: section,
                   row: row
                 }
@@ -117,25 +119,24 @@ Page({
             baseTool.print([section, row])
             if (item.date === dict.date) {
               item.contestList.push({
-                tag: row + 1,
                 name: dict.name,
                 time: dict.time,
                 gameId: dict.gameId,
                 createTime: dict.createTime,
                 date: dict.date,
-                isSelect: false,
+                isSelect: item.isSelect,
                 section: section,
                 row: row
               })
             } else {
               ++section, row = 0
+              data.isSelect = false
               data.dataList.push({
                 id: section + 1,
                 isSelect: false,
                 date: dict.date,
                 contestList: [
                   {
-                    tag: row + 1,
                     name: dict.name,
                     time: dict.time,
                     gameId: dict.gameId,
@@ -168,18 +169,60 @@ Page({
   
   }, 
   selectClick: function (e) {
-    baseTool.print(e)
     var that = this
     var dict = e.currentTarget.dataset
     var id = dict.id, section = dict.section, row = dict.row
     baseTool.print([id, section, row])
     if (id == -100 && section == -100 && row == -100) {
+      // 全选中或者不选中
       data.isSelect = !data.isSelect
+      // 设置所有的状态
       that.changeDataListAllSelectState(data.isSelect)
     } else if (id != -100 && section == -100 && row == -100) {
-      
-      data.dataList[id - 1].select = !data.dataList[id - 1].select
-      that.changeDataListSectionSelectState(id - 1, data.dataList[id - 1].select)
+      // 按中的是 sectionHeader 上的按钮
+      data.dataList[id - 1].isSelect = !data.dataList[id - 1].isSelect
+      // 设置整个 section
+      that.changeDataListSectionSelectState(id - 1, data.dataList[id - 1].isSelect)
+      if (!data.dataList[id - 1].isSelect) {
+        data.isSelect = false
+      }
+
+      // 检查选中的状态
+      var dataSelects = data.dataList.filter(function (value, index, array) {
+        baseTool.print(value)
+        return value.isSelect == true
+      })
+      // 如果当前全部选中, 则全选按钮选中
+      if (dataSelects.length === data.dataList.length) {
+        data.isSelect = true
+      }
+    } else if (id == -100 && section != -100 && row != -100){
+      // 按中的是 cell 上
+      data.dataList[section].contestList[row].isSelect = !data.dataList[section].contestList[row].isSelect 
+      if (!data.dataList[section].contestList[row].isSelect) {
+        data.dataList[section].isSelect = false
+        data.isSelect = false
+      }
+
+      // 检查 section 是否全选
+      var selectSelections = data.dataList[section].contestList.filter(function (value, index, array) {
+        return value.isSelect == true
+      })
+
+      if (selectSelections.length === data.dataList[section].contestList.length) {
+        data.dataList[section].isSelect = true
+      }
+
+      // 检查所有 section 是否全选
+      var dataSelects =  data.dataList.filter(function (value, index, array) {
+        baseTool.print(value)
+        return value.isSelect == true
+      })
+
+      if (dataSelects.length === data.dataList.length) {
+        data.isSelect = true
+      }
+
     }
     that.setData(data)
   },
@@ -190,15 +233,41 @@ Page({
     data.dataList[section].contestList[row].isSelect = select
   },
   changeDataListSectionSelectState: function (section, select = false) {
+    var that = this
     data.dataList[section].isSelect = select
     for (var index = 0; index < data.dataList[section].contestList.length; ++index) {
-      data.dataList[section].contestList[index].isSelect = select
+      that.changeContestListSelectState(section, index, select)
     }
   },
   changeDataListAllSelectState: function (select) {
     var that = this
+    data.isSelect = select
     for (var index = 0; index < data.dataList.length; ++index) {
       that.changeDataListSectionSelectState(index, select)
     }
+  },
+  mergeDataClick: function (e) {
+    baseTool.print(e)
+
+    var mergeData = []
+    for (var index = 0; index < data.dataList.length; ++index) {
+      var itemSelects = data.dataList[index].contestList.filter(function (value, index, array) {
+        return value.isSelect == true
+      })
+
+      if (itemSelects.length > 0) {
+        baseTool.print(itemSelects)
+        mergeData = mergeData.concat(itemSelects)
+      }
+    }
+    baseTool.print(mergeData)
+
+    wx.navigateTo({
+      url: '../brushContestDetail/brushContestDetail',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+
   }
 })

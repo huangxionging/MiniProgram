@@ -11,6 +11,6 @@
       <template is='selectComponent' data='{{id:-100, section:-100, row: -100, isSelect}}'></template>
     </view>
     <text id='my-brush-merge-all'>全选</text>
-    <view class='my-brush-merge-button' hover-class='hover-main-button'>合并数据</view>
+    <view class='my-brush-merge-button' hover-class='hover-main-button' bindtap='mergeDataClick'>合并数据</view>
   </view>
 </view>
