@@ -38,13 +38,31 @@ Page({
    */
   onLoad: function (options) {
     baseTool.print(item)
+    item = {
+      isNext: false,
+      name: '',
+      selects: [
+        {
+          selectButton: 'userInfo-brush-select-item',
+          title: '标准巴氏刷牙法 (6岁以上)',
+          id: 1,
+          select: true
+        },
+        {
+          selectButton: 'userInfo-brush-select-item',
+          title: '圆弧刷牙法 (6岁以下)',
+          id: 2,
+          select: false
+        }
+      ]
+    }
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+  baseTool.print('准备好了')
   },
 
   /**
