@@ -43,4 +43,20 @@ module.exports = {
    * 我的历史刷牙比赛
    */
   pageQueryContest: 'pageQueryGames',
+  /**
+   * 获取我的页面里的比赛数量与参赛者数量
+   */
+  getMyGameCount: 'getMyGameCount',
+  /**
+   * 获得参赛人员数据
+   */
+  getContestgMembers: 'getParticipatingMembers',
+  /**
+   * 更新用户信息
+   */
+  updatePlayers: 'updatePlayers',
+  /**
+   * 删除用户
+   */
+  delPlayers: 'delPlayers'
 }

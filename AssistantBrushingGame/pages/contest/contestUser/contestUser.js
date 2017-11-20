@@ -3,7 +3,7 @@ const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
-
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 var data = {
   loadingDone: false,
   hasData: false,
@@ -27,6 +27,12 @@ Page({
     baseTool.print(options)
     var that = this
     that.loadData()
+    // 添加消息处理函数
+    baseMessageHandler.addMessageHandler('selectRefresh', that, that.loadData).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -54,7 +60,12 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    // 删除通知
+    baseMessageHandler.removeSpecificInstanceMessageHandler('selectRefresh', this).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
   loadData: function() {
     var that = this
@@ -69,7 +80,8 @@ Page({
           data.push({
             id: index + 1, // 主key
             name: res[index].name, // 名字
-            playerId: res[index].playerId // 参赛者的 id
+            playerId: res[index].playerId, // 参赛者的 id
+            brushingMethodId: res[index].brushingMethodId,
           })
         }
         that.setData({

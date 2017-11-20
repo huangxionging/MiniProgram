@@ -1,89 +1,49 @@
 // pages/my/brushContestDetail/brushContestDetail.js
-var data = {
-  /**
-    * 是否加载完成
-    */
-  loadingDone: false,
-  hasData: false,
-  gameId: '',
-  contestTitle: '刷牙比赛1',
-  contestDate: '2017-10-25',
-  /**
-   * 是否正在同步
-   */
-  isSyn: false,
-  dataList: [
-    {
-      rank: 1,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98',
-      color: '#ffb9e0',
-    },
-    {
-      rank: 2,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98',
-      color: '#fe6941',
-    },
-    {
-      rank: 3,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98',
-      color: '#2cabee',
-    },
-    {
-      rank: 4,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-    {
-      rank: 5,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-    {
-      rank: 6,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-    {
-      rank: 7,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-    {
-      rank: 8,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-    {
-      rank: 9,
-      name: '林基金',
-      tail: '(tail-1233334444)',
-      score: '98'
-    },
-  ]
-}
+const app = getApp()
+const loginManager = require('../../../manager/loginManager.js')
+const baseWechat = require('../../../utils/baseWeChat.js')
+const baseURL = require('../../../utils/baseURL.js')
+const baseTool = require('../../../utils/baseTool.js')
+const myManager = require('../../../manager/myManager.js')
+
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: data,
+  data: {
+    /**
+       * 是否加载完成
+       */
+    loadingDone: false,
+    hasData: false,
+    gameId: '',
+    /**
+     * 是否正在同步
+     */
+    dataList: [
+     
+    ]
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this
+    baseTool.print(options)
+    that.setData({
+      gameId: options.gameId
+    })
+    // 设置导航栏标题
+    wx.setNavigationBarTitle({
+      title: options.name,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+    // 加载数据
+    that.loadData()
   },
 
   /**
@@ -118,14 +78,16 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    // 加载数据
+    var that = this
+    that.loadData()
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+
   },
 
   /**
@@ -133,5 +95,42 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  loadData() {
+    var that = this
+    wx.showNavigationBarLoading()
+    myManager.getContestgMembers(that.data.gameId).then(res => {
+      baseTool.print(res)
+      var dataList = []
+      dataList.splice(0, dataList.length)
+      if (res && res.length > 0) {
+        baseTool.print(dataList)
+        for (var index = 0; index < res.length; ++index) {
+          dataList.push({
+            rank: index + 1,
+            name: res[index].name,
+            tail: '(tail-' + res[index].macAddress.toLowerCase() + ')',
+            playerId: res[index].playerId,
+            score: res[index].score ? res[index].score : '未同步'
+          })
+          if (index == 0) {
+            dataList[index].color = '#ffb9e0'
+          } else if (index == 1) {
+            dataList[index].color = '#fe6941'
+          } else if (index == 2) {
+            dataList[index].color = '#2cabee'
+          }
+        }
+        that.setData({
+          loadingDone: true,
+          hasData: true,
+          dataList: dataList,
+        })
+      }
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+    }).catch(res => {
+      baseTool.print(res)
+    })
   }
 })

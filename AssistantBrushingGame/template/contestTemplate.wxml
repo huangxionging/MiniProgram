@@ -41,6 +41,10 @@
         <button class='main-button' hover-class='hover-main-button' bindtap='userInfoSave'>下一个</button>
       </block>
     </view>
+    <view wx:if='{{deleteLine}}' bindtap='deleteClick' class='userInfo-delete-view' hover-class='userInfo-delete-hover'>
+      <text>删除</text>
+      <view id='userInfo-delete-line'></view>
+    </view>
   </view>
 </template>
 

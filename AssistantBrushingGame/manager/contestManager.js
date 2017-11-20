@@ -207,6 +207,62 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
   })
 }
 
+function updatePlayers(name = '', playerId = '', brushingMethodId = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updatePlayers
+    var data = {
+      memberId: baseTool.valueForKey('memberId'),
+      name: name,
+      playerId: playerId,
+      brushingMethodId: brushingMethodId,
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        baseTool.print(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
+      },
+      fail: function () {
+        reject(baseTool.errorMsg)
+      },
+      complete: function (res) { },
+    })
+  })
+}
+
+function delPlayers(playerId = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
+    var data = {
+      memberId: baseTool.valueForKey('memberId'),
+      playerId: playerId,
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        baseTool.print(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
+      },
+      fail: function () {
+        reject(baseTool.errorMsg)
+      },
+      complete: function (res) { },
+    })
+  })
+}
+
 module.exports = {
   // 首页接口
   getHomePage: getHomePage,
@@ -222,4 +278,8 @@ module.exports = {
   deleteContest: deleteContest,
   // 绑定参赛者
   bindContestUser: bindContestUser,
+  // 更新用户信息
+  updatePlayers: updatePlayers,
+  // 删除用户
+  delPlayers: delPlayers,
 }

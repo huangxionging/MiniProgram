@@ -1,6 +1,6 @@
 <!--pages/my/myIndex/myIndex.wxml-->
 <import src='../../../template/myTemplate.wxml'/>
-<view class='my-container'>
+<view class='my-container' wx:if='{{loadingDone}}'>
   <view id='my-info-view'>
     <image id="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
     <text id="my-userinfo-nickname">{{userInfo.nickName}}</text>

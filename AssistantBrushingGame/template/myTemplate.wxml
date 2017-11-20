@@ -33,7 +33,7 @@
       </view>
       <text id='my-brush-contest-cell-title'>{{name}}</text>
       <view id='my-brush-contest-cell-right'>
-         <navigator url='../brushContestDetail/brushContestDetail' id='my-brush-contest-cell-navigate'>
+         <navigator url='../brushContestDetail/brushContestDetail?gameId={{gameId}}&name={{name}}' id='my-brush-contest-cell-navigate'>
            <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
          </navigator>
          <text id='my-brush-contest-cell-time'>{{time}}</text>
