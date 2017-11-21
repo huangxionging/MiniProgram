@@ -247,23 +247,20 @@ Page({
     }
   },
   mergeDataClick: function (e) {
-    baseTool.print(e)
+    // baseTool.print(e)
 
     var mergeData = []
-    for (var index = 0; index < data.dataList.length; ++index) {
-      var itemSelects = data.dataList[index].contestList.filter(function (value, index, array) {
-        return value.isSelect == true
-      })
-
-      if (itemSelects.length > 0) {
-        baseTool.print(itemSelects)
-        mergeData = mergeData.concat(itemSelects)
+    for (var index1 = 0; index1 < data.dataList.length; ++index1) {
+      for (var index2 = 0; index2 < data.dataList[index1].contestList.length; ++index2) {
+        if (data.dataList[index1].contestList[index2].isSelect) {
+          mergeData.push(data.dataList[index1].contestList[index2].gameId)
+        }
       }
     }
     baseTool.print(mergeData)
-
+    var gameIds = mergeData.join(',')
     wx.navigateTo({
-      url: '../brushContestDetail/brushContestDetail',
+      url: '../mergeData/mergeData?gameIds=' + gameIds,
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},

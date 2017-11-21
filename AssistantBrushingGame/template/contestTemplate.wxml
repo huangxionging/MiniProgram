@@ -61,19 +61,17 @@
 </template>
 
 <template name='createContestDeviceItem'>
-  <navigator url='../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}'>
-    <view class="contest-device-view {{(id==1)?'':'item-orthers'}}">
-      <view id='contest-device-tail-view'>
-        <text id='contest-device-tail'>{{name}}</text>
-        <image id='contet-device-power' src='{{imageUrl}}'></image>
-        <text id='contest-device-power-number'>75%</text>
-      </view>
-      <view id='contest-tip-view'>
-        <text id='contest-device-tip'>参赛</text>
-        <image id='contest-device-arrow' src='../../../resource/right_arrow.png'></image>
-      </view>
+  <view class="contest-device-view {{(index==0)?'':'item-orthers'}}" data-gameId='{{gameId}}' data-deviceId='{{deviceId}}' data-name='{{name}}' data-url="../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}" bindtap='contestDeviceClick'>
+    <view id='contest-device-tail-view'>
+      <text id='contest-device-tail'>{{name}}</text>
+      <image id='contet-device-power' src='{{imageUrl}}'></image>
+      <text id='contest-device-power-number'>75%</text>
     </view>
-  </navigator>
+    <view id='contest-tip-view'>
+      <text id='contest-device-tip'>参赛</text>
+      <image id='contest-device-arrow' src='../../../resource/right_arrow.png'></image>
+    </view>
+  </view>  
 </template>
 
 <template name='selectComponent'>

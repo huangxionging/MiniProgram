@@ -60,11 +60,12 @@ function getBluetoothAdapterState() {
 /**
  * 开始发现蓝牙设备
  */
-function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = false, interval = 100) {
+function startBluetoothDevicesDiscovery(services = [], allowDuplicatesKey = true, interval = 0) {
+  baseTool.print([services, allowDuplicatesKey, interval])
   return new Promise((resolve, reject) => {
     wx.startBluetoothDevicesDiscovery({
-      services: services,
-      allowDuplicatesKey: allowDuplicatesKey,
+      services: [],
+      allowDuplicatesKey: false,
       interval: interval,
       success: resolve,
       fail: reject,
@@ -105,18 +106,11 @@ function stopBluetoothDevicesDiscovery() {
 }
 
 module.exports = {
-  /**
-   * 检查会话是否过期
-   */
+  // 检查会话是否过期
   checkSession: checkSession,
-  /**
-   * 登录
-   */
+  //登录
   login: login,
-
-  /**
-   * 获得用户信息
-   */
+  //获得用户信息
   getUserInfo: getUserInfo,
   // 打开蓝牙适配器
   openBluetoothAdapter: openBluetoothAdapter,

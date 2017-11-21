@@ -6,54 +6,18 @@ const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-var data = {
-  name: '',
-  gameId: '',
-  total: '比赛设备15支',
-  dataList: [
-    {
-      id: 1,
-      deviceId: 'DD5412201FE3',
-      name: 1234567,
-      imageUrl: '../../../resource/power25.png',
-      gameId: '',
-    },
-    {
-      id: 2,
-      deviceId: 'DD5412201FE3',
-      name: 1234567,
-      imageUrl: '../../../resource/power25.png',
-      gameId: '',
-    },
-    {
-      id: 3,
-      deviceId: 'DD5412201FE3',
-      name: 1234567,
-      imageUrl: '../../../resource/power25.png',
-      gameId: '',
-    },
-    {
-      id: 4,
-      deviceId: 'DD5412201FE3',
-      name: 1234567,
-      imageUrl: '../../../resource/power25.png',
-      gameId: '',
-    },
-    {
-      id: 5,
-      deviceId: 'DD5412201FE3',
-      name: 1234567,
-      imageUrl: '../../../resource/power25.png',
-      gameId: '',
-    }
-  ]
-}
+
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: data,
+  data: {
+    name: '',
+    gameId: '',
+    total: '比赛设备0支',
+    dataList: []
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -61,26 +25,30 @@ Page({
   onLoad: function (options) {
     baseTool.print(options)
     var that = this
-    data.gameId = options.gameId
-    data.name = options.name
-    for (var index = 0; index < data.dataList.length; ++index) {
-      data.dataList[index].gameId = options.gameId
-    }
-    baseTool.print(data)
-    that.setData(data)
+    that.setData({
+      gameId: options.gameId,
+      name: options.name
+    })
     var searchBluetoothDevicePromise = bluetoothManager.searchBluetoothDevice()
     searchBluetoothDevicePromise.then(res => {
+      console.log(res);
       that.foundDevices()
     })
 
-    // baseMessageHandler.addMessageHandler('message', this, function (res) {
-    //   baseTool.print(res)
-    // })
-    // baseMessageHandler.sendMessage('deleteContest', options).then(res => {
-    //   baseTool.print(res)
-    // }).catch(res => {
-    //   baseTool.print(res)
-    // })
+    baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
+      var that = this
+      var dataList = that.data.dataList.filter((value, index, arry) => {
+        return value.deviceId != res
+      })
+
+      that.setData({
+        dataList: dataList
+      })
+    }).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -118,6 +86,18 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+
+    baseMessageHandler.removeSpecificInstanceMessageHandler('deleteDevice', this).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+
+    bluetoothManager.stopSearchDevice().then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -133,34 +113,44 @@ Page({
   onReachBottom: function () {
   
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  },
   foundDevices: function () {
     var that = this
     bluetoothManager.foundDevice(res => {
-      var dataList = data.dataList
+      if (res.name.indexOf('game') == -1) {
+        return
+      }
+      baseTool.print(res)
+      var dataList = that.data.dataList
       var index = dataList.length
-      res.id = index + 1
       res.imageUrl = '../../../resource/power25.png'
       res.navigateUrl = '../selectContestUser/selectContestUser'
-      dataList.push(res)
-      data.total = '比赛设备 ' + (index + 1) + '支'
-      that.setData(data)
+      let hex = Array.prototype.map.call(new Uint8Array(res.advertisData), x => ('00' + x.toString(16)).slice(-2)).join('');
+      console.log([hex, 'dddd'])
+      dataList.push({
+        name: res.name,
+        deviceId: res.deviceId
+      })
+      that.setData({
+        dataList: dataList,
+        tototal: '比赛设备 ' + (index + 1) + '支'
+      })
     })
   },
   getInputName: function(e) {
     baseTool.print(e)
-    data.name = e.detail.value
-
-    contestManager.addContest(data.gameId, data.name).then(res => {
+    this.setData({
+      name: e.detail.value
+    })
+    contestManager.addContest(this.data.gameId, this.data.name).then(res => {
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
+    })
+  },
+  contestDeviceClick: function(e) {
+    baseTool.print(e)
+    wx.navigateTo({
+      url: e.currentTarget.dataset.url,
     })
   }
 })

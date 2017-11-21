@@ -10,6 +10,7 @@ var data = {
   hasData: false,
   gameId: '',
   deviceId: '',
+  macAddress: '',
   deviceName: '',
   dataList: []
 }
@@ -28,8 +29,12 @@ Page({
     var that = this
     baseTool.print(options)
     data.gameId = options.gameId
-    data.deviceId = options.deviceId
+    var deviceId = options.deviceId
+    var deviceIds = deviceId.split(':')
+    data.deviceId = deviceIds.join('').toUpperCase()
     data.deviceName = options.name
+    data.macAddress = options.deviceId
+    baseTool.print(data.deviceId)
     that.setData(data)
     that.loadData()
     // 添加消息处理函数
@@ -146,6 +151,7 @@ Page({
     contestManager.bindContestUser(data.gameId, name, userId, data.deviceId).then(res => {
       baseTool.print(res)
       wx.navigateBack()
+      baseMessageHandler.sendMessage('deleteDevice', data.macAddress)
     }).catch(res => {
       baseTool.print(res)
     }) 

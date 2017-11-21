@@ -34,18 +34,7 @@ function searchBluetoothDevice() {
 function foundDevice(callback) {
   baseWechat.onBluetoothDeviceFound(res => {
     if (res.devices && res.devices.length > 0) {
-      var data = res.devices[0]
-      var value = data.advertisData
-      let hex = Array.prototype.map.call(new Uint8Array(value), x => ('00' + x.toString(16)).slice(-2)).join('');
-      console.log(new Uint8Array(value))
-      baseTool.print(data.name)
-      callback({
-        name: data.name,
-        deviceId: data.deviceId,
-        value: hex,
-      })
-
-      // baseTool.print(res.devices)
+      callback(res.devices[0])
     }
   })
 }
@@ -60,17 +49,14 @@ function closeBluetoothAdapter() {
 
 function stopSearchDevice() {
   return new Promise((resolve, reject) => {
-    stopBluetoothDevicesDiscovery.then(res => {
-      closeBluetoothAdapter()
-    }).catch(res => {
-
+    stopBluetoothDevicesDiscovery().catch(res => {
+      reject(res)
     })
-    var closeBluetoothAdapterPromise = baseTool.bindThenPromise(stopBluetoothDevicesDiscovery, closeBluetoothAdapter)
-
+    var closeBluetoothAdapterPromise = baseTool.bindThenPromise(stopBluetoothDevicesDiscovery(), closeBluetoothAdapter)
     closeBluetoothAdapterPromise.then(res => {
-      resolve
+      resolve(res)
     }).catch(res => {
-      reject
+      reject(res)
     })
   })
 }

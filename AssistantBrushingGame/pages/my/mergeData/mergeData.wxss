@@ -1,0 +1,10 @@
+/* pages/my/mergeData/mergeData.wxss */
+@import '../../../template/contestTemplate.wxss';
+.my-brush-contest-detail-container{
+  width: 100%;
+  height: 100;
+}
+
+#contest-table-view{
+  margin-top: 2rpx;
+}

@@ -9,7 +9,7 @@
   <view id='create-total-device-view'>{{total}}</view>
   <view id='create-device-list-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
-      <template is='createContestDeviceItem' data='{{...item}}'></template>
+      <template is='createContestDeviceItem' data='{{...item, index, gameId}}'></template>
     </block>
   </view>
 </view>

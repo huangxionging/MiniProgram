@@ -58,5 +58,9 @@ module.exports = {
   /**
    * 删除用户
    */
-  delPlayers: 'delPlayers'
+  delPlayers: 'delPlayers',
+  /**
+   * 合并数据
+   */
+  mergeData: 'combinedData'
 }
