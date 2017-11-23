@@ -61,7 +61,7 @@
 </template>
 
 <template name='createContestDeviceItem'>
-  <view class="contest-device-view {{(index==0)?'':'item-orthers'}}" data-gameId='{{gameId}}' data-deviceId='{{deviceId}}' data-name='{{name}}' data-url="../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}" bindtap='contestDeviceClick'>
+  <view class="contest-device-view {{(index==0)?'':'item-orthers'}}" data-gameId='{{gameId}}' data-deviceId='{{deviceId}}' data-name='{{name}}' data-macAddress='{{macAddress}}'   data-url="../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}&macAddress={{macAddress}}" bindtap='contestDeviceClick'>
     <view id='contest-device-tail-view'>
       <text id='contest-device-tail'>{{name}}</text>
       <image id='contet-device-power' src='{{imageUrl}}'></image>

@@ -91,6 +91,10 @@ function closeBluetoothAdapter(){
   })
 }
 
+function onBluetoothAdapterStateChange(callback){
+  wx.onBluetoothAdapterStateChange(callback)
+}
+
 /**
  * 停止发现设备
  */
@@ -103,6 +107,146 @@ function stopBluetoothDevicesDiscovery() {
     })
   })
   
+}
+
+/**
+ * 创建 ble 连接
+ */
+function createBLEConnection(deviceId = '') {
+  return new Promise((resolve, reject) => {
+    wx.createBLEConnection({
+      deviceId: deviceId,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 关闭 ble 连接
+ */
+function closeBLEConnection(deviceId = '') {
+  return new Promise((resolve, reject) => {
+    wx.closeBLEConnection({
+      deviceId: deviceId,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 获得 ble 服务
+ */
+function getBLEDeviceServices(deviceId = '') {
+  return new Promise((resolve, reject) => {
+    wx.getBLEDeviceServices({
+      deviceId: deviceId,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+function getBLEDeviceCharacteristics(deviceId = '', serviceId = '') {
+  return new Promise((resolve, reject) => {
+    wx.getBLEDeviceCharacteristics({
+      deviceId: deviceId,
+      serviceId: serviceId,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+  
+}
+
+/**
+ * 读特征
+ */
+function readBLECharacteristicValue(deviceId = '', serviceId = '', characteristicId = '') {
+  return new Promise((resolve, reject) => {
+    wx.readBLECharacteristicValue({
+      deviceId: deviceId,
+      serviceId: serviceId,
+      characteristicId: characteristicId,
+      success: resolve,
+      fail: reject,
+      complete: function(res) {},
+    })
+  })
+}
+
+/**
+ * 通知特征值中的
+ */
+function notifyBLECharacteristicValueChange(deviceId = '', serviceId = '', characteristicId = '', state = true) {
+  return new Promise((resolve, reject) => {
+    wx.notifyBLECharacteristicValueChange({
+      deviceId: deviceId,
+      serviceId: serviceId,
+      characteristicId: characteristicId,
+      state: state,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 写特征值
+ */
+function writeBLECharacteristicValue(deviceId = '', serviceId = '', characteristicId = '', value = []) {
+  return new Promise((resolve, reject) => {
+    wx.writeBLECharacteristicValue({
+      deviceId: deviceId,
+      serviceId: serviceId,
+      characteristicId: characteristicId,
+      value: value,
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+/**
+ * 状态改变
+ */
+function onBLEConnectionStateChange(callBack){
+  wx.onBLEConnectionStateChange(callBack)
+}
+
+/**
+ * 蓝牙特征值改变
+ */
+function onBLECharacteristicValueChange(callBack) {
+  wx.onBLECharacteristicValueChange(callBack)
+}
+
+function getConnectedBluetoothDevices(services = []) {
+  return new Promise((resolve, reject) => {
+    wx.getConnectedBluetoothDevices({
+      services: services,
+      success: resolve,
+      fail: reject,
+      complete: function(res) {},
+    })
+  })
+}
+
+function getBluetoothDevices() {
+  return new Promise((resolve, reject) => {
+    wx.getBluetoothDevices({
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
 }
 
 module.exports = {
@@ -124,4 +268,25 @@ module.exports = {
   stopBluetoothDevicesDiscovery, stopBluetoothDevicesDiscovery,
   // 关闭蓝牙适配器
   closeBluetoothAdapter, closeBluetoothAdapter,
+  // 创建 ble 连接
+  createBLEConnection: createBLEConnection,
+  // 关闭 ble 连接
+  closeBLEConnection: closeBLEConnection,
+  // 获得 ble 服务
+  getBLEDeviceServices: getBLEDeviceServices,
+  // 读特征值
+  readBLECharacteristicValue: readBLECharacteristicValue,
+  // 通知特征值预订
+  notifyBLECharacteristicValueChange: notifyBLECharacteristicValueChange,
+  // 写特征值
+  writeBLECharacteristicValue: writeBLECharacteristicValue,
+  // ble 连接状态改变
+  onBLEConnectionStateChange: onBLEConnectionStateChange,
+  // 特征值改变了
+  onBLECharacteristicValueChange: onBLECharacteristicValueChange,
+  // 获得特征值
+  getBLEDeviceCharacteristics: getBLEDeviceCharacteristics,
+  onBluetoothAdapterStateChange: onBluetoothAdapterStateChange,
+  getConnectedBluetoothDevices: getConnectedBluetoothDevices,
+  getBluetoothDevices: getBluetoothDevices,
 }

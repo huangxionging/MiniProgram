@@ -218,6 +218,9 @@ Page({
     var bindingTelphoneAction = loginManager.bindingTelphone(telphoneNumber, verifyCode)
     bindingTelphoneAction.then(res => {
       console.log(res)
+      wx.reLaunch({
+        url: '../pages/contest/contest/contest',
+      })
     })
   }
 })

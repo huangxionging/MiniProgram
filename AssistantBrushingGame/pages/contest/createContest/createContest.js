@@ -1,11 +1,13 @@
 // pages/createContest/createContest.js
+const app = getApp()
 const bluetoothManager = require('../../../manager/bluetoothManager.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
-
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const bleCommandManager = require('../../../manager/bleCommandManager.js')
+const baseHexConvertTool = require('../../../utils/baseHexConvertTool.js')
 
 Page({
 
@@ -16,7 +18,13 @@ Page({
     name: '',
     gameId: '',
     total: '比赛设备0支',
-    dataList: []
+    dataList: [],
+    serviceUUIDs: [],
+    tailServiceUUID: '0000FFA0-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 notify
+    tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 write
+    tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
   },
 
   /**
@@ -29,10 +37,11 @@ Page({
       gameId: options.gameId,
       name: options.name
     })
-    var searchBluetoothDevicePromise = bluetoothManager.searchBluetoothDevice()
-    searchBluetoothDevicePromise.then(res => {
-      console.log(res);
+    bluetoothManager.checkBluetoothState().then(res => {
+      baseTool.print('checkBluetoothState: success')
       that.foundDevices()
+    }).catch(res => {
+      baseTool.print('checkBluetoothState: fail')
     })
 
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
@@ -40,7 +49,6 @@ Page({
       var dataList = that.data.dataList.filter((value, index, arry) => {
         return value.deviceId != res
       })
-
       that.setData({
         dataList: dataList
       })
@@ -77,10 +85,11 @@ Page({
    */
   onUnload: function () {
     baseTool.print('页面卸载')
+    var that = this
     // 发送通知
     baseMessageHandler.sendMessage('deleteContest', {
-      gameId: data.gameId,
-      name: data.name,
+      gameId: that.data.gameId,
+      name: that.data.name,
     }).then(res => {
       baseTool.print(res)
     }).catch(res => {
@@ -93,11 +102,15 @@ Page({
       baseTool.print(res)
     })
 
+    app.bleCallback = undefined
+
     bluetoothManager.stopSearchDevice().then(res => {
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
     })
+
+    
   },
 
   /**
@@ -116,23 +129,25 @@ Page({
   foundDevices: function () {
     var that = this
     bluetoothManager.foundDevice(res => {
+      // console.log('new device list has founded');
+      // console.log(res);
       if (res.name.indexOf('game') == -1) {
         return
       }
-      baseTool.print(res)
+
       var dataList = that.data.dataList
       var index = dataList.length
-      res.imageUrl = '../../../resource/power25.png'
-      res.navigateUrl = '../selectContestUser/selectContestUser'
-      let hex = Array.prototype.map.call(new Uint8Array(res.advertisData), x => ('00' + x.toString(16)).slice(-2)).join('');
-      console.log([hex, 'dddd'])
+      var macAddress = res.name.split('-')[1]
+      baseTool.print(macAddress)
+      // 广播数据先不弄
       dataList.push({
         name: res.name,
-        deviceId: res.deviceId
+        macAddress: macAddress,
+        deviceId: res.deviceId,
       })
       that.setData({
         dataList: dataList,
-        tototal: '比赛设备 ' + (index + 1) + '支'
+        total: '比赛设备' + (index + 1) + '支',
       })
     })
   },
@@ -148,9 +163,12 @@ Page({
     })
   },
   contestDeviceClick: function(e) {
-    baseTool.print(e)
+    var that = this
+    var deviceId = e.currentTarget.dataset.deviceid
+    wx.hideLoading()
     wx.navigateTo({
       url: e.currentTarget.dataset.url,
     })
+    baseTool.print(e)
   }
 })

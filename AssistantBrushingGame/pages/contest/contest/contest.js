@@ -152,15 +152,17 @@ Page({
     wx.showNavigationBarLoading()
     var getHomePagePromise = contestManager.getHomePage()
     var del = getHomePagePromise.then(res => {
-      // wx.hideNavigationBarLoading()
+      wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.print(res)
       if (typeof(res) != 'undefined' && res.playersList) {
         that.parseData(res)
-      } else if (typeof (res) != 'undefined') {
+      } else if (typeof (res) != 'undefined' && res.gameInfo) {
         that.deleteContest(res.gameInfo)
-      } else {
-        typeof(res) != 'undefined'
+      } else if (typeof(res) == 'undefined'){
+        data.loadingDone = true
+        data.hasData = false
+        that.setData(data)
       }
     }).catch(res => {
       wx.hideNavigationBarLoading()

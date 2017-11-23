@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/blank/blankIndex",
     "pages/contest/contest/contest",
     "pages/login/binding/binding",
     "pages/contest/createContest/createContest",
