@@ -263,6 +263,66 @@ function delPlayers(playerId = '') {
   })
 }
 
+function uploadBrushRecord() {
+  return new Promise((resolve, reject) => {
+    baseTool.print('从本地数据库上传数据！')
+    var that = this;
+    var dataStorageAll = new Array()
+    wx.getStorage({
+      key: 'dataObjectList',
+      success: function (res) {
+        dataStorageAll = res.data;
+        console.log('wx getStorage', res.data)
+        if (dataStorageAll != null && dataStorageAll.length >= 1) {
+          var jsonData = JSON.stringify(dataStorageAll)
+          console.log('send:', jsonData, that.data);
+          console.log('jsonData:', jsonData)
+          var url = baseURL.baseBrushDomain + baseApiList.uploadRecord
+          baseTool.print(url)
+          wx.request({
+            //上传数据接口
+            url: url,
+            //如果设为json，会尝试对返回的数据做一次 JSON.parse
+            dataType: 'json',
+            data: {
+              sign: '123456',
+              timestamp: Date.parse(new Date()),
+              data: jsonData,
+            },
+            header: {
+              "sourceType": "wx",
+              'content-type': 'application/x-www-form-urlencoded', // 默认值
+            },
+            method: 'POST',
+            success: function (res) {
+              console.log(res.data)
+              //上传数据返回成功之后刷新主页分数
+              baseTool.print(res)
+              if (res.data.code == 'success') {
+                resolve(res.data.data);
+                //清空数据
+                //成功之后 移除数据
+                wx.removeStorage({
+                  key: 'dataObjectList',
+                  success: function (res) {
+                    console.log(res.data)
+                    console.log('wx data remove', dataStorageAll)
+                  }
+                })
+              } else {
+                reject(res.data.msg)
+              }
+            },
+            fail: function (res) {
+              reject(baseTool.errorMsg)
+            }
+          })
+        }
+      }
+    })
+  })
+}
+
 module.exports = {
   // 首页接口
   getHomePage: getHomePage,
@@ -282,4 +342,6 @@ module.exports = {
   updatePlayers: updatePlayers,
   // 删除用户
   delPlayers: delPlayers,
+  // 上传刷牙数据
+  uploadBrushRecord: uploadBrushRecord,
 }

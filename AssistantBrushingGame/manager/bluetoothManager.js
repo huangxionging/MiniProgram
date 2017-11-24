@@ -191,6 +191,7 @@ module.exports = {
   onBluetoothAdapterStateChange: onBluetoothAdapterStateChange,
   closeBLEConnection: closeBLEConnection,
   closeAllConnection: closeAllConnection,
+  stopBluetoothDevicesDiscovery: stopBluetoothDevicesDiscovery,
 }
 
 

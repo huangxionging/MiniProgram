@@ -7,7 +7,7 @@ const baseTool = require('./utils/baseTool.js')
 const bluetoothManager = require('./manager/bluetoothManager.js')
 App({
   onLaunch: function () {
-    // loginManager.loginFlow()
+    loginManager.loginFlow()
   },
   globalData: {
     userInfo: null,

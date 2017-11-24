@@ -21,12 +21,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "的",
-					"pathName": "pages/contest/createContest/createContest",
+					"pathName": "pages/login/binding/binding",
 					"query": ""
 				}
 			]

@@ -1,4 +1,7 @@
 /* pages/binding/binding.wxss */
+page{
+  background-color: #fff;
+}
 .binding-container{
   height: 100%;
   font-weight: lighter; 

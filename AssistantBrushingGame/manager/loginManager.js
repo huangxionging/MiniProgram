@@ -116,12 +116,13 @@ function checkUserBindingState(code = '', userInfo = {}) {
     })
   })
   
-}
+} 
 
 /**
  * 重启页面
  */
 function reLauch() {
+  baseTool.print('ddd')
   wx.reLaunch({
     url: '/pages/contest/contest/contest',
     success: function (res) { },

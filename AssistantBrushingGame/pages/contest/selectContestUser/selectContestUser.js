@@ -182,7 +182,8 @@ Page({
       data.dataList[index].item.isSelect = !data.dataList[index].item.isSelect
       that.setData(data)
       wx.showModal({
-        title: data.dataList[index].name + ' 在本次比赛中将与设备 ' + data.deviceName + ' 绑定',
+        title: '提示',
+        content: data.dataList[index].name + ' 在本次比赛中将与设备 ' + data.deviceName + ' 绑定',
         showCancel: true,
         cancelText: '取消',
         cancelColor: '#999',
@@ -216,7 +217,7 @@ Page({
     contestManager.bindContestUser(data.gameId, name, userId, data.macAddress).then(res => {
       baseTool.print(res)
       wx.navigateBack()
-      baseMessageHandler.sendMessage('deleteDevice', data.macAddress)
+      baseMessageHandler.sendMessage('deleteDevice', data.deviceId)
     }).catch(res => {
       baseTool.print(res)
     }) 
@@ -270,7 +271,7 @@ Page({
         // 查找设备命令
 
   
-        var buffer = bleCommandManager.findDevice()
+        var buffer = bleCommandManager.findDeviceCommand()
         bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
           baseTool.print([res, '查找设备命令发送成功'])
         }).catch(res => {

@@ -62,5 +62,9 @@ module.exports = {
   /**
    * 合并数据
    */
-  mergeData: 'combinedData'
+  mergeData: 'combinedData',
+  /**
+   * 上传数据
+   */
+  uploadRecord: 'api/gameUploadBrushTeethRecord'
 }
