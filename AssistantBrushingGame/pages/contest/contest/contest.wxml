@@ -28,11 +28,7 @@
           <button id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
         </block>
       </view>
-      <view id='contest-table-view'>
-         <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
-          <template is='contestUserScoreItem' data='{{...item}}'></template>
-        </block> 
-      </view>
+      z
     </view>
   </block>
 </view>
