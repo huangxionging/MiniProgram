@@ -47,6 +47,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    
     that.getHomePage()
     baseMessageHandler.addMessageHandler('deleteContest', this, that.deleteContest).then(res => {
       baseTool.print(res)
@@ -162,6 +163,7 @@ Page({
     if (data.synCommandCount == data.dataList.length) {
       // 同步结束
       wx.hideLoading()
+      that.getHomePage()
       wx.showToast({
         title: '同步结束',
         icon: '',
@@ -490,7 +492,7 @@ Page({
       })
     }
   },
-  upStorageDataToService: function (toast) {
+  upStorageDataToService: function () {
     var that = this
     contestManager.uploadBrushRecord().then(res => {
       // 设备数据上传成功

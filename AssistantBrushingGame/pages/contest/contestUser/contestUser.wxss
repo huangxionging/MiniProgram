@@ -6,18 +6,14 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
   font-weight: lighter; 
 }
 .contest-content-view{
   height: 100%;
   width: 100%;
-  align-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 #contest-user {
@@ -53,27 +49,25 @@
   bottom: 270rpx;
 }
 
-
-
-#contest-table-view{
+.contest-table-view{
   width: 100%;
   margin-top: 2rpx;
   margin-bottom: 98rpx;
+  /* flex: 1; */
 }
 
 .add-contest-user{
+  position: fixed;
   width: 100%;
   height: 98rpx; 
-  position: fixed;
   bottom: 0;
   font-size: 30rpx;
   background-color: #00a0e9;
   color: #fff;
   display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
   font-weight: normal;
 }
 .hover-main-button{

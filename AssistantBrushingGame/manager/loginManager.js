@@ -191,14 +191,17 @@ function loginFlow() {
     // 成功
     checkStateAction.then(res => {
       baseTool.print(res)
-      reLauch()
+      // reLauch()
       getUserInfo().then(res => {
         const app = getApp()
         app.globalData.userInfo = res.userInfo
         resolve(res)
+      }).catch(res => {
+        reject(res)
       })
     }).catch(res => {
       baseTool.print(res)
+      reject(res)
     })
 
     // 会话过期需要登录
@@ -218,6 +221,8 @@ function loginFlow() {
       const app = getApp()
       app.globalData.userInfo = res.userInfo
       return checkUserBindingState(code, res.userInfo)
+    }).catch(res => {
+      reject(res)
     })
 
     // 和服务器通信结果
@@ -227,7 +232,8 @@ function loginFlow() {
       var wxUser = res.data.data.wxUser
       if (wxUser.memberId) {
         baseTool.setValueForKey(wxUser.memberId, 'memberId')
-        reLauch()
+        // reLauch()
+        resolve(wxUser)
       } else if (wxUser.openid) {
         baseTool.setValueForKey(wxUser.openid, 'openid')
         wx.redirectTo({

@@ -2,10 +2,15 @@
 <template name='myItem'>
   <navigator url='{{url}}'>
     <view class="my-item {{(id==1)?'':'item-orthers'}}">
+    <view class='my-item-left-view'>
       <image src='../../../resource/{{icon}}' id='my-item-icon'></image>
       <text id='my-item-title'>{{title}}</text>
+    </view>
+    <view class='my-item-right-view'>
       <text id='my-item-quantity'>{{quantity}}</text>
       <image src='../../../resource/right_arrow.png' id='my-item-arrow'></image>
+    </view>
+      
     </view>
   </navigator>
 </template>
@@ -33,10 +38,11 @@
       </view>
       <text id='my-brush-contest-cell-title'>{{name}}</text>
       <view id='my-brush-contest-cell-right'>
+        <text id='my-brush-contest-cell-time'>{{time}}</text>
          <navigator url='../brushContestDetail/brushContestDetail?gameId={{gameId}}&name={{name}}' id='my-brush-contest-cell-navigate'>
            <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
          </navigator>
-         <text id='my-brush-contest-cell-time'>{{time}}</text>
+         
       </view>
   </view>
 </template>

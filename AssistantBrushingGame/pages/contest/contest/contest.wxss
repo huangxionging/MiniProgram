@@ -5,7 +5,7 @@
 .contest-container {
   height: 100%;
   width: 100%;
-  display: flex;
+  display: -webkit-flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
@@ -13,14 +13,10 @@
   font-weight: lighter; 
 }
 
-.contest-content-view{
+/* .contest-content-view{
   height: 100%;
   width: 100%;
-  align-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-}
+} */
 
 #contest-user {
   position: absolute;
@@ -33,7 +29,7 @@
 
 #contest-no-contest-view {
   margin-top: 238rpx;
-  display: flex;
+  display: -webkit-flex;
   flex-direction: column;
   align-items: center;
 }
@@ -60,7 +56,7 @@
 #contest-main-view{
   width: 100%;
   height: 400rpx;
-  display: flex;
+   display: -webkit-flex; 
   flex-direction: column;
   align-content: center;
   align-items: center;
@@ -70,6 +66,7 @@
 }
 
  #contest-background{
+  margin-top: 0;
   width: 100%;
   height: 100%;
 } 
@@ -92,6 +89,7 @@
   top: 160rpx;
 }
 #contest-info-view{
+  width: 100%;
   position: absolute;
   top: 90rpx;
   display: flex;
@@ -113,13 +111,11 @@
 }
 
 #contest-syn-button{
-  position: absolute;
-  top: 250rpx;
+   margin-top: 70rpx; 
 }
 
 #contest-synchronization{
-  position: absolute;
-  top: 250rpx;
+  margin-top: 70rpx; 
   background-color: #68b9de;
 }
 

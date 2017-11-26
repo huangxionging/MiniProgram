@@ -1,11 +1,12 @@
 <template name='contestUserScoreItem'>
   <view class="item {{(rank==1)?'':'item-orthers'}}">
-    <text id='item-rank' style='color:{{color}}'>{{rank}}</text>
-    <view id='item-name-tail'>
-      <text id='item-name'>{{name}}</text>
-      <text id='item-tail'>{{tail}}</text>
+    <view class='item-info-view'>
+      <text id='item-rank' style='color:{{color}}'>{{rank}}</text>
+        <text id='item-name'>{{name}}</text>
+        <text id='item-tail'>{{tail}}</text> 
     </view>
-    <text id='item-score'>{{score}}</text>
+    
+     <text id='item-score'>{{score}}</text> 
   </view>
 </template>
 
@@ -23,8 +24,8 @@
     <view id='userInfo-name-view'>
       <image src='../../../resource/box-person.png' id='userInfo-name-image'></image>
       <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' bindinput='getInputUserName' value='{{name}}'></input>
-      <view id='userInfo-name-line'></view>
     </view>
+    <view id='userInfo-name-line'></view>
     <view id='userInfo-brush-view'>
       <text id='userInfo-brush-title'>选择参赛刷牙方法</text>
       <view id='userInfo-brush-select-view'>

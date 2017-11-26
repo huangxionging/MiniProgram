@@ -12,12 +12,13 @@
   </block>
   <block wx:else>
     <view class='contest-content-view'>
-      <view id='contest-table-view'>
+      <view class='contest-table-view'>
         <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
           <template is='contestUserItem' data='{{...item}}'></template>
         </block> 
+        <view class='add-contest-user' hover-class='hover-main-button' bindtap='addContestUser' >添加参赛者</view>
       </view>
-      <view class='add-contest-user' hover-class='hover-main-button' bindtap='addContestUser' >添加参赛者</view>
+      
     </view>
   </block>
 </view>
