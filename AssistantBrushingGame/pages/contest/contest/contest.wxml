@@ -18,15 +18,20 @@
         <view id='contest-info-view' background-size='cover'>
           <text id='contest-title'>{{contestTitle}}</text>
           <text id='contest-date'>{{contestDate}}</text>
-          <block wx:if='{{isSyn}}'>
+          <block wx:if='{{isSynNow}}'>
           <button id='contest-synchronization' class='main-button'>同步中</button>
           </block>
           <block wx:else>
-            <button id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
+            <block wx:if='{{isSyn}}'>
+              <button  id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
+            </block>
+            <block wx:else>
+              <button  id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='contestReSyn' >同步数据</button>
+            </block>
           </block>
         </view>
-        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
-          <image  src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
+        <image wx:if='{{isSyn}}'  src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
+          <image src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
       </view>
       <view id='contest-table-view'>
          <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>

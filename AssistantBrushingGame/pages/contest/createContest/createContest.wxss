@@ -10,13 +10,12 @@
   justify-content: center;
 }
 #create-name-view{
-  position: absolute;
   width: 100%;
   top: 2rpx;
   height: 130rpx;
   display: flex;
+  flex-direction: row;
   background-color: #fff;
-  align-content: center; 
   align-items: center;
 }
 #create-name-title{
@@ -24,16 +23,19 @@
   font-size: 28rpx;
   color: #666;
 }
+
+.create-input-view{
+  width: 570rpx;
+  display: flex;
+  flex-direction: column;
+}
 #create-input{
-  position: absolute;
-  left: 144rpx;
-  right: 30rpx;
+  width: 100%;
   font-size: 28rpx;
   color: #999;
   text-align: right;
 }
 #create-line{
-  position: absolute;
   left: 144rpx;
   right: 30rpx;
   bottom: 30rpx;

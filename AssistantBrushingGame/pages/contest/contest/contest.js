@@ -19,9 +19,13 @@ var data = {
   contestTitle: '刷牙比赛1',
   contestDate: '2017-10-25',
   /**
-   * 是否正在同步
+   * 是否已经同步过
    */
   isSyn: false,
+  /**
+   * 是否同步中
+   */
+  isSynNow: false,
   dataList: [],
   dataObjectList: [],
   deviceDataList: [],
@@ -144,7 +148,7 @@ Page({
     baseTool.print(e)
     var that = this
     that.setData({
-      isSyn: true
+      isSynNow: true
     })
     wx.showLoading({
       title: '同步数据中',
@@ -174,6 +178,9 @@ Page({
         success: function(res) {},
         fail: function(res) {},
         complete: function(res) {},
+      })
+      that.setData({
+        isSynNow: false
       })
       return
     }
@@ -246,6 +253,7 @@ Page({
     data.hasData = true
     // 清空数组
     data.dataList.length = 0
+    data.isSyn = !res.gameInfo.isSyn
     for (var index = 0; index < res.playersList.length; ++index) {
       data.dataList.push({
         rank: index + 1,
