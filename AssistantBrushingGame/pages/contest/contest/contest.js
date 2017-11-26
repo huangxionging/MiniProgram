@@ -141,6 +141,7 @@ Page({
     
   },
   contestReSyn: function (e) {
+    baseTool.print(e)
     var that = this
     that.setData({
       isSyn: true

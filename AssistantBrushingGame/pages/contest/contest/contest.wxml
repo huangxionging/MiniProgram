@@ -15,8 +15,6 @@
     <!-- <view class='contest-content-view'> -->
       <view id='contest-main-view'>
         <image  src='../../../resource/contest_background.png' id='contest-background'></image>
-          <image  src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
-         <image src='../../../resource/contest_syn.png' id='contest-synchronize-image' bindtap='contestReSyn'></image>  
         <view id='contest-info-view' background-size='cover'>
           <text id='contest-title'>{{contestTitle}}</text>
           <text id='contest-date'>{{contestDate}}</text>
@@ -27,6 +25,8 @@
             <button id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
           </block>
         </view>
+        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
+          <image  src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
       </view>
       <view id='contest-table-view'>
          <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>

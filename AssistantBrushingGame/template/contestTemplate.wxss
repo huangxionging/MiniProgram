@@ -203,11 +203,9 @@
   width: 100%;
   height: 120rpx;
   background-color: white;
-  align-content: center;
   align-items: center;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
 }
 
 .select-component-image{
@@ -217,26 +215,22 @@
 }
 
 #select-item-button{
-  position:  absolute;
-  left: 30rpx;
+  margin-left: 15rpx;
   width: 44rpx;
   height: 44rpx;
 }
 #select-item-name{
-  position: absolute;
-  left: 84rpx;
+  margin-left: 24rpx;
   font-size: 26rpx;
+  flex: 1;
 }
 #select-device-arrow{
   width: 44rpx;
   height: 44rpx;
-  position: absolute;
-  right: 15rpx;
 }
 #select-navigate{
   align-content: center;
   align-items: center;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
 }

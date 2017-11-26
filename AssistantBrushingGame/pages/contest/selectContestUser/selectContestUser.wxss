@@ -18,15 +18,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-}
-
-#select-user {
-  position: absolute;
-  width: 70rpx;
-  height: 70rpx;
-  border-radius: 50%;
-  right: 30rpx;
-  top: 60rpx;
+  flex: 1;
 }
 
 #select-no-user-view {
@@ -47,13 +39,6 @@
   font-size: 26rpx;
   color: #9c9da3;
 }
-
-#select-create-select-button{
-  position: absolute;
-  bottom: 270rpx;
-}
-
-
 
 #select-table-view{
   width: 100%;

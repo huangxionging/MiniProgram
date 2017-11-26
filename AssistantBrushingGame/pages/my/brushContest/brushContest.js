@@ -26,8 +26,14 @@ Page({
    */
   onLoad: function (options) {
     var that = this
-    data.pageNo = 1
+    data = {
+      pageNo: 1,
+      isSelect: false,
+      loadingDone: false,
+      dataList: []
+    }
     this.loadData()
+
   },
 
   /**

@@ -66,7 +66,7 @@
     <view id='contest-device-tail-view'>
       <text id='contest-device-tail'>{{name}}</text>
       <image id='contet-device-power' src='{{imageUrl}}'></image>
-      <text id='contest-device-power-number'>75%</text>
+      <!-- <text id='contest-device-power-number'>75%</text> -->
     </view>
     <view id='contest-tip-view'>
       <text id='contest-device-tip'>参赛</text>
