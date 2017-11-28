@@ -1,50 +1,22 @@
-// pages/contest/contestUserDetail/contestUserDetail.js
+// pages/contest/addOneContestUser/addOneContestUser.js
 const app = getApp()
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-var select = true
-var item = {
-  isNext: false,
-  playerId: '',
-  name: '',
-  deleteLine: true,
-  selects: [
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '标准巴氏刷牙法 (6岁以上)',
-      id: 1,
-      select: true
-    },
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '圆弧刷牙法 (6岁以下)',
-      id: 2,
-      select: false
-    }
-  ]
-}
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    item: item
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    baseTool.print(33)
-    select = true
-    item = {
-      playerId: '',
+    select: true,
+    gameId: '',
+    macAddress: '',
+    item: {
       isNext: false,
-      deleteLine: true,
       name: '',
       selects: [
         {
@@ -61,21 +33,15 @@ Page({
         }
       ]
     }
-    baseTool.print(item)
-    baseTool.print(options)
-    item.name = options.name
-    item.playerId = options.playerId
+  },
 
-    if (options.brushingMethodId === 'a002c7680a5f4f8ea0b1b47fa3f2b947') {
-      item.selects[0].select = true
-      item.selects[1].select = false
-    } else {
-      item.selects[0].select = false
-      item.selects[1].select = true
-    }
-
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
     this.setData({
-      item: item
+      gameId: options.gameId,
+      macAddress: options.macAddress
     })
   },
 
@@ -104,7 +70,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    
+  
   },
 
   /**
@@ -130,19 +96,24 @@ Page({
   selectClick: function (e) {
     var that = this
     // baseTool.print(e)
-    select = 2 - e.target.id
+    var select = 2 - e.target.id
     baseTool.print(select)
-    baseTool.print(item)
+    var item = that.data.item
     item.selects[0].select = select
     item.selects[1].select = !select
     baseTool.print(item)
     // 终于渲染成功了
     that.setData({
+      select: select,
       item: item
     })
   },
   userInfoSave: function () {
     var that = this
+    var item = that.data.item
+    var select = that.data.select
+    baseTool.print(item.name)
+    
     if (item.name == '') {
       wx.showModal({
         title: '提示',
@@ -163,22 +134,16 @@ Page({
     }
 
     wx.showLoading({
-      title: '正在修改',
+      title: '正在添加',
       mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
     })
-    contestManager.updatePlayers(item.name, item.playerId, brushMethod).then(res => {
+    contestManager.addContestUser(item.name, brushMethod).then(res => {
       baseTool.print(res)
       wx.hideLoading()
-      // 终于渲染成功了
-      baseMessageHandler.sendMessage('selectRefresh', {
-        code: true,
-        msg: '添加成功需要刷新'
-      }).then(res => {
-
-      })
+      that.bindDevice(res)
     }).catch(res => {
       baseTool.print(res)
       wx.hideLoading()
@@ -194,38 +159,33 @@ Page({
   },
   getInputUserName: function (e) {
     baseTool.print(e)
+    var that = this
+    var item = that.data.item
     item.name = e.detail.value
-  },
-  deleteClick: function() {
-    wx.showModal({
-      title: '提示',
-      content: '你确定要删除该用户?',
-      showCancel: true,
-      cancelText: '取消',
-      confirmText: '确定',
-      confirmColor: '#00a0e9',
-      success: function(res) {
-        if (res.confirm === true) {
-          wx.showNavigationBarLoading()
-          contestManager.delPlayers(item.playerId).then(res => {
-            baseTool.print(res)
-            // 发送刷新通知
-            baseMessageHandler.sendMessage('selectRefresh', {
-              code: true,
-              msg: '添加成功需要刷新'
-            }).then(res => {
-              // 然后再进行下一步操作
-              wx.hideNavigationBarLoading()
-              wx.navigateBack()
-            })
-          }).catch(res => {
-            baseTool.print(res)
-          })
-        }
-      },
-      fail: function(res) {},
-      complete: function(res) {},
+    that.setData({
+      item: item
     })
-    
-  }
+  },
+  bindDevice: function (userInfo) {
+    var name = userInfo.player
+    var userId = userInfo.playerId
+    // macAddress
+    var that = this
+    baseTool.print(userInfo)
+    contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress).then(res => {
+      baseTool.print(res)
+      wx.navigateBack({
+        delta: 2,
+      })
+      baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
+      baseMessageHandler.sendMessage('selectRefresh', {
+        code: true,
+        msg: '添加成功需要刷新'
+      }).then(res => {
+
+      })
+    }).catch(res => {
+      baseTool.print(res)
+    })
+  },
 })

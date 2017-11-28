@@ -172,7 +172,7 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
       data: data,
 
       success: res => {
-        // baseTool.print(res)
+        baseTool.print(res)
         resolve(res)
       },
       fail: reject,
@@ -210,7 +210,7 @@ function loginFlow() {
     var code
     // 登录成功, 获得 code
     loginAction.then(res => {
-      baseTool.print(res)
+      baseTool.print([res, '结果'])
       code = res.code
     })
     // 登录成功之后获取用户信息 loginManager.getUserInfo()

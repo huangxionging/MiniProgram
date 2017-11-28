@@ -22,8 +22,8 @@
 }
 
 #item-rank{
-  margin-left: 30rpx;
-  width: 50rpx;
+  margin-left: 0rpx;
+  width: 70rpx;
   font-size: 40rpx;
   color: #9c9da3;
   font-weight: lighter;
@@ -45,9 +45,10 @@
 
 #item-score{
   margin-right: 0rpx;
-  width: 110rpx;
   font-size: 26rpx;
+  width: 110rpx;
   color: #999;
+  text-align: center;
 }
 
 #user-arrow{

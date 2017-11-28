@@ -165,7 +165,7 @@ Page({
   ,
   addContestUser: () => {
     wx.navigateTo({
-      url: '../addContestUser/addContestUser',
+      url: '../addOneContestUser/addOneContestUser?gameId=' + data.gameId + '&macAddress=' + data.macAddress,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -217,7 +217,8 @@ Page({
     contestManager.bindContestUser(data.gameId, name, userId, data.macAddress).then(res => {
       baseTool.print(res)
       wx.navigateBack()
-      baseMessageHandler.sendMessage('deleteDevice', data.deviceId)
+      // 删除这个 Mac 地址下的
+      baseMessageHandler.sendMessage('deleteDevice', data.macAddress)
     }).catch(res => {
       baseTool.print(res)
     }) 
@@ -267,17 +268,16 @@ Page({
 
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value)
       baseTool.print([hex, '通知信息'])
-      if (hex.indexOf('f20d') == 0) {
+      // 兼容产品
+      if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
         // 查找设备命令
-
-  
         var buffer = bleCommandManager.findDeviceCommand()
         bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
           baseTool.print([res, '查找设备命令发送成功'])
         }).catch(res => {
           baseTool.print([res, '设备常亮失败'])
         })
-      } else if (hex.indexOf('f3') == 0) {
+      } else if (hex.indexOf('f30c') == 0) {
         baseTool.print([res, '设备常亮'])
         wx.hideLoading()
         wx.showToast({

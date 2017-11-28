@@ -203,10 +203,22 @@ Page({
   nextStep:function () {
     var bindingTelphoneAction = loginManager.bindingTelphone(telphoneNumber, verifyCode)
     bindingTelphoneAction.then(res => {
-      console.log(res)
-      wx.reLaunch({
-        url: '/pages/contest/contest/contest',
-      })
+      baseTool.print([res, '完整的数据结构'])
+      // 表示已经绑定
+      var wxUser = res.data.data.wxUser
+      if (wxUser.memberId) {
+        baseTool.setValueForKey(wxUser.memberId, 'memberId')
+        console.log(res)
+        wx.reLaunch({
+          url: '/pages/contest/contest/contest',
+        })
+      } else if (wxUser.openid) {
+        baseTool.setValueForKey(wxUser.openid, 'openid')
+        wx.redirectTo({
+          url: '/pages/login/binding/binding',
+        })
+      }
+      
     })
   }
 })

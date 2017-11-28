@@ -1,0 +1,6 @@
+<!--pages/contest/addOneContestUser/addOneContestUser.wxml-->
+<import src='../../../template/contestTemplate.wxml'/>
+<import src='../../../template/contestTemplate.wxml'/>
+<view class='add-user-container'>
+  <template is='userInfoView' data='{{...item}}'></template>
+</view>

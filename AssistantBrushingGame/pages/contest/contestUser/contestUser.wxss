@@ -45,8 +45,7 @@
 }
 
 #contest-create-contest-button{
-  position: absolute;
-  bottom: 270rpx;
+  margin-top: 280rpx;
 }
 
 .contest-table-view{

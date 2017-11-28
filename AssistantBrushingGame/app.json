@@ -10,7 +10,8 @@
     "pages/my/brushContest/brushContest",
     "pages/contest/selectContestUser/selectContestUser",
     "pages/my/brushContestDetail/brushContestDetail",
-    "pages/my/mergeData/mergeData"
+    "pages/my/mergeData/mergeData",
+    "pages/contest/addOneContestUser/addOneContestUser"
   ],
   "window": {
     "backgroundTextStyle": "dark",

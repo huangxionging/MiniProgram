@@ -51,7 +51,6 @@ Page({
    */
   onLoad: function (options) {
     var that = this
-    
     that.getHomePage()
     baseMessageHandler.addMessageHandler('deleteContest', this, that.deleteContest).then(res => {
       baseTool.print(res)
@@ -203,29 +202,55 @@ Page({
       that.foundDevices()
     }).catch(res => {
       baseTool.print('checkBluetoothState: fail')
+      wx.hideLoading()
     })
   },
   foundDevices: function () {
     var that = this
     // 设备信息
+
+    var stopTimer = true
+    function findDeviceTimeOut(timeCount) {
+      timeCount--
+      if (timeCount == 0) {
+        baseTool.print('定时器走完, 搜索失败')
+        // 搜索失败
+        return
+      }
+
+      if (stopTimer == true) {
+        // 成功找到尾巴
+        baseTool.print('搜索成功')
+        wx.hideLoading()
+        return
+      }
+      setTimeout(() => {
+        findDeviceTimeOut(timeCount)
+      }, 10)
+    }
+    // 开启搜索定时器
+    findDeviceTimeOut(1000)
+    stopTimer = false
     var deviceInfo = data.dataList[data.synCommandCount]
     bluetoothManager.foundDevice(res => {
       // console.log('new device list has founded');
       // console.log(res);
+
       if (res.name.indexOf('game') == -1) {
         return
       }
-
       var dataList = that.data.dataList
       var index = dataList.length
       var macAddress = res.name.split('-')[1].toUpperCase()
       baseTool.print([macAddress, data.synCommandCount])
-
+      
       // 找到设备
       if (macAddress === deviceInfo.macAddress) {
         // 停止搜索设备
         // 记住当前设备信息
         data.deviceInfo = res
+        // 停止搜索
+        stopTimer = true
         bluetoothManager.stopBluetoothDevicesDiscovery().then(res => {
           // 成功开始连接设备
           that.connectDevice()
@@ -233,6 +258,7 @@ Page({
           baseTool.print('stopBluetoothDevicesDiscovery: fail')
         })
       }
+
     })
   },
   contestUserClick: () => {
@@ -261,17 +287,28 @@ Page({
         tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
         playerId: res.playersList[index].playerId,
         macAddress: res.playersList[index].macAddress.toUpperCase(),
-        score: res.playersList[index].score ? res.playersList[index].score : '未同步'
+        score: res.playersList[index].score ? res.playersList[index].score : -100
       })
-      if (index == 0) {
-        data.dataList[index].color = '#ffb9e0'
-      } else if (index == 1) {
-        data.dataList[index].color = '#fe6941'
-      } else if (index == 2) {
-        data.dataList[index].color = '#2cabee'
-      }
     }
-    wx.hideNavigationBarLoading()
+    wx.hideNavigationBarLoading({})
+
+    // 按分数从大到小排序
+    data.dataList.sort((a, b) => {
+      return b.score - a.score
+    })
+    // 然后再改变值
+    if (data.dataList.length > 0) {
+      data.dataList[0].color = '#ffb9e0'
+    }
+
+    if (data.dataList.length > 1) {
+      data.dataList[1].color = '#fe6941'
+    }
+
+    if (data.dataList.length > 2) {
+      data.dataList[2].color = '#2cabee'
+    }
+
     that.setData(data)
   },
   deleteContest: function(res) {
@@ -363,6 +400,8 @@ Page({
     })
   },
   findDevice: function (deviceId = '') {
+
+    
     // 查找设备命令
     var that = this
     var buffer = bleCommandManager.findDeviceCommand()
