@@ -25,6 +25,7 @@ Page({
     tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
+    bindedDevices = {}
   },
 
   /**
@@ -50,9 +51,7 @@ Page({
         confirmText: '确定',
         confirmColor: '#00a0e9',
         success: function(res) {
-          if (res.confirm == true) {
-            wx.navigateBack()
-          }
+          wx.navigateBack()
         },
         fail: function(res) {baseTool.print(res)},
         complete: function(res) {},

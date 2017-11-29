@@ -52,7 +52,7 @@ App({
                 // 所以此处假如 callback
                 console.log(res)
                 if (this.userInfoReadyCallback) {
-                  console.log(res)
+                  console.log(res, '滴答滴')
                   this.userInfoReadyCallback(res)
                 }
               }

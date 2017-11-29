@@ -201,7 +201,7 @@ function loginFlow() {
       })
     }).catch(res => {
       baseTool.print(res)
-      reject(res)
+      return baseTool.defaultPromise()
     })
 
     // 会话过期需要登录
@@ -229,18 +229,26 @@ function loginFlow() {
     checkUserBindingStateAction.then(res => {
       baseTool.print(res.data.data)
       // 表示已经绑定
-      var wxUser = res.data.data.wxUser
-      if (wxUser.memberId) {
-        baseTool.setValueForKey(wxUser.memberId, 'memberId')
-        // reLauch()
-        resolve(wxUser)
-      } else if (wxUser.openid) {
-        baseTool.setValueForKey(wxUser.openid, 'openid')
-        wx.redirectTo({
-          url: '/pages/login/binding/binding',
-        })
+      if (res.data.data.wxUser) {
+        var wxUser = res.data.data.wxUser
+        if (wxUser.memberId) {
+          baseTool.setValueForKey(wxUser.memberId, 'memberId')
+          // reLauch()
+          resolve(wxUser)
+        } else if (wxUser.openid) {
+          baseTool.setValueForKey(wxUser.openid, 'openid')
+          // wx.redirectTo({
+          //   url: '/pages/login/binding/binding',
+          // })
+          resolve({
+            redirectTo: '/pages/login/binding/binding'
+          })
+        } else {
+          rejec(res)
+        }
+      } else {
+        rejec(res)
       }
-      resolve(wxUser)
     })
   })
 }

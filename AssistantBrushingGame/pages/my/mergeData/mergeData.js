@@ -35,6 +35,9 @@ Page({
     })
     // 加载数据
     that.loadData()
+    app.userInfoReadyCallback = res => {
+      that.loadData()
+    }
   },
 
   /**
@@ -98,19 +101,28 @@ Page({
         baseTool.print(dataList)
         for (var index = 0; index < res.length; ++index) {
           dataList.push({
-            rank: index + 1,
             name: res[index].name,
             tail: '(tail-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
-            score: res[index].score ? res[index].score : '未同步'
+            score: res[index].score ? res[index].score : -100
           })
-          if (index == 0) {
-            dataList[index].color = '#ffb9e0'
-          } else if (index == 1) {
-            dataList[index].color = '#fe6941'
-          } else if (index == 2) {
-            dataList[index].color = '#2cabee'
-          }
+        }
+
+        // 按分数从大到小排序
+        dataList.sort((a, b) => {
+          return b.score - a.score
+        })
+        // 然后再改变值
+        if (dataList.length > 0) {
+          dataList[0].color = '#ffb9e0'
+        }
+
+        if (dataList.length > 1) {
+          dataList[1].color = '#fe6941'
+        }
+
+        if (dataList.length > 2) {
+          dataList[2].color = '#2cabee'
         }
         that.setData({
           loadingDone: true,

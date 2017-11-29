@@ -105,6 +105,28 @@ function bindCatchPromise(masterPromise = defaultPromise(), catchPromise = defau
   })
 }
 
+function setValueForKeyAsync(value, key) {
+  return new Promise((resolve, reject) => {
+    wx.setStorage({
+      key: key,
+      data: value,
+      success: resolve,
+      fail: reject,
+      complete: function(res) {},
+    })
+  })
+}
+
+function valueForKeyAsync(key) {
+  return new Promise((resolve, reject) => {
+    wx.getStorage({
+      key: key,
+      success: resolve,
+      fail: reject,
+      complete: function(res) {},
+    })
+  })
+}
 
 // 添加接口
 module.exports = {
@@ -116,8 +138,10 @@ module.exports = {
   systemInfo: systemInfo,
   // 获取键值对
   valueForKey: valueForKey,
+  valueForKeyAsync: valueForKeyAsync,
   // 设置键值对
   setValueForKey: setValueForKey,
+  setValueForKeyAsync: setValueForKeyAsync,
   // 删除指定键值对
   removeObjectForKey: removeObjectForKey,
   // 清空缓存

@@ -30,12 +30,18 @@
             </block>
           </block>
         </view>
-        <image wx:if='{{isSyn}}'  src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
+        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
           <image src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
+      </view>
+      <view wx:if='{{!isSynNow && !isSyn}}' class='add-contest-user-view' bindtap='addContestUser'>
+        <view class='add-contest-user-content-view'>
+          <text>添加参赛者</text>
+          <view class='add-contest-user-view-line'></view>
+        </view>
       </view>
       <view id='contest-table-view'>
          <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
-          <template is='contestUserScoreItem' data='{{...item}}'></template>
+          <template is='contestUserScoreItem' data='{{...item, index}}'></template>
         </block> 
       </view>
     <!-- </view> -->

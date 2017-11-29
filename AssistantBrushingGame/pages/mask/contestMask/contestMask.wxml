@@ -1,0 +1,6 @@
+<!--pages/mask/contestMask/contestMask.wxml-->
+<view class='mask-container'>
+  <block wx:if='{{mask}}'>
+    <image src='../../../resource/{{imageName}}.png' class='mask-image' bindtap='maskClick'></image>
+  </block>
+</view>

@@ -50,7 +50,21 @@ Page({
     }
 
     that.loadData()
-    
+    app.userInfoReadyCallback = res => {
+      that.loadData()
+      if (app.globalData.userInfo) {
+        that.setData({
+          userInfo: app.globalData.userInfo
+        })
+      } else {
+        loginManager.getUserInfo().then(res => {
+          app.globalData.userInfo = res.userInfo
+          that.setData({
+            userInfo: app.globalData.userInfo
+          })
+        })
+      }
+    }
   },
 
   /**

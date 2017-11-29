@@ -1,6 +1,4 @@
 // pages/binding/binding.js
-
-
 const app = getApp()
 const loginManager = require('../../../manager/loginManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
@@ -31,6 +29,20 @@ Page({
   onLoad: function (options) {
     // 获取 url 信息
     var that = this
+    app.userInfoReadyCallback = res => {
+      if (app.globalData.userInfo) {
+        that.setData({
+          userInfo: app.globalData.userInfo
+        })
+      } else {
+        loginManager.getUserInfo().then(res => {
+          app.globalData.userInfo = res.userInfo
+          that.setData({
+            userInfo: app.globalData.userInfo
+          })
+        })
+      }
+    }
     if (app.globalData.userInfo) {
       that.setData({
         userInfo: app.globalData.userInfo
@@ -43,8 +55,6 @@ Page({
         })
       })
     }
-
-    
   },
 
   /**

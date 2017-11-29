@@ -1,4 +1,5 @@
 // pages/contest/contestUser/contestUser.js
+const app = getApp()
 const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
@@ -33,6 +34,10 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+
+    app.userInfoReadyCallback = res => {
+      that.loadData()
+    }
   },
 
   /**
@@ -109,12 +114,17 @@ Page({
     var that = this
     that.loadData()
   },
+  onShareAppMessage: function (e) {
+
+  },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    return {
+      title: 'ddd'
+    }
   },
   addContestUser: () => {
     wx.navigateTo({

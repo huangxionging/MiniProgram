@@ -65,7 +65,7 @@ function  checkBluetoothState() {
       return baseTool.defaultPromise()
     })
 
-    // 蓝牙适配器
+    // 蓝牙适配器 竟然被我想出了如此完美的解决方案
     var closeBluetoothAdapterPromise = new Promise((resolve, reject) => {
       closeBluetoothAdapterPromise1.then(resolve).catch(reject)
       closeBluetoothAdapterPromise2.then(resolve).catch(reject)
@@ -81,7 +81,7 @@ function  checkBluetoothState() {
       return baseTool.defaultPromise()
     })
 
-    // 初始化蓝牙适配器
+    // 初始化蓝牙适配器 竟然被我想出了如此完美的解决方案
     var openBluetoothAdapterPromise = new Promise((resolve, reject) => {
         openBluetoothAdapterPromise1.then(resolve).catch(reject)
         openBluetoothAdapterPromise2.then(resolve).catch(reject)
@@ -151,23 +151,9 @@ function stopSearchDevice() {
  */
 function connectDevice(deviceId = '') {
   return new Promise((resolve, reject) => {
-    // 创建 ble 链接, 完成之后获得 ble 服务
-    // 重新初始化
-    var closeBluetoothAdapterPromise = closeBluetoothAdapter()
-    var checkBluetoothStatePromise = closeBluetoothAdapterPromise.then(res => {
-      return baseWechat.openBluetoothAdapter()
-    }).catch(res => {
-      reject(res)
-    })
-    
     // 然后链接
-    var createBLEConnectionPromise = checkBluetoothStatePromise.then(res => {
-      return baseWechat.createBLEConnection(deviceId)
-    }).catch(res => {
-      reject(res)
-    })
     // 获得服务 Promise
-    var getBLEDeviceServicesPromise = createBLEConnectionPromise.then(res => {
+    var getBLEDeviceServicesPromise = baseWechat.createBLEConnection(deviceId).then(res => {
       return baseWechat.getBLEDeviceServices(deviceId)
     }).catch(res => {
       reject(res)
@@ -219,10 +205,6 @@ function notifyBLECharacteristicValueChange(deviceId = '', serviceId = '', chara
 
 function writeBLECharacteristicValue(deviceId = '', serviceId = '', characteristicId = '', value = []){
   return baseWechat.writeBLECharacteristicValue(deviceId, serviceId, characteristicId, value)
-}
-
-function findDevice() {
-  
 }
 
 function onBluetoothAdapterStateChange (callback){

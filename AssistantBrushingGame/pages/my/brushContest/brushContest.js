@@ -32,8 +32,10 @@ Page({
       loadingDone: false,
       dataList: []
     }
-    this.loadData()
-
+    that.loadData()
+    app.userInfoReadyCallback = res => {
+      that.loadData()
+    }
   },
 
   /**

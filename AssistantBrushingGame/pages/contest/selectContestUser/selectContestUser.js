@@ -1,4 +1,5 @@
 // pages/contest/selectContestUser/selectContestUser.js
+const app = getApp()
 const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
@@ -43,6 +44,10 @@ Page({
     baseTool.print(data.deviceId)
     that.setData(data)
     that.loadData()
+
+    app.userInfoReadyCallback = res => {
+      that.loadData()
+    }
     // 添加消息处理函数
     baseMessageHandler.addMessageHandler('selectRefresh', that, that.loadData).then(res => {
       baseTool.print(res)
@@ -159,6 +164,14 @@ Page({
       wx.showModal({
         title: '提示',
         content: '蓝牙连接失败',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {
+          wx.navigateBack()
+        },
+        fail: function(res) {},
+        complete: function(res) {},
       })
     })
   }
@@ -197,6 +210,9 @@ Page({
             that.setData(data)
           } else if(res.confirm) {
             that.bindDevice(data.dataList[index])
+          } else if (!res.cancel && !res.confirm) {
+            data.dataList[index].item.isSelect = !data.dataList[index].item.isSelect
+            that.setData(data)
           }
           // 
         },

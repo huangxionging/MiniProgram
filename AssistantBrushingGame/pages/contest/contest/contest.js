@@ -57,7 +57,9 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
-
+    app.userInfoReadyCallback = res => {
+      that.getHomePage()
+    }
     // baseMessageHandler.addMessageHandler('message', this, function (res) {
     //   baseTool.print(res)
     // }).then(res => {
@@ -122,7 +124,13 @@ Page({
         data.loadingDone = true
         data.hasData = false
         that.setData(data)
-      }
+        var first = baseTool.valueForKey('firstContestUser')
+        if (!first) {
+          wx.redirectTo({
+            url: '/pages/mask/contestMask/contestMask?imageName=contest-user_mask&isResync=false',
+          })
+        }
+      } 
     }).catch(res => {
       wx.hideNavigationBarLoading()
       baseTool.print(res)
@@ -221,7 +229,7 @@ Page({
       if (stopTimer == true) {
         // 成功找到尾巴
         baseTool.print('搜索成功')
-        wx.hideLoading()
+        // wx.hideLoading()
         return
       }
       setTimeout(() => {
@@ -278,17 +286,20 @@ Page({
     data.loadingDone = true
     data.hasData = true
     // 清空数组
+    data.isSyn = false
     data.dataList.length = 0
-    data.isSyn = !res.gameInfo.isSyn
     for (var index = 0; index < res.playersList.length; ++index) {
       data.dataList.push({
-        rank: index + 1,
         name: res.playersList[index].name,
         tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
         playerId: res.playersList[index].playerId,
         macAddress: res.playersList[index].macAddress.toUpperCase(),
         score: res.playersList[index].score ? res.playersList[index].score : -100
       })
+
+      if (res.playersList[index].score > 0) {
+        data.isSyn = true
+      } 
     }
     wx.hideNavigationBarLoading({})
 
@@ -308,8 +319,15 @@ Page({
     if (data.dataList.length > 2) {
       data.dataList[2].color = '#2cabee'
     }
-
     that.setData(data)
+    if (data.isSyn) {
+      var first = baseTool.valueForKey('firstContest')
+      if (!first) {
+        wx.redirectTo({
+          url: '/pages/mask/contestMask/contestMask?imageName=contest-mask&isResync=true',
+        })
+      }
+    } 
   },
   deleteContest: function(res) {
     var that = this
@@ -383,7 +401,7 @@ Page({
       var values = new Uint8Array(res.value)
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
       baseTool.print([hex, '通知信息'])
-      if ((hex.indexOf('f20d') == 0) || (hex.indexOf('f30d'))  == 0) {
+      if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
         // 再次回复设备
         that.connectReplyDevice(deviceId)
       } else if (hex.indexOf('f30cf5') == 0) {
@@ -397,18 +415,6 @@ Page({
       } else if (hex.indexOf('f7') == 0 || hex.indexOf('f9') == 0) {
         that.newProcessOnceData(hex, values, deviceId)
       }
-    })
-  },
-  findDevice: function (deviceId = '') {
-
-    
-    // 查找设备命令
-    var that = this
-    var buffer = bleCommandManager.findDeviceCommand()
-    bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
-      baseTool.print([res, '查找设备命令发送成功'])
-    }).catch(res => {
-      baseTool.print([res, '设备常亮失败'])
     })
   },
   connectReplyDevice: function (deviceId = '') {
@@ -499,18 +505,18 @@ Page({
     data.dataHead = hex.substring(0, 2)
 
     //数据处理逻辑
-    if (typedArrayRead[2] == 0) {
+    if (values[2] == 0) {
       data.data01 = hex
       baseTool.print(['data01:', data.data01])
-    } else if (typedArrayRead[2] == 1) {
+    } else if (values[2] == 1) {
       data.data02 = hex
       baseTool.print(['data02:', data.data02])
 
-    } else if (typedArrayRead[2] == 2) {
+    } else if (values[2] == 2) {
       data.data03 = hex
       baseTool.print(['data03:', data.data03])
 
-    } else if (typedArrayRead[2] == 3) {
+    } else if (values[2] == 3) {
       data.data04 = hex
       baseTool.print(['data04:', data.data04])
       //一条完整数据拼接
@@ -524,9 +530,8 @@ Page({
       console.log("dataObject", dataObject)
 
       //放入数据集合
-      that.data.dataObjectList.push(dataObject);
-      that.data.dList.push(oneCompleteData);
-      console.log('dataList:', that.data.dataList)
+      data.dataObjectList.push(dataObject);
+      data.deviceDataList.push(oneCompleteData);
       baseTool.print(['dataList:', data.dataList])
       //一条完整数据回复
       var oneDataWrite = "f103" + data.dataHead;
@@ -552,5 +557,8 @@ Page({
     }).catch(res => {
       baseTool.print([res, '错误信息'])
     })
+  },
+  addContestUser: function() {
+
   }
 })

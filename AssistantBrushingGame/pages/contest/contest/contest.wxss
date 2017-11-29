@@ -93,6 +93,26 @@
   font-weight: bold;
 }
 
+.add-contest-user-view{
+  width: 100%;
+  height: 70rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-contest-user-content-view{
+  font-size: 28rpx;
+  color: #00a0e9;
+}
+
+.add-contest-user-view-line{
+  width: 100%;
+  height: 2rpx;
+  background-color: #00a0e9;
+}
+
 #contest-date{
   position: relative;
   font-size: 26rpx;
@@ -101,7 +121,7 @@
 
 #contest-syn-button{
   position: relative;
-  margin-top: 70rpx; 
+  margin-top: 80rpx;
 }
 
 #contest-synchronization{
