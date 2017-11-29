@@ -25,13 +25,17 @@ Page({
     tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
-    bindedDevices = {}
+    bindedDevices: {}
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+    baseMessageHandler.getMessage(res => {
+      baseTool.print([res, 'ddd'])
+    })
     baseTool.print(options)
     var that = this
     that.setData({
@@ -46,7 +50,6 @@ Page({
       wx.showModal({
         title: '提示',
         content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
-        mask: true,
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',

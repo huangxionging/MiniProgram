@@ -159,8 +159,18 @@ function resetMessageHandlers() {
   })
 }
 
+function postMessage(messageHandler = () => {}){
+  addMessageHandler('postMessage', null, messageHandler)
+}
+
+function getMessage(messageHandler = () => {}){
+  sendMessage('postMessage', messageHandler).then(res => {
+    removeSpecificInstanceMessageHandler('postMessage', null)
+  })
+}
+
 module.exports = {
-  // 添加消息
+  // 添加消息 适用于回传通知
   addMessageHandler: addMessageHandler,
   // 发送消息
   sendMessage: sendMessage,
@@ -170,5 +180,8 @@ module.exports = {
   removeSpecificInstanceMessageHandler: removeSpecificInstanceMessageHandler,
   // 重置消息处理
   resetMessageHandlers: resetMessageHandlers,
+  // 适用于正向传输数据
+  postMessage: postMessage,
+  getMessage: getMessage,
 }
 

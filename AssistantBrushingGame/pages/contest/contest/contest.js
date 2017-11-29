@@ -141,8 +141,18 @@ Page({
       if (typeof (res) != 'undefined') {
         var gameId = res.game.gameId
         var name = res.game.name
+
         wx.navigateTo({
           url: '../createContest/createContest?' + 'gameId=' + gameId + '&' + 'name=' + name,
+          success: function(res) {
+            baseTool.print(['ok', 1])
+
+            baseMessageHandler.postMessage(res => {
+              res('ok')
+            })
+          },
+          fail: function(res) {},
+          complete: function(res) {},
         })
       }
       
