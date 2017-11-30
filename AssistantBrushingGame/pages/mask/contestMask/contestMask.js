@@ -72,25 +72,28 @@ Page({
   maskClick: function() {
 
     var that = this
-    if (that.data.isResync) {
+    // baseTool.print([that.data.isResync, 'dddff'])
+    if (that.data.isResync == 'true') {
+      // baseTool.print('ddd')
       baseTool.setValueForKeyAsync(true, 'firstContest').then(res => {
         // 切换页面
         wx.switchTab({
           url: '../../contest/contest/contest',
           success: function () {
-
+            // baseTool.print('dddf')
           }
         })
       }).catch(res => {
 
       })
     } else {
+      // baseTool.print('ddd')
       baseTool.setValueForKeyAsync(true, 'firstContestUser').then(res => {
         // 切换页面
         wx.switchTab({
           url: '../../contest/contest/contest',
           success: function () {
-
+            // baseTool.print('dddg')
           }
         })
       }).catch(res => {

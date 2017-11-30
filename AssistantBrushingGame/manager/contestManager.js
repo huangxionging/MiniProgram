@@ -2,12 +2,12 @@ const baseWechat = require('../utils/baseWeChat.js')
 const baseURL = require('../utils/baseURL.js')
 const baseTool = require('../utils/baseTool.js')
 const baseApiList = require('../utils/baseApiList.js')
-
+const loginManager = require('./loginManager.js')
 function getHomePage() {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
     var data = {
-      memberId: baseTool.valueForKey('memberId')
+      memberId: loginManager.getMemberId()
     }
     wx.request({
       url: url,
@@ -36,7 +36,7 @@ function addContestUser(name = '', brushingMethodId = '') {
     var data = {
       name: name,
       brushingMethodId: brushingMethodId,
-      memberId: baseTool.valueForKey('memberId')
+      memberId: loginManager.getMemberId()
     }
     wx.request({
       url: url,
@@ -63,7 +63,7 @@ function getContestUserList() {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getContestUserList
     var data = {
-      memberId: baseTool.valueForKey('memberId')
+      memberId: loginManager.getMemberId()
     }
     wx.request({
       url: url,
@@ -90,7 +90,7 @@ function selectContestUser(gameId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.selectContestUser
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
       gameId: gameId
     }
     baseTool.print(data)
@@ -121,7 +121,7 @@ function addContest(gameId = undefined, name = undefined) {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContest
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
     }
 
     if (gameId) {
@@ -156,7 +156,7 @@ function deleteContest(gameId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.deleteContest
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
       gameId: gameId,
     }
     wx.request({
@@ -181,7 +181,7 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindContestUser
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
       gameId: gameId,
       player: player,
       playerId: playerId,
@@ -211,7 +211,7 @@ function updatePlayers(name = '', playerId = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updatePlayers
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
       name: name,
       playerId: playerId,
       brushingMethodId: brushingMethodId,
@@ -240,7 +240,7 @@ function delPlayers(playerId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
     var data = {
-      memberId: baseTool.valueForKey('memberId'),
+      memberId: loginManager.getMemberId(),
       playerId: playerId,
     }
     baseTool.print(data)

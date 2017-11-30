@@ -32,16 +32,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this
 
-    baseMessageHandler.getMessage(res => {
-      baseTool.print([res, 'ddd'])
+    // 获取消息
+    baseMessageHandler.getMessage('createContest', res => {
+      that.setData({
+        bindedDevices: res
+      })
+    }).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
     })
     baseTool.print(options)
-    var that = this
+    
     that.setData({
       gameId: options.gameId,
       name: options.name
     })
+
     bluetoothManager.checkBluetoothState().then(res => {
       baseTool.print('checkBluetoothState: success')
       that.foundDevices()
@@ -53,20 +62,27 @@ Page({
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function(res) {
+        success: function (res) {
           wx.navigateBack()
         },
-        fail: function(res) {baseTool.print(res)},
-        complete: function(res) {},
+        fail: function (res) { baseTool.print(res) },
+        complete: function (res) { },
       })
     })
 
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
       var that = this
       // 搜索 macAddress
+      var bindedDevices = that.data.bindedDevices
+      
       var dataList = that.data.dataList.filter((value, index, arry) => {
+
+        if (value.macAddress === res.toUpperCase()) {
+          bindedDevices[res] = value
+        }
         return value.macAddress != res.toUpperCase()
       })
+      var bin
       baseTool.print(dataList)
       that.setData({
         dataList: dataList
@@ -90,6 +106,7 @@ Page({
    */
   onShow: function (res) {
     baseTool.print('页面显示')
+    
   },
 
   /**
@@ -136,7 +153,36 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function (res) {
-    baseTool.print(res)
+    baseTool.print('下拉刷新')
+    wx.showNavigationBarLoading()
+    wx.showLoading({
+      title: '重新搜索设备',
+    })
+    var that = this
+    that.setData({
+      dataList: []
+    })
+    bluetoothManager.checkBluetoothState().then(res => {
+      baseTool.print('checkBluetoothState: success')
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      that.foundDevices()
+    }).catch(res => {
+      baseTool.print('checkBluetoothState: fail')
+      wx.showModal({
+        title: '提示',
+        content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+          // wx.navigateBack()
+        },
+        fail: function (res) { baseTool.print(res) },
+        complete: function (res) { },
+      })
+    })
   },
 
   /**
@@ -147,6 +193,7 @@ Page({
   },
   foundDevices: function () {
     var that = this
+    var bindedDevices = that.data.bindedDevices
     bluetoothManager.foundDevice(res => {
       // console.log('new device list has founded');
       // console.log(res);
@@ -156,12 +203,17 @@ Page({
 
       var dataList = that.data.dataList
       var index = dataList.length
-      var macAddress = res.name.split('-')[1]
+      var macAddress = res.name.split('-')[1].toUpperCase()
       baseTool.print(['发现新设备', macAddress, res])
+      
+       // 已经绑定过, 需要过滤掉
+      if (bindedDevices[macAddress]) {
+        return
+      }
       // 广播数据先不弄
       dataList.push({
         name: res.name,
-        macAddress: macAddress.toUpperCase(),
+        macAddress: macAddress,
         deviceId: res.deviceId,
       })
       that.setData({

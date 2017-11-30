@@ -7,22 +7,22 @@ const baseTool = require('./utils/baseTool.js')
 const bluetoothManager = require('./manager/bluetoothManager.js')
 App({
   onLaunch: function () {
-    loginManager.loginFlow().then(res => {
-      if (this.userInfoReadyCallback) {
-        // 回调
-        this.userInfoReadyCallback(res)
+    // loginManager.loginFlow().then(res => {
+    //   if (this.userInfoReadyCallback) {
+    //     // 回调
+    //     this.userInfoReadyCallback(res)
 
-        // 去到绑定页面
-        if (res.redirectTo) {
-          wx.redirectTo({
-            url: res.redirectTo,
-          })
-        }
+    //     // 去到绑定页面
+    //     if (res.redirectTo) {
+    //       wx.redirectTo({
+    //         url: res.redirectTo,
+    //       })
+    //     }
 
-      }
-    }).catch(res => {
+    //   }
+    // }).catch(res => {
 
-    })
+    // })
 
     
   },

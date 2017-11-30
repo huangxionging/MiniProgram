@@ -67,6 +67,15 @@ Page({
     // }).catch(res => {
     //   baseTool.print(res)
     // })
+
+    baseMessageHandler.postMessage('message', res => {
+      res('底部tapBar切换')
+      // baseMessageHandler.removeMessage('createContest')
+    }).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -144,13 +153,7 @@ Page({
 
         wx.navigateTo({
           url: '../createContest/createContest?' + 'gameId=' + gameId + '&' + 'name=' + name,
-          success: function(res) {
-            baseTool.print(['ok', 1])
-
-            baseMessageHandler.postMessage(res => {
-              res('ok')
-            })
-          },
+          success: function(res) {},
           fail: function(res) {},
           complete: function(res) {},
         })
@@ -295,17 +298,21 @@ Page({
     data.gameId = res.gameInfo.gameId
     data.loadingDone = true
     data.hasData = true
+    data.deviceInfo = {}
     // 清空数组
     data.isSyn = false
     data.dataList.length = 0
     for (var index = 0; index < res.playersList.length; ++index) {
-      data.dataList.push({
+      var macAddress = res.playersList[index].macAddress.toUpperCase()
+      var device = {
         name: res.playersList[index].name,
         tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
         playerId: res.playersList[index].playerId,
-        macAddress: res.playersList[index].macAddress.toUpperCase(),
+        macAddress: macAddress,
         score: res.playersList[index].score ? res.playersList[index].score : -100
-      })
+      }
+      data.dataList.push(device)
+      data.deviceInfo[macAddress] =  device
 
       if (res.playersList[index].score > 0) {
         data.isSyn = true
@@ -330,7 +337,8 @@ Page({
       data.dataList[2].color = '#2cabee'
     }
     that.setData(data)
-    if (data.isSyn) {
+    baseTool.print(data.isSyn)
+    if (!data.isSyn) {
       var first = baseTool.valueForKey('firstContest')
       if (!first) {
         wx.redirectTo({
@@ -569,6 +577,23 @@ Page({
     })
   },
   addContestUser: function() {
-
+    var gameId = res.game.gameId
+    var name = res.game.name
+    wx.navigateTo({
+      url: '../createContest/createContest?' + 'gameId=' + gameId + '&' + 'name=' + name,
+      success: function (res) {
+        // 提交消息
+        baseMessageHandler.postMessage('createContest', res => {
+          res(data.deviceInfo)
+          // baseMessageHandler.removeMessage('createContest')
+        }).then(res => {
+          baseTool.print(res)
+        }).catch(res => {
+          baseTool.print(res)
+        })
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
   }
 })

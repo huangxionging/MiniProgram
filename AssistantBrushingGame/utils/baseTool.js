@@ -9,7 +9,6 @@ var systemInfo = wx.getSystemInfoSync()
 var brand = String(systemInfo.brand).toLowerCase()
 // 是否模拟器
 var isSimulator = (brand == 'devtools')
-
 /**
  * e 是要打印的参数
  */

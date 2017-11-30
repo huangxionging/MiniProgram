@@ -1,5 +1,6 @@
 const baseWechat = require('../utils/baseWeChat.js')
 const baseTool = require('../utils/baseTool.js')
+const loginManager = require('./loginManager.js')
 
 function  checkBluetoothState() {
   // 打开蓝牙适配器 Promise
@@ -33,7 +34,7 @@ function  checkBluetoothState() {
       return baseTool.defaultPromise()
     })
 
-    // 蓝牙可用并且在搜索的情形
+    // 蓝牙可用并且在搜索的情形1
     var stopBluetoothDevicesDiscoveryPromise = getBluetoothAdapterStatePromise.then(res => {
       // 可用 并且在搜索, 先停止搜索
       if (res.available == true && res.discovering == true) {
@@ -52,6 +53,8 @@ function  checkBluetoothState() {
         baseTool.print([res, '蓝牙适配器不可用'])
         reject(res)
       }
+    }).catch(res => {
+      return baseTool.defaultPromise()
     })
 
     // 停止搜索

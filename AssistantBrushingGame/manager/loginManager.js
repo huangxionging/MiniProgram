@@ -253,6 +253,34 @@ function loginFlow() {
   })
 }
 
+function getMemberId() {
+
+  var memeberId = baseTool.valueForKey('memberId')
+  if (memeberId) {
+    return memeberId
+  } else {
+    loginFlow().then(res => {
+      var app = getApp()
+
+      // 回调
+      // 去到绑定页面
+      if (res.redirectTo) {
+        wx.redirectTo({
+          url: res.redirectTo,
+        })
+      } else {
+        if (app.userInfoReadyCallback) {
+          app.userInfoReadyCallback(res)
+        }
+        
+      }
+      
+    }).catch(res => {
+
+    })
+    return ''
+  }
+}
 module.exports = {
   checkState: checkState,
   login: login,
@@ -262,4 +290,5 @@ module.exports = {
   getVerifyCode: getVerifyCode,
   bindingTelphone: bindingTelphone,
   loginFlow: loginFlow,
+  getMemberId: getMemberId,
 }
