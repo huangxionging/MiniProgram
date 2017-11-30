@@ -228,7 +228,17 @@ Page({
           url: '/pages/login/binding/binding',
         })
       }
-      
+    }).catch(res => {
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     })
   }
 })

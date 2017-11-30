@@ -7,24 +7,12 @@ const baseTool = require('./utils/baseTool.js')
 const bluetoothManager = require('./manager/bluetoothManager.js')
 App({
   onLaunch: function () {
-    // loginManager.loginFlow().then(res => {
-    //   if (this.userInfoReadyCallback) {
-    //     // 回调
-    //     this.userInfoReadyCallback(res)
-
-    //     // 去到绑定页面
-    //     if (res.redirectTo) {
-    //       wx.redirectTo({
-    //         url: res.redirectTo,
-    //       })
-    //     }
-
-    //   }
-    // }).catch(res => {
-
-    // })
-
-    
+    // 执行登陆流程, 确保随时处于登陆状态
+    loginManager.loginFlow().then(res => {
+      // baseTool.print(res)
+    }).catch(res => {
+      // baseTool.print(res)
+    })
   },
   globalData: {
     userInfo: null,
@@ -34,5 +22,4 @@ App({
   },
   onShow: function() {
   },
-  
 })

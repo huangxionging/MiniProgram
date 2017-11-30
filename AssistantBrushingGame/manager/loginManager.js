@@ -28,6 +28,8 @@ function login() {
         title: '网络错误',
         content: '请检查网络是否连接',
         showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
         success: function(res) {},
         fail: function(res) {},
         complete: function(res) {},
@@ -173,7 +175,11 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
 
       success: res => {
         baseTool.print(res)
-        resolve(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
       },
       fail: reject,
       complete: function (res) { },
