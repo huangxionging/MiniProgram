@@ -323,6 +323,33 @@ function uploadBrushRecord() {
   })
 }
 
+function tagSynGame(gameId = '') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.tagSyn
+    var data = {
+      memberId: loginManager.getMemberId(),
+      gameId: gameId,
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        baseTool.print(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
+      },
+      fail: function () {
+        reject(baseTool.errorMsg)
+      },
+      complete: function (res) { },
+    })
+  })
+}
+
 module.exports = {
   // 首页接口
   getHomePage: getHomePage,
@@ -344,4 +371,6 @@ module.exports = {
   delPlayers: delPlayers,
   // 上传刷牙数据
   uploadBrushRecord: uploadBrushRecord,
+  // 标识同步
+  tagSynGame: tagSynGame,
 }

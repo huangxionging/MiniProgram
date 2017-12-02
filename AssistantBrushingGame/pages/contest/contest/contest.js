@@ -37,7 +37,10 @@ var data = {
   tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
   // 同步指令计数
   synCommandCount: 0,
-  deviceInfo: null
+  deviceInfo: null,
+  synSuccessCount: 0,
+  synFailCount: 0,
+  synNoDataCount: 0
 }
 Page({
 
@@ -60,22 +63,6 @@ Page({
     app.userInfoReadyCallback = res => {
       that.getHomePage()
     }
-    // baseMessageHandler.addMessageHandler('message', this, function (res) {
-    //   baseTool.print(res)
-    // }).then(res => {
-    //   baseTool.print(res)
-    // }).catch(res => {
-    //   baseTool.print(res)
-    // })
-
-    baseMessageHandler.postMessage('message', res => {
-      res('底部tapBar切换')
-      // baseMessageHandler.removeMessage('createContest')
-    }).then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
-    })
   },
 
   /**
@@ -109,6 +96,15 @@ Page({
   onPullDownRefresh: function () {
     var that = this
     that.getHomePage()
+    wx.closeBluetoothAdapter({
+      success: function(res) {
+        baseTool.print([res, '成功释放资源'])
+      },
+      fail: function(res) {
+        baseTool.print([res, '呵呵'])
+      },
+      complete: function(res) {},
+    })
   },
 
   /**
@@ -170,45 +166,77 @@ Page({
     that.setData({
       isSynNow: true
     })
+    wx.hideLoading()
     wx.showLoading({
       title: '同步数据中',
       mask: false,
-      success: function(res) {},
+      success: function(res) {
+        // 每次从第 0个设备开始
+        data.synCommandCount = 0
+        data.synFailCount = 0
+        data.synSuccessCount = 0
+        data.synNoDataCount = 0
+        data.dataObjectList.splice(0, data.dataObjectList.length)
+        data.deviceDataList.splice(0, data.deviceDataList.length)
+        that.synDevice()
+      },
       fail: function(res) {},
       complete: function(res) {},
     })
-    // 每次从第 0个设备开始
-    data.synCommandCount = 0
-    data.dataObjectList = []
-    data.deviceDataList = []
-    that.synDevice()
+
+    contestManager.tagSynGame(data.gameId).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
   synDevice: function () {
     var that = this
     if (data.synCommandCount == data.dataList.length) {
       // 同步结束
+      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步无数据:' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
       wx.hideLoading()
-      that.getHomePage()
-      wx.showToast({
-        title: '同步结束',
-        icon: '',
-        image: '',
-        duration: 3000,
-        mask: true,
-        success: function(res) {},
+      wx.showModal({
+        title: '同步结果',
+        content: content,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {
+          that.getHomePage()
+          that.setData({
+            isSynNow: false
+          })
+
+          wx.closeBluetoothAdapter({
+            success: function(res) {},
+            fail: function(res) {},
+            complete: function(res) {},
+          })
+        },
         fail: function(res) {},
         complete: function(res) {},
       })
-      that.setData({
-        isSynNow: false
-      })
       return
     }
+    wx.hideLoading()
     wx.showLoading({
       title: '同步第' + (data.synCommandCount + 1) + '个尾巴',
-      mask: true,
+      mask: false,
       success: function(res) {
-        that.openBle()
+
+        setTimeout(function () {
+          wx.closeBluetoothAdapter({
+            success: function (res) {
+              that.openBle()
+            },
+            fail: function (res) {
+              that.openBle()
+            },
+            complete: function (res) { },
+          })
+        }, 3000)
+        
       },
       fail: function(res) {},
       complete: function(res) {},
@@ -216,29 +244,63 @@ Page({
     
   },
   openBle: function () {
-    // 打开蓝牙
     var that = this
-    bluetoothManager.checkBluetoothState().then(res => {
-      baseTool.print('checkBluetoothState: success')
-      that.foundDevices()
-    }).catch(res => {
-      baseTool.print('checkBluetoothState: fail')
-      wx.hideLoading()
+    // 打开蓝牙
+    wx.openBluetoothAdapter({
+      success: function (res) {
+        baseTool.print("openBluetoothAdapter: success");
+        baseTool.print(res);
+        //start discovery devices
+        wx.startBluetoothDevicesDiscovery({
+          services: [],
+          success: function (res) {
+            baseTool.print("startBluetoothDevicesDiscovery: success");
+            baseTool.print(res);
+            //Listen to find new equipment
+            that.foundDevices()
+          },
+        })
+      },
+      fail: function (res) {
+        baseTool.print("openBluetoothAdapter: fail");
+        baseTool.print(res);
+        wx.showModal({
+          title: '提示',
+          content: '蓝牙不可用, 请检查蓝牙和GPS状态后再使用',
+          showCancel: false,
+          confirmText: '确定',
+          confirmColor: '#00a0e9',
+          success: function (res) {
+            wx.hideLoading()
+            that.setData({
+              isSynNow: false
+            })
+          },
+          fail: function (res) { baseTool.print(res) },
+          complete: function (res) { },
+        })
+      },
     })
   },
   foundDevices: function () {
     var that = this
     // 设备信息
-
     var stopTimer = true
     function findDeviceTimeOut(timeCount) {
       timeCount--
       if (timeCount == 0) {
         baseTool.print('定时器走完, 搜索失败')
         // 搜索失败
+        wx.hideLoading()
+        // 搜索不到, 失败
+        data.synFailCount++
+        // 同步下一个设备
+        data.synCommandCount++
+        data.dataObjectList.splice(0, data.dataObjectList.length)
+        data.deviceDataList.splice(0, data.deviceDataList.length)
+        that.synDevice()
         return
       }
-
       if (stopTimer == true) {
         // 成功找到尾巴
         baseTool.print('搜索成功')
@@ -250,36 +312,38 @@ Page({
       }, 10)
     }
     // 开启搜索定时器
-    findDeviceTimeOut(1000)
     stopTimer = false
+    findDeviceTimeOut(1000)
     var deviceInfo = data.dataList[data.synCommandCount]
-    bluetoothManager.foundDevice(res => {
-      // console.log('new device list has founded');
-      // console.log(res);
-
-      if (res.name.indexOf('game') == -1) {
+    wx.onBluetoothDeviceFound(function(res){
+      var device = res.devices[0]
+      // baseTool.print(device)
+      if (device.name.indexOf('game') == -1) {
         return
       }
       var dataList = that.data.dataList
       var index = dataList.length
-      var macAddress = res.name.split('-')[1].toUpperCase()
+      var macAddress = device.name.split('-')[1].toUpperCase()
       baseTool.print([macAddress, data.synCommandCount])
-      
+
       // 找到设备
       if (macAddress === deviceInfo.macAddress) {
         // 停止搜索设备
         // 记住当前设备信息
-        data.deviceInfo = res
+        data.deviceInfo = device
         // 停止搜索
         stopTimer = true
-        bluetoothManager.stopBluetoothDevicesDiscovery().then(res => {
-          // 成功开始连接设备
-          that.connectDevice()
-        }).catch(res => {
-          baseTool.print('stopBluetoothDevicesDiscovery: fail')
+        wx.stopBluetoothDevicesDiscovery({
+          success: function(res) {
+            // 成功开始连接设备
+            that.connectDevice()
+          },
+          fail: function(res) {
+            baseTool.print('stopBluetoothDevicesDiscovery: fail')
+          },
+          complete: function(res) {},
         })
       }
-
     })
   },
   contestUserClick: () => {
@@ -300,7 +364,7 @@ Page({
     data.hasData = true
     data.deviceInfo = {}
     // 清空数组
-    data.isSyn = false
+    data.isSyn = res.gameInfo.isSyn
     data.dataList.length = 0
     for (var index = 0; index < res.playersList.length; ++index) {
       var macAddress = res.playersList[index].macAddress.toUpperCase()
@@ -313,10 +377,6 @@ Page({
       }
       data.dataList.push(device)
       data.deviceInfo[macAddress] =  device
-
-      if (res.playersList[index].score > 0) {
-        data.isSyn = true
-      } 
     }
     wx.hideNavigationBarLoading({})
 
@@ -358,6 +418,8 @@ Page({
   connectDevice: function () {
     var that = this
     // 找服务, 找特征
+    baseTool.print('正在连接设备...')
+    wx.hideLoading()
     wx.showLoading({
       title: '正在连接设备...',
       mask: false,
@@ -365,57 +427,52 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
-    var getCharacteristicsPromise = bluetoothManager.connectDevice(data.deviceInfo.deviceId).then(res => {
-      baseTool.print([res, '服务 UUID', data.deviceInfo.deviceId, data.tailServiceUUID])
-      return bluetoothManager.getDeviceCharacteristics(data.deviceInfo.deviceId, data.tailServiceUUID)
-      // 获得服务特征
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-      })
-    })
-
-    // 预订通知
-    var notifyPromise = getCharacteristicsPromise.then(res => {
-      baseTool.print([res, '获得特征值'])
-      return bluetoothManager.notifyDeviceCharacteristicValueChange(data.deviceInfo.deviceId, data.tailServiceUUID, data.tailCharacteristicIdNotify)
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-      })
-    })
-
-    notifyPromise.then(res => {
-      baseTool.print([res, '预订通知成功成功'])
-      that.deviceCharacteristicValueChange(data.deviceInfo.deviceId)
-    }).catch(res => {
-      baseTool.print([res, '预订通知失败'])
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-      })
-    })
-  },
-  deviceConnectionStateChange: function () {
-    bluetoothManager.deviceConnectionStateChange(res => {
-      baseTool.print([res, '蓝牙状态改变'])
+    // 创建连接
+    wx.createBLEConnection({
+      deviceId: data.deviceInfo.deviceId,
+      success: function(res) {
+        // 获得服务
+        wx.getBLEDeviceServices({
+          deviceId: data.deviceInfo.deviceId,
+          success: function(res) {
+            wx.getBLEDeviceCharacteristics({
+              deviceId: data.deviceInfo.deviceId,
+              serviceId: data.tailServiceUUID,
+              success: function(res) {
+                wx.notifyBLECharacteristicValueChange({
+                  deviceId: data.deviceInfo.deviceId,
+                  serviceId: data.tailServiceUUID,
+                  characteristicId: data.tailCharacteristicIdNotify,
+                  state: true,
+                  success: function(res) {
+                    baseTool.print([res, '预订通知成功成功'])
+                    that.deviceCharacteristicValueChange(data.deviceInfo.deviceId)
+                  },
+                  fail: function(res) {},
+                  complete: function(res) {},
+                })
+              },
+              fail: function(res) {},
+              complete: function(res) {},
+            })
+          },
+          fail: function(res) {},
+          complete: function(res) {},
+        })
+      },
+      fail: function(res) {},
+      complete: function(res) {},
     })
   },
   deviceConnectionStateChange: function () {
-    bluetoothManager.deviceConnectionStateChange(res => {
+    wx.onBLEConnectionStateChange(function(res){
       baseTool.print([res, '蓝牙状态改变'])
     })
   },
   deviceCharacteristicValueChange: function (deviceId = '') {
     var that = this
-    bluetoothManager.deviceCharacteristicValueChange(res => {
+
+    wx.onBLECharacteristicValueChange(function(res){
       var values = new Uint8Array(res.value)
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
       baseTool.print([hex, '通知信息'])
@@ -439,41 +496,64 @@ Page({
     // 查找设备命令
     var that = this
     var buffer = bleCommandManager.connectReplyDeviceCommand()
-    bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
-      baseTool.print([res, '查找设备命令发送成功'])
-    }).catch(res => {
-      baseTool.print([res, '设备常亮失败'])
+    wx.writeBLECharacteristicValue({
+      deviceId: deviceId,
+      serviceId: data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdWrite,
+      value: buffer,
+      success: function(res) {
+        baseTool.print([res, '查找设备命令发送成功'])
+      },
+      fail: function(res) {
+        baseTool.print([res, '设备常亮失败'])
+      },
+      complete: function(res) {},
     })
   },
   onceDataEndReplyDevice: function (deviceId = '') {
     var that = this
     var buffer = bleCommandManager.onceDataEndReplyDeviceCommand()
-    bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
-      baseTool.print([res, '一次交互结束'])
-      bluetoothManager.closeBLEConnection(deviceId).then(res => {
-        baseTool.print([res, '成功断开设备'])
 
-        if (data.dataObjectList.length == 0) {
-          data.synCommandCount++
-          data.dataObjectList = []
-          data.deviceDataList = []
-          that.synDevice()
-        } else {
-          //如果有数据 上传数据
-          //先把数据保存到微信
-          console.log('wx sava data', data.dataObjectList)
-          wx.setStorage({
-            key: "dataObjectList",
-            data: data.dataObjectList
-          })
-          that.upStorageDataToService(true);
-        }
-        
-      }).catch(res => {
-        baseTool.print([res, '断开设备失败'])
-      })
-    }).catch(res => {
-      baseTool.print([res, '设备常亮失败'])
+    wx.writeBLECharacteristicValue({
+      deviceId: deviceId,
+      serviceId: data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdWrite,
+      value: buffer,
+      success: function (res) {
+        baseTool.print([res, '一次交互结束'])
+        wx.closeBLEConnection({
+          deviceId: deviceId,
+          success: function(res) {
+            baseTool.print([res, '一次交互结束'])
+            baseTool.print([res, '成功断开设备'])
+
+            if (data.dataObjectList.length == 0) {
+              // 无数据
+              data.synNoDataCount++
+              data.synCommandCount++
+              data.dataObjectList = []
+              data.deviceDataList = []
+              that.synDevice()
+            } else {
+              //如果有数据 上传数据
+              //先把数据保存到微信
+              console.log('wx sava data', data.dataObjectList)
+              wx.setStorage({
+                key: "dataObjectList",
+                data: data.dataObjectList
+              })
+              that.upStorageDataToService(true);
+            }
+          },
+          fail: function(res) {},
+          complete: function(res) {},
+        })
+      },
+      fail: function (res) {
+        baseTool.print([res, '设备常亮失败'])
+       
+      },
+      complete: function (res) { },
     })
   }, 
   processOnceData: function (hex, values, deviceId = '') {
@@ -510,10 +590,19 @@ Page({
       var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
       baseTool.print(['reply', typedArray])
       var oneDataWriteBuffer = typedArray.buffer
-      bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, data.tailCharacteristicIdWrite, oneDataWriteBuffer).then(res => {
-        baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-      }).catch(res => {
-        baseTool.print([res, '设备常亮失败'])
+
+      wx.writeBLECharacteristicValue({
+        deviceId: deviceId,
+        serviceId: data.tailServiceUUID,
+        characteristicId: that.data.tailCharacteristicIdWrite,
+        value: oneDataWriteBuffer,
+        success: function (res) {
+          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+        },
+        fail: function (res) {
+          baseTool.print([res, '设备常亮失败'])
+        },
+        complete: function (res) { },
       })
     }
   },
@@ -556,10 +645,19 @@ Page({
       var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
       baseTool.print(['reply', typedArray])
       var oneDataWriteBuffer = typedArray.buffer
-      bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, data.tailCharacteristicIdWrite, oneDataWriteBuffer).then(res => {
-        baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-      }).catch(res => {
-        baseTool.print([res, '设备常亮失败'])
+
+      wx.writeBLECharacteristicValue({
+        deviceId: deviceId,
+        serviceId: data.tailServiceUUID,
+        characteristicId: that.data.tailCharacteristicIdWrite,
+        value: oneDataWriteBuffer,
+        success: function (res) {
+          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+        },
+        fail: function (res) {
+          baseTool.print([res, '设备常亮失败'])
+        },
+        complete: function (res) { },
       })
     }
   },
@@ -568,6 +666,7 @@ Page({
     contestManager.uploadBrushRecord().then(res => {
       // 设备数据上传成功
       baseTool.print([res, '数据上传成功'])
+      data.synSuccessCount++
       data.synCommandCount++
       data.dataObjectList = []
       data.deviceDataList = []
@@ -577,8 +676,8 @@ Page({
     })
   },
   addContestUser: function() {
-    var gameId = res.game.gameId
-    var name = res.game.name
+    var gameId = data.gameId
+    var name = data.contestTitle
     wx.navigateTo({
       url: '../createContest/createContest?' + 'gameId=' + gameId + '&' + 'name=' + name,
       success: function (res) {

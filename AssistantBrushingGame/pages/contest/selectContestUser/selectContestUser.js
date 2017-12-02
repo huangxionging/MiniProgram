@@ -9,27 +9,25 @@ const bleCommandManager = require('../../../manager/bleCommandManager.js')
 const baseHexConvertTool = require('../../../utils/baseHexConvertTool.js')
 const bluetoothManager = require('../../../manager/bluetoothManager.js')
 
-var data = {
-  loadingDone: false,
-  hasData: false,
-  gameId: '',
-  deviceId: '',
-  macAddress: '',
-  deviceName: '',
-  dataList: [],
-  tailServiceUUID: '0000FFA0-0000-1000-8000-00805F9B34FB',
-  //尾巴读取数据的特征值 notify
-  tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
-  //尾巴读取数据的特征值 write
-  tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
-}
-
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: data,
+  data: {
+    loadingDone: false,
+    hasData: false,
+    gameId: '',
+    deviceId: '',
+    macAddress: '',
+    deviceName: '',
+    dataList: [],
+    tailServiceUUID: '0000FFA0-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 notify
+    tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 write
+    tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -37,14 +35,16 @@ Page({
   onLoad: function (options) {
     var that = this
     baseTool.print(options)
-    data.gameId = options.gameId
-    data.deviceId = options.deviceId
-    data.deviceName = options.name
-    data.macAddress = options.macAddress.toUpperCase()
-    baseTool.print(data.deviceId)
-    that.setData(data)
-    that.loadData()
 
+    that.setData({
+      gameId: options.gameId,
+      deviceId: options.deviceId,
+      macAddress: options.macAddress.toUpperCase(),
+      deviceName: options.name
+    })
+
+    baseTool.print(that.data.deviceId)
+    that.loadData()
     app.userInfoReadyCallback = res => {
       that.loadData()
     }
@@ -54,8 +54,20 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
-    that.connectDevice()
-    that.deviceConnectionStateChange()
+
+    // 找服务, 找特征
+    wx.showLoading({
+      title: '正在连接设备...',
+      mask: false,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+
+    setTimeout(function () {
+      that.connectDevice()
+      that.deviceConnectionStateChange()
+    }, 1000)
 
   },
 
@@ -84,6 +96,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    var that = this
     // 删除通知
     baseMessageHandler.removeSpecificInstanceMessageHandler('selectRefresh', this).then(res => {
       baseTool.print(res)
@@ -91,10 +104,15 @@ Page({
       baseTool.print(res)
     })
 
-    bluetoothManager.closeBLEConnection(data.deviceId).then(res => {
-      baseTool.print([res, '断开链接成功'])
-    }).catch(res => {
-      baseTool.print([res, '断开链接失败'])
+    wx.closeBLEConnection({
+      deviceId: that.data.deviceId,
+      success: function(res) {
+        baseTool.print([res, '断开链接成功'])
+      },
+      fail: function(res) {
+        baseTool.print([res, '断开链接失败'])
+      },
+      complete: function(res) {},
     })
   },
 
@@ -121,58 +139,104 @@ Page({
   },
   connectDevice: function () {
     var that = this
-    // 找服务, 找特征
-    wx.showLoading({
-      title: '正在连接设备...',
-      mask: false,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
-    })
-    var getCharacteristicsPromise = bluetoothManager.connectDevice(data.deviceId).then(res => {
-      baseTool.print([res, '服务 UUID', data.macAddress, data.tailServiceUUID])
-      return bluetoothManager.getDeviceCharacteristics(data.deviceId, data.tailServiceUUID)
-      // 获得服务特征
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-      })
-    })
-
-    // 预订通知
-    var notifyPromise = getCharacteristicsPromise.then(res => {
-      baseTool.print([res, '获得特征值'])
-      return bluetoothManager.notifyDeviceCharacteristicValueChange(data.deviceId, data.tailServiceUUID, data.tailCharacteristicIdNotify)
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-      })
-    })
-
-    notifyPromise.then(res => {
-      baseTool.print([res, '预订通知成功成功'])
-      that.deviceCharacteristicValueChange(data.deviceId)
-    }).catch(res => {
-      baseTool.print([res, '预订通知失败'])
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙连接失败',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function(res) {
-          wx.navigateBack()
-        },
-        fail: function(res) {},
-        complete: function(res) {},
-      })
+    wx.createBLEConnection({
+      deviceId: that.data.deviceId,
+      success: function (res) {
+        baseTool.print([res, '蓝牙连接成功'])
+        // 获得服务
+        wx.getBLEDeviceServices({
+          deviceId: that.data.deviceId,
+          success: function (res) {
+            baseTool.print([res, '获得服务成功'])
+            wx.getBLEDeviceCharacteristics({
+              deviceId: that.data.deviceId,
+              serviceId: that.data.tailServiceUUID,
+              success: function (res) {
+                baseTool.print([res, '获得特征值成功'])
+                // 预订通知
+                wx.notifyBLECharacteristicValueChange({
+                  deviceId: that.data.deviceId,
+                  serviceId: that.data.tailServiceUUID,
+                  characteristicId: that.data.tailCharacteristicIdNotify,
+                  state: true,
+                  success: function (res) {
+                    baseTool.print([res, '预订通知成功成功'])
+                    that.deviceCharacteristicValueChange(that.data.deviceId)
+                  },
+                  fail: function (res) {
+                    baseTool.print([res, '预订通知失败'])
+                    wx.hideLoading()
+                    wx.showModal({
+                      title: '提示',
+                      content: '蓝牙连接失败',
+                      showCancel: false,
+                      confirmText: '确定',
+                      confirmColor: '#00a0e9',
+                      success: function (res) {
+                        wx.navigateBack()
+                      },
+                      fail: function (res) { },
+                      complete: function (res) { },
+                    })
+                  },
+                  complete: function (res) { },
+                })
+              },
+              fail: function (res) {
+                baseTool.print([res, '获得特征值失败'])
+                wx.hideLoading()
+                wx.showModal({
+                  title: '提示',
+                  content: '蓝牙连接失败',
+                  showCancel: false,
+                  confirmText: '确定',
+                  confirmColor: '#00a0e9',
+                  success: function (res) {
+                    wx.navigateBack()
+                  },
+                  fail: function (res) { },
+                  complete: function (res) { },
+                })
+              },
+              complete: function (res) { },
+            })
+          },
+          fail: function (res) {
+            baseTool.print([res, '蓝牙获得服务失败'])
+            wx.hideLoading()
+            wx.showModal({
+              title: '提示',
+              content: '蓝牙连接失败',
+              showCancel: false,
+              confirmText: '确定',
+              confirmColor: '#00a0e9',
+              success: function (res) {
+                wx.navigateBack()
+              },
+              fail: function (res) { },
+              complete: function (res) { },
+            })
+          },
+          complete: function (res) { },
+        })
+      },
+      fail: function (res) {
+        baseTool.print([res, '蓝牙连接失败'])
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '蓝牙连接失败',
+          showCancel: false,
+          confirmText: '确定',
+          confirmColor: '#00a0e9',
+          success: function (res) {
+            wx.navigateBack()
+          },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      },
+      complete: function (res) { },
     })
   }
   ,
@@ -242,12 +306,13 @@ Page({
   loadData: function() {
     var that = this
     wx.showNavigationBarLoading()
-    contestManager.selectContestUser(data.gameId).then(res => {
+    contestManager.selectContestUser(that.data.gameId).then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.print(typeof (res))
       if (typeof (res) != 'undefined' && res.length > 0) {
+        var data = that.data
         data.loadingDone = true
         data.hasData = true
         data.dataList.splice(0, data.dataList.length)
@@ -264,6 +329,7 @@ Page({
         }
         that.setData(data)
       } else {
+        var data = that.data
         data.loadingDone = true
         data.hasData = false
         data.dataList.splice(0, data.dataList.length)
@@ -274,30 +340,42 @@ Page({
     })
   },
   deviceConnectionStateChange: function () {
-    bluetoothManager.deviceConnectionStateChange(res => {
+    wx.onBLEConnectionStateChange(function(res){
       baseTool.print([res, '蓝牙状态改变'])
+      if (res.connected == false) {
+
+      }
     })
   },
   deviceCharacteristicValueChange: function (deviceId = '') {
     var that = this
-    bluetoothManager.deviceCharacteristicValueChange(res => {
 
+    wx.onBLECharacteristicValueChange(function(res){
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value)
       baseTool.print([hex, '通知信息'])
       // 兼容产品
       if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
         // 查找设备命令
         var buffer = bleCommandManager.findDeviceCommand()
-        bluetoothManager.writeDeviceCharacteristicValue(deviceId, data.tailServiceUUID, that.data.tailCharacteristicIdWrite, buffer).then(res => {
-          baseTool.print([res, '查找设备命令发送成功'])
-        }).catch(res => {
-          baseTool.print([res, '设备常亮失败'])
+
+        wx.writeBLECharacteristicValue({
+          deviceId: deviceId,
+          serviceId: that.data.tailServiceUUID,
+          characteristicId: that.data.tailCharacteristicIdWrite,
+          value: buffer,
+          success: function(res) {
+            baseTool.print([res, '查找设备命令发送成功'])
+          },
+          fail: function(res) {
+            baseTool.print([res, '设备常亮失败'])
+          },
+          complete: function(res) {},
         })
       } else if (hex.indexOf('f30c') == 0) {
         baseTool.print([res, '设备常亮'])
         wx.hideLoading()
         wx.showToast({
-          title: '尾巴保持常亮',
+          title: '点亮设备',
           icon: '',
           image: '',
           duration: 3000,

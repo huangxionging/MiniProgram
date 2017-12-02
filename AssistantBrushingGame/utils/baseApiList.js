@@ -66,5 +66,9 @@ module.exports = {
   /**
    * 上传数据
    */
-  uploadRecord: 'api/gameUploadBrushTeethRecord'
+  uploadRecord: 'api/gameUploadBrushTeethRecord',
+  /**
+   * 标识
+   */
+  tagSyn: 'taggedSynchronization',
 }

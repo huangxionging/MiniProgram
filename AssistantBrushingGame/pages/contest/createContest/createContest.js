@@ -25,7 +25,8 @@ Page({
     tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
-    bindedDevices: {}
+    bindedDevices: {},
+    systemInfo: {}
   },
 
   /**
@@ -33,7 +34,36 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    // setTimeout(() => {
+    //   findDeviceTimeOut(timeCount)
+    // }, 10)
+    that.openBle()
+    // baseTool.getSystemInfoAsync().then(res => {
+    //   if (res.platform != 'ios') {
+    //   } else {
+    //     bluetoothManager.checkBluetoothState().then(res => {
+    //       baseTool.print('checkBluetoothState: success')
+    //       that.foundDevices()
+    //     }).catch(res => {
+    //       baseTool.print('checkBluetoothState: fail')
+    //       wx.showModal({
+    //         title: '提示',
+    //         content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
+    //         showCancel: false,
+    //         confirmText: '确定',
+    //         confirmColor: '#00a0e9',
+    //         success: function (res) {
+    //           wx.navigateBack()
+    //         },
+    //         fail: function (res) { baseTool.print(res) },
+    //         complete: function (res) { },
+    //       })
+    //     })
+    //   }
+    // }).catch(res => {
 
+    // })
+    
     // 获取消息
     baseMessageHandler.getMessage('createContest', res => {
       that.setData({
@@ -51,25 +81,7 @@ Page({
       name: options.name
     })
 
-    bluetoothManager.checkBluetoothState().then(res => {
-      baseTool.print('checkBluetoothState: success')
-      that.foundDevices()
-    }).catch(res => {
-      baseTool.print('checkBluetoothState: fail')
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function (res) {
-          wx.navigateBack()
-        },
-        fail: function (res) { baseTool.print(res) },
-        complete: function (res) { },
-      })
-    })
-
+    
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
       var that = this
       // 搜索 macAddress
@@ -82,23 +94,28 @@ Page({
         }
         return value.macAddress != res.toUpperCase()
       })
-      var bin
       baseTool.print(dataList)
+      var index = dataList.length
       that.setData({
-        dataList: dataList
+        dataList: dataList,
+        total: '比赛设备' + (index + 1) + '支',
       })
     }).then(res => {
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
     })
+    
   },
+  
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function (res) {
     baseTool.print('页面准备好')
+
+    
   },
 
   /**
@@ -106,7 +123,6 @@ Page({
    */
   onShow: function (res) {
     baseTool.print('页面显示')
-    
   },
 
   /**
@@ -138,51 +154,74 @@ Page({
       baseTool.print(res)
     })
 
-    app.bleCallback = undefined
-
-    bluetoothManager.stopSearchDevice().then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
+    // 停止搜索
+    wx.stopBluetoothDevicesDiscovery({
+      success: function (res) {
+        baseTool.print("stopBluetoothDevicesDiscovery: success");
+      },
     })
 
-    
+    // 关闭适配器释放资源
+    wx.closeBluetoothAdapter({
+      success: function (res) {
+        baseTool.print("closeBluetoothAdapter: success");
+      },
+    })
   },
-
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function (res) {
     baseTool.print('下拉刷新')
-    wx.showNavigationBarLoading()
-    wx.showLoading({
-      title: '重新搜索设备',
-    })
     var that = this
     that.setData({
-      dataList: []
+      dataList: [],
+      total: '比赛设备' + (0) + '支',
     })
-    bluetoothManager.checkBluetoothState().then(res => {
-      baseTool.print('checkBluetoothState: success')
-      wx.hideLoading()
-      wx.hideNavigationBarLoading()
-      wx.stopPullDownRefresh()
-      that.foundDevices()
-    }).catch(res => {
-      baseTool.print('checkBluetoothState: fail')
-      wx.showModal({
-        title: '提示',
-        content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function (res) {
-          // wx.navigateBack()
-        },
-        fail: function (res) { baseTool.print(res) },
-        complete: function (res) { },
-      })
+
+    wx.stopBluetoothDevicesDiscovery({
+      success: function (res) {
+        console.log("stopBluetoothDevicesDiscovery: success");
+        //close bt. adapter
+        wx.closeBluetoothAdapter({
+          success: function (res) {
+            console.log("closeBluetoothAdapter: success");
+            that.openBle()
+          },
+          fail: function (res) {
+            that.openBle()
+          }
+        })
+      },
+      fail: function (res) {
+        that.openBle()
+      }
     })
+    // if (that.data.systemInfo.platform != 'ios') {
+      
+    // } else {
+    //   bluetoothManager.checkBluetoothState().then(res => {
+    //     baseTool.print('checkBluetoothState: success')
+    //     wx.hideLoading()
+    //     wx.hideNavigationBarLoading()
+    //     wx.stopPullDownRefresh()
+    //     that.foundDevices()
+    //   }).catch(res => {
+    //     baseTool.print('checkBluetoothState: fail')
+    //     wx.showModal({
+    //       title: '提示',
+    //       content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
+    //       showCancel: false,
+    //       confirmText: '确定',
+    //       confirmColor: '#00a0e9',
+    //       success: function (res) {
+    //         // wx.navigateBack()
+    //       },
+    //       fail: function (res) { baseTool.print(res) },
+    //       complete: function (res) { },
+    //     })
+    //   })
+    // }
   },
 
   /**
@@ -191,37 +230,7 @@ Page({
   onReachBottom: function () {
   
   },
-  foundDevices: function () {
-    var that = this
-    var bindedDevices = that.data.bindedDevices
-    bluetoothManager.foundDevice(res => {
-      // console.log('new device list has founded');
-      // console.log(res);
-      if (res.name.indexOf('game') == -1) {
-        return
-      }
-
-      var dataList = that.data.dataList
-      var index = dataList.length
-      var macAddress = res.name.split('-')[1].toUpperCase()
-      baseTool.print(['发现新设备', macAddress, res])
-      
-       // 已经绑定过, 需要过滤掉
-      if (bindedDevices[macAddress]) {
-        return
-      }
-      // 广播数据先不弄
-      dataList.push({
-        name: res.name,
-        macAddress: macAddress,
-        deviceId: res.deviceId,
-      })
-      that.setData({
-        dataList: dataList,
-        total: '比赛设备' + (index + 1) + '支',
-      })
-    })
-  },
+ 
   getInputName: function(e) {
     baseTool.print(e)
     this.setData({
@@ -241,5 +250,119 @@ Page({
       url: e.currentTarget.dataset.url,
     })
     baseTool.print(e)
-  }
+  },
+  openBle: function () {
+    var that = this
+    // 打开蓝牙
+    wx.showNavigationBarLoading()
+    wx.showLoading({
+      title: '正在搜索设备',
+      mask: true,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+
+    setTimeout(function() {
+      wx.openBluetoothAdapter({
+        success: function (res) {
+          baseTool.print("openBluetoothAdapter: success");
+          baseTool.print(res);
+          //start discovery devices
+          wx.hideLoading()
+          wx.hideNavigationBarLoading()
+          wx.stopPullDownRefresh()
+          wx.startBluetoothDevicesDiscovery({
+            services: [],
+            success: function (res) {
+              baseTool.print("startBluetoothDevicesDiscovery: success");
+              baseTool.print(res);
+              //Listen to find new equipment
+              var bindedDevices = that.data.bindedDevices
+              wx.onBluetoothDeviceFound(function (res) {
+                var device = res.devices[0]
+                if (device.name.indexOf('game') == -1) {
+                  return
+                }
+                var dataList = that.data.dataList
+                var index = dataList.length
+                var macAddress = device.name.split('-')[1].toUpperCase()
+                baseTool.print(['发现新设备', macAddress, res])
+
+                // 已经绑定过, 需要过滤掉
+                if (bindedDevices[macAddress]) {
+                  return
+                }
+                // 广播数据先不弄
+                dataList.push({
+                  name: device.name,
+                  macAddress: macAddress,
+                  deviceId: device.deviceId,
+                })
+                that.setData({
+                  dataList: dataList,
+                  total: '比赛设备' + (index + 1) + '支',
+                })
+              })
+
+            },
+            fail: function(res) {
+              baseTool.print([res, '开始发现失败'])
+            }
+          })
+        },
+        fail: function (res) {
+          baseTool.print("openBluetoothAdapter: fail");
+          baseTool.print(res);
+          wx.hideLoading()
+          wx.hideNavigationBarLoading()
+          wx.stopPullDownRefresh()
+          wx.showModal({
+            title: '提示',
+            content: '蓝牙打开失败, 请检查蓝牙和GPS状态后再使用',
+            showCancel: false,
+            confirmText: '确定',
+            confirmColor: '#00a0e9',
+            success: function (res) {
+              wx.navigateBack()
+            },
+            fail: function (res) { baseTool.print(res) },
+            complete: function (res) { },
+          })
+        },
+      })
+    }, 3000)
+  },
+  foundDevices: function () {
+    var that = this
+    var bindedDevices = that.data.bindedDevices
+    bluetoothManager.foundDevice(res => {
+      // console.log('new device list has founded');
+      // console.log(res);
+      if (res.name.indexOf('game') == -1) {
+        return
+      }
+
+      var dataList = that.data.dataList
+      var index = dataList.length
+      var macAddress = res.name.split('-')[1].toUpperCase()
+      baseTool.print(['发现新设备', macAddress, res])
+
+      // 已经绑定过, 需要过滤掉
+      if (bindedDevices[macAddress]) {
+        // return
+      }
+      // 广播数据先不弄
+      dataList.push({
+        id: dataList.length + 1,
+        name: res.name,
+        macAddress: macAddress,
+        deviceId: res.deviceId,
+      })
+      that.setData({
+        dataList: dataList,
+        total: '比赛设备' + (index + 1) + '支',
+      })
+    })
+  },
 })

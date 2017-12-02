@@ -16,7 +16,8 @@ App({
   },
   globalData: {
     userInfo: null,
-    deviceList: []
+    deviceList: [],
+    systemInfo: {}
   },
   onHide: function() {
   },

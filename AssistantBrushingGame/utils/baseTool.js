@@ -127,6 +127,26 @@ function valueForKeyAsync(key) {
   })
 }
 
+/**
+ * 获取系统信息
+ */
+function getSystemInfo() {
+  wx.getSystemInfoSync()
+}
+
+/**
+ * 获取系统信息, 异步
+ */
+function getSystemInfoAsync() {
+  return new Promise((resolve, reject) => {
+    wx.getSystemInfo({
+      success: resolve,
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -145,6 +165,10 @@ module.exports = {
   removeObjectForKey: removeObjectForKey,
   // 清空缓存
   removeAllObjects: removeAllObjects,
+  // 获取系统信息
+  getSystemInfo: getSystemInfo,
+  // 异步获取系统信息
+  getSystemInfoAsync: getSystemInfoAsync,
   // 震动
   vibrate: vibrate,
   getNet: function () {
