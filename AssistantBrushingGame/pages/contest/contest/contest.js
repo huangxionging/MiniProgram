@@ -40,7 +40,9 @@ var data = {
   deviceInfo: null,
   synSuccessCount: 0,
   synFailCount: 0,
-  synNoDataCount: 0
+  synNoDataCount: 0,
+  deviceAllObject: {}
+  
 }
 Page({
 
