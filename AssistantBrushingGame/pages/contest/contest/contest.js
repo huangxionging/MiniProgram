@@ -42,7 +42,7 @@ var data = {
   synFailCount: 0,
   synNoDataCount: 0,
   deviceAllObject: {}
-  
+  synchronizeObject: {}
 }
 Page({
 
@@ -311,12 +311,12 @@ Page({
       }
       setTimeout(() => {
         findDeviceTimeOut(timeCount)
-      }, 10)
+      }, 100)
     }
     // 开启搜索定时器
     stopTimer = false
-    findDeviceTimeOut(1000)
-    var deviceInfo = data.dataList[data.synCommandCount]
+    findDeviceTimeOut(20)
+
     wx.onBluetoothDeviceFound(function(res){
       var device = res.devices[0]
       // baseTool.print(device)
@@ -364,7 +364,7 @@ Page({
     data.gameId = res.gameInfo.gameId
     data.loadingDone = true
     data.hasData = true
-    data.deviceInfo = {}
+    data.synchronizeObject = {}
     // 清空数组
     data.isSyn = res.gameInfo.isSyn
     data.dataList.length = 0
@@ -378,10 +378,9 @@ Page({
         score: res.playersList[index].score ? res.playersList[index].score : -100
       }
       data.dataList.push(device)
-      data.deviceInfo[macAddress] =  device
+      data.synchronizeObject[macAddress] =  device
     }
     wx.hideNavigationBarLoading({})
-
     // 按分数从大到小排序
     data.dataList.sort((a, b) => {
       return b.score - a.score
