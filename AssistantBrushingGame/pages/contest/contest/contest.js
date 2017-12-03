@@ -532,7 +532,7 @@ Page({
   onceDataEndReplyDevice: function (deviceId = '') {
     var that = this
     var buffer = bleCommandManager.onceDataEndReplyDeviceCommand()
-
+    baseTool.print([deviceId, '数据回复'])
     wx.writeBLECharacteristicValue({
       deviceId: deviceId,
       serviceId: data.tailServiceUUID,
@@ -562,13 +562,14 @@ Page({
               that.upStorageDataToService();
             }
           },
-          fail: function(res) {},
+          fail: function(res) {
+            baseTool.print([res, '设备写入信息失败'])
+          },
           complete: function(res) {},
         })
       },
       fail: function (res) {
-        baseTool.print([res, '设备常亮失败'])
-       
+        baseTool.print([res, '蓝牙写失败'])
       },
       complete: function (res) { },
     })
