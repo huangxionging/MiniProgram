@@ -5,7 +5,7 @@
         <text id='item-name'>{{name}}</text>
         <text id='item-tail'>{{tail}}</text> 
     </view>
-     <text id='item-score'>{{score > 0 ? score : '未同步'}}</text> 
+     <text id='item-score'>{{score > 0 ? score : (score == 0 ? '无数据' : '未同步')}}</text> 
   </view>
 </template>
 

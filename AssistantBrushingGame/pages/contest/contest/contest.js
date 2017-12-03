@@ -26,8 +26,13 @@ var data = {
    * 是否同步中
    */
   isSynNow: false,
+  // 数据列表
   dataList: [],
+  // 搜索的设备名列表
+  deviceNameList: [],
+  // 数据集合
   dataObjectList: [],
+  // 设备数据集合
   deviceDataList: [],
   serviceUUIDs: [],
   tailServiceUUID: '0000FFA0-0000-1000-8000-00805F9B34FB',
@@ -37,11 +42,12 @@ var data = {
   tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
   // 同步指令计数
   synCommandCount: 0,
-  deviceInfo: null,
   synSuccessCount: 0,
   synFailCount: 0,
   synNoDataCount: 0,
-  deviceAllObject: {}
+  // 所有搜索到的设备
+  deviceAllObject: {},
+  // 待同步的设备对象
   synchronizeObject: {}
 }
 Page({
@@ -172,19 +178,23 @@ Page({
     wx.showLoading({
       title: '同步数据中',
       mask: false,
-      success: function(res) {
-        // 每次从第 0个设备开始
-        data.synCommandCount = 0
-        data.synFailCount = 0
-        data.synSuccessCount = 0
-        data.synNoDataCount = 0
-        data.dataObjectList.splice(0, data.dataObjectList.length)
-        data.deviceDataList.splice(0, data.deviceDataList.length)
-        that.synDevice()
-      },
+      success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
     })
+
+    // 开启定时器, 3秒后
+    setTimeout(function () {
+      wx.closeBluetoothAdapter({
+        success: function (res) {
+          that.openBle()
+        },
+        fail: function (res) {
+          that.openBle()
+        },
+        complete: function (res) { },
+      })
+    }, 3000)
 
     contestManager.tagSynGame(data.gameId).then(res => {
       baseTool.print(res)
@@ -193,56 +203,8 @@ Page({
     })
   },
   synDevice: function () {
-    var that = this
-    if (data.synCommandCount == data.dataList.length) {
-      // 同步结束
-      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步无数据:' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
-      wx.hideLoading()
-      wx.showModal({
-        title: '同步结果',
-        content: content,
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function(res) {
-          that.getHomePage()
-          that.setData({
-            isSynNow: false
-          })
+    
 
-          wx.closeBluetoothAdapter({
-            success: function(res) {},
-            fail: function(res) {},
-            complete: function(res) {},
-          })
-        },
-        fail: function(res) {},
-        complete: function(res) {},
-      })
-      return
-    }
-    wx.hideLoading()
-    wx.showLoading({
-      title: '同步第' + (data.synCommandCount + 1) + '个尾巴',
-      mask: false,
-      success: function(res) {
-
-        setTimeout(function () {
-          wx.closeBluetoothAdapter({
-            success: function (res) {
-              that.openBle()
-            },
-            fail: function (res) {
-              that.openBle()
-            },
-            complete: function (res) { },
-          })
-        }, 3000)
-        
-      },
-      fail: function(res) {},
-      complete: function(res) {},
-    })
     
   },
   openBle: function () {
@@ -286,36 +248,28 @@ Page({
   },
   foundDevices: function () {
     var that = this
-    // 设备信息
-    var stopTimer = true
-    function findDeviceTimeOut(timeCount) {
-      timeCount--
-      if (timeCount == 0) {
-        baseTool.print('定时器走完, 搜索失败')
-        // 搜索失败
-        wx.hideLoading()
-        // 搜索不到, 失败
-        data.synFailCount++
-        // 同步下一个设备
-        data.synCommandCount++
-        data.dataObjectList.splice(0, data.dataObjectList.length)
-        data.deviceDataList.splice(0, data.deviceDataList.length)
-        that.synDevice()
-        return
-      }
+    // 重置信息
+    data.synCommandCount = 0
+    data.synFailCount = 0
+    data.synSuccessCount = 0
+    data.synNoDataCount = 0
+    data.deviceAllObject = {}
+    // 设备信息 20s 后停止
+    var stopTimer = false
+    setTimeout(function () {
+      // 如果 20s 内搜索到全部设备, 则不走下面代码
       if (stopTimer == true) {
-        // 成功找到尾巴
-        baseTool.print('搜索成功')
-        // wx.hideLoading()
         return
       }
-      setTimeout(() => {
-        findDeviceTimeOut(timeCount)
-      }, 100)
-    }
-    // 开启搜索定时器
-    stopTimer = false
-    findDeviceTimeOut(20)
+      wx.stopBluetoothDevicesDiscovery({
+        success: function(res) {
+          // 停止搜索以后, 开始同步
+          that.dispatchConnect()
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+    }, 20000)
 
     wx.onBluetoothDeviceFound(function(res){
       var device = res.devices[0]
@@ -323,28 +277,27 @@ Page({
       if (device.name.indexOf('game') == -1) {
         return
       }
-      var dataList = that.data.dataList
-      var index = dataList.length
+      // 获得 MAC地址
       var macAddress = device.name.split('-')[1].toUpperCase()
-      baseTool.print([macAddress, data.synCommandCount])
-
-      // 找到设备
-      if (macAddress === deviceInfo.macAddress) {
-        // 停止搜索设备
-        // 记住当前设备信息
-        data.deviceInfo = device
-        // 停止搜索
-        stopTimer = true
-        wx.stopBluetoothDevicesDiscovery({
-          success: function(res) {
-            // 成功开始连接设备
-            that.connectDevice()
-          },
-          fail: function(res) {
-            baseTool.print('stopBluetoothDevicesDiscovery: fail')
-          },
-          complete: function(res) {},
-        })
+      // 在同步列表里面
+      if (data.synchronizeObject[macAddress]) {
+        baseTool.print([macAddress])
+        // 加入设备列表
+        data.deviceAllObject[macAddress] = device
+        // 将 mac 地址加入搜索列表
+        data.deviceNameList.push(macAddress)
+        // 如果两者长度相等, 就不用等待 20s 了
+        if (data.deviceNameList.length == data.dataList.length) {
+          // 停止搜索设备
+          wx.stopBluetoothDevicesDiscovery({
+            success: function(res) {
+              // 开始连接设备
+              that.dispatchConnect()
+            },
+            fail: function(res) {},
+            complete: function(res) {},
+          })
+        }
       }
     })
   },
@@ -364,21 +317,28 @@ Page({
     data.gameId = res.gameInfo.gameId
     data.loadingDone = true
     data.hasData = true
+    data.synchronizeObject = null
     data.synchronizeObject = {}
     // 清空数组
     data.isSyn = res.gameInfo.isSyn
     data.dataList.length = 0
     for (var index = 0; index < res.playersList.length; ++index) {
       var macAddress = res.playersList[index].macAddress.toUpperCase()
-      var device = {
+      // 待同步的列表项
+      var item = {
         name: res.playersList[index].name,
         tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
         playerId: res.playersList[index].playerId,
         macAddress: macAddress,
         score: res.playersList[index].score ? res.playersList[index].score : -100
       }
-      data.dataList.push(device)
-      data.synchronizeObject[macAddress] =  device
+      if (data.isSyn == true && item.score == -100){
+        item.score = 0
+      }
+      // 添加数据集合
+      data.dataList.push(item)
+      // 待同步设备 mac 地址
+      data.synchronizeObject[macAddress] =  macAddress
     }
     wx.hideNavigationBarLoading({})
     // 按分数从大到小排序
@@ -416,10 +376,62 @@ Page({
       baseTool.print(res)
     })
   },
-  connectDevice: function () {
+  dispatchConnect: function () {
+    var that = this
+    // 结束条件
+    if (data.synCommandCount == data.dataList.length) {
+      // 同步结束
+      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步无数据:' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
+      wx.hideLoading()
+      wx.showModal({
+        title: '同步结果',
+        content: content,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+          that.getHomePage()
+          that.setData({
+            isSynNow: false
+          })
+          wx.closeBluetoothAdapter({
+            success: function (res) { },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    } else {
+      var item = data.dataList[data.synCommandCount]
+      // 设备 mac 地址
+      var deviceName = item.macAddress
+      // 获得设备信息
+      var device = data.deviceAllObject[deviceName]
+      // 如果不存在, 则跳过
+      if (!device) {
+        data.synFailCount++
+        data.synCommandCount++
+        // 500 ms 以后执行连接调度
+        setTimeout(function () {
+          that.dispatchConnect()
+        }, 500)
+      } else {
+        // 设备存在
+        that.connectDevice(device)
+        // 清空数据
+        data.dataObjectList.splice(0, data.dataObjectList.length)
+        data.deviceDataList.splice(0, data.deviceDataList.length)
+      }
+    }
+  },
+  connectDevice: function (device) {
     var that = this
     // 找服务, 找特征
     baseTool.print('正在连接设备...')
+    baseTool.print(device)
     wx.hideLoading()
     wx.showLoading({
       title: '正在连接设备...',
@@ -430,24 +442,24 @@ Page({
     })
     // 创建连接
     wx.createBLEConnection({
-      deviceId: data.deviceInfo.deviceId,
+      deviceId: device.deviceId,
       success: function(res) {
         // 获得服务
         wx.getBLEDeviceServices({
-          deviceId: data.deviceInfo.deviceId,
+          deviceId: device.deviceId,
           success: function(res) {
             wx.getBLEDeviceCharacteristics({
-              deviceId: data.deviceInfo.deviceId,
+              deviceId: device.deviceId,
               serviceId: data.tailServiceUUID,
               success: function(res) {
                 wx.notifyBLECharacteristicValueChange({
-                  deviceId: data.deviceInfo.deviceId,
+                  deviceId: device.deviceId,
                   serviceId: data.tailServiceUUID,
                   characteristicId: data.tailCharacteristicIdNotify,
                   state: true,
                   success: function(res) {
                     baseTool.print([res, '预订通知成功成功'])
-                    that.deviceCharacteristicValueChange(data.deviceInfo.deviceId)
+                    that.deviceCharacteristicValueChange(device.deviceId)
                   },
                   fail: function(res) {},
                   complete: function(res) {},
@@ -461,7 +473,13 @@ Page({
           complete: function(res) {},
         })
       },
-      fail: function(res) {},
+      fail: function(res) {
+        baseTool.print([res, '蓝牙连接失败'])
+        // 无数据
+        data.synFailCount++
+        data.synCommandCount++
+        that.dispatchConnect()
+      },
       complete: function(res) {},
     })
   },
@@ -532,9 +550,7 @@ Page({
               // 无数据
               data.synNoDataCount++
               data.synCommandCount++
-              data.dataObjectList = []
-              data.deviceDataList = []
-              that.synDevice()
+              that.dispatchConnect()
             } else {
               //如果有数据 上传数据
               //先把数据保存到微信
@@ -543,7 +559,7 @@ Page({
                 key: "dataObjectList",
                 data: data.dataObjectList
               })
-              that.upStorageDataToService(true);
+              that.upStorageDataToService();
             }
           },
           fail: function(res) {},
@@ -669,9 +685,7 @@ Page({
       baseTool.print([res, '数据上传成功'])
       data.synSuccessCount++
       data.synCommandCount++
-      data.dataObjectList = []
-      data.deviceDataList = []
-      that.synDevice()
+      that.dispatchConnect()
     }).catch(res => {
       baseTool.print([res, '错误信息'])
     })
