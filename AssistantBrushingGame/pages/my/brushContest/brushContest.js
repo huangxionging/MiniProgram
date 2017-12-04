@@ -266,6 +266,19 @@ Page({
       }
     }
     baseTool.print(mergeData)
+    if (mergeData.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '您未选中任何比赛',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      return
+    }
     var gameIds = mergeData.join(',')
     wx.navigateTo({
       url: '../mergeData/mergeData?gameIds=' + gameIds,

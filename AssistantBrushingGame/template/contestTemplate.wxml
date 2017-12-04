@@ -64,8 +64,8 @@
   <view class="contest-device-view {{(index==0)?'':'item-orthers'}}" data-gameId='{{gameId}}' data-deviceId='{{deviceId}}' data-name='{{name}}' data-macAddress='{{macAddress}}'   data-url="../selectContestUser/selectContestUser?gameId={{gameId}}&deviceId={{deviceId}}&name={{name}}&macAddress={{macAddress}}" bindtap='contestDeviceClick'>
     <view id='contest-device-tail-view'>
       <text id='contest-device-tail'>{{name}}</text>
-      <image id='contet-device-power' src='{{imageUrl}}'></image>
-      <!-- <text id='contest-device-power-number'>75%</text> -->
+      <image id='contet-device-power' src='../../../resource/{{imageUrl}}.png'></image>
+       <text id='contest-device-power-number'>{{power}}%</text> 
     </view>
     <view id='contest-tip-view'>
       <text id='contest-device-tip'>参赛</text>

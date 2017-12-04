@@ -169,14 +169,13 @@ Page({
     
   },
   contestReSyn: function (e) {
-    baseTool.print(e)
     var that = this
     that.setData({
       isSynNow: true
     })
     wx.hideLoading()
     wx.showLoading({
-      title: '同步数据中',
+      title: '同步数据...',
       mask: false,
       success: function(res) {},
       fail: function(res) {},
@@ -188,9 +187,11 @@ Page({
       wx.closeBluetoothAdapter({
         success: function (res) {
           that.openBle()
+          that.deviceConnectionStateChange()
         },
         fail: function (res) {
           that.openBle()
+          that.deviceConnectionStateChange()
         },
         complete: function (res) { },
       })
@@ -253,7 +254,17 @@ Page({
     data.synFailCount = 0
     data.synSuccessCount = 0
     data.synNoDataCount = 0
+    data.deviceAllObject = null
     data.deviceAllObject = {}
+    data.deviceNameList.splice(0, data.deviceNameList.length)
+    wx.hideLoading()
+    wx.showLoading({
+      title: '搜索设备...',
+      mask: false,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
     // 设备信息 20s 后停止
     var stopTimer = false
     setTimeout(function () {
@@ -379,7 +390,7 @@ Page({
   dispatchConnect: function () {
     var that = this
     // 结束条件
-    if (data.synCommandCount == data.dataList.length) {
+    if (data.synCommandCount >= data.dataList.length) {
       // 同步结束
       var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步无数据:' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
       wx.hideLoading()
@@ -405,6 +416,16 @@ Page({
       })
       return
     } else {
+      baseTool.print('同步第' + (data.synCommandCount + 1) + '个设备')
+      wx.hideLoading()
+      wx.showLoading({
+        title: '同步第' + (data.synCommandCount + 1) + '个设备',
+        mask: false,
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      // 读取设备列表
       var item = data.dataList[data.synCommandCount]
       // 设备 mac 地址
       var deviceName = item.macAddress
@@ -420,7 +441,10 @@ Page({
         }, 500)
       } else {
         // 设备存在
-        that.connectDevice(device)
+        // 500 ms 以后执行连接调度
+        setTimeout(function () {
+          that.connectDevice(device)
+        }, 500)
         // 清空数据
         data.dataObjectList.splice(0, data.dataObjectList.length)
         data.deviceDataList.splice(0, data.deviceDataList.length)
@@ -440,18 +464,96 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
+
+    var connectTimeOut = true
+    // 10秒未连接
+    setTimeout(function () {
+
+      if (connectTimeOut == true) {
+        wx.closeBLEConnection({
+          deviceId: device.deviceId,
+          success: function(res) {
+            // 无数据
+            data.synFailCount++
+            data.synCommandCount++
+            that.dispatchConnect()
+          },
+          fail: function(res) {
+            // 无数据
+            data.synFailCount++
+            data.synCommandCount++
+            that.dispatchConnect()
+          },
+          complete: function(res) {},
+        })
+      } else {
+        return
+      }
+    }, 10000)
     // 创建连接
     wx.createBLEConnection({
       deviceId: device.deviceId,
       success: function(res) {
+        connectTimeOut = false
         // 获得服务
+        var serviceTimeOut = true
+        // 10秒未获得服务跳过
+        setTimeout(function () {
+          if (serviceTimeOut == true) {
+            wx.closeBLEConnection({
+              deviceId: device.deviceId,
+              success: function (res) {
+                // 无数据
+                data.synFailCount++
+                data.synCommandCount++
+                that.dispatchConnect()
+              },
+              fail: function (res) {
+                // 无数据
+                data.synFailCount++
+                data.synCommandCount++
+                that.dispatchConnect()
+              },
+              complete: function (res) { },
+            })
+          } else {
+            return
+          }
+        }, 10000)
         wx.getBLEDeviceServices({
           deviceId: device.deviceId,
           success: function(res) {
+            serviceTimeOut = false
+            // 获得服务
+            var characteristics = true
+            // 10秒未获得服务跳过
+            setTimeout(function () {
+              if (characteristics == true) {
+                wx.closeBLEConnection({
+                  deviceId: device.deviceId,
+                  success: function (res) {
+                    // 无数据
+                    data.synFailCount++
+                    data.synCommandCount++
+                    that.dispatchConnect()
+                  },
+                  fail: function (res) {
+                    // 无数据
+                    data.synFailCount++
+                    data.synCommandCount++
+                    that.dispatchConnect()
+                  },
+                  complete: function (res) { },
+                })
+              } else {
+                return
+              }
+            }, 10000)
             wx.getBLEDeviceCharacteristics({
               deviceId: device.deviceId,
               serviceId: data.tailServiceUUID,
               success: function(res) {
+                characteristics = false
                 wx.notifyBLECharacteristicValueChange({
                   deviceId: device.deviceId,
                   serviceId: data.tailServiceUUID,
@@ -465,17 +567,58 @@ Page({
                   complete: function(res) {},
                 })
               },
-              fail: function(res) {},
+              fail: function(res) {
+                characteristics = false
+                // 关闭连接
+                wx.closeBLEConnection({
+                  deviceId: device.deviceId,
+                  success: function (res) {
+                    // 无数据
+                    data.synFailCount++
+                    data.synCommandCount++
+                    that.dispatchConnect()
+                  },
+                  fail: function (res) {
+                    // 无数据
+                    data.synFailCount++
+                    data.synCommandCount++
+                    that.dispatchConnect()
+                  },
+                  complete: function (res) { },
+                })
+              },
               complete: function(res) {},
             })
           },
-          fail: function(res) {},
+          fail: function(res) {
+            baseTool.print([res, '获得服务失败'])
+            serviceTimeOut = false
+            // 关闭连接
+            wx.closeBLEConnection({
+              deviceId: device.deviceId,
+              success: function (res) {
+                // 无数据
+                data.synFailCount++
+                data.synCommandCount++
+                that.dispatchConnect()
+              },
+              fail: function (res) {
+                // 无数据
+                data.synFailCount++
+                data.synCommandCount++
+                that.dispatchConnect()
+              },
+              complete: function (res) { },
+            })
+          },
           complete: function(res) {},
         })
       },
       fail: function(res) {
         baseTool.print([res, '蓝牙连接失败'])
         // 无数据
+        // 没超时
+        connectTimeOut = false
         data.synFailCount++
         data.synCommandCount++
         that.dispatchConnect()
@@ -699,7 +842,7 @@ Page({
       success: function (res) {
         // 提交消息
         baseMessageHandler.postMessage('createContest', res => {
-          res(data.deviceInfo)
+          res(data.deviceAllObject)
           // baseMessageHandler.removeMessage('createContest')
         }).then(res => {
           baseTool.print(res)
@@ -710,5 +853,11 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
+  },
+  timeOut: function (callback = () => {}, inteval = 1000, total = 0) {
+
+    setTimeout(function () {
+      callback()
+    }, inteval)
   }
 })

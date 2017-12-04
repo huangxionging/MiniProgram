@@ -27,6 +27,7 @@ Page({
     tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
+    reconnectCount: 0
   },
 
   /**
@@ -67,7 +68,7 @@ Page({
     setTimeout(function () {
       that.connectDevice()
       that.deviceConnectionStateChange()
-    }, 1000)
+    }, 3000)
 
   },
 
@@ -222,27 +223,41 @@ Page({
       },
       fail: function (res) {
         baseTool.print([res, '蓝牙连接失败'])
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '蓝牙连接失败',
-          showCancel: false,
-          confirmText: '确定',
-          confirmColor: '#00a0e9',
-          success: function (res) {
-            wx.navigateBack()
-          },
-          fail: function (res) { },
-          complete: function (res) { },
-        })
+        var reconnectCount = that.data.reconnectCount
+        if (reconnectCount == 3) {
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '蓝牙连接失败',
+            showCancel: false,
+            confirmText: '确定',
+            confirmColor: '#00a0e9',
+            success: function (res) {
+              wx.navigateBack()
+            },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+        } else {
+          reconnectCount++
+          that.setData({
+            reconnectCount: reconnectCount
+          })
+          // 500ms 以后重连
+          setTimeout(function(){
+            that.connectDevice()
+          }, 500)
+          
+        }
       },
       complete: function (res) { },
     })
   }
   ,
-  addContestUser: () => {
+  addContestUser: function() {
+    var that = this
     wx.navigateTo({
-      url: '../addOneContestUser/addOneContestUser?gameId=' + data.gameId + '&macAddress=' + data.macAddress,
+      url: '../addOneContestUser/addOneContestUser?gameId=' + that.data.gameId + '&macAddress=' + that.data.macAddress,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -252,15 +267,18 @@ Page({
     baseTool.print(e)
     var that = this
     var index = e.currentTarget.id - 1
-    var isSelect = data.dataList[index].item.isSelect
+    var dataList = that.data.dataList
+    var isSelect = dataList[index].item.isSelect
     if (isSelect) {
       return
     } else {
-      data.dataList[index].item.isSelect = !data.dataList[index].item.isSelect
-      that.setData(data)
+      dataList[index].item.isSelect = !dataList[index].item.isSelect
+      that.setData({
+        dataList: dataList
+      })
       wx.showModal({
         title: '提示',
-        content: data.dataList[index].name + ' 在本次比赛中将与设备 ' + data.deviceName + ' 绑定',
+        content: dataList[index].name + ' 在本次比赛中将与设备 ' + that.data.deviceName + ' 绑定',
         showCancel: true,
         cancelText: '取消',
         cancelColor: '#999',
@@ -270,13 +288,17 @@ Page({
           baseTool.print(res)
 
           if (res.cancel) {
-            data.dataList[index].item.isSelect = !data.dataList[index].item.isSelect
-            that.setData(data)
+            dataList[index].item.isSelect = !dataList[index].item.isSelect
+            that.setData({
+              dataList: dataList
+            })
           } else if(res.confirm) {
-            that.bindDevice(data.dataList[index])
+            that.bindDevice(that.data.dataList[index])
           } else if (!res.cancel && !res.confirm) {
-            data.dataList[index].item.isSelect = !data.dataList[index].item.isSelect
-            that.setData(data)
+            dataList[index].item.isSelect = !dataList[index].item.isSelect
+            that.setData({
+              dataList: dataList
+            })
           }
           // 
         },
@@ -291,14 +313,15 @@ Page({
     
   },
   bindDevice: function (userInfo) {
+    var that = this
     var name = userInfo.name
     var userId = userInfo.playerId
     // macAddress
-    contestManager.bindContestUser(data.gameId, name, userId, data.macAddress).then(res => {
+    contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress).then(res => {
       baseTool.print(res)
       wx.navigateBack()
       // 删除这个 Mac 地址下的
-      baseMessageHandler.sendMessage('deleteDevice', data.macAddress)
+      baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
     }).catch(res => {
       baseTool.print(res)
     }) 
@@ -343,7 +366,7 @@ Page({
     wx.onBLEConnectionStateChange(function(res){
       baseTool.print([res, '蓝牙状态改变'])
       if (res.connected == false) {
-
+        
       }
     })
   },
@@ -357,7 +380,6 @@ Page({
       if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
         // 查找设备命令
         var buffer = bleCommandManager.findDeviceCommand()
-
         wx.writeBLECharacteristicValue({
           deviceId: deviceId,
           serviceId: that.data.tailServiceUUID,

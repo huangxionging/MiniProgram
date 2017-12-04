@@ -34,38 +34,11 @@ Page({
    */
   onLoad: function (options) {
     var that = this
-    // setTimeout(() => {
-    //   findDeviceTimeOut(timeCount)
-    // }, 10)
-    that.openBle()
-    // baseTool.getSystemInfoAsync().then(res => {
-    //   if (res.platform != 'ios') {
-    //   } else {
-    //     bluetoothManager.checkBluetoothState().then(res => {
-    //       baseTool.print('checkBluetoothState: success')
-    //       that.foundDevices()
-    //     }).catch(res => {
-    //       baseTool.print('checkBluetoothState: fail')
-    //       wx.showModal({
-    //         title: '提示',
-    //         content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
-    //         showCancel: false,
-    //         confirmText: '确定',
-    //         confirmColor: '#00a0e9',
-    //         success: function (res) {
-    //           wx.navigateBack()
-    //         },
-    //         fail: function (res) { baseTool.print(res) },
-    //         complete: function (res) { },
-    //       })
-    //     })
-    //   }
-    // }).catch(res => {
 
-    // })
-    
+    that.openBle()
     // 获取消息
     baseMessageHandler.getMessage('createContest', res => {
+      baseTool.print(['设备列表', res])
       that.setData({
         bindedDevices: res
       })
@@ -81,7 +54,6 @@ Page({
       name: options.name
     })
 
-    
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
       var that = this
       // 搜索 macAddress
@@ -197,31 +169,6 @@ Page({
         that.openBle()
       }
     })
-    // if (that.data.systemInfo.platform != 'ios') {
-      
-    // } else {
-    //   bluetoothManager.checkBluetoothState().then(res => {
-    //     baseTool.print('checkBluetoothState: success')
-    //     wx.hideLoading()
-    //     wx.hideNavigationBarLoading()
-    //     wx.stopPullDownRefresh()
-    //     that.foundDevices()
-    //   }).catch(res => {
-    //     baseTool.print('checkBluetoothState: fail')
-    //     wx.showModal({
-    //       title: '提示',
-    //       content: '蓝牙打开失败, 请检查蓝牙状态后再使用',
-    //       showCancel: false,
-    //       confirmText: '确定',
-    //       confirmColor: '#00a0e9',
-    //       success: function (res) {
-    //         // wx.navigateBack()
-    //       },
-    //       fail: function (res) { baseTool.print(res) },
-    //       complete: function (res) { },
-    //     })
-    //   })
-    // }
   },
 
   /**
@@ -290,14 +237,31 @@ Page({
                 baseTool.print(['发现新设备', macAddress, res])
 
                 // 已经绑定过, 需要过滤掉
+                baseTool.print(['发现新设备', bindedDevices, res])
                 if (bindedDevices[macAddress]) {
-                  return
+                  return 
                 }
+                
+                var hexArray = new Uint8Array(device.advertisData)
+                var power = hexArray[hexArray.byteLength - 1]
+                var imageUrl = ''
+                if (power <= 25) {
+                  imageUrl = 'power25'
+                } else if (power <= 50) {
+                  imageUrl = 'power50'
+                } else if (power <= 75) {
+                  imageUrl = 'power75'
+                } else if (power <= 100) {
+                  imageUrl = 'power100'
+                }
+
                 // 广播数据先不弄
                 dataList.push({
                   name: device.name,
                   macAddress: macAddress,
                   deviceId: device.deviceId,
+                  power: power,
+                  imageUrl: imageUrl
                 })
                 that.setData({
                   dataList: dataList,
