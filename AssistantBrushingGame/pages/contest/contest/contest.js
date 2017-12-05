@@ -50,7 +50,11 @@ var data = {
   // 待同步的设备对象
   synchronizeObject: {},
   // 
-  synNodataTimeOut: true
+  synNodataTimeOut: true,
+  // 重连次数
+  synReconnectCount: 0,
+  // 执行行数
+  synExeLine: 54,
 }
 Page({
 
@@ -261,6 +265,7 @@ Page({
     data.deviceAllObject = null
     data.deviceAllObject = {}
     data.deviceNameList.splice(0, data.deviceNameList.length)
+    data.synReconnectCount = 0
     wx.hideLoading()
     wx.showLoading({
       title: '搜索设备...',
@@ -279,6 +284,7 @@ Page({
       wx.stopBluetoothDevicesDiscovery({
         success: function(res) {
           // 停止搜索以后, 开始同步
+          data.synExeLine = 284
           that.dispatchConnect()
         },
         fail: function(res) {},
@@ -304,9 +310,11 @@ Page({
         // 如果两者长度相等, 就不用等待 20s 了
         if (data.deviceNameList.length == data.dataList.length) {
           // 停止搜索设备
+          stopTimer = true
           wx.stopBluetoothDevicesDiscovery({
             success: function(res) {
               // 开始连接设备
+              data.synExeLine = 313
               that.dispatchConnect()
             },
             fail: function(res) {},
@@ -394,6 +402,11 @@ Page({
   dispatchConnect: function () {
     var that = this
     // 结束条件
+    baseTool.print('synExeLine行数:' + data.synExeLine)
+    baseTool.print('synCommandCount:' + data.synCommandCount)
+    baseTool.print('synSuccessCount:' + data.synSuccessCount)
+    baseTool.print('synFailCount:' + data.synFailCount)
+    baseTool.print('synNoDataCount:' + data.synNoDataCount)
     if (data.synCommandCount == data.dataList.length) {
       // 同步结束
       wx.hideLoading()
@@ -440,6 +453,7 @@ Page({
       var device = data.deviceAllObject[deviceName]
       // 如果不存在, 则跳过
       if (!device) {
+        data.synExeLine = 452
         that.synNextDevice()
       } else {
         // 设备存在
@@ -447,6 +461,8 @@ Page({
         // baseTool.print(device)
         setTimeout(function () {
           baseTool.print(device)
+          // 设备重连次数重置
+          data.synReconnectCount = 0
           that.connectDevice(device)
         }, 500)
         // 清空数据
@@ -476,19 +492,30 @@ Page({
         return true
       }
       if (total == 0) {
-        baseTool.print(['连接超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        wx.closeBLEConnection({
-          deviceId: device.deviceId,
-          success: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          fail: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          complete: function (res) { },
-        })
+        // 发起重连
+        if (data.synReconnectCount < 3) {
+          data.synReconnectCount++
+          // 500ms 后发起重连
+          setTimeout(function () {
+            that.connectDevice(device)
+          }, 500)
+        } else {
+          baseTool.print(['连接超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
+          wx.closeBLEConnection({
+            deviceId: device.deviceId,
+            success: function (res) {
+              // 无数据
+              data.synExeLine = 495
+              that.synNextDevice()
+            },
+            fail: function (res) {
+              // 无数据
+              data.synExeLine = 499
+              that.synNextDevice()
+            },
+            complete: function (res) { },
+          })
+        }
         return true
       }
       return false
@@ -513,10 +540,12 @@ Page({
                 deviceId: device.deviceId,
                 success: function (res) {
                   // 无数据
+                  data.synExeLine = 528
                   that.synNextDevice()
                 },
                 fail: function (res) {
                   // 无数据
+                  data.synExeLine = 533
                   that.synNextDevice()
                 },
                 complete: function (res) { },
@@ -544,10 +573,12 @@ Page({
                       deviceId: device.deviceId,
                       success: function (res) {
                         // 无数据
+                        data.synExeLine = 561
                         that.synNextDevice()
                       },
                       fail: function (res) {
                         // 无数据
+                        data.synExeLine = 566
                         that.synNextDevice()
                       },
                       complete: function (res) { },
@@ -575,10 +606,12 @@ Page({
                             deviceId: device.deviceId,
                             success: function (res) {
                               // 无数据
+                              data.synExeLine = 596
                               that.synNextDevice()
                             },
                             fail: function (res) {
                               // 无数据
+                              data.synExeLine = 599
                               that.synNextDevice()
                             },
                             complete: function (res) { },
@@ -587,6 +620,16 @@ Page({
                         }
                         return false
                       }, 10, 500)
+                      // 接收特征值数据
+                      wx.hideLoading()
+                      wx.showLoading({
+                        title: '读取设备数据...',
+                        mask: false,
+                        success: function(res) {},
+                        fail: function(res) {},
+                        complete: function(res) {},
+                      })
+                      that.deviceCharacteristicValueChange(device.deviceId)
                       wx.notifyBLECharacteristicValueChange({
                         deviceId: device.deviceId,
                         serviceId: data.tailServiceUUID,
@@ -595,34 +638,34 @@ Page({
                         success: function (res) {
                           notyfyCharacteristicsTimeOut = true
                           baseTool.print([res, '预订通知成功成功'])
-                          setTimeout(function(){
+                          // 50 ms 以后执行下一步
                             // 定时器
-                            data.synNodataTimeOut = false
-                            baseTool.startTimer(function (total) {
-                              if (data.synNodataTimeOut == true) {
-                                baseTool.print(['首次收到数据未超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-                                return true
-                              }
-                              if (total == 0) {
-                                baseTool.print(['首次收到数据超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-                                wx.closeBLEConnection({
-                                  deviceId: deviceId,
-                                  success: function (res) {
-                                    // 无数据
-                                    that.synNextDevice()
-                                  },
-                                  fail: function (res) {
-                                    // 无数据
-                                    that.synNextDevice()
-                                  },
-                                  complete: function (res) { },
-                                })
-                                return true
-                              }
-                              return false
-                            }, 10, 500)
-                            that.deviceCharacteristicValueChange(device.deviceId)
-                          }, 50)
+                          data.synNodataTimeOut = false
+                          // 20s 无法同步完, 算失败
+                          baseTool.startTimer(function (total) {
+                            if (data.synNodataTimeOut == true) {
+                              return true
+                            }
+                            if (total == 0) {
+                              wx.closeBLEConnection({
+                                deviceId: device.deviceId,
+                                success: function (res) {
+                                  // 无数据
+                                  data.synExeLine = 631
+                                  that.synNextDevice()
+                                },
+                                fail: function (res) {
+                                  // 无数据
+                                  data.synExeLine = 636
+                                  that.synNextDevice()
+                                },
+                                complete: function (res) { },
+                              })
+                              return true
+                            }
+                            return false
+                          }, 10, 2000)
+                            // 介绍设备数据
                         },
                         fail: function (res) {
                           notyfyCharacteristicsTimeOut = true
@@ -632,10 +675,12 @@ Page({
                             deviceId: device.deviceId,
                             success: function (res) {
                               // 无数据
+                              data.synExeLine = 655
                               that.synNextDevice()
                             },
                             fail: function (res) {
                               // 无数据
+                              data.synExeLine = 660
                               that.synNextDevice()
                             },
                             complete: function (res) { },
@@ -653,10 +698,12 @@ Page({
                       deviceId: device.deviceId,
                       success: function (res) {
                         // 无数据
+                        data.synExeLine = 678
                         that.synNextDevice()
                       },
                       fail: function (res) {
                         // 无数据
+                        data.synExeLine = 683
                         that.synNextDevice()
                       },
                       complete: function (res) { },
@@ -675,10 +722,12 @@ Page({
                 deviceId: device.deviceId,
                 success: function (res) {
                   // 无数据
+                  data.synExeLine = 702
                   that.synNextDevice()
                 },
                 fail: function (res) {
                   // 无数据
+                  data.synExeLine = 707
                   that.synNextDevice()
                 },
                 complete: function (res) { },
@@ -694,7 +743,16 @@ Page({
         // 无数据
         // 没超时
         connectTimeOut = true
-        that.synNextDevice()
+        if (data.synReconnectCount < 3) {
+          data.synReconnectCount++
+          // 500ms 后发起重连
+          setTimeout(function() {
+            that.connectDevice(device)
+          }, 500)
+        } else {
+          data.synExeLine = 736
+          that.synNextDevice()
+        }
       },
       complete: function(res) {},
     })
@@ -707,7 +765,6 @@ Page({
   deviceCharacteristicValueChange: function (deviceId = '') {
     var that = this
     // 收到定时器
-    data.synNodataTimeOut = true
     wx.onBLECharacteristicValueChange(function(res){
       var values = new Uint8Array(res.value)
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
@@ -733,30 +790,6 @@ Page({
     // 查找设备命令
     var that = this
     var buffer = bleCommandManager.connectReplyDeviceCommand()
-    data.synNodataTimeOut = false
-    baseTool.startTimer(function (total) {
-      if (data.synNodataTimeOut == true) {
-        baseTool.print(['首次回复未超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        return true
-      }
-      if (total == 0) {
-        baseTool.print(['首次回超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        wx.closeBLEConnection({
-          deviceId: deviceId,
-          success: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          fail: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          complete: function (res) { },
-        })
-        return true
-      }
-      return false
-    }, 10, 500)
     wx.writeBLECharacteristicValue({
       deviceId: deviceId,
       serviceId: data.tailServiceUUID,
@@ -788,6 +821,8 @@ Page({
 
             if (data.dataObjectList.length == 0) {
               // 无数据
+              data.synExeLine = 793
+              data.synNodataTimeOut = true
               that.synNoDataNextDevice()
             } else {
               //如果有数据 上传数据
@@ -804,6 +839,8 @@ Page({
             baseTool.print([res, '设备写入信息失败'])
             if (data.dataObjectList.length == 0) {
               // 无数据
+              data.synNodataTimeOut = true
+              data.synExeLine = 812
               that.synNoDataNextDevice()
             } else {
               //如果有数据 上传数据
@@ -829,6 +866,8 @@ Page({
 
             if (data.dataObjectList.length == 0) {
               // 无数据
+              data.synExeLine = 838
+              data.synNodataTimeOut = true
               that.synNoDataNextDevice()
             } else {
               //如果有数据 上传数据
@@ -845,6 +884,8 @@ Page({
             baseTool.print([res, '设备写入信息失败'])
             if (data.dataObjectList.length == 0) {
               // 无数据
+              data.synNodataTimeOut = true
+              data.synExeLine = 855
               that.synNoDataNextDevice()
             } else {
               //如果有数据 上传数据
@@ -868,29 +909,6 @@ Page({
     var that = this
     // 定时器
     data.synNodataTimeOut = false
-    baseTool.startTimer(function (total) {
-      if (data.synNodataTimeOut == true) {
-        baseTool.print(['收到刷牙数据未超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        return true
-      }
-      if (total == 0) {
-        baseTool.print(['收到刷牙数据超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        wx.closeBLEConnection({
-          deviceId: deviceId,
-          success: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          fail: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          complete: function (res) { },
-        })
-        return true
-      }
-      return false
-    }, 10, 500)
     data.dataHead = hex.substring(0, 2)
     //数据处理逻辑
     if (values[2] == 0) {
@@ -941,30 +959,6 @@ Page({
   newProcessOnceData: function (hex, values, deviceId = '') {
     //初始化头部信息 回复要带
     var that = this
-    data.synNodataTimeOut = false
-    baseTool.startTimer(function (total) {
-      if (data.synNodataTimeOut == true) {
-        baseTool.print(['收到刷牙未数据超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        return true
-      }
-      if (total == 0) {
-        baseTool.print(['收到刷牙数据超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-        wx.closeBLEConnection({
-          deviceId: deviceId,
-          success: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          fail: function (res) {
-            // 无数据
-            that.synNextDevice()
-          },
-          complete: function (res) { },
-        })
-        return true
-      }
-      return false
-    }, 10, 500)
     data.dataHead = hex.substring(0, 2)
 
     //数据处理逻辑
@@ -1020,11 +1014,22 @@ Page({
   },
   upStorageDataToService: function () {
     var that = this
-    data.synNodataTimeOut = true
+    wx.hideLoading()
+    wx.showLoading({
+      title: '上传数据...',
+      mask: true,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
     contestManager.uploadBrushRecord().then(res => {
       // 设备数据上传成功
+      wx.hideLoading()
+      data.synNodataTimeOut = true
       baseTool.print([res, '数据上传成功'])
+      data.synExeLine = 988
       that.synSuccessNextDevice()
+      
     }).catch(res => {
       baseTool.print([res, '错误信息'])
     })
