@@ -102,7 +102,7 @@ Page({
         for (var index = 0; index < res.length; ++index) {
           dataList.push({
             name: res[index].name,
-            tail: '(tail-' + res[index].macAddress.toLowerCase() + ')',
+            tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
             score: res[index].score ? res[index].score : -100
           })

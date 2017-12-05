@@ -34,26 +34,31 @@ Page({
    */
   onLoad: function (options) {
     var that = this
-
-    that.openBle()
-    // 获取消息
-    baseMessageHandler.getMessage('createContest', res => {
-      baseTool.print(['设备列表', res])
-      that.setData({
-        bindedDevices: res
-      })
-    }).then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
-    })
     baseTool.print(options)
-    
+
     that.setData({
       gameId: options.gameId,
       name: options.name
     })
-
+    
+    if (options.add == 'yes') {
+      baseMessageHandler.getMessage('createContest', res => {
+        baseTool.print(['设备列表', res])
+        // 获取到设备列表
+        that.openBle()
+        that.setData({
+          bindedDevices: res
+        })
+      }).then(res => {
+        baseTool.print(res)
+      }).catch(res => {
+        baseTool.print(res)
+      })
+    } else {
+      that.openBle()
+    }
+    // 获取消息
+    
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
       var that = this
       // 搜索 macAddress
@@ -234,14 +239,13 @@ Page({
                 var dataList = that.data.dataList
                 var index = dataList.length
                 var macAddress = device.name.split('-')[1].toUpperCase()
-                baseTool.print(['发现新设备', macAddress, res])
+                
 
                 // 已经绑定过, 需要过滤掉
-                baseTool.print(['发现新设备', bindedDevices, res])
                 if (bindedDevices[macAddress]) {
                   return 
                 }
-                
+                baseTool.print(['发现新设备', macAddress, device, device.RSSI])
                 var hexArray = new Uint8Array(device.advertisData)
                 var power = hexArray[hexArray.byteLength - 1]
                 var imageUrl = ''
@@ -261,8 +265,13 @@ Page({
                   macAddress: macAddress,
                   deviceId: device.deviceId,
                   power: power,
-                  imageUrl: imageUrl
+                  imageUrl: imageUrl,
+                  rssi: device.RSSI
                 })
+                dataList.sort((a, b) => {
+                  return b.rssi - a.rssi
+                })
+                dataList.s
                 that.setData({
                   dataList: dataList,
                   total: '比赛设备' + (index + 1) + '支',

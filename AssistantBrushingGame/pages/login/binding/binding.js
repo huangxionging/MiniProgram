@@ -215,7 +215,8 @@ Page({
     bindingTelphoneAction.then(res => {
       baseTool.print([res, '完整的数据结构'])
       // 表示已经绑定
-      var wxUser = res.data.data.wxUser
+      var wxUser = res.wxUser
+      baseTool.print([res, wxUser, wxUser.memberId, 'memberId'])
       if (wxUser.memberId) {
         baseTool.setValueForKey(wxUser.memberId, 'memberId')
         console.log(res)
@@ -229,6 +230,7 @@ Page({
         })
       }
     }).catch(res => {
+      baseTool.print([res, '失败数据'])
       wx.showModal({
         title: '提示',
         content: res,

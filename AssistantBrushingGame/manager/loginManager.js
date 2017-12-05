@@ -111,7 +111,11 @@ function checkUserBindingState(code = '', userInfo = {}) {
       
       success: res => {
         // baseTool.print(res)
-        resolve(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          reject(res.data.msg)
+        }
       },
       fail: reject,
       complete: function (res) { },
@@ -233,10 +237,10 @@ function loginFlow() {
 
     // 和服务器通信结果
     checkUserBindingStateAction.then(res => {
-      baseTool.print(res.data.data)
+      baseTool.print(res.wxUser)
       // 表示已经绑定
-      if (res.data.data.wxUser) {
-        var wxUser = res.data.data.wxUser
+      if (res.wxUser) {
+        var wxUser = res.wxUser
         if (wxUser.memberId) {
           baseTool.setValueForKey(wxUser.memberId, 'memberId')
           // reLauch()
@@ -250,10 +254,10 @@ function loginFlow() {
             redirectTo: '/pages/login/binding/binding'
           })
         } else {
-          rejec(res)
+          reject(res)
         }
       } else {
-        rejec(res)
+        reject(res)
       }
     })
   })

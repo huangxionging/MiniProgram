@@ -147,6 +147,21 @@ function getSystemInfoAsync() {
   })
 }
 
+function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
+  var that = this
+  var stop = callback(total)
+  if (stop == true) {
+    return
+  } else {
+    // 自减1
+    total--
+    // 定时器
+    setTimeout(function () {
+      startTimer(callback, inteval, total)
+    }, inteval)
+  }
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -191,4 +206,6 @@ module.exports = {
   bindCatchPromise: bindCatchPromise,
   // 网络失败提示
   errorMsg: '网络错误',
+  // 启动定时器功能
+  startTimer: startTimer,
 }
