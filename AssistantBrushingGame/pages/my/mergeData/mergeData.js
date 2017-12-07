@@ -104,7 +104,7 @@ Page({
             name: res[index].name,
             tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
-            score: res[index].score ? res[index].score : -100
+            score: res[index].score ? res[index].score : 0
           })
         }
 

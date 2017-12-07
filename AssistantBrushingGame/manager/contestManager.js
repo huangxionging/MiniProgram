@@ -177,7 +177,7 @@ function deleteContest(gameId = '') {
   })
 }
 
-function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '') {
+function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindContestUser
     var data = {
@@ -186,15 +186,15 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
       player: player,
       playerId: playerId,
       macAddress: macAddress,
+      brushingMethodId: brushingMethodId,
     }
     baseTool.print(data)
     wx.request({
       url: url,
       data: data,
       success: function (res) {
-        baseTool.print(res)
         if (res.data.code == 'success') {
-          resolve(res.data.data);
+          resolve(res.data.msg);
         } else {
           reject(res.data.msg)
         }

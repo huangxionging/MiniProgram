@@ -2,7 +2,7 @@ module.exports = {
   /**
    * 获取验证码
    */
-  getVerifyCode: 'api/smscode/generate',
+  getVerifyCode: 'generateCode',
   /**
    * 绑定手机号
    */

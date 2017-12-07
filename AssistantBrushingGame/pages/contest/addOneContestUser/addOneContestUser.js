@@ -5,6 +5,8 @@ const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const baseHexConvertTool = require('../../../utils/baseHexConvertTool.js')
+const bleCommandManager = require('../../../manager/bleCommandManager.js')
 
 Page({
 
@@ -32,7 +34,13 @@ Page({
           select: false
         }
       ]
-    }
+    },
+    deviceId: '',
+    tailServiceUUID: '0000FFA0-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 notify
+    tailCharacteristicIdNotify: '0000FFA2-0000-1000-8000-00805F9B34FB',
+    //尾巴读取数据的特征值 write
+    tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
   },
 
   /**
@@ -41,7 +49,8 @@ Page({
   onLoad: function (options) {
     this.setData({
       gameId: options.gameId,
-      macAddress: options.macAddress
+      macAddress: options.macAddress,
+      deviceId: options.deviceId
     })
   },
 
@@ -135,7 +144,7 @@ Page({
 
     wx.showLoading({
       title: '正在添加',
-      mask: true,
+      mask: false,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -169,21 +178,41 @@ Page({
   bindDevice: function (userInfo) {
     var name = userInfo.player
     var userId = userInfo.playerId
+    var brushingMethodId = userInfo.brushingMethodId
     // macAddress
     var that = this
     baseTool.print(userInfo)
-    contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress).then(res => {
-      baseTool.print(res)
-      wx.navigateBack({
-        delta: 2,
-      })
-      baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
-      baseMessageHandler.sendMessage('selectRefresh', {
-        code: true,
-        msg: '添加成功需要刷新'
-      }).then(res => {
+    contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress, brushingMethodId).then(res => {
+      baseTool.print([res, 'ddcdscdc', that.data.deviceId])
 
+      var buffer = []
+      if (brushingMethodId == 'a002c7680a5f4f8ea0b1b47fa3f2b947') {
+        buffer = bleCommandManager.connectReplyDeviceCommand()
+      } else {
+        buffer = bleCommandManager.connectReplyDeviceCommand('00')
+      }
+      baseTool.print([baseHexConvertTool.arrayBufferToHexString(buffer), '颠三倒四多'])
+      wx.writeBLECharacteristicValue({
+        deviceId: that.data.deviceId,
+        serviceId: that.data.tailServiceUUID,
+        characteristicId: that.data.tailCharacteristicIdWrite,
+        value: buffer,
+        success: function (res) {
+          baseTool.print(res, '发送成功')
+          wx.navigateBack({
+            delta: 2,
+          })
+        },
+        fail: function (res) {
+          baseTool.print(res, '发送失败')
+          wx.navigateBack({
+            delta: 2,
+          })
+        },
+        complete: function (res) { },
       })
+      
+      baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
     }).catch(res => {
       baseTool.print(res)
     })

@@ -11,7 +11,10 @@ function getUserInfo() {
   return new Promise((resolve, reject) => {
     baseWechat.getUserInfo().then(res => {
       resolve(res)
-    }).catch(reject)
+    }).catch(res => {
+      // baseTool.print(res)
+      reject(res)
+    })
   })
 }
 
@@ -142,7 +145,7 @@ function reLauch() {
  */
 function getVerifyCode(telphoneNumber = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseApiList.getVerifyCode
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getVerifyCode
     var data = { 'telephone': telphoneNumber}
     var openid = baseTool.valueForKey('openid')
     if (openid) {
@@ -154,7 +157,11 @@ function getVerifyCode(telphoneNumber = '') {
 
       success: res => {
         // baseTool.print(res)
-        resolve(res)
+        if (res.data.code == 'success') {
+          resolve(res.data);
+        } else {
+          reject(res.data.msg)
+        }
       },
       fail: reject,
       complete: function (res) { },
@@ -207,6 +214,7 @@ function loginFlow() {
         app.globalData.userInfo = res.userInfo
         resolve(res)
       }).catch(res => {
+        
         reject(res)
       })
     }).catch(res => {
@@ -232,6 +240,7 @@ function loginFlow() {
       app.globalData.userInfo = res.userInfo
       return checkUserBindingState(code, res.userInfo)
     }).catch(res => {
+      baseTool.print(res)
       reject(res)
     })
 
@@ -286,7 +295,7 @@ function getMemberId() {
       }
       
     }).catch(res => {
-
+      baseTool.print(res)
     })
     return ''
   }

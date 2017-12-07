@@ -75,7 +75,7 @@ Page({
       var index = dataList.length
       that.setData({
         dataList: dataList,
-        total: '比赛设备' + (index + 1) + '支',
+        total: '比赛设备' + (index) + '支',
       })
     }).then(res => {
       baseTool.print(res)

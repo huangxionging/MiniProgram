@@ -139,6 +139,7 @@ Page({
     }
 
 
+    // 标准巴氏
     var brushMethod = 'a002c7680a5f4f8ea0b1b47fa3f2b947'
     if(!select) {
       brushMethod = '6827c45622b141ef869c955e0c51f9f8'

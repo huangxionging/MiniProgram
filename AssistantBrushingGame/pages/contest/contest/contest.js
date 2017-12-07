@@ -189,7 +189,7 @@ Page({
     wx.hideLoading()
     wx.showLoading({
       title: '同步数据...',
-      mask: false,
+      mask: true,
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
@@ -269,7 +269,7 @@ Page({
     wx.hideLoading()
     wx.showLoading({
       title: '搜索设备...',
-      mask: false,
+      mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -440,7 +440,7 @@ Page({
       wx.hideLoading()
       wx.showLoading({
         title: '同步第' + (data.synCommandCount + 1) + '个设备',
-        mask: false,
+        mask: true,
         success: function (res) { },
         fail: function (res) { },
         complete: function (res) { },
@@ -479,7 +479,7 @@ Page({
     wx.hideLoading()
     wx.showLoading({
       title: '正在连接设备...',
-      mask: false,
+      mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -624,7 +624,7 @@ Page({
                       wx.hideLoading()
                       wx.showLoading({
                         title: '读取设备数据...',
-                        mask: false,
+                        mask: true,
                         success: function(res) {},
                         fail: function(res) {},
                         complete: function(res) {},

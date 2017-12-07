@@ -10,24 +10,23 @@ function findDeviceCommand() {
   // 转换成16进制字符串
   var systemTimeHex = baseHexConvertTool.arrayToHexString(systemTimeArray)
   // 生成完整的命令字符串
-  var commandHexString = header + systemTimeHex + headHabit + brushMethod
+  var commandHexString = header + brushMethod + headHabit + systemTimeHex
   baseTool.print(commandHexString)
   // 生成命令数组
   var buffer = baseHexConvertTool.hexStringToArrayBuffer(commandHexString)
   return buffer
 }
 
-function connectReplyDeviceCommand() {
-  var header = 'f10bf2'
+function connectReplyDeviceCommand(brushMethod = '01') {
+  var header = 'f10ef2'
   var headHabit = '00'
-  var brushMethod = '01'
   // 获得格式化时间数组
   var systemTimeArray = getFormatDateArray()
   // 转换成16进制字符串
   var systemTimeHex = baseHexConvertTool.arrayToHexString(systemTimeArray)
   // 生成完整的命令字符串
-  var commandHexString = header + systemTimeHex + headHabit + brushMethod
-  baseTool.print(commandHexString)
+  var commandHexString = header + systemTimeHex + headHabit + brushMethod + '00'
+  baseTool.print(systemTimeHex)
   // 生成命令数组
   var buffer = baseHexConvertTool.hexStringToArrayBuffer(commandHexString)
   return buffer
@@ -50,6 +49,7 @@ function getFormatDateArray() {
   const second = date.getSeconds()
   const yearHead = year.substring(0, 2)
   const yearEnd = year.substring(2)
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return [yearHead, yearEnd, month, day, hour, minute, second]
 }
 

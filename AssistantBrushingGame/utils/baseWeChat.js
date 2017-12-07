@@ -21,13 +21,21 @@ function login() {
 }
 
 function getUserInfo() {
-  
   return new Promise((resolve, reject) => {
     wx.getUserInfo({
-      success: resolve,
-      fail: reject,
+      success: function(res) {
+        resolve(res)
+      },
+      fail: function(res) {
+        baseTool.print('sdcsdcsdaasdas 是的VVVV发发')
+        reject(res)},
       complete: function(res) {},
     })
+    // wx.getUserInfo({
+    //   success: resolve,
+    //   fail: reject,
+    //   complete: function(res) {},
+    // })
   })
 }
 
