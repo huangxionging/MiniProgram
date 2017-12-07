@@ -158,8 +158,18 @@ Page({
         }
       } 
     }).catch(res => {
-      wx.hideNavigationBarLoading()
       baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     })
   },
   createContest: () => {

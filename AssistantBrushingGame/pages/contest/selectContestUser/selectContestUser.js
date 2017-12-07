@@ -534,9 +534,10 @@ Page({
     var name = userInfo.name
     var userId = userInfo.playerId
     // macAddress
+    wx.showNavigationBarLoading()
     contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress, userInfo.brushingMethodId).then(res => {
       baseTool.print(res)
-      
+      wx.hideNavigationBarLoading()
       // 删除这个 Mac 地址下的
       baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
       var buffer = null
@@ -560,6 +561,22 @@ Page({
       })
     }).catch(res => {
       baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.startPullDownRefresh({
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      wx.showModal({
+        title: '提示',
+        content: res,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     }) 
   },
   loadData: function() {
@@ -596,6 +613,17 @@ Page({
       }
     }).catch(res => {
       baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.showModal({
+        title: '提示',
+        content: res,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
     })
   },
   deviceConnectionStateChange: function () {
