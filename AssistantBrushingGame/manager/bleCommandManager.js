@@ -39,6 +39,10 @@ function onceDataEndReplyDeviceCommand() {
   return buffer
 }
 
+function closeLightCommand() {
+  
+}
+
 function getFormatDateArray() {
   var date = new Date();
   const year = date.getFullYear() + ''
