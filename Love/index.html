@@ -7,7 +7,11 @@
     <style type="text/css">
         @font-face {
             font-family: digit;
+<<<<<<< HEAD
             src: url('katong.ttf') format("truetype");
+=======
+            src: url('digital-7_mono.ttf') format("truetype");
+>>>>>>> origin/master
         }
     </style>
     <link href="css/default.css" type="text/css" rel="stylesheet">
@@ -16,6 +20,7 @@
     <script type="text/javascript" src="js/functions.js"></script>
 </head>
 
+
 <body>
     <div id="mainDiv">
         <div id="content">
@@ -23,12 +28,22 @@
                 <canvas id="garden"></canvas>
                 <div id="words">
                     <div id="messages">
+<<<<<<< HEAD
                         瓜瓜和宝宝，天生一对
                         <div id="elapseClock"></div>
                     </div>
                     <div id="loveu">
                         Love you forever and ever.<br/>
                         <div class="signature">by 瓜瓜</div>
+=======
+                        王大可同学, 爱你爱你哦
+                        <div id="elapseClock"></div>
+                    </div>
+                    <div id="loveu">
+                        Love you forever and ever.
+                        <br/>
+                        <div class="signature">-- 黄雄</div>
+>>>>>>> origin/master
                     </div>
                 </div>
             </div>
@@ -41,7 +56,12 @@
         if (!document.createElement('canvas').getContext) {
             var msg = document.createElement("div");
             msg.id = "errorMsg";
+<<<<<<< HEAD
             msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+=======
+            msg.innerHTML =
+                "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+>>>>>>> origin/master
             document.body.appendChild(msg);
             $("#code").css("display", "none")
             $("#copyright").css("position", "absolute");
@@ -49,6 +69,7 @@
             document.execCommand("stop");
         } else {
             startHeartAnimation();
+<<<<<<< HEAD
             // setInterval(function() {
             //     startHeartAnimation();
             // }, 10000);
@@ -58,6 +79,18 @@
             //     timeElapse();
             // }, 500);
 
+=======
+            setInterval(function() {
+                startHeartAnimation();
+            }, 10000);
+
+            timeElapse();
+
+            setInterval(function() {
+                timeElapse();
+            }, 500);
+
+>>>>>>> origin/master
             adjustCodePosition();
             $("#code").typewriter();
         }
