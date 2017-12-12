@@ -60,7 +60,7 @@ Page({
     // 找服务, 找特征
     wx.showLoading({
       title: '正在连接设备...',
-      mask: true,
+      mask: false,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -114,17 +114,28 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+    baseTool.print(that.data.deviceId)
 
-    wx.closeBLEConnection({
+
+    var buffer = bleCommandManager.closeLightCommand()
+    wx.writeBLECharacteristicValue({
       deviceId: that.data.deviceId,
+      serviceId: that.data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdWrite,
+      value: buffer,
       success: function(res) {
-        baseTool.print([res, '断开链接成功'])
+        baseTool.print([res, '成功关灯'])
+        wx.closeBLEConnection({
+          deviceId: that.data.deviceId,
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
+        })
       },
-      fail: function(res) {
-        baseTool.print([res, '断开链接失败'])
-      },
+      fail: function(res) {},
       complete: function(res) {},
     })
+    
   },
 
   /**
@@ -189,6 +200,7 @@ Page({
       }
       return false
     }, 10, 500)
+    baseTool.print(that.data.deviceId)
     wx.createBLEConnection({
       deviceId: that.data.deviceId,
       success: function (res) {
@@ -668,7 +680,7 @@ Page({
           icon: '',
           image: '',
           duration: 3000,
-          mask: true,
+          mask: false,
           success: function (res) { },
           fail: function (res) { },
           complete: function (res) { },

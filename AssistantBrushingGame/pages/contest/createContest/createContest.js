@@ -185,6 +185,19 @@ Page({
  
   getInputName: function(e) {
     baseTool.print(e)
+    if (e.detail.value == '') {
+      wx.showModal({
+        title: '提示',
+        content: '比赛名称不能为空哦!',
+        showCancel: false,
+        cancelColor: '确认',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      return
+    }
     this.setData({
       name: e.detail.value
     })
@@ -261,6 +274,7 @@ Page({
 
                 // 广播数据先不弄
                 dataList.push({
+                  id: dataList.length + 1,
                   name: device.name,
                   macAddress: macAddress,
                   deviceId: device.deviceId,

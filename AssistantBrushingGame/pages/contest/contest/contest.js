@@ -16,8 +16,8 @@ var data = {
   loadingDone: false,
   hasData: false,
   gameId: '',
-  contestTitle: '刷牙比赛1',
-  contestDate: '2017-10-25',
+  contestTitle: '',
+  contestDate: '',
   /**
    * 是否已经同步过
    */
