@@ -40,7 +40,10 @@ function onceDataEndReplyDeviceCommand() {
 }
 
 function closeLightCommand() {
-  
+  var header = 'f503f5'
+  // 生成命令数组
+  var buffer = baseHexConvertTool.hexStringToArrayBuffer(header)
+  return buffer
 }
 
 function getFormatDateArray() {
@@ -250,5 +253,6 @@ module.exports = {
   connectReplyDeviceCommand: connectReplyDeviceCommand,
   onceDataEndReplyDeviceCommand: onceDataEndReplyDeviceCommand,
   dataBoxCommand: dataBoxCommand,
+  closeLightCommand: closeLightCommand,
 }
 

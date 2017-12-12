@@ -116,26 +116,26 @@ Page({
     })
     baseTool.print(that.data.deviceId)
 
-    wx.getConnectedBluetoothDevices({
-      services: [that.data.tailServiceUUID],
+
+    var buffer = bleCommandManager.closeLightCommand()
+    wx.writeBLECharacteristicValue({
+      deviceId: that.data.deviceId,
+      serviceId: that.data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdWrite,
+      value: buffer,
       success: function(res) {
-        var devices = res.devices
-        for (var index = 0; index < devices.length; ++index) {
-          wx.closeBLEConnection({
-            deviceId: devices[index].deviceId,
-            success: function (res) {
-              baseTool.print([res, '断开链接成功'])
-            },
-            fail: function (res) {
-              baseTool.print([res, '断开链接失败'])
-            },
-            complete: function (res) { },
-          })
-        }
+        baseTool.print([res, '成功关灯'])
+        wx.closeBLEConnection({
+          deviceId: that.data.deviceId,
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
+        })
       },
       fail: function(res) {},
       complete: function(res) {},
     })
+    
   },
 
   /**
