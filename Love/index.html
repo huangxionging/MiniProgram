@@ -16,7 +16,6 @@
     <script type="text/javascript" src="js/functions.js"></script>
 </head>
 
-
 <body>
     <div id="mainDiv">
         <div id="content">
@@ -24,13 +23,12 @@
                 <canvas id="garden"></canvas>
                 <div id="words">
                     <div id="messages">
-                        王大可同学, 爱你爱你哦
+                        瓜瓜, 我永远爱你
                         <div id="elapseClock"></div>
                     </div>
                     <div id="loveu">
-                        Love you forever and ever.
-                        <br/>
-                        <div class="signature">-- 黄雄</div>
+                        Love you forever and ever.<br/>
+                        <div class="signature">-- 小白兔</div>
                     </div>
                 </div>
             </div>
@@ -43,8 +41,7 @@
         if (!document.createElement('canvas').getContext) {
             var msg = document.createElement("div");
             msg.id = "errorMsg";
-            msg.innerHTML =
-                "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+            msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
             document.body.appendChild(msg);
             $("#code").css("display", "none")
             $("#copyright").css("position", "absolute");
@@ -52,12 +49,11 @@
             document.execCommand("stop");
         } else {
             startHeartAnimation();
-            setInterval(function() {
-                startHeartAnimation();
-            }, 10000);
+            // setInterval(function() {
+            //     startHeartAnimation();
+            // }, 10000);
 
             timeElapse();
-
             setInterval(function() {
                 timeElapse();
             }, 500);

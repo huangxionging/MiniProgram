@@ -102,8 +102,8 @@ function timeElapse() {
 
     var date = new Date()
     var year = date.getFullYear() + ''
-    var month = formatNumber(date.getMonth())
-    console.log(date)
+    var month = formatNumber(date.getMonth() + 1)
+
     var day = formatNumber(date.getDate())
     var hour = formatNumber(date.getHours())
     var minute = formatNumber(date.getMinutes())

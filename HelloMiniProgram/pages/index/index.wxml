@@ -13,5 +13,8 @@
   <view>
     <button bindtap='change1'>ViewController1</button>
     <button bindtap='change2'>ViewController2</button>
+    <button bindtap='change3'>ViwController3</button>
+    <button bindtap='change4'>ViwController4</button>
+    <button bindtap='change5'>ViwController4</button>
   </view>
 </view>
