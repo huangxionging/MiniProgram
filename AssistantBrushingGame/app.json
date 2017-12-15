@@ -12,7 +12,8 @@
     "pages/my/brushContestDetail/brushContestDetail",
     "pages/my/mergeData/mergeData",
     "pages/contest/addOneContestUser/addOneContestUser",
-    "pages/mask/contestMask/contestMask"
+    "pages/mask/contestMask/contestMask",
+    "pages/my/brushScoreReport/brushScoreReport"
   ],
   "window": {
     "backgroundTextStyle": "dark",

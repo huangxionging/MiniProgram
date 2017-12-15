@@ -123,3 +123,7 @@
   height:  44rpx;
   border-radius: 50%;
 }
+
+.navigator{
+  height: 100%;
+}

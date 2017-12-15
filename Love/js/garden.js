@@ -3,30 +3,30 @@ function Vector(a, b) {
     this.y = b
 }
 Vector.prototype = {
-    rotate: function (b) {
+    rotate: function(b) {
         var a = this.x;
         var c = this.y;
         this.x = Math.cos(b) * a - Math.sin(b) * c;
         this.y = Math.sin(b) * a + Math.cos(b) * c;
         return this
     },
-    mult: function (a) {
+    mult: function(a) {
         this.x *= a;
         this.y *= a;
         return this
     },
-    clone: function () {
+    clone: function() {
         return new Vector(this.x, this.y)
     },
-    length: function () {
+    length: function() {
         return Math.sqrt(this.x * this.x + this.y * this.y)
     },
-    subtract: function (a) {
+    subtract: function(a) {
         this.x -= a.x;
         this.y -= a.y;
         return this
     },
-    set: function (a, b) {
+    set: function(a, b) {
         this.x = a;
         this.y = b;
         return this
@@ -44,7 +44,7 @@ function Petal(a, f, b, e, c, d) {
     this.isfinished = false
 }
 Petal.prototype = {
-    draw: function () {
+    draw: function() {
         var a = this.bloom.garden.ctx;
         var e, d, c, b;
         e = new Vector(0, this.r).rotate(Garden.degrad(this.startAngle));
@@ -57,7 +57,7 @@ Petal.prototype = {
         a.bezierCurveTo(c.x, c.y, b.x, b.y, d.x, d.y);
         a.stroke()
     },
-    render: function () {
+    render: function() {
         if (this.r <= this.bloom.r) {
             this.r += this.growFactor;
             this.draw()
@@ -78,7 +78,7 @@ function Bloom(e, d, f, a, b) {
     this.garden.addBloom(this)
 }
 Bloom.prototype = {
-    draw: function () {
+    draw: function() {
         var c, b = true;
         this.garden.ctx.save();
         this.garden.ctx.translate(this.p.x, this.p.y);
@@ -92,7 +92,7 @@ Bloom.prototype = {
             this.garden.removeBloom(this)
         }
     },
-    init: function () {
+    init: function() {
         var c = 360 / this.pc;
         var b = Garden.randomInt(0, 90);
         for (var a = 0; a < this.pc; a++) {
@@ -107,15 +107,15 @@ function Garden(a, b) {
     this.ctx = a
 }
 Garden.prototype = {
-    render: function () {
+    render: function() {
         for (var a = 0; a < this.blooms.length; a++) {
             this.blooms[a].draw()
         }
     },
-    addBloom: function (a) {
+    addBloom: function(a) {
         this.blooms.push(a)
     },
-    removeBloom: function (a) {
+    removeBloom: function(a) {
         var d;
         for (var c = 0; c < this.blooms.length; c++) {
             d = this.blooms[c];
@@ -125,16 +125,16 @@ Garden.prototype = {
             }
         }
     },
-    createRandomBloom: function (a, b) {
+    createRandomBloom: function(a, b) {
         this.createBloom(a, b, Garden.randomInt(Garden.options.bloomRadius.min, Garden.options.bloomRadius.max),
-        Garden.randomrgba(Garden.options.color.rmin, Garden.options.color.rmax, Garden.options.color.gmin, Garden.options.color.gmax, Garden.options.color.bmin,
-           Garden.options.color.bmax, Garden.options.color.opacity),
+            Garden.randomrgba(Garden.options.color.rmin, Garden.options.color.rmax, Garden.options.color.gmin, Garden.options.color.gmax, Garden.options.color.bmin,
+                Garden.options.color.bmax, Garden.options.color.opacity),
             Garden.randomInt(Garden.options.petalCount.min, Garden.options.petalCount.max))
     },
-    createBloom: function (a, f, d, e, b) {
+    createBloom: function(a, f, d, e, b) {
         new Bloom(new Vector(a, f), d, e, b, this)
     },
-    clear: function () {
+    clear: function() {
         this.blooms = [];
         this.ctx.clearRect(0, 0, this.element.width, this.element.height)
     }
@@ -169,23 +169,23 @@ Garden.options = {
     },
     tanAngle: 60
 };
-Garden.random = function (b, a) {
+Garden.random = function(b, a) {
     return Math.random() * (a - b) + b
 };
-Garden.randomInt = function (b, a) {
+Garden.randomInt = function(b, a) {
     return Math.floor(Math.random() * (a - b + 1)) + b
 };
 Garden.circle = 2 * Math.PI;
-Garden.degrad = function (a) {
+Garden.degrad = function(a) {
     return Garden.circle / 360 * a
 };
-Garden.raddeg = function (a) {
+Garden.raddeg = function(a) {
     return a / Garden.circle * 360
 };
-Garden.rgba = function (f, e, c, d) {
+Garden.rgba = function(f, e, c, d) {
     return "rgba(" + f + "," + e + "," + c + "," + d + ")"
 };
-Garden.randomrgba = function (i, n, h, m, l, d, k) {
+Garden.randomrgba = function(i, n, h, m, l, d, k) {
     var c = Math.round(Garden.random(i, n));
     var f = Math.round(Garden.random(h, m));
     var j = Math.round(Garden.random(l, d));

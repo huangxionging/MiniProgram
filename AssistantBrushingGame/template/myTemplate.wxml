@@ -21,7 +21,7 @@
       <view id='my-brush-section-select'>
         <template is='selectComponent' data='{{id, section: -100, row: -100, isSelect}}'></template>
       </view>
-      <text id='my-brush-section-date'>{{date}}</text>
+      <text id='my-brush-section-date' bindtap='selectClick' data-id='{{id}}' data-section='-100' data-row='-100'>{{date}}</text>
     </view>
     <view class='my-brush-section-content'>
       <block wx:for='{{contestList}}' wx:key='id' wx:item='item'>
@@ -36,12 +36,12 @@
       <view id='my-brush-contest-cell-select-view'>
         <template is='selectComponent' data='{{id: -100, section, row, isSelect}}'></template>
       </view>
-      <text id='my-brush-contest-cell-title'>{{name}}</text>
+      <text id='my-brush-contest-cell-title' bindtap='selectClick' data-id='-100' data-section='{{section}}' data-row='{{row}}'>{{name}}</text>
       <view id='my-brush-contest-cell-right'>
-        <text id='my-brush-contest-cell-time'>{{time}}</text>
-         <navigator url='../brushContestDetail/brushContestDetail?gameId={{gameId}}&name={{name}}' id='my-brush-contest-cell-navigate'>
-           <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
-         </navigator>
+        <navigator url='../brushContestDetail/brushContestDetail?gameId={{gameId}}&name={{name}}' id='my-brush-contest-cell-navigate' class='navigator'>
+          <text id='my-brush-contest-cell-time'>{{time}}</text>
+          <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
+        </navigator>
          
       </view>
   </view>

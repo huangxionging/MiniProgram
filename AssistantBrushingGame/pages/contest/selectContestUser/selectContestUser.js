@@ -60,7 +60,7 @@ Page({
     // 找服务, 找特征
     wx.showLoading({
       title: '正在连接设备...',
-      mask: false,
+      mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -680,7 +680,7 @@ Page({
           icon: '',
           image: '',
           duration: 3000,
-          mask: false,
+          mask: true,
           success: function (res) { },
           fail: function (res) { },
           complete: function (res) { },

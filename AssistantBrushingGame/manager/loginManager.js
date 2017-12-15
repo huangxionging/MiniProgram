@@ -160,7 +160,9 @@ function getVerifyCode(telphoneNumber = '') {
         if (res.data.code == 'success') {
           resolve(res.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: reject,
@@ -189,7 +191,9 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: reject,
@@ -246,9 +250,9 @@ function loginFlow() {
 
     // 和服务器通信结果
     checkUserBindingStateAction.then(res => {
-      baseTool.print(res.wxUser)
       // 表示已经绑定
-      if (res.wxUser) {
+      if (res && res.wxUser) {
+        baseTool.print(res.wxUser)
         var wxUser = res.wxUser
         if (wxUser.memberId) {
           baseTool.setValueForKey(wxUser.memberId, 'memberId')

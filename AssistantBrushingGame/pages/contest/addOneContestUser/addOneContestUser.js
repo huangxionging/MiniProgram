@@ -105,7 +105,7 @@ Page({
   selectClick: function (e) {
     var that = this
     // baseTool.print(e)
-    var select = 2 - e.target.id
+    var select = 2 - e.currentTarget.dataset.id
     baseTool.print(select)
     var item = that.data.item
     item.selects[0].select = select
@@ -144,7 +144,7 @@ Page({
 
     wx.showLoading({
       title: '正在添加',
-      mask: false,
+      mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },

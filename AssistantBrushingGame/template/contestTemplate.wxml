@@ -1,5 +1,5 @@
 <template name='contestUserScoreItem'>
-  <view class="item {{(index==0)?'':'item-orthers'}}">
+  <view class="item {{(index==0)?'':'item-orthers'}}" bindtap='scoreReportClick' data-index='{{index}}'>
     <view class='item-info-view'>
       <text id='item-rank' style='color:{{color}}'>{{index+1}}</text>
         <text id='item-name'>{{name}}</text>
@@ -49,13 +49,13 @@
 </template>
 
 <template name='selectButton'>
-  <view class="{{selectButton}} {{(id==1)?'':'select-orthers'}}">
+  <view class="{{selectButton}} {{(id==1)?'':'select-orthers'}}" bindtap='selectClick' data-id='{{id}}'>
     <text id='select-title'>{{title}}</text>
     <block wx:if='{{select}}'>
-      <image src='../../../resource/box-selected.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+      <image src='../../../resource/box-selected.png' class='selectButton-image' bindtap='selectClick' data-id='{{id}}'></image>
     </block>
     <block wx:else>
-      <image src='../../../resource/box-normal.png' class='selectButton-image' bindtap='selectClick' id='{{id}}'></image>
+      <image src='../../../resource/box-normal.png' class='selectButton-image' bindtap='selectClick' data-id='{{id}}'></image>
     </block>
   </view>
 </template>

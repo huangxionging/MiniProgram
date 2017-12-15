@@ -10,7 +10,7 @@
     <view id='my-brush-merge-select'>
       <template is='selectComponent' data='{{id:-100, section:-100, row: -100, isSelect}}'></template>
     </view>
-    <text id='my-brush-merge-all'>全选</text>
+    <text bindtap='selectClick' id='my-brush-merge-all' data-id='-100' data-section='-100' data-row='-100'>全选</text>
     <view class='my-brush-merge-button' hover-class='hover-main-button' bindtap='mergeDataClick'>合并数据</view>
   </view>
 </view>

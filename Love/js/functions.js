@@ -71,34 +71,6 @@ function startHeartAnimation() {
         }
     }, c)
 }
-<<<<<<< HEAD
-
-(function(a) {
-    a.fn.typewriter = function() {
-        this.each(function() {
-            var d = a(this),
-                c = d.html(),
-                b = 0;
-            d.html("");
-
-            var e = setInterval(function() {
-                var f = c.substr(b, 1);
-                if (f == "<") {
-                    b = c.indexOf(">", b) + 1
-                } else {
-                    b++
-                }
-                d.html(c.substring(0, b) + (b & 1 ? "_" : ""));
-                if (b >= c.length) {
-                    clearInterval(e)
-                }
-            }, 75)
-        });
-        return this
-    }
-})(jQuery);
-=======
->>>>>>> origin/master
 
 (function(a) {
     a.fn.typewriter = function() {
@@ -125,22 +97,11 @@ function startHeartAnimation() {
     }
 })(jQuery);
 
-<<<<<<< HEAD
 function timeElapse() {
 
     var date = new Date()
     var year = date.getFullYear() + ''
     var month = formatNumber(date.getMonth() + 1)
-
-=======
-
-function timeElapse() {
-
-    var date = new Date()
-    var year = date.getFullYear() + ''
-    var month = formatNumber(date.getMonth())
-    console.log(date)
->>>>>>> origin/master
     var day = formatNumber(date.getDate())
     var hour = formatNumber(date.getHours())
     var minute = formatNumber(date.getMinutes())

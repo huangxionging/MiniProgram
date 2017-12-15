@@ -12,6 +12,10 @@
   margin-top: 8rpx;
 }
 
+/* .hover-score{
+
+} */
+
 .item-info-view{
   margin-left: 0rpx;
   align-content: center;

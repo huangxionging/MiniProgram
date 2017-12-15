@@ -129,8 +129,8 @@ Page({
   },
   selectClick: function (e) {
     var that = this
-    // baseTool.print(e)
-    select = 2 - e.target.id
+    baseTool.print(e)
+    select = 2 - e.currentTarget.dataset.id
     baseTool.print(select)
     baseTool.print(item)
     item.selects[0].select = select

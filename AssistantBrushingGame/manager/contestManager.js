@@ -9,6 +9,7 @@ function getHomePage() {
     var data = {
       memberId: loginManager.getMemberId()
     }
+    baseTool.print(url)
     wx.request({
       url: url,
       data: data,
@@ -16,7 +17,9 @@ function getHomePage() {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -45,7 +48,9 @@ function addContestUser(name = '', brushingMethodId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -72,7 +77,9 @@ function getContestUserList() {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -103,7 +110,9 @@ function selectContestUser(gameId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -138,7 +147,9 @@ function addContest(gameId = undefined, name = undefined) {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -166,7 +177,9 @@ function deleteContest(gameId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -196,7 +209,9 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
         if (res.data.code == 'success') {
           resolve(res.data.msg);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -225,7 +240,9 @@ function updatePlayers(name = '', playerId = '', brushingMethodId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -252,7 +269,9 @@ function delPlayers(playerId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {
@@ -310,7 +329,9 @@ function uploadBrushRecord() {
                   }
                 })
               } else {
-                reject(res.data.msg)
+                if (res.data.msg != 'memberId不能为空') {
+                  reject(res.data.msg)
+                }
               }
             },
             fail: function (res) {
@@ -339,7 +360,9 @@ function tagSynGame(gameId = '') {
         if (res.data.code == 'success') {
           resolve(res.data.data);
         } else {
-          reject(res.data.msg)
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
         }
       },
       fail: function () {

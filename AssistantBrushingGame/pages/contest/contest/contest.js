@@ -365,6 +365,10 @@ Page({
         macAddress: macAddress,
         score: res.playersList[index].score ? res.playersList[index].score : -100
       }
+
+      if (res.playersList[index].recordId) {
+        item.recordId = res.playersList[index].recordId
+      }
       if (data.isSyn == true && item.score == -100){
         item.score = 0
       }
@@ -1107,5 +1111,21 @@ Page({
       data.synCommandCount++
       that.dispatchConnect()
     }, 500)
+  },
+  scoreReportClick: function(e) {
+    var that = this
+   
+    var index = e.currentTarget.dataset.index
+    var item = data.dataList[index]
+    if (item.recordId) {
+      wx.navigateTo({
+        url: '/pages/my/brushScoreReport/brushScoreReport?name=' + item.name + '&recordId=' + item.recordId,
+        success: function(res) {},
+        fail: function(res) {
+          baseTool.print(res)
+        },
+        complete: function(res) {},
+      })
+    }
   }
 })

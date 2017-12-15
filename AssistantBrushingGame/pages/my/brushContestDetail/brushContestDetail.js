@@ -21,9 +21,7 @@ Page({
     /**
      * 是否正在同步
      */
-    dataList: [
-     
-    ]
+    dataList: []
   },
 
   /**
@@ -110,12 +108,22 @@ Page({
       if (res && res.length > 0) {
         baseTool.print(dataList)
         for (var index = 0; index < res.length; ++index) {
-          dataList.push({
+          var macAddress = res[index].macAddress.toUpperCase()
+          // 待同步的列表项
+          var item = {
             name: res[index].name,
             tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
+            macAddress: macAddress,
             score: res[index].score ? res[index].score : 0
-          })
+          }
+
+          if (res[index].recordId) {
+            item.recordId = res[index].recordId
+          }
+          
+          // 添加数据集合
+          dataList.push(item)
         }
 
         // 按分数从大到小排序
@@ -146,5 +154,21 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+  },
+  scoreReportClick: function (e) {
+    var that = this
+    var data = that.data
+    var index = e.currentTarget.dataset.index
+    var item = data.dataList[index]
+    if (item.recordId) {
+      wx.navigateTo({
+        url: '/pages/my/brushScoreReport/brushScoreReport?name=' + item.name + '&recordId=' + item.recordId,
+        success: function (res) { },
+        fail: function (res) {
+          baseTool.print(res)
+        },
+        complete: function (res) { },
+      })
+    }
   }
 })

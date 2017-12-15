@@ -6,32 +6,25 @@ const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const myManager = require('../../../manager/myManager.js')
 
-var data = {
-  pageNo: 1,
-  isSelect: false,
-  loadingDone: false,
-  dataList: []
-}
-
 
 Page({
 
   /**
    * 页面的初始数据
    */
-  data: data,
+  data: {
+    pageNo: 1,
+    isSelect: false,
+    loadingDone: false,
+    dataList: []
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that = this
-    data = {
-      pageNo: 1,
-      isSelect: false,
-      loadingDone: false,
-      dataList: []
-    }
+  
     that.loadData()
     app.userInfoReadyCallback = res => {
       that.loadData()
@@ -71,10 +64,11 @@ Page({
    */
   onPullDownRefresh: function () {
     var that = this
-    data.pageNo = 1
-    data.loadingDone = false
+    that.setData({
+      pageNo: 1,
+      isSelect: false
+    })
     this.loadData()
-    data.isSelect = false;
   },
 
   /**
@@ -82,30 +76,39 @@ Page({
    */
   onReachBottom: function () {
     var that = this
-    data.pageNo++
+    var pageNo = that.data.pageNo
+    that.setData({
+      pageNo: ++pageNo
+    })
     this.loadData()
   },
   loadData() {
     wx.showNavigationBarLoading()
     var that = this
-    myManager.pageQueryContest(data.pageNo).then(res => {
+    myManager.pageQueryContest(that.data.pageNo).then(res => {
       baseTool.print(res)
-      data.loadingDone = true
+      that.setData({
+        loadingDone: true
+      })
+
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       if (res.dataList && res.dataList.length > 0) {
-        if (data.pageNo == 1) {
-          data.dataList.splice(0, data.dataList.length)
+        if (that.data.pageNo == 1) {
+          that.setData({
+            dataList: []
+          })
         }
         var section = 0, row = 0
         // 解析数据
+        var dataList = that.data.dataList
         for (var index = 0; index < res.dataList.length; ++index) {
           // 如果是第一个
           var dict = res.dataList[index]
-          if (!data.dataList[section]) {
-            data.dataList.push({
+          if (!dataList[section]) {
+            dataList.push({
               id: (section + 1),
-              isSelect: data.isSelect,
+              isSelect: that.data.isSelect,
               date: dict.date,
               contestList: [
                 {
@@ -114,7 +117,7 @@ Page({
                   gameId: dict.gameId,
                   createTime: dict.createTime,
                   date: dict.date,
-                  isSelect: data.isSelect,
+                  isSelect: that.data.isSelect,
                   section: section,
                   row: row
                 }
@@ -122,8 +125,8 @@ Page({
             })
           } else {
             // 判断日期是否相同
-            section = data.dataList.length - 1, row = data.dataList[section].contestList.length
-            var item = data.dataList[section]
+            section = that.data.dataList.length - 1, row = that.data.dataList[section].contestList.length
+            var item = that.data.dataList[section]
             baseTool.print([section, row])
             if (item.date === dict.date) {
               item.contestList.push({
@@ -138,8 +141,10 @@ Page({
               })
             } else {
               ++section, row = 0
-              data.isSelect = false
-              data.dataList.push({
+              that.setData({
+                isSelect: false
+              })
+              dataList.push({
                 id: section + 1,
                 isSelect: false,
                 date: dict.date,
@@ -160,8 +165,10 @@ Page({
           }
           
         }
-        that.setData(data)
-        baseTool.print(data)
+        that.setData({
+          dataList: dataList
+        })
+        baseTool.print(that.data)
       } else{
 
       }
@@ -181,6 +188,7 @@ Page({
     var dict = e.currentTarget.dataset
     var id = dict.id, section = dict.section, row = dict.row
     baseTool.print([id, section, row])
+    var data = that.data
     if (id == -100 && section == -100 && row == -100) {
       // 全选中或者不选中
       data.isSelect = !data.isSelect
@@ -238,25 +246,33 @@ Page({
    * 将 data.dataList.contestList 某个元素的 isSelect 变成 true
    */
   changeContestListSelectState: function(section, row, select = false) {
+    var that = this
+    var data = that.data
     data.dataList[section].contestList[row].isSelect = select
+    that.setData(data)
   },
   changeDataListSectionSelectState: function (section, select = false) {
     var that = this
+    var data = that.data
     data.dataList[section].isSelect = select
     for (var index = 0; index < data.dataList[section].contestList.length; ++index) {
       that.changeContestListSelectState(section, index, select)
     }
+    that.setData(data)
   },
   changeDataListAllSelectState: function (select) {
     var that = this
+    var data = that.data
     data.isSelect = select
     for (var index = 0; index < data.dataList.length; ++index) {
       that.changeDataListSectionSelectState(index, select)
     }
+    that.setData(data)
   },
   mergeDataClick: function (e) {
     // baseTool.print(e)
-
+    var that = this
+    var data = that.data
     var mergeData = []
     for (var index1 = 0; index1 < data.dataList.length; ++index1) {
       for (var index2 = 0; index2 < data.dataList[index1].contestList.length; ++index2) {
@@ -265,6 +281,7 @@ Page({
         }
       }
     }
+    that.setData(data)
     baseTool.print(mergeData)
     if (mergeData.length == 0) {
       wx.showModal({
