@@ -61,5 +61,20 @@ Page({
     wx.navigateTo({
       url: '../ViewController/ViewController2',
     })
+  },
+  change3: function() {
+    wx.navigateTo({
+      url: '../Heart/Heart',
+    }) 
+  },
+  change4: function() {
+    wx.navigateTo({
+      url: '../ViewController/ViewController4'
+    })
+  },
+  change5: function () {
+    wx.navigateTo({
+      url: '../ViewController/ViewController5'
+    })
   }
 })

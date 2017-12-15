@@ -1,0 +1,4 @@
+<!--pages/Heart/Heart.wxml-->
+<view class='heart-container'>
+  <canvas canvas-id='heart'></canvas>
+</view>

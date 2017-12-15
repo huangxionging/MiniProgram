@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/ViewController/ViewController1",
-    "pages/ViewController/ViewController2"
+    "pages/ViewController/ViewController2",
+    "pages/Heart/Heart",
+    "pages/ViewController/ViewController4"
   ],
   "tabBar" : {
     "onReachBottomDistance": "true",
