@@ -97,29 +97,14 @@ function startHeartAnimation() {
     }
 })(jQuery);
 
-function timeElapse() {
 
-    var date = new Date()
-    var year = date.getFullYear() + ''
-    var month = formatNumber(date.getMonth() + 1)
-<<<<<<< HEAD
-=======
-
-=======
 
 function timeElapse() {
 
     var date = new Date()
     var year = date.getFullYear() + ''
-<<<<<<< HEAD
     var month = formatNumber(date.getMonth() + 1)
 
-=======
-    var month = formatNumber(date.getMonth())
-    console.log(date)
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
     var day = formatNumber(date.getDate())
     var hour = formatNumber(date.getHours())
     var minute = formatNumber(date.getMinutes())
