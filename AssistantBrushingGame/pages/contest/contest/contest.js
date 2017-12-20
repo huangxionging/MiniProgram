@@ -173,11 +173,18 @@ Page({
     })
   },
   createContest: () => {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
     contestManager.addContest().then(res => {
+      wx.hideLoading()
       if (typeof (res) != 'undefined') {
         var gameId = res.game.gameId
         var name = res.game.name
-
         wx.navigateTo({
           url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no',
           success: function(res) {},
@@ -188,6 +195,17 @@ Page({
       
     }).catch(res => {
       baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
     })
     
   },
@@ -247,6 +265,7 @@ Page({
       fail: function (res) {
         baseTool.print("openBluetoothAdapter: fail");
         baseTool.print(res);
+        wx.hideLoading()
         wx.showModal({
           title: '提示',
           content: '蓝牙不可用, 请检查蓝牙和GPS状态后再使用',
@@ -254,7 +273,6 @@ Page({
           confirmText: '确定',
           confirmColor: '#00a0e9',
           success: function (res) {
-            wx.hideLoading()
             that.setData({
               isSynNow: false
             })
