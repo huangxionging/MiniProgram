@@ -12,7 +12,8 @@ Page({
     name: '',
     recordId: '',
     loadDone: false,
-    url: ''
+    url: '',
+    clinicName: ''
   },
 
   /**
@@ -29,11 +30,14 @@ Page({
       complete: function (res) { },
     })
     var that = this
+    var clinicName = baseTool.valueForKey('clinicName')
     baseTool.print(options)
     that.setData({
       name: options.name,
-      recordId: options.recordId
+      recordId: options.recordId,
+      clinicName: clinicName
     })
+
     that.loadData()
     
   },
@@ -101,7 +105,7 @@ Page({
     var that = this
     var data = that.data
     
-    myManager.brushScoreReport(data.recordId, data.name).then(res => {
+    myManager.brushScoreReport(data.recordId, data.name, data.clinicName).then(res => {
       baseTool.print(res)
       that.setData({
         loadDone: true,

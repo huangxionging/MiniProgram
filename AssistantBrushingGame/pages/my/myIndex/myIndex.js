@@ -27,6 +27,13 @@ Page({
         title: '参赛者',
         quantity: 50,
         url: '../../contest/contestUser/contestUser'
+      },
+      {
+        id: 3,
+        icon: 'icon_user.png',
+        title: '我的诊所',
+        // quantity: 50,
+        url: '../myClinic/myClinic'
       }
     ]
   },

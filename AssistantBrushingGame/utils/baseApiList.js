@@ -71,4 +71,12 @@ module.exports = {
    * 标识
    */
   tagSyn: 'taggedSynchronization',
+  /**
+   * 更新诊所信息
+   */
+  updateClinicInfo: 'updateClinicInfo',
+  /**
+   * 获取诊所信息
+   */
+  getClinicInfo: 'getClinicInfo'
 }

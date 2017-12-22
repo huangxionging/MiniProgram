@@ -8,7 +8,7 @@
         <image src='../../../resource/contest_no_contest.png' id='contest-no-contest-image'></image>
         <text id='contest-no-contest-text'>暂无比赛, 快去创建比赛吧</text>
       </view>
-      <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest'>创建比赛</button>
+      <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest' disabled='{{createButtonDisable}}'>创建比赛</button>
     </view>
   </block>
   <block wx:else>
@@ -23,15 +23,18 @@
           </block>
           <block wx:else>
             <block wx:if='{{isSyn}}'>
-              <button  id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' >创建比赛</button>
+              <button  id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='createContest' disabled='{{createButtonDisable}}'>创建比赛</button>
             </block>
             <block wx:else>
               <button  id='contest-syn-button' class='main-button' hover-class='hover-main-button' bindtap='contestReSyn' >同步数据</button>
             </block>
           </block>
         </view>
-        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn'></image>  
-          <image src='../../../resource/contest_user.png' id='contest-create-image' bindtap='contestUserClick'></image> 
+        <image src='../../../resource/contest_syn.png' id='contest-synchronize-image'  bindtap='contestReSyn' ></image> 
+        <navigator url='../contestUser/contestUser'>
+        <image src='../../../resource/contest_user.png' id='contest-create-image'></image> 
+        </navigator>
+        
       </view>
       <view wx:if='{{!isSynNow && !isSyn}}' class='add-contest-user-view' bindtap='addContestUser'>
         <view class='add-contest-user-content-view'>

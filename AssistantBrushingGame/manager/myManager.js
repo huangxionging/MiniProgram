@@ -113,12 +113,13 @@ function mergeData(gameIds) {
   
 }
 
-function brushScoreReport(recordId='', name = '') {
+function brushScoreReport(recordId='', name = '', clinicName = '') {
   return new Promise((resolve, reject) => {
     var url = 'https://32teeth.cn/tem_img/html2png.php'
     var data = {
       recordId: recordId,
-      name: name
+      name: name,
+      zs_name: clinicName
     }
     baseTool.print(data)
     wx.request({
@@ -133,10 +134,76 @@ function brushScoreReport(recordId='', name = '') {
   })
 }
 
+function updateClinicInfo(name = '', imagUrl = ''){
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updateClinicInfo
+    var data = {
+      clinicPic: imagUrl,
+      clinicName: name,
+      openId: baseTool.valueForKey('openid')
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        resolve(res.data)
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+function getClinicInfo(){
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getClinicInfo
+    var data = {
+      openId: baseTool.valueForKey('openid')
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
+        }
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
+
+function getUploadToken(filePath = '') {
+  baseTool.print(filePath)
+  return new Promise((resolve, reject) => {
+    var fileName = filePath.split('//')[1];
+    var url = 'http://doctor.32teeth.cn/sys/api/getUploadToken/imageName/' + fileName 
+    baseTool.print(url)
+    wx.request({
+      url: url,
+      success: function (res) {
+        resolve(res);
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+  
+}
 module.exports = {
   pageQueryContest: pageQueryContest,
   getMyGameCount: getMyGameCount,
   getContestgMembers: getContestgMembers,
   mergeData: mergeData,
-  brushScoreReport: brushScoreReport
+  brushScoreReport: brushScoreReport,
+  updateClinicInfo: updateClinicInfo,
+  getClinicInfo: getClinicInfo,
+  getUploadToken: getUploadToken,
 }

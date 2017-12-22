@@ -55,6 +55,7 @@ var data = {
   synReconnectCount: 0,
   // 执行行数
   synExeLine: 54,
+  createButtonDisable: false,
 }
 Page({
 
@@ -96,6 +97,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var that = this
+    that.setData({
+      createButtonDisable: false
+    })
   },
 
   /**
@@ -172,7 +177,11 @@ Page({
       })
     })
   },
-  createContest: () => {
+  createContest: function(){
+    var that = this
+    that.setData({
+      createButtonDisable: true
+    })
     wx.showLoading({
       title: '加载中...',
       mask: true,
@@ -181,14 +190,21 @@ Page({
       complete: function(res) {},
     })
     contestManager.addContest().then(res => {
-      wx.hideLoading()
+      
       if (typeof (res) != 'undefined') {
         var gameId = res.game.gameId
         var name = res.game.name
         wx.navigateTo({
           url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no',
-          success: function(res) {},
-          fail: function(res) {},
+          success: function(res) {
+            // wx.hideLoading()
+          },
+          fail: function(res) {
+            // wx.hideLoading()
+            that.setData({
+              createButtonDisable: false
+            })
+          },
           complete: function(res) {},
         })
       }
@@ -196,6 +212,9 @@ Page({
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
+      that.setData({
+        createButtonDisable: false
+      })
       wx.showModal({
         title: '提示',
         content: res,
@@ -353,6 +372,10 @@ Page({
     })
   },
   contestUserClick: () => {
+    var that = this
+    that.setData({
+      createButtonDisable: true
+    })
     wx.navigateTo({
       url: '../contestUser/contestUser',
     })
@@ -442,7 +465,7 @@ Page({
     if (data.synCommandCount == data.dataList.length) {
       // 同步结束
       wx.hideLoading()
-      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步无数据:' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
+      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步未达标' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
       wx.showModal({
         title: '同步结果',
         content: content,
@@ -1069,7 +1092,10 @@ Page({
   addContestUser: function() {
     var gameId = data.gameId
     var name = data.contestTitle
-
+    var that = this
+    that.setData({
+      createButtonDisable: true
+    })
     // 提交消息
     baseMessageHandler.postMessage('createContest', res => {
       res(data.synchronizeObject)

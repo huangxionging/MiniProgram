@@ -256,6 +256,7 @@ function loginFlow() {
         var wxUser = res.wxUser
         if (wxUser.memberId) {
           baseTool.setValueForKey(wxUser.memberId, 'memberId')
+          baseTool.setValueForKey(wxUser.openid, 'openid')
           // reLauch()
           resolve(wxUser)
         } else if (wxUser.openid) {

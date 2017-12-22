@@ -13,7 +13,8 @@
     "pages/my/mergeData/mergeData",
     "pages/contest/addOneContestUser/addOneContestUser",
     "pages/mask/contestMask/contestMask",
-    "pages/my/brushScoreReport/brushScoreReport"
+    "pages/my/brushScoreReport/brushScoreReport",
+    "pages/my/myClinic/myClinic"
   ],
   "window": {
     "backgroundTextStyle": "dark",
