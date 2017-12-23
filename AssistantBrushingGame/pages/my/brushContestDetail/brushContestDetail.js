@@ -21,7 +21,8 @@ Page({
     /**
      * 是否正在同步
      */
-    dataList: []
+    dataList: [],
+    title: ''
   },
 
   /**
@@ -31,7 +32,8 @@ Page({
     var that = this
     baseTool.print(options)
     that.setData({
-      gameId: options.gameId
+      gameId: options.gameId,
+      title: options.name
     })
     // 设置导航栏标题
     wx.setNavigationBarTitle({
@@ -96,7 +98,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+
+    return {
+      title: ''
+    }
   },
   loadData() {
     var that = this
