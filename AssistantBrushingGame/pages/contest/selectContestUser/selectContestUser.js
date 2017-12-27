@@ -218,7 +218,7 @@ Page({
             if (total == 0) {
               baseTool.print('获得服务超时')
               wx.closeBLEConnection({
-                deviceId: device.deviceId,
+                deviceId: that.data.deviceId,
                 success: function (res) {
                 },
                 fail: function (res) {
@@ -260,7 +260,7 @@ Page({
                   if (total == 0) {
                     baseTool.print('获得特征值超时')
                     wx.closeBLEConnection({
-                      deviceId: device.deviceId,
+                      deviceId: that.data.deviceId,
                       success: function (res) {
                       },
                       fail: function (res) {
@@ -301,7 +301,7 @@ Page({
                         if (total == 0) {
                           baseTool.print('预定通知超时')
                           wx.closeBLEConnection({
-                            deviceId: device.deviceId,
+                            deviceId: that.data.deviceId,
                             success: function (res) {
                             },
                             fail: function (res) {
@@ -350,7 +350,7 @@ Page({
                             }
                             if (total == 0) {
                               wx.closeBLEConnection({
-                                deviceId: device.deviceId,
+                                deviceId: that.data.deviceId,
                                 success: function (res) {
                                 },
                                 fail: function (res) {
@@ -401,7 +401,7 @@ Page({
                     baseTool.print([res, '获得特征值失败'])
                     characteristicsTimeOut == true
                     wx.closeBLEConnection({
-                      deviceId: device.deviceId,
+                      deviceId: that.data.deviceId,
                       success: function (res) {
                       },
                       fail: function (res) {

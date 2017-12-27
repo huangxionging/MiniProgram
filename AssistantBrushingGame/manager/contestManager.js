@@ -5,6 +5,16 @@ const baseApiList = require('../utils/baseApiList.js')
 const loginManager = require('./loginManager.js')
 function getHomePage() {
   return new Promise((resolve, reject) => {
+
+    wx.getStorage({
+      key: 'gameObject',
+      success: function(res) {
+        var gameObject = res.data
+        var gameList = 
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
     var data = {
       memberId: loginManager.getMemberId()
@@ -35,29 +45,67 @@ function getHomePage() {
  */
 function addContestUser(name = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContestUser
-    var data = {
-      name: name,
-      brushingMethodId: brushingMethodId,
-      memberId: loginManager.getMemberId()
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContestUser
+    // var data = {
+    //   name: name,
+    //   brushingMethodId: brushingMethodId,
+    //   memberId: loginManager.getMemberId()
+    // }
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+
+    var contestUserObject = wx.getStorageSync('contestUserObject')
+    if (!contestUserObject) {
+      wx.setStorageSync('contestUserObject', {
+        // 记录数据
+        contestUserList: [],
+        // 去重名使用
+        contestUserNameObject: {},
+        // 更新数据时使用
+        // 主键当做 id 使用
+        primaryKey: 0
+      })
+      contestUserObject = baseTool.valueForKey('contestUserObject')
+    } 
+
+    if (contestUserObject.contestUserNameObject[name]) {
+      reject('名字重复')
+    } else {
+      var playerId = contestUserObject.primaryKey++
+      contestUserObject.contestUserNameObject[name] = playerId
+      contestUserObject.contestUserList.push({
+        name: name,
+        brushingMethodId: brushingMethodId,
+        playerId: playerId 
+      })
+
+      wx.setStorage({
+        key: 'contestUserObject',
+        data: contestUserObject,
+        success: function (res) {
+          resolve(res)
+        },
+        fail: function (res) {
+          reject(res)
+        },
+        complete: function (res) { },
+      })
     }
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
-          }
-        }
-      },
-      fail: function () {
-        reject(baseTool.errorMsg)
-      },
-      complete: function (res) { },
-    })
   })
 }
 
@@ -66,26 +114,38 @@ function addContestUser(name = '', brushingMethodId = '') {
  */
 function getContestUserList() {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getContestUserList
-    var data = {
-      memberId: loginManager.getMemberId()
-    }
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
-          }
-        }
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getContestUserList
+    // var data = {
+    //   memberId: loginManager.getMemberId()
+    // }
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+    wx.getStorage({
+      key: 'contestUserObject',
+      success: function(res) {
+        baseTool.print(res.data.contestUserList)
+        resolve(res.data.contestUserList)
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function(res) {
+        baseTool.print(res)
+        resolve(res)
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   })
 }
@@ -95,28 +155,54 @@ function getContestUserList() {
  */
 function selectContestUser(gameId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.selectContestUser
-    var data = {
-      memberId: loginManager.getMemberId(),
-      gameId: gameId
-    }
-    baseTool.print(data)
-    baseTool.print(url)
-    wx.request({
-      url: url,
-      data: data,
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.selectContestUser
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    //   gameId: gameId
+    // }
+    // baseTool.print(data)
+    // baseTool.print(url)
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     baseTool.print(res)
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+
+    wx.getStorage({
+      key: 'contestUserObject',
       success: function (res) {
-        baseTool.print(res)
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
+        var userList = []
+        var contestUserObject = res.data
+        var contestUserList = contestUserObject.contestUserList
+        var gameList = wx.getStorageSync('gameObject').gameList
+        var gameItem = gameList[gameList.length - 1]
+        for (var index = 0; index < contestUserList.length; ++index) {
+          var obj = {
+            name: contestUserList[index].name,
+            playerId: contestUserList[index].playerId,
+            brushingMethodId: contestUserList[index].brushingMethodId,
+            isBound: gameItem.deviceUserBindObject[contestUserList[index].playerId] ? true : false
           }
+          userList.push(obj)
         }
+        resolve(userList)
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function (res) {
+        baseTool.print(res)
+        resolve(res)
       },
       complete: function (res) { },
     })
@@ -128,35 +214,115 @@ function selectContestUser(gameId = '') {
  */
 function addContest(gameId = undefined, name = undefined) {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContest
-    var data = {
-      memberId: loginManager.getMemberId(),
-    }
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContest
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    // }
+    // if (gameId) {
+    //   data.gameId = gameId
+    // }
 
-    if (gameId) {
-      data.gameId = gameId
-    }
+    // if (name) {
+    //   data.name = name
+    // }
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
 
-    if (name) {
-      data.name = name
-    }
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
+    // 非空修改比赛 id
+    if (gameId != undefined) {
+
+      wx.getStorage({
+        key: 'gameObject',
+        success: function(res) {
+          var gameObject = res.data
+          var gameNameObject = gameObject.gameNameObject
+          var gameList = gameObject.gameList
+          // 删除设备数为 0 的
+          for (var index = gameList.length - 1; index >= 0; --index) {
+            // 没有设备
+            if (gameList[index].gameId == gameId) {
+              delete gameNameObject[gameList[index].name]
+              gameNameObject[name] = gameId
+              gameList[index].name = name
+              break
+            }
           }
-        }
-      },
-      fail: function () {
-        reject(baseTool.errorMsg)
-      },
-      complete: function (res) { },
-    })
+          wx.setStorage({
+            key: 'gameObject',
+            data: gameObject,
+            success: function (res) {
+              resolve(res)
+            },
+            fail: function (res) {
+              reject(res)
+            },
+            complete: function (res) { },
+          })
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      
+    } else {
+      var gameObject = wx.getStorageSync('gameObject')
+      if (!gameObject) {
+        wx.setStorageSync('gameObject', {
+          // 记录数据
+          gameList: [],
+          // 去重名使用
+          gameNameObject: {},
+          // 主键当做 id 使用
+          primaryKey: 0
+        })
+        gameObject = baseTool.valueForKey('gameObject')
+      }
+
+      var gameId = gameObject.primaryKey++
+      var name = '刷牙比赛' + gameObject.gameList.length
+      var deviceList = []
+      gameObject.gameList.push({
+        gameId: gameId,
+        name: name,
+        deviceUserBindObject: {},
+        deviceList: [],
+        createTime: baseTool.getCurrentTime(),
+        isSyn: false, // 是否已经同步服务器
+      })
+      gameObject.gameNameObject[name] = gameId
+
+      wx.setStorage({
+        key: 'gameObject',
+        data: gameObject,
+        success: function (res) {
+          resolve({
+            game: {
+              gameId: gameId,
+              name: name
+            }
+          })
+        },
+        fail: function (res) {
+          reject(res)
+        },
+        complete: function (res) { },
+      })
+    }
+    
   })
 }
 
@@ -165,57 +331,136 @@ function addContest(gameId = undefined, name = undefined) {
  */
 function deleteContest(gameId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.deleteContest
-    var data = {
-      memberId: loginManager.getMemberId(),
-      gameId: gameId,
-    }
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.deleteContest
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    //   gameId: gameId,
+    // }
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+
+    wx.getStorage({
+      key: 'gameObject', 
+      success: function(res) {
+        var gameObject = res.data
+        var gameNameObject = gameObject.gameNameObject
+        var gameList = gameObject.gameList
+        // 删除设备数为 0 的
+        for (var index = gameList.length - 1; index >= 0 ; --index) {
+          // 没有设备
+          if (gameList[index].deviceList.length == 0) {
+            delete gameNameObject[gameList[index].name]
+            gameList.splice(index, 1)
+          } else {
+            break
           }
         }
+        wx.setStorage({
+          key: 'gameObject',
+          data: gameObject,
+          success: function(res) {
+            resolve(res)
+          },
+          fail: function(res) {
+            reject(res)
+          },
+          complete: function(res) {},
+        })
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function(res) {
+        reject(res)
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
+    
   })
 }
 
 function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindContestUser
-    var data = {
-      memberId: loginManager.getMemberId(),
-      gameId: gameId,
-      player: player,
-      playerId: playerId,
-      macAddress: macAddress,
-      brushingMethodId: brushingMethodId,
-    }
-    baseTool.print(data)
-    wx.request({
-      url: url,
-      data: data,
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindContestUser
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    //   gameId: gameId,
+    //   player: player,
+    //   playerId: playerId,
+    //   macAddress: macAddress,
+    //   brushingMethodId: brushingMethodId,
+    // }
+    // baseTool.print(data)
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.msg);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+    wx.getStorage({
+      key: 'gameObject',
       success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.msg);
+        var gameObject = res.data
+        var gameNameObject = gameObject.gameNameObject
+        var gameList = gameObject.gameList
+        // 删除设备数为 0 的
+        var indicate = gameList.length - 1
+        var gameItem = gameList[indicate]
+        // 添加到这场比赛
+        if (gameItem.gameId == gameId) {
+
+          gameItem.deviceList.push({
+            gameId: gameId,
+            player: player,
+            playerId: playerId,
+            macAddress: macAddress,
+            brushingMethodId: brushingMethodId,
+            score: 0
+          })
+          // 记录绑定, 用于快速查询绑定数据
+          gameItem.deviceUserBindObject[playerId] = player
+
+          wx.setStorage({
+            key: 'gameObject',
+            data: gameObject,
+            success: function (res) {
+              resolve(res)
+            },
+            fail: function (res) {
+              reject(res)
+            },
+            complete: function (res) { },
+          })
         } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
-          }
+          reject('绑定失败')
         }
+        
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function (res) {
+        reject(res)
       },
       complete: function (res) { },
     })
@@ -224,58 +469,137 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
 
 function updatePlayers(name = '', playerId = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updatePlayers
-    var data = {
-      memberId: loginManager.getMemberId(),
-      name: name,
-      playerId: playerId,
-      brushingMethodId: brushingMethodId,
-    }
-    baseTool.print(data)
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        baseTool.print(res)
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updatePlayers
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    //   name: name,
+    //   playerId: playerId,
+    //   brushingMethodId: brushingMethodId,
+    // }
+    // baseTool.print(data)
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     baseTool.print(res)
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+    wx.getStorage({
+      key: 'contestUserObject',
+      success: function(res) {
+        var contestUserObject = res.data
+        var contestUserList = contestUserObject.contestUserList
+        var oldPlayerId = contestUserObject.contestUserNameObject[name]
+        // id 不同且名字一样 则判定重名
+        if (oldPlayerId && oldPlayerId != playerId){
+          reject('重名了')
         } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
+          for (var index = 0; index < contestUserList.length; index++) {
+            if (contestUserList[index].playerId == playerId) {
+
+              // 删除旧数据
+              delete contestUserObject.contestUserNameObject[contestUserList[index].name]
+              // 添加新数据
+              contestUserObject.contestUserNameObject[name] = playerId
+              // 更改列表数据
+              contestUserList[index].name = name
+              contestUserList[index].brushingMethodId = brushingMethodId
+              break
+            }
           }
+
+          wx.setStorage({
+            key: 'contestUserObject',
+            data: contestUserObject,
+            success: function (res) {
+              resolve(res)
+            },
+            fail: function (res) {
+              reject(res)
+            },
+            complete: function (res) { },
+          })
         }
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function(res) {
+        reject(res)
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   })
 }
 
 function delPlayers(playerId = '') {
   return new Promise((resolve, reject) => {
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
-    var data = {
-      memberId: loginManager.getMemberId(),
-      playerId: playerId,
-    }
-    baseTool.print(data)
-    wx.request({
-      url: url,
-      data: data,
+    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
+    // var data = {
+    //   memberId: loginManager.getMemberId(),
+    //   playerId: playerId,
+    // }
+    // baseTool.print(data)
+    // wx.request({
+    //   url: url,
+    //   data: data,
+    //   success: function (res) {
+    //     baseTool.print(res)
+    //     if (res.data.code == 'success') {
+    //       resolve(res.data.data);
+    //     } else {
+    //       if (res.data.msg != 'memberId不能为空') {
+    //         reject(res.data.msg)
+    //       }
+    //     }
+    //   },
+    //   fail: function () {
+    //     reject(baseTool.errorMsg)
+    //   },
+    //   complete: function (res) { },
+    // })
+
+    wx.getStorage({
+      key: 'contestUserObject',
       success: function (res) {
-        baseTool.print(res)
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
+        var contestUserObject = res.data
+        var contestUserList = contestUserObject.contestUserList
+        var indicate = -100
+        for (var index = 0; index < contestUserList.length; index++) {
+          if (contestUserList[index].playerId == playerId) {
+            indicate = index
+            break
           }
         }
+
+        if (indicate != -100){
+          delete contestUserObject.contestUserNameObject[contestUserList[indicate].name]
+          contestUserList.splice(indicate, 1)
+        }
+        
+        baseTool.print(contestUserList)
+        wx.setStorage({
+          key: 'contestUserObject',
+          data: contestUserObject,
+          success: function (res) {
+            resolve(res)
+          },
+          fail: function (res) {
+            reject(res)
+          },
+          complete: function (res) { },
+        })
       },
-      fail: function () {
-        reject(baseTool.errorMsg)
+      fail: function (res) {
+        reject(res)
       },
       complete: function (res) { },
     })

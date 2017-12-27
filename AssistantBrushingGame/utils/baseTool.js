@@ -162,6 +162,26 @@ function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
   }
 }
 
+function getCurrentTime() {
+  var date = new Date();
+  var year = date.getFullYear() + ''
+  var month = zeroFormat(date.getMonth() + 1 + '')
+  var day = zeroFormat(date.getDate() + '')
+  var hour = zeroFormat(date.getHours() + '')
+  var minute = zeroFormat(date.getMinutes() + '')
+  var second = zeroFormat(date.getSeconds() + '')
+
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+}
+
+/**
+ * 加 0 格式化字符串
+ */
+function zeroFormat(oldString = '') {
+  return oldString.length == 1 ? '0' + oldString : oldString
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -208,4 +228,6 @@ module.exports = {
   errorMsg: '网络错误',
   // 启动定时器功能
   startTimer: startTimer,
+  // 获取当前时间
+  getCurrentTime: getCurrentTime
 }

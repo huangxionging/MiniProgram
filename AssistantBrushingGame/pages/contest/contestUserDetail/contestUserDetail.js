@@ -5,46 +5,17 @@ const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-var select = true
-var item = {
-  isNext: false,
-  playerId: '',
-  name: '',
-  deleteLine: true,
-  selects: [
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '标准巴氏刷牙法 (6岁以上)',
-      id: 1,
-      select: true
-    },
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '圆弧刷牙法 (6岁以下)',
-      id: 2,
-      select: false
-    }
-  ]
-}
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    item: item
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    baseTool.print(33)
-    select = true
-    item = {
-      playerId: '',
-      isNext: false,
+    select: true,
+    item: {
       deleteLine: true,
+      isNext: false,
       name: '',
       selects: [
         {
@@ -61,7 +32,18 @@ Page({
         }
       ]
     }
-    baseTool.print(item)
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+
+    var that = this
+    var select = that.data.select
+    var item = that.data.item
+    baseTool.print(33)
+    
     baseTool.print(options)
     item.name = options.name
     item.playerId = options.playerId
@@ -129,6 +111,8 @@ Page({
   },
   selectClick: function (e) {
     var that = this
+    var select = that.data.select
+    var item = that.data.item
     baseTool.print(e)
     select = 2 - e.currentTarget.dataset.id
     baseTool.print(select)
@@ -138,11 +122,14 @@ Page({
     baseTool.print(item)
     // 终于渲染成功了
     that.setData({
+      select: select,
       item: item
     })
   },
   userInfoSave: function () {
     var that = this
+    var select = that.data.select
+    var item = that.data.item
     if (item.name == '') {
       wx.showModal({
         title: '提示',
@@ -194,9 +181,17 @@ Page({
   },
   getInputUserName: function (e) {
     baseTool.print(e)
+    var that = this
+    var item = that.data.item
     item.name = e.detail.value
+    // 终于渲染成功了
+    that.setData({
+      item: item
+    })
   },
   deleteClick: function() {
+    var that = this
+    var item = that.data.item
     wx.showModal({
       title: '提示',
       content: '你确定要删除该用户?',

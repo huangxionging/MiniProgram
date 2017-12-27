@@ -5,42 +5,15 @@ const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const contestManager = require('../../../manager/contestManager.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-var select = true
-var item = {
-  isNext: false,
-  name: '',
-  selects: [
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '标准巴氏刷牙法 (6岁以上)',
-      id: 1,
-      select: true
-    },
-    {
-      selectButton: 'userInfo-brush-select-item',
-      title: '圆弧刷牙法 (6岁以下)',
-      id: 2,
-      select: false
-    }
-  ]
-}
+
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    item: item
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    app.userInfoReadyCallback = res => {
-    }
-    baseTool.print(item)
-    item = {
+    select: true,
+    item: {
       isNext: false,
       name: '',
       selects: [
@@ -57,6 +30,14 @@ Page({
           select: false
         }
       ]
+    }
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    app.userInfoReadyCallback = res => {
     }
   },
 
@@ -110,6 +91,8 @@ Page({
   },
   selectClick: function(e) {
     var that = this
+    var select = that.data.select
+    var item = that.data.item
     baseTool.print(e)
     select = 2 - e.currentTarget.dataset.id
     baseTool.print(select)
@@ -119,11 +102,14 @@ Page({
     baseTool.print(item)
     // 终于渲染成功了
     that.setData({
+      select: select,
       item: item
     })
   },
   userInfoSave: function() {
     var that = this
+    var select = that.data.select
+    var item = that.data.item
     baseTool.print(item.name)
     if (item.name == '') {
       wx.showModal({
@@ -159,6 +145,7 @@ Page({
       item.name = ''
       // 终于渲染成功了
       that.setData({
+        select: select,
         item: item
       })
 
@@ -183,6 +170,11 @@ Page({
   },
   getInputUserName: function (e){
     baseTool.print(e)
+    var that = this
+    var item = that.data.item
     item.name = e.detail.value
+    that.setData({
+      item: item
+    })
   }
 })
