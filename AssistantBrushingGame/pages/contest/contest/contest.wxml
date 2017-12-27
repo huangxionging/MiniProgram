@@ -3,7 +3,9 @@
 <view class='contest-container' wx:if='{{loadingDone}}'>
   <block wx:if='{{!hasData}}'>
     <view class='contest-content-view'>
-      <image src='../../../resource/contest_user.png' id='contest-user' bindtap='contestUserClick'></image>
+      <navigator url='../contestUser/contestUser'>
+        <image src='../../../resource/contest_user.png' id='contest-create-image'></image> 
+      </navigator>
       <view id='contest-no-contest-view'>
         <image src='../../../resource/contest_no_contest.png' id='contest-no-contest-image'></image>
         <text id='contest-no-contest-text'>暂无比赛, 快去创建比赛吧</text>

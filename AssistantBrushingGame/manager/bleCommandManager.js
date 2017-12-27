@@ -60,7 +60,7 @@ function getFormatDateArray() {
   return [yearHead, yearEnd, month, day, hour, minute, second]
 }
 
-function dataBoxCommand(array, macAddress) { //构造函数模式
+function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构造函数模式
   var that = this;
   var array = array || [];
 
@@ -86,8 +86,9 @@ function dataBoxCommand(array, macAddress) { //构造函数模式
 
   //此两项数据通过接口获得
   data.macAddress = macAddress;
-
-
+  data.brushingMethodId = brushingMethodId
+  baseTool.print(brushingMethodId)
+  data.playerName = playerName
   if (array.length > 70) {
     data.outLeftUpXBrushCount = array[10];
     data.outLeftUpYBrushCount = array[11];

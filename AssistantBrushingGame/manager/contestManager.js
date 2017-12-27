@@ -9,14 +9,14 @@ function getHomePage() {
     wx.getStorage({
       key: 'gameObject',
       success: function(res) {
-        baseTool.print(res)
+        baseTool.print([res, '读取成功'])
         var gameObject = res.data
         var gameList = gameObject.gameList
         var gameItem = gameList[gameList.length - 1]
         resolve(gameItem)
       },
       fail: function(res) {
-        baseTool.print(res)
+        baseTool.print([res, '读取失败'])
         var url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
         var data = {
           memberId: loginManager.getMemberId()
@@ -26,13 +26,19 @@ function getHomePage() {
           url: url,
           data: data,
           success: function (res) {
+            baseTool.print([res])
             if (res.data.code == 'success') {
               var result = res.data.data
+              if (result == undefined) {
+                resolve(result)
+                return
+              }
               var gameInfo = result.gameInfo
               var playersList = result.playersList
               // 有结果
-              if (typeof (result) != 'undefined' && playersList) {
-
+             
+              if (typeof (result) != 'undefined' && playersList != undefined) {
+                baseTool.print([result, playersList])
                 // 先设置数据
                 wx.setStorageSync('gameObject', {
                   // 记录数据
@@ -79,19 +85,20 @@ function getHomePage() {
                   isSyn: true, // 是否已经同步服务器
                 }
                 gameObject.gameList.push(gameItem)
+                wx.setStorage({
+                  key: 'gameObject',
+                  data: gameObject,
+                  success: function (res) {
+                    resolve(gameItem)
+                  },
+                  fail: function (res) {
+                    reject(res)
+                  },
+                  complete: function (res) { },
+                })
+              } else {
+                resolve(result)
               }
-
-              wx.setStorage({
-                key: 'gameObject',
-                data: gameObject,
-                success: function (res) {
-                  resolve(gameItem)
-                },
-                fail: function (res) {
-                  reject(res)
-                },
-                complete: function (res) { },
-              })
               
             } else {
               if (res.data.msg != 'memberId不能为空') {
@@ -679,62 +686,80 @@ function delPlayers(playerId = '') {
   })
 }
 
-function uploadBrushRecord() {
+function uploadBrushRecord(gameId) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
     var that = this;
     var dataStorageAll = new Array()
     wx.getStorage({
-      key: 'dataObjectList',
+      key: 'deviceDataObject',
       success: function (res) {
-        dataStorageAll = res.data;
-        console.log('wx getStorage', res.data)
-        if (dataStorageAll != null && dataStorageAll.length >= 1) {
-          var jsonData = JSON.stringify(dataStorageAll)
-          console.log('send:', jsonData, that.data);
-          console.log('jsonData:', jsonData)
-          var url = baseURL.baseBrushDomain + baseApiList.uploadRecord
-          baseTool.print(url)
-          wx.request({
-            //上传数据接口
-            url: url,
-            //如果设为json，会尝试对返回的数据做一次 JSON.parse
-            dataType: 'json',
-            data: {
-              sign: '123456',
-              timestamp: Date.parse(new Date()),
-              data: jsonData,
-            },
-            header: {
-              "sourceType": "wx",
-              'content-type': 'application/x-www-form-urlencoded', // 默认值
-            },
-            method: 'POST',
-            success: function (res) {
-              console.log(res.data)
-              //上传数据返回成功之后刷新主页分数
-              baseTool.print(res)
-              if (res.data.code == 'success') {
-                resolve(res.data.data);
-                //清空数据
-                //成功之后 移除数据
-                wx.removeStorage({
-                  key: 'dataObjectList',
-                  success: function (res) {
-                    console.log(res.data)
-                    console.log('wx data remove', dataStorageAll)
+        var deviceDataObject = res.data
+        var dataObjectList = deviceDataObject.dataObjectList
+        var indicate = -100
+        for (var index = dataObjectList.length - 1; index >= 0; --index) {
+          if (dataObjectList[index].gameId == gameId) {
+            indicate = index
+            break
+          }
+        }
+        if (indicate != -100) {
+          var dataStorageAll = dataObjectList[indicate].deviceDataObjectList
+          console.log('wx getStorage', dataStorageAll)
+          if (dataStorageAll != null && dataStorageAll.length >= 1) {
+            var jsonData = JSON.stringify(dataStorageAll)
+            console.log('send:', jsonData, that.data);
+            console.log('jsonData:', jsonData)
+            console.log('dataObjectList:', dataObjectList[indicate])
+            var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
+            baseTool.print(url)
+            wx.request({
+              //上传数据接口
+              url: url,
+              //如果设为json，会尝试对返回的数据做一次 JSON.parse
+              dataType: 'json',
+              data: {
+                sign: '123456',
+                timestamp: Date.parse(new Date()),
+                memberId: loginManager.getMemberId(),
+                gameName: dataObjectList[indicate].gameName,
+                data: jsonData,
+              },
+              header: {
+                "sourceType": "wx",
+                'content-type': 'application/x-www-form-urlencoded', // 默认值
+              },
+              method: 'POST',
+              success: function (res) {
+                console.log(res.data)
+                //上传数据返回成功之后刷新主页分数
+                baseTool.print(res)
+                if (res.data.code == 'success') {
+                  resolve(res.data.data);
+                  //清空数据
+                  //成功之后 移除数据
+                  wx.removeStorage({
+                    key: 'dataObjectList',
+                    success: function (res) {
+                      console.log(res.data)
+                      console.log('wx data remove', dataStorageAll)
+                    }
+                  })
+                } else {
+                  if (res.data.msg != 'memberId不能为空') {
+                    reject(res.data.msg)
                   }
-                })
-              } else {
-                if (res.data.msg != 'memberId不能为空') {
-                  reject(res.data.msg)
                 }
+              },
+              fail: function (res) {
+                reject(baseTool.errorMsg)
               }
-            },
-            fail: function (res) {
-              reject(baseTool.errorMsg)
-            }
-          })
+            })
+          } else {
+            reject('全部无数据')
+          }
+        } else {
+          reject('gameId 不存在')
         }
       }
     })
@@ -770,9 +795,96 @@ function tagSynGame(gameId = '') {
   })
 }
 
-function addDeviceDataObject(dataOject, gameId, macAddress, playerId, brushingMethodId) {
+function addDeviceDataObject(deviceDataOject, gameId, gameName) {
   return new Promise((resolve, reject) => {
-    deviceDataObject
+    wx.getStorage({
+      key: 'deviceDataObject',
+      success: function(res) {
+        var deviceDataObject = res.data
+        var dataObjectList = deviceDataObject.dataObjectList
+        var dataObjectItem = dataObjectList[dataObjectList.length - 1]
+        if (dataObjectItem.gameId != gameId) {
+          dataObjectList.push({
+            gameId: gameId,
+            gameName: gameName,
+            deviceDataObjectList: []
+          })
+          dataObjectItem = dataObjectList[dataObjectList.length - 1]
+        }
+        // 添加一条数据
+        dataObjectItem.deviceDataObjectList.push(deviceDataOject)
+        wx.setStorage({
+          key: 'deviceDataObject',
+          data: deviceDataObject,
+          success: function (res) {
+            resolve(res)
+          },
+          fail: function (res) {
+            reject(res)
+          },
+          complete: function (res) { },
+        })
+      },
+      fail: function(res) {
+        var deviceDataObject = {
+          dataObjectList: [{
+            gameId: gameId,
+            gameName: gameName,
+            deviceDataObjectList: [
+              deviceDataOject
+            ]
+          }]
+        }
+        wx.setStorage({
+          key: 'deviceDataObject',
+          data: deviceDataObject,
+          success: function(res) {
+            resolve(res)
+          },
+          fail: function(res) {
+            reject(res)
+          },
+          complete: function(res) {},
+        })
+      },
+      complete: function(res) {},
+    })
+  })
+}
+/**
+ * 删除设备数据
+ */
+function deleteDeviceDataObject(gameId) {
+  wx.getStorage({
+    key: 'deviceDataObject',
+    success: function (res) {
+      var deviceDataObject = res.data
+      var dataObjectList = deviceDataObject.dataObjectList
+      for (var index = dataObjectList.length - 1; index >= 0; --index) {
+        var dataObjectItem = dataObjectList[index]
+        if (dataObjectItem.gameId == gameId) {
+          // 删除数据
+          dataObjectList.splice(index, 1)
+          wx.setStorage({
+            key: 'deviceDataObject',
+            data: deviceDataObject,
+            success: function (res) {
+              resolve(res)
+            },
+            fail: function (res) {
+              reject(res)
+            },
+            complete: function (res) { },
+          })
+          break
+        } 
+      }
+      
+    },
+    fail: function (res) {
+      reject(res)
+    },
+    complete: function (res) { },
   })
 }
 
@@ -799,4 +911,8 @@ module.exports = {
   uploadBrushRecord: uploadBrushRecord,
   // 标识同步
   tagSynGame: tagSynGame,
+  // 添加设备数据
+  addDeviceDataObject: addDeviceDataObject,
+  // 删除已同步的数据
+  deleteDeviceDataObject: deleteDeviceDataObject,
 }

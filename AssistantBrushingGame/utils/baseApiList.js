@@ -78,5 +78,6 @@ module.exports = {
   /**
    * 获取诊所信息
    */
-  getClinicInfo: 'getClinicInfo'
+  getClinicInfo: 'getClinicInfo',
+  gameUploadBrushTeethRecord: 'gameUploadBrushTeethRecord'
 }

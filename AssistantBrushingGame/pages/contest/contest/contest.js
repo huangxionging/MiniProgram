@@ -147,10 +147,13 @@ Page({
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.print(res)
-      if (typeof (res) != 'undefined' && res.deviceList.length > 0) {
+      if (typeof (res) != 'undefined' && res.deviceList && res.deviceList.length > 0) {
         that.parseData(res)
-      } else if (typeof (res) != 'undefined' && res.deviceList.length == 0) {
+      } else if (typeof (res) != 'undefined') {
         that.deleteContest(res)
+        data.loadingDone = true
+        data.hasData = false
+        that.setData(data)
       } else if (typeof(res) == 'undefined'){
         data.loadingDone = true
         data.hasData = false
@@ -400,11 +403,12 @@ Page({
       var macAddress = res.deviceList[index].macAddress
       // 待同步的列表项
       var item = {
-        name: res.deviceList[index].name,
+        name: res.deviceList[index].player,
         tail: res.deviceList[index].tail,
         playerId: res.deviceList[index].playerId,
         macAddress: macAddress,
-        score: res.deviceList[index].score ? res.deviceList[index].score : -100
+        score: res.deviceList[index].score ? res.deviceList[index].score : -100,
+        brushingMethodId: res.deviceList[index].brushingMethodId
       }
 
       if (res.deviceList[index].recordId != '') {
@@ -465,7 +469,7 @@ Page({
     if (data.synCommandCount == data.dataList.length) {
       // 同步结束
       wx.hideLoading()
-      var content = '同步成功:' + data.synSuccessCount + '个; ' + '同步未达标' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
+      var content = '本地同步成功:' + data.synSuccessCount + '个; ' + '本地同步未达标' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
       wx.showModal({
         title: '同步结果',
         content: content,
@@ -473,10 +477,31 @@ Page({
         confirmText: '确定',
         confirmColor: '#00a0e9',
         success: function (res) {
-          that.getHomePage()
-          that.setData({
-            isSynNow: false
+
+          wx.showModal({
+            title: '小提示',
+            content: '如需马上查看分数, 请点击"确定"按钮连网把本地数据同步到云端计算',
+            showCancel: true,
+            cancelText: '取消',
+            cancelColor: 'red',
+            confirmText: '确定',
+            confirmColor: '#00a0e9',
+            success: function(res) {
+              if (res.confirm == true) {
+                that.upStorageDataToService()
+              } else {
+                that.getHomePage()                
+              }
+            },
+            fail: function(res) {
+
+            },
+            complete: function(res) {},
           })
+          
+          // that.setData({
+          //   isSynNow: false
+          // })
           wx.closeBluetoothAdapter({
             success: function (res) { },
             fail: function (res) { },
@@ -882,12 +907,17 @@ Page({
             } else {
               //如果有数据 上传数据
               //先把数据保存到微信
-              console.log('wx sava data', data.dataObjectList)
-              wx.setStorage({
-                key: "dataObjectList",
-                data: data.dataObjectList
-              })
-              that.upStorageDataToService();
+              wx.hideLoading()
+              data.synNodataTimeOut = true
+              baseTool.print([res, '数据上传成功'])
+              data.synExeLine = 888
+              that.synSuccessNextDevice()
+              // console.log('wx sava data', data.dataObjectList)
+              // wx.setStorage({
+              //   key: "dataObjectList",
+              //   data: data.dataObjectList
+              // })
+              // that.upStorageDataToService();
             }
           },
           fail: function(res) {
@@ -900,12 +930,17 @@ Page({
             } else {
               //如果有数据 上传数据
               //先把数据保存到微信
-              console.log('wx sava data', data.dataObjectList)
-              wx.setStorage({
-                key: "dataObjectList",
-                data: data.dataObjectList
-              })
-              that.upStorageDataToService();
+              wx.hideLoading()
+              data.synNodataTimeOut = true
+              baseTool.print([res, '数据上传成功'])
+              data.synExeLine = 912
+              that.synSuccessNextDevice()
+              // console.log('wx sava data', data.dataObjectList)
+              // wx.setStorage({
+              //   key: "dataObjectList",
+              //   data: data.dataObjectList
+              // })
+              // that.upStorageDataToService();
             }
           },
           complete: function(res) {},
@@ -927,12 +962,17 @@ Page({
             } else {
               //如果有数据 上传数据
               //先把数据保存到微信
-              console.log('wx sava data', data.dataObjectList)
-              wx.setStorage({
-                key: "dataObjectList",
-                data: data.dataObjectList
-              })
-              that.upStorageDataToService();
+              wx.hideLoading()
+              data.synNodataTimeOut = true
+              baseTool.print([res, '数据上传成功'])
+              data.synExeLine = 943
+              that.synSuccessNextDevice()
+              // console.log('wx sava data', data.dataObjectList)
+              // wx.setStorage({
+              //   key: "dataObjectList",
+              //   data: data.dataObjectList
+              // })
+              // that.upStorageDataToService();
             }
           },
           fail: function (res) {
@@ -945,12 +985,18 @@ Page({
             } else {
               //如果有数据 上传数据
               //先把数据保存到微信
-              console.log('wx sava data', data.dataObjectList)
-              wx.setStorage({
-                key: "dataObjectList",
-                data: data.dataObjectList
-              })
-              that.upStorageDataToService();
+              wx.hideLoading()
+              data.synNodataTimeOut = true
+              baseTool.print([res, '数据上传成功'])
+              data.synExeLine = 952
+              that.synSuccessNextDevice()
+              // console.log('wx sava data', data.dataObjectList)
+              // wx.setStorage({
+              //   key: "dataObjectList",
+              //   data: data.dataObjectList
+              // })
+
+              // that.upStorageDataToService();
             }
           },
           complete: function (res) { },
@@ -982,11 +1028,16 @@ Page({
       var typedArrayOneDate = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneCompleteData))
       baseTool.print([typedArrayOneDate, '一天的数据'])
       var deviceInfo = data.dataList[data.synCommandCount]
-      var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress);
+      var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId);
 
       baseTool.print(["dataObject", dataObject])
 
       //放入数据集合
+      contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
+        baseTool.print(["dataObject", res])
+      }).catch(res => {
+        baseTool.print(["错误信息", res])
+      })
       data.dataObjectList.push(dataObject);
       data.deviceDataList.push(oneCompleteData);
       baseTool.print(['dataList:', data.dataList])
@@ -1039,9 +1090,14 @@ Page({
       baseTool.print([typedArrayOneDate, '一天的数据'])
       var deviceInfo = data.dataList[data.synCommandCount]
       baseTool.print([data.synCommandCount, deviceInfo, '设备信息'])
-      var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress);
+      var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId);
       console.log("dataObject", dataObject)
 
+      contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
+        baseTool.print(["dataObject", res])
+      }).catch(res => {
+        baseTool.print(["错误信息", res])
+      })
       //放入数据集合
       data.dataObjectList.push(dataObject);
       data.deviceDataList.push(oneCompleteData);
@@ -1077,7 +1133,7 @@ Page({
       fail: function(res) {},
       complete: function(res) {},
     })
-    contestManager.uploadBrushRecord().then(res => {
+    contestManager.uploadBrushRecord(data.gameId).then(res => {
       // 设备数据上传成功
       wx.hideLoading()
       data.synNodataTimeOut = true
