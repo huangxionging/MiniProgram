@@ -9,34 +9,105 @@ function getHomePage() {
     wx.getStorage({
       key: 'gameObject',
       success: function(res) {
+        baseTool.print(res)
         var gameObject = res.data
-        var gameList = 
+        var gameList = gameObject.gameList
+        var gameItem = gameList[gameList.length - 1]
+        resolve(gameItem)
       },
-      fail: function(res) {},
+      fail: function(res) {
+        baseTool.print(res)
+        var url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
+        var data = {
+          memberId: loginManager.getMemberId()
+        }
+        baseTool.print(url)
+        wx.request({
+          url: url,
+          data: data,
+          success: function (res) {
+            if (res.data.code == 'success') {
+              var result = res.data.data
+              var gameInfo = result.gameInfo
+              var playersList = result.playersList
+              // 有结果
+              if (typeof (result) != 'undefined' && playersList) {
+
+                // 先设置数据
+                wx.setStorageSync('gameObject', {
+                  // 记录数据
+                  gameList: [],
+                  // 去重名使用
+                  gameNameObject: {},
+                  // 主键当做 id 使用
+                  primaryKey: 0
+                })
+                // 再次读取
+                var gameObject = wx.getStorageSync('gameObject')
+                // 设置 id
+                var gameId = gameObject.primaryKey++
+                // 设置名字
+                var name = gameInfo.name
+                // 添加比赛
+                gameObject.gameNameObject[name] = gameId
+                // 缓存比赛
+                var deviceList = []
+                var deviceUserBindObject = {}
+                for (var index = 0; index < playersList.length; ++index) {
+                  var macAddress =playersList[index].macAddress.toUpperCase()
+                  // 待同步的列表项
+                  var item = {
+                    gameId: gameId,
+                    player: playersList[index].name,
+                    playerId: playersList[index].playerId,
+                    macAddress: macAddress,
+                    score: playersList[index].score ? res.playersList[index].score : 0,
+                    recordId: playersList[index].recordId ? playersList[index].recordId : '',
+                    tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
+                    brushingMethodId: 'a002c7680a5f4f8ea0b1b47fa3f2b947',
+                    isBound: true            
+                  }
+                  deviceUserBindObject[playersList[index].playerId] = playersList[index].name
+                  deviceList.push(item)
+                }
+                var gameItem = {
+                  gameId: gameId,
+                  name: name,
+                  deviceUserBindObject: deviceUserBindObject,
+                  deviceList: deviceList,
+                  createTime: gameInfo.createTime,
+                  isSyn: true, // 是否已经同步服务器
+                }
+                gameObject.gameList.push(gameItem)
+              }
+
+              wx.setStorage({
+                key: 'gameObject',
+                data: gameObject,
+                success: function (res) {
+                  resolve(gameItem)
+                },
+                fail: function (res) {
+                  reject(res)
+                },
+                complete: function (res) { },
+              })
+              
+            } else {
+              if (res.data.msg != 'memberId不能为空') {
+                reject(res.data.msg)
+              }
+            }
+          },
+          fail: function () {
+            reject(baseTool.errorMsg)
+          },
+          complete: function (res) { },
+        })
+      },
       complete: function(res) {},
     })
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
-    var data = {
-      memberId: loginManager.getMemberId()
-    }
-    baseTool.print(url)
-    wx.request({
-      url: url,
-      data: data,
-      success: function (res) {
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          if (res.data.msg != 'memberId不能为空') {
-            reject(res.data.msg)
-          }
-        }
-      },
-      fail: function () {
-        reject(baseTool.errorMsg)
-      },
-      complete: function (res) { },
-    })
+    
   })
 }
 
@@ -294,7 +365,6 @@ function addContest(gameId = undefined, name = undefined) {
 
       var gameId = gameObject.primaryKey++
       var name = '刷牙比赛' + gameObject.gameList.length
-      var deviceList = []
       gameObject.gameList.push({
         gameId: gameId,
         name: name,
@@ -438,7 +508,10 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
             playerId: playerId,
             macAddress: macAddress,
             brushingMethodId: brushingMethodId,
-            score: 0
+            score: 0,
+            recordId: '',
+            tail: '(game-' + macAddress.toLowerCase() + ')',
+            isBound: true
           })
           // 记录绑定, 用于快速查询绑定数据
           gameItem.deviceUserBindObject[playerId] = player
@@ -694,6 +767,12 @@ function tagSynGame(gameId = '') {
       },
       complete: function (res) { },
     })
+  })
+}
+
+function addDeviceDataObject(dataOject, gameId, macAddress, playerId, brushingMethodId) {
+  return new Promise((resolve, reject) => {
+    deviceDataObject
   })
 }
 

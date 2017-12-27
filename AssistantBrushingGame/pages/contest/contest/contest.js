@@ -147,10 +147,10 @@ Page({
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.print(res)
-      if (typeof(res) != 'undefined' && res.playersList) {
+      if (typeof (res) != 'undefined' && res.deviceList.length > 0) {
         that.parseData(res)
-      } else if (typeof (res) != 'undefined' && res.gameInfo) {
-        that.deleteContest(res.gameInfo)
+      } else if (typeof (res) != 'undefined' && res.deviceList.length == 0) {
+        that.deleteContest(res)
       } else if (typeof(res) == 'undefined'){
         data.loadingDone = true
         data.hasData = false
@@ -386,28 +386,28 @@ Page({
   parseData: function(res) {
     baseTool.print(res)
     var that = this
-    data.contestTitle = res.gameInfo.name
-    data.contestDate = res.gameInfo.createTime
-    data.gameId = res.gameInfo.gameId
+    data.contestTitle = res.name
+    data.contestDate = res.createTime
+    data.gameId = res.gameId
     data.loadingDone = true
     data.hasData = true
     data.synchronizeObject = null
     data.synchronizeObject = {}
     // 清空数组
-    data.isSyn = res.gameInfo.isSyn
+    data.isSyn = res.isSyn
     data.dataList.length = 0
-    for (var index = 0; index < res.playersList.length; ++index) {
-      var macAddress = res.playersList[index].macAddress.toUpperCase()
+    for (var index = 0; index < res.deviceList.length; ++index) {
+      var macAddress = res.deviceList[index].macAddress
       // 待同步的列表项
       var item = {
-        name: res.playersList[index].name,
-        tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
-        playerId: res.playersList[index].playerId,
+        name: res.deviceList[index].name,
+        tail: res.deviceList[index].tail,
+        playerId: res.deviceList[index].playerId,
         macAddress: macAddress,
-        score: res.playersList[index].score ? res.playersList[index].score : -100
+        score: res.deviceList[index].score ? res.deviceList[index].score : -100
       }
 
-      if (res.playersList[index].recordId) {
+      if (res.deviceList[index].recordId != '') {
         item.recordId = res.playersList[index].recordId
       }
       if (data.isSyn == true && item.score == -100){
