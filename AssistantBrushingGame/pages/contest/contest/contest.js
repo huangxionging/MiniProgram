@@ -412,7 +412,8 @@ Page({
       }
 
       if (res.deviceList[index].recordId != '') {
-        item.recordId = res.playersList[index].recordId
+        baseTool.print(res.deviceList[index])
+        item.recordId = res.deviceList[index].recordId
       }
       if (data.isSyn == true && item.score == -100){
         item.score = 0
@@ -1138,8 +1139,7 @@ Page({
       wx.hideLoading()
       data.synNodataTimeOut = true
       baseTool.print([res, '数据上传成功'])
-      data.synExeLine = 988
-      that.synSuccessNextDevice()
+      that.getHomePage()
       
     }).catch(res => {
       baseTool.print([res, '错误信息'])
@@ -1190,19 +1190,58 @@ Page({
   },
   synNextDevice: function () {
     var that = this
-    setTimeout(function () {
-      data.synFailCount++
-      data.synCommandCount++
-      that.dispatchConnect()
-    }, 500)
+    if (data.synCommandCount < data.dataList.length && data.isSyn == false) {
+      var deviceInfo = data.dataList[data.synCommandCount]
+      var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
+
+      baseTool.print(["dataObject", dataObject])
+      //放入数据集合
+      contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
+        baseTool.print(["dataObject", res])
+        setTimeout(function () {
+          data.synFailCount++
+          data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      }).catch(res => {
+        baseTool.print(["错误信息", res])
+      })
+    } else {
+      setTimeout(function () {
+        data.synFailCount++
+        data.synCommandCount++
+        that.dispatchConnect()
+      }, 500)
+    }
+    
+    
+    
   },
   synNoDataNextDevice: function() {
     var that = this
-    setTimeout(function () {
-      data.synNoDataCount++
-      data.synCommandCount++
-      that.dispatchConnect()
-    }, 500)
+    if (data.synCommandCount < data.dataList.length && data.isSyn == false) {
+      var deviceInfo = data.dataList[data.synCommandCount]
+      var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
+
+      baseTool.print(["dataObject", dataObject])
+      //放入数据集合
+      contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
+        baseTool.print(["dataObject", res])
+        setTimeout(function () {
+          data.synNoDataCount++
+          data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      }).catch(res => {
+        baseTool.print(["错误信息", res])
+      })
+    } else {
+      setTimeout(function () {
+        data.synNoDataCount++
+        data.synCommandCount++
+        that.dispatchConnect()
+      }, 500)
+    }
   },
   synSuccessNextDevice: function() {
     var that = this

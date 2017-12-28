@@ -82,13 +82,22 @@ function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构
     return n[1] ? n : '0' + n
   }
   data.brushTeethTime = brushTimeUnionHead + ' ' + brushTimeUnion;
-  console.log(data.brushTime)
+  if (data.brushTeethTime.indexOf('undefined') != -1) {
+    data.brushTeethTime= ''
+  }
+
 
   //此两项数据通过接口获得
   data.macAddress = macAddress;
   data.brushingMethodId = brushingMethodId
   baseTool.print(brushingMethodId)
   data.playerName = playerName
+  if (data.brushTeethTime == '') {
+    data.isTrue = 1
+  } else {
+    data.isTrue = 0
+  }
+  
   if (array.length > 70) {
     data.outLeftUpXBrushCount = array[10];
     data.outLeftUpYBrushCount = array[11];

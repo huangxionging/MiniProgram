@@ -62,19 +62,21 @@ function getHomePage() {
                 for (var index = 0; index < playersList.length; ++index) {
                   var macAddress =playersList[index].macAddress.toUpperCase()
                   // 待同步的列表项
+                  baseTool.print(playersList[index])
                   var item = {
                     gameId: gameId,
                     player: playersList[index].name,
                     playerId: playersList[index].playerId,
                     macAddress: macAddress,
-                    score: playersList[index].score ? res.playersList[index].score : 0,
-                    recordId: playersList[index].recordId ? playersList[index].recordId : '',
+                    score: (playersList[index].score ? playersList[index].score : 0),
+                    recordId: (playersList[index].recordId ? playersList[index].recordId : ''),
                     tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
                     brushingMethodId: 'a002c7680a5f4f8ea0b1b47fa3f2b947',
                     isBound: true            
                   }
-                  deviceUserBindObject[playersList[index].playerId] = playersList[index].name
                   deviceList.push(item)
+                  deviceUserBindObject[playersList[index].name] = index
+                  
                 }
                 var gameItem = {
                   gameId: gameId,
@@ -267,12 +269,13 @@ function selectContestUser(gameId = '') {
         var contestUserList = contestUserObject.contestUserList
         var gameList = wx.getStorageSync('gameObject').gameList
         var gameItem = gameList[gameList.length - 1]
+        baseTool.print(gameItem.deviceUserBindObject)
         for (var index = 0; index < contestUserList.length; ++index) {
           var obj = {
             name: contestUserList[index].name,
             playerId: contestUserList[index].playerId,
             brushingMethodId: contestUserList[index].brushingMethodId,
-            isBound: gameItem.deviceUserBindObject[contestUserList[index].playerId] ? true : false
+            isBound: (gameItem.deviceUserBindObject[contestUserList[index].name] != undefined) ? true : false
           }
           userList.push(obj)
         }
@@ -521,7 +524,7 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
             isBound: true
           })
           // 记录绑定, 用于快速查询绑定数据
-          gameItem.deviceUserBindObject[playerId] = player
+          gameItem.deviceUserBindObject[player] = gameItem.deviceList.length - 1
 
           wx.setStorage({
             key: 'gameObject',
@@ -690,11 +693,23 @@ function uploadBrushRecord(gameId) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
     var that = this;
-    var dataStorageAll = new Array()
+
+    var gameObject = wx.getStorageSync('gameObject')
+    var gameList = gameObject.gameList
+    for (var index = 0; index < gameList.length; ++index) {
+      var gameItem = gameList[index]
+      if (gameItem.gameId == gameId) {
+        // 修改数据
+        gameItem.isSyn = true
+        break
+      }
+    }
+    wx.setStorageSync('gameObject', gameObject)
     wx.getStorage({
       key: 'deviceDataObject',
       success: function (res) {
         var deviceDataObject = res.data
+        baseTool.print(deviceDataObject)
         var dataObjectList = deviceDataObject.dataObjectList
         var indicate = -100
         for (var index = dataObjectList.length - 1; index >= 0; --index) {
@@ -708,8 +723,7 @@ function uploadBrushRecord(gameId) {
           console.log('wx getStorage', dataStorageAll)
           if (dataStorageAll != null && dataStorageAll.length >= 1) {
             var jsonData = JSON.stringify(dataStorageAll)
-            console.log('send:', jsonData, that.data);
-            console.log('jsonData:', jsonData)
+            console.log('send:', jsonData);
             console.log('dataObjectList:', dataObjectList[indicate])
             var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
             baseTool.print(url)
@@ -723,6 +737,7 @@ function uploadBrushRecord(gameId) {
                 timestamp: Date.parse(new Date()),
                 memberId: loginManager.getMemberId(),
                 gameName: dataObjectList[indicate].gameName,
+                gameId: gameId.length > 0 ? gameId : '',
                 data: jsonData,
               },
               header: {
@@ -735,16 +750,73 @@ function uploadBrushRecord(gameId) {
                 //上传数据返回成功之后刷新主页分数
                 baseTool.print(res)
                 if (res.data.code == 'success') {
-                  resolve(res.data.data);
-                  //清空数据
-                  //成功之后 移除数据
-                  wx.removeStorage({
-                    key: 'dataObjectList',
-                    success: function (res) {
-                      console.log(res.data)
-                      console.log('wx data remove', dataStorageAll)
-                    }
-                  })
+                  // resolve(res.data.data);
+                  var gameObjectItem = res.data.data
+                  if (gameObjectItem != undefined && gameObjectItem.scoreList != undefined && gameObjectItem.scoreList.length > 0) {
+                    wx.getStorage({
+                      key: 'gameObject',
+                      success: function (res) {
+                        var gameObject = res.data
+                        var gameList = gameObject.gameList
+                        baseTool.print(gameObject)
+                        for (var index = 0; index < gameList.length; ++index) {
+                          var gameItem = gameList[index]
+                          baseTool.print(gameItem)
+                          if (gameItem.gameId == gameId) {
+                            baseTool.print(gameItem)
+                            for (var index1 = 0; index1 < gameObjectItem.scoreList.length; ++index1) {
+                              var item = gameObjectItem.scoreList[index1]
+                              var player = item.playerName
+                              baseTool.print(item)
+                              if (player != undefined && gameItem.deviceUserBindObject[player] != undefined) {
+                                var indicate = gameItem.deviceUserBindObject[player]
+                                var deviceItem = gameItem.deviceList[indicate]
+                                if (item.macAddress == deviceItem.macAddress) {
+                                  baseTool.print(item)
+                                  if (item.overallScore > deviceItem.score) {
+                                    baseTool.print(item)
+                                    deviceItem.score = item.overallScore
+                                    deviceItem.recordId = item.recordId
+                                    // 替换 gameId
+                                    deviceItem.gameId = item.gameId
+                                  }
+                                }
+                              }
+                            }
+                            // 替换 gameId
+                            gameItem.gameId = gameObjectItem.gameId
+                            gameItem.isSyn = true
+                            gameObject.gameNameObject[gameObjectItem.name] = gameObjectItem.gameId
+                          }
+                        }
+
+                        wx.setStorage({
+                          key: 'gameObject',
+                          data: gameObject,
+                          success: function(res) {
+                            baseTool.print(res)
+                            deleteDeviceDataObject(gameId).then(res => {
+                              baseTool.print(res)
+                              resolve(res)
+                            }).catch(res => {
+                              baseTool.print(res)
+                              resolve(res)
+                            })
+                          },
+                          fail: function(res) {
+                            resolve(res)
+                          },
+                          complete: function(res) {},
+                        })
+                      },
+                      fail: function (res) {
+                        reject(res)
+                      },
+                      complete: function (res) { },
+                    })
+                  } else {
+                    resolve(gameObjectItem)
+                  }
                 } else {
                   if (res.data.msg != 'memberId不能为空') {
                     reject(res.data.msg)
@@ -855,36 +927,38 @@ function addDeviceDataObject(deviceDataOject, gameId, gameName) {
  * 删除设备数据
  */
 function deleteDeviceDataObject(gameId) {
-  wx.getStorage({
-    key: 'deviceDataObject',
-    success: function (res) {
-      var deviceDataObject = res.data
-      var dataObjectList = deviceDataObject.dataObjectList
-      for (var index = dataObjectList.length - 1; index >= 0; --index) {
-        var dataObjectItem = dataObjectList[index]
-        if (dataObjectItem.gameId == gameId) {
-          // 删除数据
-          dataObjectList.splice(index, 1)
-          wx.setStorage({
-            key: 'deviceDataObject',
-            data: deviceDataObject,
-            success: function (res) {
-              resolve(res)
-            },
-            fail: function (res) {
-              reject(res)
-            },
-            complete: function (res) { },
-          })
-          break
-        } 
-      }
-      
-    },
-    fail: function (res) {
-      reject(res)
-    },
-    complete: function (res) { },
+  return new Promise((resolve, reject) => {
+    wx.getStorage({
+      key: 'deviceDataObject',
+      success: function (res) {
+        var deviceDataObject = res.data
+        var dataObjectList = deviceDataObject.dataObjectList
+        for (var index = dataObjectList.length - 1; index >= 0; --index) {
+          var dataObjectItem = dataObjectList[index]
+          if (dataObjectItem.gameId == gameId) {
+            // 删除数据
+            dataObjectList.splice(index, 1)
+            wx.setStorage({
+              key: 'deviceDataObject',
+              data: deviceDataObject,
+              success: function (res) {
+                resolve(res)
+              },
+              fail: function (res) {
+                reject(res)
+              },
+              complete: function (res) { },
+            })
+            break
+          }
+        }
+
+      },
+      fail: function (res) {
+        reject(res)
+      },
+      complete: function (res) { },
+    })
   })
 }
 
