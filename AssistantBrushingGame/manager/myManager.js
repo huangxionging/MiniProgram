@@ -195,7 +195,30 @@ function getUploadToken(filePath = '') {
       complete: function (res) { },
     })
   })
-  
+}
+
+function getContestUserCount() {
+  return new Promise((resolve, reject) => {
+    wx.getStorage({
+      key: 'contestUserObject',
+      success: function (res) {
+
+        var contestUserObject = res.data
+        var contestUserList = contestUserObject.contestUserList
+        if (contestUserObject != undefined && contestUserList != undefined) {
+          resolve(contestUserList.length)
+        } else {
+          reject('数据错误')
+        }
+        
+      },
+      fail: function (res) {
+        baseTool.print(res)
+        resolve(res)
+      },
+      complete: function (res) { },
+    })
+  })
 }
 module.exports = {
   pageQueryContest: pageQueryContest,

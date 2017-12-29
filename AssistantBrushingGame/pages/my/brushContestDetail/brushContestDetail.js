@@ -120,7 +120,7 @@ Page({
             tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
             macAddress: macAddress,
-            score: res[index].score ? res[index].score : 0
+            score: res[index].score
           }
 
           if (res[index].recordId) {

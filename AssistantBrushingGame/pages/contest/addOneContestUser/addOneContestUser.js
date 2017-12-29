@@ -176,7 +176,7 @@ Page({
     })
   },
   bindDevice: function (userInfo) {
-    var name = userInfo.player
+    var name = userInfo.name
     var userId = userInfo.playerId
     var brushingMethodId = userInfo.brushingMethodId
     // macAddress

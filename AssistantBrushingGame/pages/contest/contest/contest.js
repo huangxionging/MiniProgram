@@ -22,6 +22,7 @@ var data = {
    * 是否已经同步过
    */
   isSyn: false,
+  isSave: false,
   /**
    * 是否同步中
    */
@@ -259,12 +260,6 @@ Page({
         complete: function (res) { },
       })
     }, 3000)
-
-    contestManager.tagSynGame(data.gameId).then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
-    })
   },
   openBle: function () {
     var that = this
@@ -398,6 +393,7 @@ Page({
     data.synchronizeObject = {}
     // 清空数组
     data.isSyn = res.isSyn
+    data.isSave = res.isSave
     data.dataList.length = 0
     for (var index = 0; index < res.deviceList.length; ++index) {
       var macAddress = res.deviceList[index].macAddress
@@ -407,7 +403,7 @@ Page({
         tail: res.deviceList[index].tail,
         playerId: res.deviceList[index].playerId,
         macAddress: macAddress,
-        score: res.deviceList[index].score ? res.deviceList[index].score : -100,
+        score: res.deviceList[index].score,
         brushingMethodId: res.deviceList[index].brushingMethodId
       }
 
@@ -415,8 +411,10 @@ Page({
         baseTool.print(res.deviceList[index])
         item.recordId = res.deviceList[index].recordId
       }
-      if (data.isSyn == true && item.score == -100){
-        item.score = 0
+
+      if (data.isSave == false && item.score == -1) {
+        // 未同步
+        item.score = -100
       }
       // 添加数据集合
       data.dataList.push(item)
@@ -441,8 +439,7 @@ Page({
       data.dataList[2].color = '#2cabee'
     }
     that.setData(data)
-    baseTool.print(data.isSyn)
-    if (!data.isSyn) {
+    if (!data.isSave) {
       var first = baseTool.valueForKey('firstContest')
       if (!first) {
         wx.redirectTo({
@@ -478,31 +475,37 @@ Page({
         confirmText: '确定',
         confirmColor: '#00a0e9',
         success: function (res) {
-
-          wx.showModal({
-            title: '小提示',
-            content: '如需马上查看分数, 请点击"确定"按钮连网把本地数据同步到云端计算',
-            showCancel: true,
-            cancelText: '取消',
-            cancelColor: 'red',
-            confirmText: '确定',
-            confirmColor: '#00a0e9',
-            success: function(res) {
-              if (res.confirm == true) {
-                that.upStorageDataToService()
-              } else {
-                that.getHomePage()                
-              }
-            },
-            fail: function(res) {
-
-            },
-            complete: function(res) {},
-          })
+          if (data.isSave == false ) {
+            contestManager.saveBrushRecord(data.gameId)
+            data.isSave = true
+          }
           
-          // that.setData({
-          //   isSynNow: false
-          // })
+          if (data.isSyn == false || data.synSuccessCount > 0) {
+            wx.showModal({
+              title: '小提示',
+              content: '如需查看分数, 请点击"确定"',
+              showCancel: true,
+              cancelText: '取消',
+              cancelColor: '#ff0000',
+              confirmText: '确定',
+              confirmColor: '#00a0e9',
+              success: function (res) {
+                if (res.confirm == true) {
+                  that.upStorageDataToService()
+                } else {
+                  that.getHomePage()
+                }
+              },
+              fail: function (res) {
+
+              },
+              complete: function (res) { },
+            })
+          }
+          
+          that.setData({
+            isSynNow: false
+          })
           wx.closeBluetoothAdapter({
             success: function (res) { },
             fail: function (res) { },
@@ -1036,31 +1039,54 @@ Page({
       //放入数据集合
       contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
         baseTool.print(["dataObject", res])
+        data.dataObjectList.push(dataObject);
+        data.deviceDataList.push(oneCompleteData);
+        baseTool.print(['dataList:', data.dataList])
+        //一条完整数据回复
+        var oneDataWrite = "f103" + data.dataHead;
+        var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
+        baseTool.print(['reply', typedArray])
+        var oneDataWriteBuffer = typedArray.buffer
+
+        wx.writeBLECharacteristicValue({
+          deviceId: deviceId,
+          serviceId: data.tailServiceUUID,
+          characteristicId: that.data.tailCharacteristicIdWrite,
+          value: oneDataWriteBuffer,
+          success: function (res) {
+            baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+          },
+          fail: function (res) {
+            baseTool.print([res, '设备常亮失败'])
+          },
+          complete: function (res) { },
+        })
       }).catch(res => {
         baseTool.print(["错误信息", res])
+        data.dataObjectList.push(dataObject);
+        data.deviceDataList.push(oneCompleteData);
+        baseTool.print(['dataList:', data.dataList])
+        //一条完整数据回复
+        var oneDataWrite = "f103" + data.dataHead;
+        var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
+        baseTool.print(['reply', typedArray])
+        var oneDataWriteBuffer = typedArray.buffer
+
+        wx.writeBLECharacteristicValue({
+          deviceId: deviceId,
+          serviceId: data.tailServiceUUID,
+          characteristicId: that.data.tailCharacteristicIdWrite,
+          value: oneDataWriteBuffer,
+          success: function (res) {
+            baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+          },
+          fail: function (res) {
+            baseTool.print([res, '设备常亮失败'])
+          },
+          complete: function (res) { },
+        })
       })
-      data.dataObjectList.push(dataObject);
-      data.deviceDataList.push(oneCompleteData);
-      baseTool.print(['dataList:', data.dataList])
-      //一条完整数据回复
-      var oneDataWrite = "f103" + data.dataHead;
-      var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-      baseTool.print(['reply', typedArray])
-      var oneDataWriteBuffer = typedArray.buffer
-     
-      wx.writeBLECharacteristicValue({
-        deviceId: deviceId,
-        serviceId: data.tailServiceUUID,
-        characteristicId: that.data.tailCharacteristicIdWrite,
-        value: oneDataWriteBuffer,
-        success: function (res) {
-          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-        },
-        fail: function (res) {
-          baseTool.print([res, '设备常亮失败'])
-        },
-        complete: function (res) { },
-      })
+      
     }
   },
   newProcessOnceData: function (hex, values, deviceId = '') {
@@ -1096,32 +1122,56 @@ Page({
 
       contestManager.addDeviceDataObject(dataObject, data.gameId, data.contestTitle).then(res => {
         baseTool.print(["dataObject", res])
+        //放入数据集合
+        data.dataObjectList.push(dataObject);
+        data.deviceDataList.push(oneCompleteData);
+        baseTool.print(['dataList:', data.dataList])
+        //一条完整数据回复
+        var oneDataWrite = "f103" + data.dataHead;
+        var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
+        baseTool.print(['reply', typedArray])
+        var oneDataWriteBuffer = typedArray.buffer
+
+        wx.writeBLECharacteristicValue({
+          deviceId: deviceId,
+          serviceId: data.tailServiceUUID,
+          characteristicId: that.data.tailCharacteristicIdWrite,
+          value: oneDataWriteBuffer,
+          success: function (res) {
+            baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+          },
+          fail: function (res) {
+            baseTool.print([res, '设备常亮失败'])
+          },
+          complete: function (res) { },
+        })
       }).catch(res => {
         baseTool.print(["错误信息", res])
-      })
-      //放入数据集合
-      data.dataObjectList.push(dataObject);
-      data.deviceDataList.push(oneCompleteData);
-      baseTool.print(['dataList:', data.dataList])
-      //一条完整数据回复
-      var oneDataWrite = "f103" + data.dataHead;
-      var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-      baseTool.print(['reply', typedArray])
-      var oneDataWriteBuffer = typedArray.buffer
+        //放入数据集合
+        data.dataObjectList.push(dataObject);
+        data.deviceDataList.push(oneCompleteData);
+        baseTool.print(['dataList:', data.dataList])
+        //一条完整数据回复
+        var oneDataWrite = "f103" + data.dataHead;
+        var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
+        baseTool.print(['reply', typedArray])
+        var oneDataWriteBuffer = typedArray.buffer
 
-      wx.writeBLECharacteristicValue({
-        deviceId: deviceId,
-        serviceId: data.tailServiceUUID,
-        characteristicId: that.data.tailCharacteristicIdWrite,
-        value: oneDataWriteBuffer,
-        success: function (res) {
-          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-        },
-        fail: function (res) {
-          baseTool.print([res, '设备常亮失败'])
-        },
-        complete: function (res) { },
+        wx.writeBLECharacteristicValue({
+          deviceId: deviceId,
+          serviceId: data.tailServiceUUID,
+          characteristicId: that.data.tailCharacteristicIdWrite,
+          value: oneDataWriteBuffer,
+          success: function (res) {
+            baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+          },
+          fail: function (res) {
+            baseTool.print([res, '设备常亮失败'])
+          },
+          complete: function (res) { },
+        })
       })
+      
     }
   },
   upStorageDataToService: function () {
@@ -1140,9 +1190,25 @@ Page({
       data.synNodataTimeOut = true
       baseTool.print([res, '数据上传成功'])
       that.getHomePage()
-      
+      that.setData({
+        isSynNow: false
+      })
     }).catch(res => {
+      wx.hideLoading()
       baseTool.print([res, '错误信息'])
+      wx.showModal({
+        title: '提示',
+        content: res + ', 请稍后重新进行同步操作',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      that.setData({
+        isSynNow: false
+      })
     })
   },
   addContestUser: function() {
@@ -1190,7 +1256,7 @@ Page({
   },
   synNextDevice: function () {
     var that = this
-    if (data.synCommandCount < data.dataList.length && data.isSyn == false) {
+    if (data.synCommandCount < data.dataList.length && data.isSave == false) {
       var deviceInfo = data.dataList[data.synCommandCount]
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 
@@ -1219,7 +1285,7 @@ Page({
   },
   synNoDataNextDevice: function() {
     var that = this
-    if (data.synCommandCount < data.dataList.length && data.isSyn == false) {
+    if (data.synCommandCount < data.dataList.length && data.isSave == false) {
       var deviceInfo = data.dataList[data.synCommandCount]
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 

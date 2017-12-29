@@ -11,7 +11,7 @@ function findDeviceCommand() {
   var systemTimeHex = baseHexConvertTool.arrayToHexString(systemTimeArray)
   // 生成完整的命令字符串
   var commandHexString = header + brushMethod + headHabit + systemTimeHex
-  baseTool.print(commandHexString)
+  baseTool.print([systemTimeHex, '时间'])
   // 生成命令数组
   var buffer = baseHexConvertTool.hexStringToArrayBuffer(commandHexString)
   return buffer
@@ -26,7 +26,7 @@ function connectReplyDeviceCommand(brushMethod = '01') {
   var systemTimeHex = baseHexConvertTool.arrayToHexString(systemTimeArray)
   // 生成完整的命令字符串
   var commandHexString = header + systemTimeHex + headHabit + brushMethod + '00'
-  baseTool.print(systemTimeHex)
+  baseTool.print([systemTimeHex, '时间'])
   // 生成命令数组
   var buffer = baseHexConvertTool.hexStringToArrayBuffer(commandHexString)
   return buffer
@@ -42,7 +42,17 @@ function onceDataEndReplyDeviceCommand() {
 function closeLightCommand() {
   var header = 'f503f5'
   // 生成命令数组
-  var buffer = baseHexConvertTool.hexStringToArrayBuffer(header)
+  var headHabit = '00'
+  var brushMethod = '01'
+  // 获得格式化时间数组
+  var systemTimeArray = getFormatDateArray()
+  // 转换成16进制字符串
+  var systemTimeHex = baseHexConvertTool.arrayToHexString(systemTimeArray)
+  // 生成完整的命令字符串
+  var commandHexString = header + brushMethod + headHabit + systemTimeHex
+  baseTool.print([systemTimeHex, '时间'])
+  // 生成命令数组
+  var buffer = baseHexConvertTool.hexStringToArrayBuffer(commandHexString)
   return buffer
 }
 
@@ -83,7 +93,7 @@ function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构
   }
   data.brushTeethTime = brushTimeUnionHead + ' ' + brushTimeUnion;
   if (data.brushTeethTime.indexOf('undefined') != -1) {
-    data.brushTeethTime= ''
+    data.brushTeethTime = ''
   }
 
 
@@ -94,6 +104,7 @@ function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构
   data.playerName = playerName
   if (data.brushTeethTime == '') {
     data.isTrue = 1
+    data.brushTeethTime = baseTool.getCurrentTime()
   } else {
     data.isTrue = 0
   }

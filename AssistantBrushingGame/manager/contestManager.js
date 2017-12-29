@@ -68,7 +68,7 @@ function getHomePage() {
                     player: playersList[index].name,
                     playerId: playersList[index].playerId,
                     macAddress: macAddress,
-                    score: (playersList[index].score ? playersList[index].score : 0),
+                    score: (playersList[index].score != undefined ? playersList[index].score : -1),
                     recordId: (playersList[index].recordId ? playersList[index].recordId : ''),
                     tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
                     brushingMethodId: 'a002c7680a5f4f8ea0b1b47fa3f2b947',
@@ -85,6 +85,7 @@ function getHomePage() {
                   deviceList: deviceList,
                   createTime: gameInfo.createTime,
                   isSyn: true, // 是否已经同步服务器
+                  isSave: true
                 }
                 gameObject.gameList.push(gameItem)
                 wx.setStorage({
@@ -163,22 +164,23 @@ function addContestUser(name = '', brushingMethodId = '') {
       contestUserObject = baseTool.valueForKey('contestUserObject')
     } 
 
-    if (contestUserObject.contestUserNameObject[name]) {
+    if (contestUserObject.contestUserNameObject[name] != undefined) {
       reject('名字重复')
     } else {
       var playerId = contestUserObject.primaryKey++
       contestUserObject.contestUserNameObject[name] = playerId
-      contestUserObject.contestUserList.push({
+      var item = {
         name: name,
         brushingMethodId: brushingMethodId,
         playerId: playerId 
-      })
+      }
+      contestUserObject.contestUserList.push(item)
 
       wx.setStorage({
         key: 'contestUserObject',
         data: contestUserObject,
         success: function (res) {
-          resolve(res)
+          resolve(item)
         },
         fail: function (res) {
           reject(res)
@@ -382,6 +384,7 @@ function addContest(gameId = undefined, name = undefined) {
         deviceList: [],
         createTime: baseTool.getCurrentTime(),
         isSyn: false, // 是否已经同步服务器
+        isSave: false, // 是否第一次同步
       })
       gameObject.gameNameObject[name] = gameId
 
@@ -518,7 +521,7 @@ function bindContestUser(gameId = '', player = '', playerId = '', macAddress = '
             playerId: playerId,
             macAddress: macAddress,
             brushingMethodId: brushingMethodId,
-            score: 0,
+            score: -1,
             recordId: '',
             tail: '(game-' + macAddress.toLowerCase() + ')',
             isBound: true
@@ -689,22 +692,25 @@ function delPlayers(playerId = '') {
   })
 }
 
+function saveBrushRecord(gameId) {
+  
+  var gameObject = wx.getStorageSync('gameObject')
+  var gameList = gameObject.gameList
+  for (var index = 0; index < gameList.length; ++index) {
+    var gameItem = gameList[index]
+    if (gameItem.gameId == gameId) {
+      // 修改数据
+      // gameItem.isSyn = true
+      gameItem.isSave = true
+      break
+    }
+  }
+  wx.setStorageSync('gameObject', gameObject)
+}
+
 function uploadBrushRecord(gameId) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
-    var that = this;
-
-    var gameObject = wx.getStorageSync('gameObject')
-    var gameList = gameObject.gameList
-    for (var index = 0; index < gameList.length; ++index) {
-      var gameItem = gameList[index]
-      if (gameItem.gameId == gameId) {
-        // 修改数据
-        gameItem.isSyn = true
-        break
-      }
-    }
-    wx.setStorageSync('gameObject', gameObject)
     wx.getStorage({
       key: 'deviceDataObject',
       success: function (res) {
@@ -872,10 +878,18 @@ function addDeviceDataObject(deviceDataOject, gameId, gameName) {
     wx.getStorage({
       key: 'deviceDataObject',
       success: function(res) {
+        baseTool.print(res)
         var deviceDataObject = res.data
         var dataObjectList = deviceDataObject.dataObjectList
+        if (dataObjectList.length == 0) {
+          dataObjectList.push({
+            gameId: gameId,
+            gameName: gameName,
+            deviceDataObjectList: []
+          })
+        }
         var dataObjectItem = dataObjectList[dataObjectList.length - 1]
-        if (dataObjectItem.gameId != gameId) {
+        if (dataObjectItem != undefined && dataObjectItem.gameId != undefined && dataObjectItem.gameId != gameId) {
           dataObjectList.push({
             gameId: gameId,
             gameName: gameName,
@@ -989,4 +1003,7 @@ module.exports = {
   addDeviceDataObject: addDeviceDataObject,
   // 删除已同步的数据
   deleteDeviceDataObject: deleteDeviceDataObject,
+  // 保存结果
+  saveBrushRecord: saveBrushRecord,
+  
 }

@@ -28,7 +28,8 @@ Page({
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
     reconnectCount: 0,
-    dataTimeOut: false
+    dataTimeOut: false,
+    failTips: false
   },
 
   /**
@@ -77,7 +78,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+
   },
 
   /**
@@ -86,13 +87,13 @@ Page({
   onShow: function () {
     wx.setKeepScreenOn({
       keepScreenOn: true,
-      success: function(res) {
+      success: function (res) {
         baseTool.print([res, '保持屏幕常亮成功'])
       },
-      fail: function(res) {
+      fail: function (res) {
         baseTool.print([res, '保持屏幕常亮失败'])
       },
-      complete: function(res) {},
+      complete: function (res) { },
     })
   },
 
@@ -100,7 +101,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
   },
 
   /**
@@ -123,19 +124,19 @@ Page({
       serviceId: that.data.tailServiceUUID,
       characteristicId: that.data.tailCharacteristicIdWrite,
       value: buffer,
-      success: function(res) {
+      success: function (res) {
         baseTool.print([res, '成功关灯'])
         wx.closeBLEConnection({
           deviceId: that.data.deviceId,
-          success: function(res) {},
-          fail: function(res) {},
-          complete: function(res) {},
+          success: function (res) { },
+          fail: function (res) { },
+          complete: function (res) { },
         })
       },
-      fail: function(res) {},
-      complete: function(res) {},
+      fail: function (res) { },
+      complete: function (res) { },
     })
-    
+
   },
 
   /**
@@ -150,14 +151,14 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+
   },
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+
   },
   connectDevice: function () {
     var that = this
@@ -171,21 +172,31 @@ Page({
         // 发起重连
         baseTool.print('连接超时')
         var reconnectCount = that.data.reconnectCount
-        if (reconnectCount >= 3) {
-          wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '蓝牙连接失败',
-            showCancel: false,
-            confirmText: '确定',
-            confirmColor: '#00a0e9',
-            success: function (res) {
-              wx.navigateBack()
-            },
-            fail: function (res) { },
-            complete: function (res) { },
+        if (reconnectCount >= 3 && reconnectCount < 100) {
+          reconnectCount = 100
+          that.setData({
+            reconnectCount: reconnectCount
           })
-        } else {
+          wx.hideLoading()
+          if (that.data.failTips == false) {
+            that.setData({
+              failTips: true
+            })
+            wx.showModal({
+              title: '提示',
+              content: '蓝牙连接失败',
+              showCancel: false,
+              confirmText: '确定',
+              confirmColor: '#00a0e9',
+              success: function (res) {
+                wx.navigateBack()
+              },
+              fail: function (res) { },
+              complete: function (res) { },
+            })
+          }
+
+        } else if (reconnectCount < 3) {
           baseTool.print('发起重连')
           reconnectCount++
           that.setData({
@@ -227,18 +238,23 @@ Page({
                 complete: function (res) { },
               })
               wx.hideLoading()
-              wx.showModal({
-                title: '提示',
-                content: '蓝牙连接失败',
-                showCancel: false,
-                confirmText: '确定',
-                confirmColor: '#00a0e9',
-                success: function (res) {
-                  wx.navigateBack()
-                },
-                fail: function (res) { },
-                complete: function (res) { },
-              })
+              if (that.data.failTips == false) {
+                that.setData({
+                  failTips: true
+                })
+                wx.showModal({
+                  title: '提示',
+                  content: '蓝牙连接失败',
+                  showCancel: false,
+                  confirmText: '确定',
+                  confirmColor: '#00a0e9',
+                  success: function (res) {
+                    wx.navigateBack()
+                  },
+                  fail: function (res) { },
+                  complete: function (res) { },
+                })
+              }
               return true
             }
             return false
@@ -269,18 +285,23 @@ Page({
                       complete: function (res) { },
                     })
                     wx.hideLoading()
-                    wx.showModal({
-                      title: '提示',
-                      content: '蓝牙连接失败',
-                      showCancel: false,
-                      confirmText: '确定',
-                      confirmColor: '#00a0e9',
-                      success: function (res) {
-                        wx.navigateBack()
-                      },
-                      fail: function (res) { },
-                      complete: function (res) { },
-                    })
+                    if (that.data.failTips == false) {
+                      that.setData({
+                        failTips: true
+                      })
+                      wx.showModal({
+                        title: '提示',
+                        content: '蓝牙连接失败',
+                        showCancel: false,
+                        confirmText: '确定',
+                        confirmColor: '#00a0e9',
+                        success: function (res) {
+                          wx.navigateBack()
+                        },
+                        fail: function (res) { },
+                        complete: function (res) { },
+                      })
+                    }
                     return true
                   }
                   return false
@@ -310,18 +331,23 @@ Page({
                             complete: function (res) { },
                           })
                           wx.hideLoading()
-                          wx.showModal({
-                            title: '提示',
-                            content: '蓝牙连接失败',
-                            showCancel: false,
-                            confirmText: '确定',
-                            confirmColor: '#00a0e9',
-                            success: function (res) {
-                              wx.navigateBack()
-                            },
-                            fail: function (res) { },
-                            complete: function (res) { },
-                          })
+                          if (that.data.failTips == false) {
+                            that.setData({
+                              failTips: true
+                            })
+                            wx.showModal({
+                              title: '提示',
+                              content: '蓝牙连接失败',
+                              showCancel: false,
+                              confirmText: '确定',
+                              confirmColor: '#00a0e9',
+                              success: function (res) {
+                                wx.navigateBack()
+                              },
+                              fail: function (res) { },
+                              complete: function (res) { },
+                            })
+                          }
                           return true
                         }
                         return false
@@ -358,40 +384,50 @@ Page({
                                 complete: function (res) { },
                               })
                               wx.hideLoading()
-                              wx.showModal({
-                                title: '提示',
-                                content: '数据传输超时',
-                                showCancel: false,
-                                confirmText: '确定',
-                                confirmColor: '#00a0e9',
-                                success: function (res) {
-                                  wx.navigateBack()
-                                },
-                                fail: function (res) { },
-                                complete: function (res) { },
-                              })
+                              if (that.data.failTips == false) {
+                                that.setData({
+                                  failTips: true
+                                })
+                                wx.showModal({
+                                  title: '提示',
+                                  content: '数据传输超时',
+                                  showCancel: false,
+                                  confirmText: '确定',
+                                  confirmColor: '#00a0e9',
+                                  success: function (res) {
+                                    wx.navigateBack()
+                                  },
+                                  fail: function (res) { },
+                                  complete: function (res) { },
+                                })
+                              }
                               return true
                             }
                             return false
                           }, 10, 2000)
-                            // 介绍设备数据
+                          // 介绍设备数据
                         },
                         fail: function (res) {
                           notyfyCharacteristicsTimeOut = true
                           baseTool.print([res, '预订通知失败'])
                           wx.hideLoading()
-                          wx.showModal({
-                            title: '提示',
-                            content: '蓝牙连接失败',
-                            showCancel: false,
-                            confirmText: '确定',
-                            confirmColor: '#00a0e9',
-                            success: function (res) {
-                              wx.navigateBack()
-                            },
-                            fail: function (res) { },
-                            complete: function (res) { },
-                          })
+                          if (that.data.failTips == false) {
+                            that.setData({
+                              failTips: true
+                            })
+                            wx.showModal({
+                              title: '提示',
+                              content: '蓝牙连接失败',
+                              showCancel: false,
+                              confirmText: '确定',
+                              confirmColor: '#00a0e9',
+                              success: function (res) {
+                                wx.navigateBack()
+                              },
+                              fail: function (res) { },
+                              complete: function (res) { },
+                            })
+                          }
                         },
                         complete: function (res) { },
                       })
@@ -410,18 +446,23 @@ Page({
                       complete: function (res) { },
                     })
                     wx.hideLoading()
-                    wx.showModal({
-                      title: '提示',
-                      content: '蓝牙连接失败',
-                      showCancel: false,
-                      confirmText: '确定',
-                      confirmColor: '#00a0e9',
-                      success: function (res) {
-                        wx.navigateBack()
-                      },
-                      fail: function (res) { },
-                      complete: function (res) { },
-                    })
+                    if (that.data.failTips == false) {
+                      that.setData({
+                        failTips: true
+                      })
+                      wx.showModal({
+                        title: '提示',
+                        content: '蓝牙连接失败',
+                        showCancel: false,
+                        confirmText: '确定',
+                        confirmColor: '#00a0e9',
+                        success: function (res) {
+                          wx.navigateBack()
+                        },
+                        fail: function (res) { },
+                        complete: function (res) { },
+                      })
+                    }
                   },
                   complete: function (res) { },
                 })
@@ -431,59 +472,74 @@ Page({
               baseTool.print([res, '蓝牙获得服务失败'])
               serviceTimeOut = true
               wx.hideLoading()
-              wx.showModal({
-                title: '提示',
-                content: '蓝牙连接失败',
-                showCancel: false,
-                confirmText: '确定',
-                confirmColor: '#00a0e9',
-                success: function (res) {
-                  wx.navigateBack()
-                },
-                fail: function (res) { },
-                complete: function (res) { },
-              })
+              if (that.data.failTips == false) {
+                that.setData({
+                  failTips: true
+                })
+                wx.showModal({
+                  title: '提示',
+                  content: '蓝牙连接失败',
+                  showCancel: false,
+                  confirmText: '确定',
+                  confirmColor: '#00a0e9',
+                  success: function (res) {
+                    wx.navigateBack()
+                  },
+                  fail: function (res) { },
+                  complete: function (res) { },
+                })
+              }
             },
             complete: function (res) { },
           })
         }, 50)
       },
       fail: function (res) {
-        baseTool.print([res, '蓝牙连接失败'])
+        // baseTool.print([res, '蓝牙连接失败8'])
         // 重连
         connectTimeOut = true
         var reconnectCount = that.data.reconnectCount
-        if (reconnectCount >= 3) {
-          wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '蓝牙连接失败',
-            showCancel: false,
-            confirmText: '确定',
-            confirmColor: '#00a0e9',
-            success: function (res) {
-              wx.navigateBack()
-            },
-            fail: function (res) { },
-            complete: function (res) { },
+        baseTool.print([res, '蓝牙连接失败', reconnectCount])
+        if (reconnectCount >= 3 && reconnectCount < 100) {
+          reconnectCount = 100
+          that.setData({
+            reconnectCount: reconnectCount
           })
-        } else {
+          wx.hideLoading()
+          if (that.data.failTips == false) {
+            that.setData({
+              failTips: true
+            })
+            wx.showModal({
+              title: '提示',
+              content: '蓝牙连接失败',
+              showCancel: false,
+              confirmText: '确定',
+              confirmColor: '#00a0e9',
+              success: function (res) {
+                wx.navigateBack()
+              },
+              fail: function (res) { },
+              complete: function (res) { },
+            })
+          }
+        } else if (reconnectCount < 3) {
           reconnectCount++
           that.setData({
             reconnectCount: reconnectCount
           })
           // 500ms 以后重连
-          setTimeout(function(){
+          setTimeout(function () {
             that.connectDevice()
           }, 500)
-          
+
         }
       },
       complete: function (res) { },
     })
   }
   ,
-  addContestUser: function() {
+  addContestUser: function () {
     var that = this
     wx.navigateTo({
       url: '../addOneContestUser/addOneContestUser?gameId=' + that.data.gameId + '&macAddress=' + that.data.macAddress + '&deviceId=' + that.data.deviceId,
@@ -492,7 +548,7 @@ Page({
       complete: function (res) { },
     })
   },
-  selectClick: function(e) {
+  selectClick: function (e) {
     baseTool.print(e)
     var that = this
     var index = e.currentTarget.id - 1
@@ -513,7 +569,7 @@ Page({
         cancelColor: '#999',
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function(res) {
+        success: function (res) {
           baseTool.print(res)
 
           if (res.cancel) {
@@ -521,7 +577,7 @@ Page({
             that.setData({
               dataList: dataList
             })
-          } else if(res.confirm) {
+          } else if (res.confirm) {
             that.bindDevice(that.data.dataList[index])
           } else if (!res.cancel && !res.confirm) {
             dataList[index].item.isSelect = !dataList[index].item.isSelect
@@ -531,15 +587,15 @@ Page({
           }
           // 
         },
-        fail: function(res) {
+        fail: function (res) {
           baseTool.print(res)
         },
-        complete: function (res) { baseTool.print(res)},
+        complete: function (res) { baseTool.print(res) },
       })
-      
+
     }
-     
-    
+
+
   },
   bindDevice: function (userInfo) {
     var that = this
@@ -563,35 +619,35 @@ Page({
         serviceId: that.data.tailServiceUUID,
         characteristicId: that.data.tailCharacteristicIdWrite,
         value: buffer,
-        success: function(res) {
+        success: function (res) {
           wx.navigateBack()
         },
-        fail: function(res) {
+        fail: function (res) {
           wx.navigateBack()
         },
-        complete: function(res) {},
+        complete: function (res) { },
       })
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.startPullDownRefresh({
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
       })
       wx.showModal({
         title: '提示',
         content: res,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function(res) {
+        success: function (res) {
         },
-        fail: function(res) {},
-        complete: function(res) {},
+        fail: function (res) { },
+        complete: function (res) { },
       })
-    }) 
+    })
   },
-  loadData: function() {
+  loadData: function () {
     var that = this
     wx.showNavigationBarLoading()
     contestManager.selectContestUser(that.data.gameId).then(res => {
@@ -639,17 +695,17 @@ Page({
     })
   },
   deviceConnectionStateChange: function () {
-    wx.onBLEConnectionStateChange(function(res){
+    wx.onBLEConnectionStateChange(function (res) {
       baseTool.print([res, '蓝牙状态改变'])
       if (res.connected == false) {
-        
+
       }
     })
   },
   deviceCharacteristicValueChange: function (deviceId = '') {
     var that = this
 
-    wx.onBLECharacteristicValueChange(function(res){
+    wx.onBLECharacteristicValueChange(function (res) {
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value)
       baseTool.print([hex, '通知信息'])
       // 兼容产品
@@ -661,13 +717,13 @@ Page({
           serviceId: that.data.tailServiceUUID,
           characteristicId: that.data.tailCharacteristicIdWrite,
           value: buffer,
-          success: function(res) {
+          success: function (res) {
             baseTool.print([res, '查找设备命令发送成功'])
           },
-          fail: function(res) {
+          fail: function (res) {
             baseTool.print([res, '设备常亮失败'])
           },
-          complete: function(res) {},
+          complete: function (res) { },
         })
       } else if (hex.indexOf('f30c') == 0) {
         baseTool.print([res, '设备常亮'])

@@ -17,7 +17,7 @@ Page({
       {
         id: 1,
         icon: 'icon_contest.png',
-        title: '刷牙比赛',
+        title: '历史刷牙比赛',
         quantity: 10,
         url: '../brushContest/brushContest'
       },
@@ -136,7 +136,14 @@ Page({
         var dataList = that.data.dataList
         baseTool.print(dataList)
         dataList[0].quantity = res.games
-        dataList[1].quantity = res.players
+        var contestUserObject = wx.getStorageSync('contestUserObject')
+        var contestUserList = contestUserObject.contestUserList
+        
+        if (contestUserObject != undefined && contestUserList != undefined) {
+          dataList[1].quantity = contestUserList.length
+        } else {
+          dataList[1].quantity = 0
+        }
         that.setData({
           loadingDone: true,
           dataList: dataList,
