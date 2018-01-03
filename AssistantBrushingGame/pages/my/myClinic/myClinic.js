@@ -151,7 +151,7 @@ Page({
       complete: function(res) {},
     })
   },
-  longpressClick: function(e) {
+  imageClick: function(e) {
     baseTool.print(e)
     wx.showActionSheet({
       itemList: ['选择照片'],
@@ -164,23 +164,34 @@ Page({
             sourceType: ['album', 'camera'],
             success: function(res) {
               baseTool.print(res)
-              // 获得 token
-              myManager.getUploadToken(res.tempFilePaths[0]).then(res => {
-                baseTool.print(res)
-                var url = 'https://up-z2.qbox.me'
-                var uploadTask = wx.uploadFile({
-                  url: '',
-                  filePath: '',
-                  name: '',
-                  header: {},
-                  formData: {},
-                  success: function (res) { },
-                  fail: function (res) { },
-                  complete: function (res) { },
-                })
-              }).catch(res => {
 
+              wx.uploadFile({
+                url: 'https://os.32teeth.cn/qn_upload',
+                filePath: res.tempFilePaths[0],
+                name: 'name',
+                success: function(res) {
+                  baseTool.print(res)
+                },
+                fail: function(res) {},
+                complete: function(res) {},
               })
+              // // 获得 token
+              // myManager.getUploadToken(res.tempFilePaths[0]).then(res => {
+              //   baseTool.print(res)
+              //   var url = 'https://up-z2.qbox.me'
+              //   var uploadTask = wx.uploadFile({
+              //     url: '',
+              //     filePath: '',
+              //     name: '',
+              //     header: {},
+              //     formData: {},
+              //     success: function (res) { },
+              //     fail: function (res) { },
+              //     complete: function (res) { },
+              //   })
+              // }).catch(res => {
+
+              // })
               
             },
             fail: function(res) {

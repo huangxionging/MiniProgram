@@ -220,6 +220,41 @@ function getContestUserCount() {
     })
   })
 }
+
+function uploadImage() {
+  return new Promise((resolve, reject) => {
+    
+    // wx.chooseImage({
+    //   count: 1,
+    //   sizeType: ['original', 'compressed'],
+    //   sourceType: ['album', 'camera'],
+    //   success: function (res) {
+    //     baseTool.print(res)
+
+    //     wx.uploadFile({
+    //       url: 'https://os.32teeth.cn/qn_upload',
+    //       filePath: res.tempFilePaths[0],
+    //       name: 'name',
+    //       success: function (res) {
+    //         baseTool.print(res)
+    //       },
+    //       fail: function (res) { },
+    //       complete: function (res) { },
+    //     })
+        
+
+    //   }
+    //   )
+  })
+  wx.chooseImage({
+    count: 0,
+    sizeType: [],
+    sourceType: [],
+    success: function(res) {},
+    fail: function(res) {},
+    complete: function(res) {},
+  })
+}
 module.exports = {
   pageQueryContest: pageQueryContest,
   getMyGameCount: getMyGameCount,

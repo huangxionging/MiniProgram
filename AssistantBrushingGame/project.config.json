@@ -26,8 +26,8 @@
 				{
 					"id": 0,
 					"name": "的",
-					"pathName": "pages/login/binding/binding",
-					"query": ""
+					"pathName": "pages/contest/contest/contest",
+					"query": "gameId=2&macAddress='dd'"
 				}
 			]
 		}

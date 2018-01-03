@@ -160,6 +160,7 @@ Page({
       baseTool.print(res)
       wx.hideLoading()
       // 终于渲染成功了
+      wx.navigateBack()
       baseMessageHandler.sendMessage('selectRefresh', {
         code: true,
         msg: '添加成功需要刷新'

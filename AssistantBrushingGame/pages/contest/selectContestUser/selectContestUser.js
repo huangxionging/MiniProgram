@@ -116,8 +116,6 @@ Page({
       baseTool.print(res)
     })
     baseTool.print(that.data.deviceId)
-
-
     var buffer = bleCommandManager.closeLightCommand()
     wx.writeBLECharacteristicValue({
       deviceId: that.data.deviceId,
@@ -551,13 +549,13 @@ Page({
   selectClick: function (e) {
     baseTool.print(e)
     var that = this
-    var index = e.currentTarget.id - 1
+    var index = e.currentTarget.dataset.id - 1
     var dataList = that.data.dataList
-    var isSelect = dataList[index].item.isSelect
+    var isSelect = dataList[index].isSelect
     if (isSelect) {
       return
     } else {
-      dataList[index].item.isSelect = !dataList[index].item.isSelect
+      dataList[index].isSelect = !dataList[index].isSelect
       that.setData({
         dataList: dataList
       })
@@ -573,14 +571,14 @@ Page({
           baseTool.print(res)
 
           if (res.cancel) {
-            dataList[index].item.isSelect = !dataList[index].item.isSelect
+            dataList[index].isSelect = !dataList[index].isSelect
             that.setData({
               dataList: dataList
             })
           } else if (res.confirm) {
             that.bindDevice(that.data.dataList[index])
           } else if (!res.cancel && !res.confirm) {
-            dataList[index].item.isSelect = !dataList[index].item.isSelect
+            dataList[index].isSelect = !dataList[index].isSelect
             that.setData({
               dataList: dataList
             })
@@ -665,10 +663,8 @@ Page({
             name: res[index].name, // 名字
             playerId: res[index].playerId, // 参赛者的 id
             brushingMethodId: res[index].brushingMethodId,
-            item: {
-              id: index + 1, // 主key
-              isSelect: res[index].isBound
-            }
+            id: index + 1, // 主key
+            isSelect: res[index].isBound
           })
         }
         that.setData(data)

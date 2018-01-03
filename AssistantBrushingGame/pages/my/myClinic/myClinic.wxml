@@ -4,15 +4,15 @@
     <text id='clinic-name-title'>诊所名字: </text>
     <input id='clinic-input' placeholder='输入诊所名字' bindinput='inputName' bindblur='inputName' value='{{name}}'></input>
   </view>
-  <!-- <view id='clinic-image'>
+   <view id='clinic-image'>
     <text>诊所图片: </text>
     <block wx:if='{{!hasImageUrl}}'>
-      <image src='../../../resource/my_addImage.png' class='clinic-pic' bindlongpress='longpressClick'></image>
+      <image src='../../../resource/my_addImage.png' bindtap='imageClick' class='clinic-pic'></image>
     </block>
     <block wx:else>
-      <image src='{{imageUrl}}' class='clinic-pic' bindtap='previeClick' bindlongpress='longpressClick'></image>
+      <image src='{{imageUrl}}' class='clinic-pic' bindtap='imageClick'></image>
     </block>
-  </view> -->
+  </view> 
 
   <button class='clinic-save-button' bindtap='clinicInfoSave'>保存</button>
   

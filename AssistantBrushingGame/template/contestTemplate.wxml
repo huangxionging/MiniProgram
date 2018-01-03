@@ -76,19 +76,19 @@
 
 <template name='selectComponent'>
   <block wx:if='{{isSelect}}'>
-    <image src='../../../resource/box-selected.png' class='select-component-image' bindtap='selectClick' id='{{id}}'></image>
+    <image src='../../../resource/box-selected.png' class='select-component-image' bindtap='selectClick' data-id='{{id}}'></image>
   </block>
   <block wx:else>
-    <image src='../../../resource/box-normal.png' class='select-component-image' bindtap='selectClick' id='{{id}}'></image>
+    <image src='../../../resource/box-normal.png' class='select-component-image' bindtap='selectClick' data-id='{{id}}'></image>
   </block>
 </template>
 
 <template name='selectContestUserItem'>
-  <view class="select-item-view {{(item.id==1)?'':'item-orthers'}}">
-    <view id='select-item-button'>
-      <template is='selectComponent' data='{{...item}}'></template>
+  <view class="select-item-view {{(id==1)?'':'item-orthers'}}">
+    <view bindtap='selectClick' id='select-item-button' data-id='{{id}}'>
+      <template is='selectComponent' ></template>
     </view>
-    <text id='select-item-name'>{{name}}</text>
+    <text bindtap='selectClick' id='select-item-name'  data-id='{{id}}'>{{name}}</text>
     <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}&brushingMethodId={{brushingMethodId}}' id='select-navigate'>
       <image id='select-device-arrow' src='../../../resource/right_arrow.png'></image>
     </navigator>

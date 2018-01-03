@@ -230,6 +230,7 @@
   flex: 1;
 }
 #select-device-arrow{
+  margin-right: 0rpx;
   width: 44rpx;
   height: 44rpx;
 }
@@ -237,5 +238,8 @@
   align-content: center;
   align-items: center;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
+  width: 50%;
+  height: 100%;
+  flex: 1
 }
