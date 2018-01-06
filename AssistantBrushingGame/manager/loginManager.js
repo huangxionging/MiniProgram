@@ -254,6 +254,9 @@ function loginFlow() {
       if (res && res.wxUser) {
         baseTool.print(res.wxUser)
         var wxUser = res.wxUser
+        if (wxUser.clinicId != undefined) {
+          baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
+        }
         if (wxUser.memberId) {
           baseTool.setValueForKey(wxUser.memberId, 'memberId')
           baseTool.setValueForKey(wxUser.openid, 'openid')

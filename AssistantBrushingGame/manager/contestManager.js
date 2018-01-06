@@ -708,7 +708,7 @@ function saveBrushRecord(gameId) {
   wx.setStorageSync('gameObject', gameObject)
 }
 
-function uploadBrushRecord(gameId) {
+function uploadBrushRecord(gameId, createTime) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
     wx.getStorage({
@@ -744,6 +744,7 @@ function uploadBrushRecord(gameId) {
                 memberId: loginManager.getMemberId(),
                 gameName: dataObjectList[indicate].gameName,
                 gameId: gameId.length > 0 ? gameId : '',
+                createTime: createTime,
                 data: jsonData,
               },
               header: {

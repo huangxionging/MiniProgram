@@ -1,7 +1,7 @@
 
 <template name='myItem'>
-  <navigator url='{{url}}'>
-    <view class="my-item {{(id==1)?'':'item-orthers'}}">
+  <!-- <navigator url='{{url}}' bindtap='dd'> -->
+  <view class="my-item {{(id==1)?'':'item-orthers'}}" data-index='{{index}}' bindtap='itemClick'>
     <view class='my-item-left-view'>
       <image src='../../../resource/{{icon}}' id='my-item-icon'></image>
       <text id='my-item-title'>{{title}}</text>
@@ -10,9 +10,8 @@
       <text id='my-item-quantity'>{{quantity}}</text>
       <image src='../../../resource/right_arrow.png' id='my-item-arrow'></image>
     </view>
-      
-    </view>
-  </navigator>
+  </view>
+  <!-- </navigator> -->
 </template>
 
 <template name='myBrushContestSection'>

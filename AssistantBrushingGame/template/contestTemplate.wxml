@@ -86,7 +86,7 @@
 <template name='selectContestUserItem'>
   <view class="select-item-view {{(id==1)?'':'item-orthers'}}">
     <view bindtap='selectClick' id='select-item-button' data-id='{{id}}'>
-      <template is='selectComponent' ></template>
+      <template is='selectComponent' data='{{id, isSelect}}'></template>
     </view>
     <text bindtap='selectClick' id='select-item-name'  data-id='{{id}}'>{{name}}</text>
     <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}&brushingMethodId={{brushingMethodId}}' id='select-navigate'>

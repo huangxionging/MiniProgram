@@ -13,7 +13,8 @@ Page({
     recordId: '',
     loadDone: false,
     url: '',
-    clinicName: ''
+    clinicName: '',
+    logo: ''
   },
 
   /**
@@ -31,11 +32,13 @@ Page({
     })
     var that = this
     var clinicName = baseTool.valueForKey('clinicName')
+    var logo = baseTool.valueForKey('clinicPic')
     baseTool.print(options)
     that.setData({
       name: options.name,
       recordId: options.recordId,
-      clinicName: clinicName
+      clinicName: clinicName,
+      logo: logo
     })
 
     that.loadData()
@@ -89,9 +92,13 @@ Page({
   onShareAppMessage: function () {
     var that = this
     var data = that.data
+    var path = '/pages/my/brushScoreReport/brushScoreReport?name=' + data.name + '&recordId=' + data.recordId
+    if (data.logo != '') {
+      path += '&logo=' + data.logo
+    }
     return {
       title: data.name + '的刷牙报告',
-      path: '/pages/my/brushScoreReport/brushScoreReport?name=' + data.name + '&recordId=' + data.recordId,
+      path: path,
       imageUrl: data.url,
       success: function(res) {
         baseTool.print(res)
@@ -105,7 +112,7 @@ Page({
     var that = this
     var data = that.data
     
-    myManager.brushScoreReport(data.recordId, data.name, data.clinicName).then(res => {
+    myManager.brushScoreReport(data.recordId, data.name, data.clinicName, data.logo).then(res => {
       baseTool.print(res)
       that.setData({
         loadDone: true,

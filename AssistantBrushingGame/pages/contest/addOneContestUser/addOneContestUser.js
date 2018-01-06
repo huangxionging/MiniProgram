@@ -169,6 +169,21 @@ Page({
   getInputUserName: function (e) {
     baseTool.print(e)
     var that = this
+    var intro = e.detail.value
+    var isTrue = intro.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null) {
+      wx.showModal({
+        title: '提示',
+        content: '参赛者名称暂不支持表情哦~',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
     var item = that.data.item
     item.name = e.detail.value
     that.setData({

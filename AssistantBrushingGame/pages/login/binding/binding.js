@@ -229,6 +229,9 @@ Page({
       // 表示已经绑定
       var wxUser = res.wxUser
       baseTool.print([res, wxUser, wxUser.memberId, 'memberId'])
+      if (wxUser.clinicId != undefined) {
+        baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
+      }
       if (wxUser.memberId) {
         baseTool.setValueForKey(wxUser.memberId, 'memberId')
         console.log(res)

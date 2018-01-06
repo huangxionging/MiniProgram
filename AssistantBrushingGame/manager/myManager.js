@@ -4,11 +4,12 @@ const baseTool = require('../utils/baseTool.js')
 const baseApiList = require('../utils/baseApiList.js')
 const loginManager = require('./loginManager.js')
 
-function getMyGameCount() {
+function getMyGameCount(clinicId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getMyGameCount
     var data = {
       memberId: loginManager.getMemberId(),
+      clinicId: clinicId
     }
     wx.request({
       url: url,
@@ -30,12 +31,13 @@ function getMyGameCount() {
   })
 }
 
-function pageQueryContest(pageNo = 1) {
+function pageQueryContest(pageNo = 1, clinicId = '') {
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.pageQueryContest
     var data = {
       memberId: loginManager.getMemberId(),
-      pageNo: pageNo
+      pageNo: pageNo,
+      clinicId: clinicId
     }
     wx.request({
       url: url,
@@ -113,13 +115,16 @@ function mergeData(gameIds) {
   
 }
 
-function brushScoreReport(recordId='', name = '', clinicName = '') {
+function brushScoreReport(recordId='', name = '', clinicName = '', logo = '') {
   return new Promise((resolve, reject) => {
     var url = 'https://32teeth.cn/tem_img/html2png.php'
     var data = {
       recordId: recordId,
       name: name,
       zs_name: clinicName
+    }
+    if (logo != '') {
+      data.logo = logo
     }
     baseTool.print(data)
     wx.request({
@@ -134,32 +139,43 @@ function brushScoreReport(recordId='', name = '', clinicName = '') {
   })
 }
 
-function updateClinicInfo(name = '', imagUrl = ''){
+function updateClinicInfo(clinicId = '', name = '', imagUrl = '', intro = ''){
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.updateClinicInfo
     var data = {
-      clinicPic: imagUrl,
-      clinicName: name,
-      openId: baseTool.valueForKey('openid')
+      pic: imagUrl,
+      name: name,
+      openId: baseTool.valueForKey('openid'),
+      memberId: loginManager.getMemberId(),
+      clinicId: clinicId,
+      intro: intro
     }
     baseTool.print(data)
     wx.request({
       url: url,
       data: data,
       success: function (res) {
-        resolve(res.data)
+        if (res.data != undefined && res.data.code != undefined && res.data.code == 'success') {
+          resolve(res.data.data)
+        } else {
+          reject(baseTool.errorMsg)
+        }
+        
       },
-      fail: reject,
+      fail: function(res) {
+        reject(baseTool.errorMsg)
+      }, 
       complete: function (res) { },
     })
   })
 }
 
-function getClinicInfo(){
+function getClinicInfo(clinicId = ''){
   return new Promise((resolve, reject) => {
     var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getClinicInfo
     var data = {
-      openId: baseTool.valueForKey('openid')
+      openId: baseTool.valueForKey('openid'),
+      clinicId: clinicId
     }
     baseTool.print(data)
     wx.request({
@@ -221,40 +237,24 @@ function getContestUserCount() {
   })
 }
 
-function uploadImage() {
+function chooseImageFrom(sourceType = 'camera') {
   return new Promise((resolve, reject) => {
-    
-    // wx.chooseImage({
-    //   count: 1,
-    //   sizeType: ['original', 'compressed'],
-    //   sourceType: ['album', 'camera'],
-    //   success: function (res) {
-    //     baseTool.print(res)
-
-    //     wx.uploadFile({
-    //       url: 'https://os.32teeth.cn/qn_upload',
-    //       filePath: res.tempFilePaths[0],
-    //       name: 'name',
-    //       success: function (res) {
-    //         baseTool.print(res)
-    //       },
-    //       fail: function (res) { },
-    //       complete: function (res) { },
-    //     })
-        
-
-    //   }
-    //   )
-  })
-  wx.chooseImage({
-    count: 0,
-    sizeType: [],
-    sourceType: [],
-    success: function(res) {},
-    fail: function(res) {},
-    complete: function(res) {},
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: [sourceType],
+      success: function (res) {
+        resolve(res.tempFilePaths[0])
+      },
+      fail: function (res) {
+        reject(res)
+      },
+      complete: function (res) { },
+    })
   })
 }
+
+
 module.exports = {
   pageQueryContest: pageQueryContest,
   getMyGameCount: getMyGameCount,
@@ -264,4 +264,5 @@ module.exports = {
   updateClinicInfo: updateClinicInfo,
   getClinicInfo: getClinicInfo,
   getUploadToken: getUploadToken,
+  chooseImageFrom: chooseImageFrom,
 }

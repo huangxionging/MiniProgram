@@ -667,6 +667,7 @@ Page({
             isSelect: res[index].isBound
           })
         }
+        baseTool.print(data)
         that.setData(data)
       } else {
         var data = that.data

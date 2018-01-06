@@ -5,6 +5,8 @@ const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const myManager = require('../../../manager/myManager.js')
+const baseApiList = require('../../../utils/baseApiList.js')
+
 Page({
 
   /**
@@ -15,6 +17,9 @@ Page({
     loadingDone: false,
     hasImageUrl: false,
     imageUrl: '',
+    fileName: '',
+    intro: '',
+    clinicId: ''
   },
 
   /**
@@ -76,6 +81,21 @@ Page({
     baseTool.print(e)
     var that = this
     var name = e.detail.value
+    baseTool.print(name)
+    var isTrue = name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null) {
+      wx.showModal({
+        title: '提示',
+        content: '单位名称暂不支持表情哦~',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
     that.setData({
       name: name
     })
@@ -83,6 +103,19 @@ Page({
   clinicInfoSave: function(e) {
     baseTool.print(e)
     var that = this
+    if (that.data.name == '') {
+      wx.showModal({
+        title: '提示',
+        content: '单位名称不能为空哦',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      return
+    }
     wx.showLoading({
       title: '保存中...',
       mask: true,
@@ -91,9 +124,13 @@ Page({
       complete: function(res) {},
     })
     wx.showNavigationBarLoading()
-    myManager.updateClinicInfo(that.data.name, '').then(res => {
-      baseTool.print(res)
-      baseTool.setValueForKey(that.data.name, 'clinicName')
+    var fileName = that.data.fileName
+    myManager.updateClinicInfo(that.data.clinicId, that.data.name, fileName, that.data.intro).then(res => {
+      // baseTool.print(res.)
+      baseTool.setValueForKey(res.name, 'clinicName')
+      baseTool.setValueForKey(res.clinicId, 'clinicId')
+      baseTool.setValueForKey(res.name.intro, 'clinicIntro')
+      // baseTool.setValueForKey(that.data.intro, 'clinicIntro')
       wx.hideLoading()
       wx.hideNavigationBarLoading()
       wx.navigateBack({
@@ -117,88 +154,170 @@ Page({
   },
   getClinicInfo: function() {
     var that = this
-    myManager.getClinicInfo().then(res => {
+    var clinicId = baseTool.valueForKey('clinicId')
+    baseTool.print([clinicId, '滴答滴'])
+    if (clinicId == '') {
+      that.setData({
+        loadingDone: true
+      })
+      return
+    }
+    myManager.getClinicInfo(clinicId).then(res => {
       baseTool.print(res)
 
       that.setData({
         loadingDone: true
       })
 
-      if (res.clinicPic) {
+      if (res.pic) {
+        baseTool.setValueForKey(res.pic, 'clinicPic')
         that.setData({
           hasImageUrl: true,
-          imageUrl: 'https://www.baidu.com/img/bd_logo1.png'
+          imageUrl: res.pic,
+          fileName: res.pic
         })
       }
 
-      if (res.clinicName){
-        baseTool.setValueForKey(res.clinicName, 'clinicName')
+      if (res.name){
+        baseTool.setValueForKey(res.name, 'clinicName')
         that.setData({
-          name: res.clinicName
+          name: res.name
+        })
+      }
+
+      if (res.clinicId != undefined) {
+        baseTool.setValueForKey(res.clinicId, 'clinicId')
+        that.setData({
+          clinicId: res.clinicId
+        })
+      }
+
+
+      if (res.intro != undefined) {
+        baseTool.setValueForKey(res.intro, 'clinicIntro')
+        that.setData({
+          intro: res.intro
         })
       }
     }).catch(res => {
       baseTool.print(res)
+      wx.showModal({
+        title: '提示',
+        content: res,
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     })
   },
-  previeClick: function(e) {
+  getIntro: function(e) {
     baseTool.print(e)
-    wx.previewImage({
-      current: 'https://www.baidu.com/img/bd_logo1.png',
-      urls: ['https://www.baidu.com/img/bd_logo1.png'],
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+    
+    var that = this
+    var intro = e.detail.value
+    var isTrue = intro.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null) {
+      wx.showModal({
+        title: '提示',
+        content: '单位简介暂不支持表情哦~',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      return
+    }
+    that.setData({
+      intro: intro
     })
   },
   imageClick: function(e) {
     baseTool.print(e)
+    var that = this
+    var items = e.currentTarget.dataset.items
+    var itemList = items.split(':')
+    var chooseItem = ['camera', 'album']
     wx.showActionSheet({
-      itemList: ['选择照片'],
+      itemList: itemList,
       itemColor: '#black',
       success: function(res) {
-        if(res.tapIndex == 0) {
-          wx.chooseImage({
-            count: 1,
-            sizeType: ['original', 'compressed'],
-            sourceType: ['album', 'camera'],
-            success: function(res) {
+        switch (res.tapIndex) {
+          case 0:
+          case 1: {
+            myManager.chooseImageFrom(chooseItem[res.tapIndex]).then(res => {
               baseTool.print(res)
-
-              wx.uploadFile({
-                url: 'https://os.32teeth.cn/qn_upload',
-                filePath: res.tempFilePaths[0],
-                name: 'name',
+              that.setData({
+                hasImageUrl: true,
+                imageUrl: res
+              })
+              var url = baseURL.baseDomain + baseApiList.uploadImageURL
+              wx.showLoading({
+                title: '上传进度:0%',
+                mask: true,
                 success: function(res) {
-                  baseTool.print(res)
+                 
                 },
-                fail: function(res) {},
+                fail: function(res) {
+                  
+                },
                 complete: function(res) {},
               })
-              // // 获得 token
-              // myManager.getUploadToken(res.tempFilePaths[0]).then(res => {
-              //   baseTool.print(res)
-              //   var url = 'https://up-z2.qbox.me'
-              //   var uploadTask = wx.uploadFile({
-              //     url: '',
-              //     filePath: '',
-              //     name: '',
-              //     header: {},
-              //     formData: {},
-              //     success: function (res) { },
-              //     fail: function (res) { },
-              //     complete: function (res) { },
-              //   })
-              // }).catch(res => {
+              var uploadTask = wx.uploadFile({
+                url: url,
+                filePath: res,
+                name: 'json',
+                success: function(res) {
+                  wx.hideLoading()
+                  wx.hideNavigationBarLoading()
+                  baseTool.print(res)
+                  if (res.statusCode == 200 ){
+                    var data = JSON.parse(res.data)
+                    baseTool.print(data)
+                    if (data != undefined && data.picNoList != undefined && data.picNoList.length > 0) {
+                      that.setData({
+                        fileName: data.picNoList[0]
+                      })
+                    }
+                  }
+                },
+                fail: function(res) {
+                  wx.hideLoading()
+                  wx.hideNavigationBarLoading()
+                },
+                complete: function(res) {},
+              })
 
-              // })
-              
-            },
-            fail: function(res) {
+              uploadTask.onProgressUpdate(function(res) {
+                baseTool.print(res)
+                wx.showLoading({
+                  title: '上传进度:' + res.progress + '%',
+                  mask: true,
+                  success: function(res) {},
+                  fail: function(res) {},
+                  complete: function(res) {},
+                })
+                res.progress
+              })
+            }).catch(res => {
               baseTool.print(res)
-            },
-            complete: function(res) {},
-          })
+            })
+            break
+          }
+          case 2: {
+            wx.previewImage({
+              current: 'that.data.imageUrl',
+              urls: [that.data.imageUrl],
+              success: function(res) {},
+              fail: function(res) {},
+              complete: function(res) {},
+            })
+            break
+          }
         }
       },
       fail: function(res) {},

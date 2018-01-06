@@ -18,6 +18,7 @@ var data = {
   gameId: '',
   contestTitle: '',
   contestDate: '',
+  createTime: '',
   /**
    * 是否已经同步过
    */
@@ -183,6 +184,31 @@ Page({
   },
   createContest: function(){
     var that = this
+    var clinicId = baseTool.valueForKey('clinicId')
+    if (clinicId == undefined || clinicId == '') {
+      wx.showModal({
+        title: '完善单位信息',
+        content: '完善单位信息后才能创建比赛哦~',
+        showCancel: true,
+        cancelText: '暂时没空',
+        cancelColor: '#000',
+        confirmText: '完善信息',
+        confirmColor: '#00a0e9',
+        success: function(res) {
+          if (res.confirm == true) {
+            wx.navigateTo({
+              url: '/pages/my/myClinic/myClinic',
+              success: function(res) {},
+              fail: function(res) {},
+              complete: function(res) {},
+            })
+          }
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      return
+    }
     that.setData({
       createButtonDisable: true
     })
@@ -387,6 +413,7 @@ Page({
     data.contestTitle = res.name
     data.contestDate = res.createTime
     data.gameId = res.gameId
+    data.createTime = res.createTime
     data.loadingDone = true
     data.hasData = true
     data.synchronizeObject = null
@@ -1184,7 +1211,7 @@ Page({
       fail: function(res) {},
       complete: function(res) {},
     })
-    contestManager.uploadBrushRecord(data.gameId).then(res => {
+    contestManager.uploadBrushRecord(data.gameId, data.createTime).then(res => {
       // 设备数据上传成功
       wx.hideLoading()
       data.synNodataTimeOut = true

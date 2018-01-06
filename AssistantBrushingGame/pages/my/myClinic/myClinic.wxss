@@ -23,6 +23,30 @@ page{
   margin-left: 20rpx;
 }
 
+#clinic-intro{
+  margin-top: 10rpx;
+  width: 100%;
+  height: 248rpx; 
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 26rpx;
+}
+
+#clinic-intro-title{
+  margin-left: 20rpx;
+}
+
+#clinic-intro-area {
+  margin-left: 20rpx;
+  margin-right: 0rpx;
+  height: 248rpx;
+  flex: 1
+}
+
+
+
 #clinic-image{
   margin-top: 10rpx;
   width: 100%;
@@ -38,12 +62,19 @@ page{
   margin-right: 0rpx;
   height: 100rpx;
   flex: 1;
+  border-color: #00a0e9;
+  border-width: 50rpx;
+}
+
+#clinic-pic-titile{
+  margin-left: 20rpx;
 }
 
 .clinic-pic{
   margin-left: 20rpx;
   width: 258rpx;
   height: 228rpx;
+  border-radius: 10rpx;
 }
 .clinic-save-button{
   position: fixed;

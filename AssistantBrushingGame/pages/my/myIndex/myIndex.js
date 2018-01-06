@@ -31,7 +31,7 @@ Page({
       {
         id: 3,
         icon: 'icon_user.png',
-        title: '我的诊所',
+        title: '我的单位',
         // quantity: 50,
         url: '../myClinic/myClinic'
       }
@@ -85,7 +85,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    // wx.startPullDownRefresh({
+    //   success: function (res) { },
+    //   fail: function (res) { },
+    //   complete: function (res) { },
+    // })
   },
 
   /**
@@ -116,6 +120,58 @@ Page({
   onReachBottom: function () {
   
   },
+  itemClick: function(e) {
+    baseTool.print(e)
+    var that = this
+    var index = e.currentTarget.dataset.index
+    switch(index) {
+      case 0: {
+        var clinicId = baseTool.valueForKey('clinicId')
+        if (clinicId == undefined || clinicId == '') {
+          wx.showModal({
+            title: '完善单位信息',
+            content: '完善单位信息后才能查看历史刷牙比赛哦~',
+            showCancel: true,
+            cancelText: '暂时没空',
+            cancelColor: '#000',
+            confirmText: '完善信息',
+            confirmColor: '#00a0e9',
+            success: function (res) {
+              if (res.confirm == true) {
+                wx.navigateTo({
+                  url: '/pages/my/myClinic/myClinic',
+                  success: function (res) { },
+                  fail: function (res) { },
+                  complete: function (res) { },
+                })
+              }
+            },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+          return
+        } else {
+          wx.navigateTo({
+            url: that.data.dataList[index].url,
+            success: function (res) { },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+        }
+        break
+      }
+      case 1:
+      case 2: {
+        wx.navigateTo({
+          url: that.data.dataList[index].url,
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
+        })
+        break
+      }
+    }
+  },
 
   /**
    * 用户点击右上角分享
@@ -125,8 +181,9 @@ Page({
   },
   loadData: function () {
     var that = this
+    var clinicId = baseTool.valueForKey('clinicId')
     wx.showNavigationBarLoading()
-    myManager.getMyGameCount().then(res => {
+    myManager.getMyGameCount(clinicId).then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()

@@ -72,12 +72,19 @@ module.exports = {
    */
   tagSyn: 'taggedSynchronization',
   /**
-   * 更新诊所信息
+   * 更新信息
    */
   updateClinicInfo: 'updateClinicInfo',
   /**
    * 获取诊所信息
    */
   getClinicInfo: 'getClinicInfo',
-  gameUploadBrushTeethRecord: 'gameUploadBrushTeethRecord'
+  /**
+   * 上传刷牙数据
+   */
+  gameUploadBrushTeethRecord: 'gameUploadBrushTeethRecord',
+  /**
+   * 上传图片
+   */
+  uploadImageURL: 'qn_upload'
 }

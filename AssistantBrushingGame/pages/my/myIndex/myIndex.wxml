@@ -7,7 +7,7 @@
   </view>
   <view id='my-table-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
-      <template is='myItem' data='{{...item}}'></template>
+      <template is='myItem' data='{{...item, index}}'></template>
     </block>
   </view>
 </view>

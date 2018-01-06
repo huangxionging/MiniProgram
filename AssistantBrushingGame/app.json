@@ -14,7 +14,8 @@
     "pages/contest/addOneContestUser/addOneContestUser",
     "pages/mask/contestMask/contestMask",
     "pages/my/brushScoreReport/brushScoreReport",
-    "pages/my/myClinic/myClinic"
+    "pages/my/myClinic/myClinic",
+    "pages/customerManger/createClass/createClass"
   ],
   "window": {
     "backgroundTextStyle": "dark",

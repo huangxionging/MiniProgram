@@ -1,16 +1,20 @@
 <!--pages/my/myClinic/myClinic.wxml-->
 <view class='clinic-container' wx:if='{{loadingDone}}'>
   <view id='clinic-name'>
-    <text id='clinic-name-title'>诊所名字: </text>
-    <input id='clinic-input' placeholder='输入诊所名字' bindinput='inputName' bindblur='inputName' value='{{name}}'></input>
+    <text id='clinic-name-title'>单位名字: </text>
+    <input id='clinic-input' placeholder='输入单位名字' bindblur='inputName' value='{{name}}' maxlength='10'></input>
+  </view>
+  <view id='clinic-intro'>
+    <text id='clinic-intro-title'>单位简介:</text>
+    <textarea id='clinic-intro-area' value='{{intro}}' maxlength='-1' placeholder='输入单位简介' bindblur='getIntro' value='{{intro}}'></textarea>
   </view>
    <view id='clinic-image'>
-    <text>诊所图片: </text>
+    <text id='clinic-pic-titile'>单位图片: </text>
     <block wx:if='{{!hasImageUrl}}'>
-      <image src='../../../resource/my_addImage.png' bindtap='imageClick' class='clinic-pic'></image>
-    </block>
+      <image src='../../../resource/my_addImage.png' bindtap='imageClick' class='clinic-pic' data-items='拍摄:从相册选择'></image>
+    </block> 
     <block wx:else>
-      <image src='{{imageUrl}}' class='clinic-pic' bindtap='imageClick'></image>
+      <image src='{{imageUrl}}' class='clinic-pic' bindtap='imageClick' data-items='拍摄:从相册选择:预览图片'></image>
     </block>
   </view> 
 

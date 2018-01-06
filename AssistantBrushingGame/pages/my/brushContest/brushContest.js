@@ -85,7 +85,8 @@ Page({
   loadData() {
     wx.showNavigationBarLoading()
     var that = this
-    myManager.pageQueryContest(that.data.pageNo).then(res => {
+    var clinicId = baseTool.valueForKey('clinicId')
+    myManager.pageQueryContest(that.data.pageNo, clinicId).then(res => {
       baseTool.print(res)
       that.setData({
         loadingDone: true
@@ -174,6 +175,9 @@ Page({
       }
     }).catch(res => {
       baseTool.print(res)
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
     })
   },
 
