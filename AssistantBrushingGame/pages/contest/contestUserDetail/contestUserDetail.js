@@ -185,7 +185,7 @@ Page({
     var that = this
     var intro = e.detail.value
     var isTrue = intro.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
-    if (isTrue == null) {
+    if (isTrue == null && intro != '' && intro != undefined) {
       wx.showModal({
         title: '提示',
         content: '参赛者名称暂不支持表情哦~',

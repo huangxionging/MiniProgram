@@ -83,7 +83,7 @@ Page({
     var name = e.detail.value
     baseTool.print(name)
     var isTrue = name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
-    if (isTrue == null) {
+    if (isTrue == null && name != '' && name != undefined) {
       wx.showModal({
         title: '提示',
         content: '单位名称暂不支持表情哦~',
@@ -219,7 +219,7 @@ Page({
     var that = this
     var intro = e.detail.value
     var isTrue = intro.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
-    if (isTrue == null) {
+    if (isTrue == null && intro != '' && intro != undefined) {
       wx.showModal({
         title: '提示',
         content: '单位简介暂不支持表情哦~',
