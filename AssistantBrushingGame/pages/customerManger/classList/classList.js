@@ -1,18 +1,55 @@
-// pages/customerManger/createClass/createClass.js
+// pages/customerManger/classList/classList.js
 const app = getApp()
 const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    loadDone: false,
+    hasData: false,
+    dataList: [
+      {
+        date: '2018-01-01',
+        name: '小小牙医1班',
+        total: 10,
+        teamId: '',
+        id: 1
+      },
+      {
+        date: '2018-01-02',
+        name: '小小牙医2班',
+        teamId: '',
+        total: 12,
+        id: 2
+      },
+      {
+        date: '2018-01-03',
+        name: '小小牙医3班',
+        teamId: '',
+        total: 8,
+        id: 3
+      },
+      {
+        date: '2018-01-05',
+        name: '小小牙医4班',
+        teamId: '',
+        total: 23,
+        id: 4
+      },
+      {
+        date: '2018-01-06',
+        name: '小小牙医5班',
+        teamId: '',
+        total: 18,
+        id: 5
+      },
+    ]
   },
 
   /**
@@ -70,7 +107,10 @@ Page({
   onShareAppMessage: function () {
   
   },
-  createButton: function(e) {
+  /**
+   * 创建按钮的点击事件
+   */
+  createButton: function (e) {
     baseTool.print(e)
   }
 })

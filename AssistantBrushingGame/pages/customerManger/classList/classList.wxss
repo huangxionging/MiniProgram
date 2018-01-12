@@ -1,0 +1,40 @@
+/* pages/customerManger/classList/classList.wxss */
+@import '../../../template/contestTemplate.wxss';
+.create-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: normal;
+}
+
+.team-add-button{
+  width: 690rpx;
+  margin-top: 16rpx;
+  background-color: #00a0e9;
+  color: #fff;
+  border-radius: 23rpx;
+  font-size: 30rpx;
+}
+
+.hover-main-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+.team-no-team-img{
+  margin-top: 390rpx;
+  width: 239rpx;
+  height: 239rpx;
+}
+.team-no-team-title{
+  margin-top: 30rpx;
+  font-size: 30rpx;
+  color: #999;
+}
+#team-table-view{
+  width: 100%;
+  margin-top: 20rpx;
+}

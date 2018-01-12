@@ -1,18 +1,11 @@
-// pages/customerManger/createClass/createClass.js
-const app = getApp()
-const contestManager = require('../../../manager/contestManager.js')
-const baseWechat = require('../../../utils/baseWeChat.js')
-const baseURL = require('../../../utils/baseURL.js')
-const baseTool = require('../../../utils/baseTool.js')
-const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-
+// pages/customerManger/classDetail/classDetail.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+  
   },
 
   /**
@@ -69,8 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  createButton: function(e) {
-    baseTool.print(e)
   }
 })

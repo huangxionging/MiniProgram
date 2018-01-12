@@ -15,7 +15,9 @@
     "pages/mask/contestMask/contestMask",
     "pages/my/brushScoreReport/brushScoreReport",
     "pages/my/myClinic/myClinic",
-    "pages/customerManger/createClass/createClass"
+    "pages/customerManger/createClass/createClass",
+    "pages/customerManger/classDetail/classDetail",
+    "pages/customerManger/classList/classList"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -33,6 +35,12 @@
         "text": "比赛",
         "iconPath": "resource/contest_normal.png",
         "selectedIconPath": "resource/contest_select.png"
+      },
+      {
+        "pagePath": "pages/customerManger/classList/classList",
+        "text": "管理",
+        "iconPath": "resource/manage_normal.png",
+        "selectedIconPath": "resource/manage_select.png"
       },
       {
         "pagePath": "pages/my/myIndex/myIndex",

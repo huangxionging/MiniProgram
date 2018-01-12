@@ -9,7 +9,7 @@
   align-content: center;
   align-items: center;
   justify-content: center;
-  font-weight: lighter; 
+  font-weight: normal; 
 }
 .select-content-view{
   height: 100%;

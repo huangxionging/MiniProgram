@@ -30,7 +30,7 @@
   width: 70rpx;
   font-size: 40rpx;
   color: #9c9da3;
-  font-weight: lighter;
+  font-weight: normal;
   text-align: center;
 }
 
@@ -242,4 +242,49 @@
   width: 50%;
   height: 100%;
   flex: 1
+}
+.team-item-view{
+  width: 100%;
+  height: 160rpx;
+  margin-top: 10rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+#team-item-other{
+  margin-top: 10rpx;
+  
+}
+
+.team-item-date{
+  margin-left: 60rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.team-item-content-view{
+  margin: 0rpx 30rpx;  
+  height: 100rpx;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content:  center;
+  flex-direction: row;
+  border-radius: 20rpx;
+}
+.team-item-name{
+  margin-left: 30rpx;
+  font-size: 28rpx;
+  color: #333;
+  flex: 1; 
+}
+.team-item-members{
+  margin-right: 0rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+.team-device-arrow{
+  width: 44rpx;
+  height: 44rpx;
 }

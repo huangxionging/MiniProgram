@@ -1,0 +1,19 @@
+<!--pages/customerManger/classList/classList.wxml-->
+<import src='../../../template/contestTemplate.wxml'/>
+<view class='create-container'>
+  <block wx:if='{{!loadDone}}'>
+    <button class='team-add-button' hover-class='hover-main-button' bindtap='createButton'>添加班级</button>
+    <block wx:if='{{hasData}}'>
+      <image src='/resource/no_class.png' class='team-no-team-img'></image>
+      <text class='team-no-team-title'>当前还没有创建班级哦</text>
+    </block>
+    <block wx:else>
+      <view id='team-table-view'>
+        <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+          <template is='teamItem' data='{{...item, index}}'></template>
+        </block> 
+      </view>
+    </block>
+  </block>
+</view>
+

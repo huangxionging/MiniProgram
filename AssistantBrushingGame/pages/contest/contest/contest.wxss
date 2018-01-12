@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: lighter; 
+  font-weight: normal; 
 }
 
 #contest-user {
@@ -116,7 +116,7 @@
 #contest-date{
   position: relative;
   font-size: 26rpx;
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 #contest-syn-button{

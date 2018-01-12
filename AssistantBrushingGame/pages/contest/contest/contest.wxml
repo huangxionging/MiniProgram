@@ -45,7 +45,7 @@
         </view>
       </view>
       <view id='contest-table-view'>
-         <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+        <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
           <template is='contestUserScoreItem' data='{{...item, index}}'></template>
         </block> 
       </view>
