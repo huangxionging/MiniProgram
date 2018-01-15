@@ -86,5 +86,9 @@ module.exports = {
   /**
    * 上传图片
    */
-  uploadImageURL: 'qn_upload'
+  uploadImageURL: 'qn_upload',
+  /**
+   * 添加班级
+   */
+  addClass: 'addClass'
 }

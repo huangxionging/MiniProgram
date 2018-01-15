@@ -112,5 +112,38 @@ Page({
    */
   createButton: function (e) {
     baseTool.print(e)
+    var that = this
+    var clinicId = baseTool.valueForKey('clinicId')
+    baseTool.print(clinicId)
+    if (clinicId == undefined || clinicId == '') {
+      wx.showModal({
+        title: '完善单位信息',
+        content: '完善单位信息后才能创建班级哦~',
+        showCancel: true,
+        cancelText: '暂时没空',
+        cancelColor: '#000',
+        confirmText: '完善信息',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+          if (res.confirm == true) {
+            wx.navigateTo({
+              url: '/pages/my/myClinic/myClinic',
+              success: function (res) { },
+              fail: function (res) { },
+              complete: function (res) { },
+            })
+          }
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
+    wx.navigateTo({
+      url: '../createClass/createClass',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   }
 })

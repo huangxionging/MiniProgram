@@ -1,6 +1,6 @@
 <!--pages/customerManger/classList/classList.wxml-->
 <import src='../../../template/contestTemplate.wxml'/>
-<view class='create-container'>
+<view class='team-container'>
   <block wx:if='{{!loadDone}}'>
     <button class='team-add-button' hover-class='hover-main-button' bindtap='createButton'>添加班级</button>
     <block wx:if='{{hasData}}'>

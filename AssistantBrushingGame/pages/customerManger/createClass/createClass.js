@@ -12,7 +12,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    clinicName: '',
+    teamName: '',
+    teamTime: ''
   },
 
   /**
@@ -70,7 +72,7 @@ Page({
   onShareAppMessage: function () {
   
   },
-  createButton: function(e) {
-    baseTool.print(e)
+  generateTeam: function(e) {
+    
   }
 })

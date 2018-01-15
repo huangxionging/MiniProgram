@@ -1,1 +1,14 @@
-<!--pages/customerManger/createClass/createClass.wxml-->
+<view class='create-container'>
+  <text>{{clinicName}}</text>
+  <view class='team-name-view'>
+    <text>班级名称</text>
+    <view class='team-name-input-view'>
+      <input placeholder='请输入班级名称'></input>
+    </view>
+    <view class='team-time-view'>
+      <text>班级名称</text>
+      <view>7天</view>
+    </view>
+    <button bindtap='generateTeam'>生成班级</button>
+  </view>
+</view>
