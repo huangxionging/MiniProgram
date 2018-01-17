@@ -2,8 +2,8 @@
   <view class="item {{(index==0)?'':'item-orthers'}}" bindtap='scoreReportClick' data-index='{{index}}'>
     <view class='item-info-view'>
       <text id='item-rank' style='color:{{color}}'>{{index+1}}</text>
-        <text id='item-name'>{{name}}</text>
-        <text id='item-tail'>{{tail}}</text> 
+      <text id='item-name'>{{name}}</text>
+      <text id='item-tail'>{{tail}}</text> 
     </view>
      <text id='item-score'>{{score > 0 ? score : (score == -1 ? '未达标' : '未同步')}}</text> 
   </view>
@@ -95,15 +95,4 @@
   </view>
 </template>
 
-<template name='teamItem'>
-  <navigator url='../classDetail/classDetail?classId={{classId}}'>
-    <view class='team-item-view'>
-      <text class='team-item-date'>{{date}}</text> 
-      <view class='team-item-content-view'>
-        <text class='team-item-name'>{{name}}</text> 
-        <text class='team-item-members'>{{total}}</text> 
-        <image src='../../../resource/right_arrow.png' class='team-device-arrow'></image> 
-      </view>
-    </view>
-  </navigator>
-</template>
+

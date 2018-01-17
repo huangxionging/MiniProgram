@@ -1,14 +1,42 @@
-<!--pages/customerManger/classDetail/classDetail.wxml-->
+<import src='../../../template/customerManage.wxml'/>
 <view class='detail-container'>
-  <swiper>
-    <swiper-item>
-      <view>B</view>
-    </swiper-item>
-    <swiper-item>
-      <view>A</view>
-    </swiper-item>
-    <swiper-item>
-      <view>C</view>
-    </swiper-item>
-  </swiper>
+  <block wx:if='{{!loadDone}}'>
+    <view class='item-view'>
+      <block wx:for='{{itemList}}' wx:key='id' wx:item='item'> 
+         <template is='detailMenu' data='{{...item,index}}'></template> 
+      </block>
+    </view>
+    <view wx:if='{{selectItemIndex==0}}' class='table-view scoreList'>
+      <block wx:for='{{personalList}}' wx:key='id' wx:item='item'> 
+         <template is='scoreItem' data='{{...item,index}}'></template> 
+      </block>
+    </view>
+    <view wx:if='{{selectItemIndex==1}}' class='table-view'>
+      <view class='group-header-view'>
+        <image src='../../../resource/group.png' class='group-header-bg'></image>
+        <view class='team-blue'>
+          <view>
+            蓝队<text>{{blueAverageScore}}</text>
+          </view>
+          <view>
+            <image src=''></image>
+            <text>36</text>
+          </view>
+        </view>
+        <view class='team-red'> 
+        </view>
+       </view> 
+      <view class='group-content-view'>
+        <block wx:for='{{groupList}}' wx:key='id' wx:item='item'> 
+          <template is='groupItem' data='{{...item,index}}'></template> 
+        </block>
+      </view>
+      
+    </view>
+    <view wx:if='{{selectItemIndex==2}}' class='table-view scoreList'>
+      <block wx:for='{{homeList}}' wx:key='id' wx:item='item'> 
+         <template is='scoreItem' data='{{...item,index}}'></template> 
+      </block>
+    </view>
+  </block>
 </view>

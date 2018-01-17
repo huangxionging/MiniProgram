@@ -30,7 +30,7 @@
 				{
 					"id": 0,
 					"name": "的",
-					"pathName": "pages/customerManger/classList/classList",
+					"pathName": "pages/customerManger/classDetail/classDetail",
 					"query": "gameId=2&macAddress='dd'"
 				}
 			]

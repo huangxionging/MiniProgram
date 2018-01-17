@@ -1,0 +1,59 @@
+<template name='teamItem'>
+  <navigator url='../classDetail/classDetail?classId={{classId}}'>
+    <view class='team-item-view'>
+      <text class='team-item-date'>{{date}}</text> 
+      <view class='team-item-content-view'>
+        <text class='team-item-name'>{{name}}</text> 
+        <text class='team-item-members'>{{total}}</text> 
+        <image src='../../../resource/right_arrow.png' class='team-device-arrow'></image> 
+      </view>
+    </view>
+  </navigator>
+</template>
+
+<template name='detailMenu'>
+  <view  class='detail-item' data-index='{{index}}' bindtap='selectClick'>
+    <text class='{{itemMenuId}}'>{{itemName}}</text>
+    <view wx:if='{{select}}' class='slect-view'></view>
+  </view>
+</template>
+
+<template name='scoreItem'>
+  <!-- <navigator> -->
+    <view  class='score-item-view' data-index='{{index}}' bindtap='personalClick'>
+      <text class='rank-item-title' style='color:{{color}}'>{{index + 1}}</text>
+      <image src='{{imageUrl}}' class='score-item-image'></image>
+      <text class='score-item-name'>{{name}}</text>
+      <text class='score-item-value'>{{score}}</text>
+      <image src='../../../resource/right_arrow.png' class='right-arrow'></image>
+    </view>
+  <!-- </navigator> -->
+</template>
+
+<template name='groupItem'>
+  <view  class='group-item-view' style="margin-top:{{index==0?0:'1rpx'}};" data-index='{{index}}' bindtap='groupClick'>
+    <view class='group-inline-view l'>
+      <view class='group-userinfo-item blue'>
+         <image src='{{blueUrl}}' class='image'></image>
+         <view>
+          {{blueName}}<view wx:if='{{isBlueCaptain}}' class='captain' style='background-color:#00a0e9;margin-left:10rpx;'>队长</view> 
+         </view>  
+      </view>
+       <text class='group-score' style='right:50rpx'>{{blueScore}}</text> 
+    </view>
+    <view class='group-inline-view r'>
+       <text class='group-score' style='left:50rpx'>{{redScore}}</text> 
+      <view class='group-userinfo-item red'>
+         <image src='{{redUrl}}' class='image'></image>
+         <view>
+          <view wx:if='{{isBlueCaptain}}' class='captain' style='background-color:#fe6d6d;margin-right:10rpx;'>队长</view>{{redName}}
+         </view>  
+      </view>
+    </view>
+    <view class='triangle'>
+      <image class='triangle-image' src='../../../resource/triangle_hl.png' wx:if='{{index<3}}'></image>
+      <image class='triangle-image' src='../../../resource/triangle_no.png' wx:if='{{index>2}}'></image>
+      <text class='triangle-text color{{index<3?index:3}}'>{{index+1}}</text>
+    </view>
+  </view>
+</template>

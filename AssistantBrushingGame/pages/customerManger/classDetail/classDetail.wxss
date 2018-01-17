@@ -1,1 +1,44 @@
-/* pages/customerManger/classDetail/classDetail.wxss */
+@import '../../../template/customerManage.wxss';
+/* page{
+  width: 100%;
+  height: 100%;
+} */
+.detail-container{
+  width: 100%;
+  height: 100%; 
+}
+.item-view{
+  margin-top: 2rpx;
+  width: 100%;
+  background-color: white;
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+}
+.group-header-view{
+  width: 100%;
+  height: 300rpx;
+}
+.group-header-bg{
+  width: 100%;
+  height: 100%;
+}
+.scoreList{
+   margin-top: 13rpx 
+}
+.table-view{
+  position: relative;
+  width: 100%;
+  margin-top: 0;
+}
+.group-content-view{
+  margin-top: 0;
+  width: 100%;
+}
+
+.team-blue{
+  position: absolute;
+}
+.team-red{
+  position: absolute;
+}
