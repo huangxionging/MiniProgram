@@ -1,0 +1,4 @@
+<!--pages/video/video.wxml-->
+<view class='video-container'> 
+  <video src='{{src}}' class='video-view' initial-time='{{initTime}}' controls='false' duration='{{totalTime}}' danmu-btn='true' danmu-list='{{danmuList}}' enable-danmu='true' autoplay='true' loop='true' muted='true' page-gesture='true' direction='-90' show-progress='true' show-fullscreen-btn='true' show-play-btn='true' show-center-play-btn='true' enable-progress-gesture='false' bindplay='videoPlay' bindpause='videoPause' bindended='videoEnd' bindtimeupdate='videoUpdate' bindfullscreenchange='videoFullScreen' objectFit=''></video>
+</view>

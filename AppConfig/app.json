@@ -7,7 +7,9 @@
     "pages/swiper/swiper",
     "pages/text/text",
     "pages/icon/icon",
-    "pages/progress/progress"
+    "pages/progress/progress",
+    "pages/camera/camera",
+    "pages/video/video"
   ],
   "window": {
     "backgroundTextStyle": "dark",

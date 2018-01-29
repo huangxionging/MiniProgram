@@ -128,14 +128,14 @@ function formatNumber(number) {
 
 function showMessages() {
     adjustWordsPosition();
-    $("#messages").fadeIn(5000, function() {
+    $("#messages").fadeIn(3000, function() {
         showLoveU()
     })
 }
 
 function adjustWordsPosition() {
     $("#words").css("position", "absolute");
-    $("#words").css("top", $("#garden").position().top + 195);
+    $("#words").css("top", $("#garden").position().top + 160);
     $("#words").css("left", $("#garden").position().left + 70)
 }
 

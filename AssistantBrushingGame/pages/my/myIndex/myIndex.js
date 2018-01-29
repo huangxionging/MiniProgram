@@ -30,7 +30,7 @@ Page({
       },
       {
         id: 3,
-        icon: 'icon_user.png',
+        icon: 'organization.png',
         title: '我的单位',
         // quantity: 50,
         url: '../myClinic/myClinic'

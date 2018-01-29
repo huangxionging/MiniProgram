@@ -232,6 +232,15 @@ Page({
       if (wxUser.clinicId != undefined) {
         baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
       }
+      if (wxUser.clinicName != undefined) {
+        baseTool.setValueForKey(wxUser.clinicName, 'clinicName')
+      }
+      if (wxUser.clinicIntro != undefined) {
+        baseTool.setValueForKey(wxUser.clinicIntro, 'clinicIntro')
+      }
+      if (wxUser.clinicPic != undefined) {
+        baseTool.setValueForKey(wxUser.clinicPic, 'clinicPic')
+      }
       if (wxUser.memberId) {
         baseTool.setValueForKey(wxUser.memberId, 'memberId')
         console.log(res)

@@ -17,7 +17,9 @@
     "pages/my/myClinic/myClinic",
     "pages/customerManger/createClass/createClass",
     "pages/customerManger/classDetail/classDetail",
-    "pages/customerManger/classList/classList"
+    "pages/customerManger/classList/classList",
+    "pages/customerManger/brushInfo/brushInfo",
+    "pages/customerManger/showTimes/showTimes"
   ],
   "window": {
     "backgroundTextStyle": "dark",

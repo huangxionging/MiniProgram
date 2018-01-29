@@ -1,14 +1,21 @@
 <view class='create-container'>
-  <text>{{clinicName}}</text>
+  <view class='clinic-name-view'>{{clinicName}}</view>
   <view class='team-name-view'>
-    <text>班级名称</text>
+    <text class='team-name-tips'>班级名称</text>
     <view class='team-name-input-view'>
-      <input placeholder='请输入班级名称'></input>
+      <input placeholder='请输入班级名称' maxlength='12' class='team-name-input' bindblur='inputEnd' value='{{teamName}}'></input>
     </view>
-    <view class='team-time-view'>
-      <text>班级名称</text>
-      <view>7天</view>
-    </view>
-    <button bindtap='generateTeam'>生成班级</button>
   </view>
+  <view class='team-time-view' wx:if='{{isCreate}}'>
+    <text class='team-name-tips'>班级有效时长</text>
+    <view class='team-name-input-view' bindtap='selectTimeClick'>
+      {{teamTime}}天<image src='../../../resource/down_arrow.png' class='down-arrow'></image>
+    </view>
+  </view>
+  <block wx:if='{{isCreate}}'>
+    <button bindtap='generateTeam' class='team-button' hover-class='team-hover-button' >生成班级</button>
+  </block>
+  <block wx:else>
+    <button bindtap='saveTeam' class='team-button' hover-class='team-hover-button'>保存</button>
+  </block>
 </view>

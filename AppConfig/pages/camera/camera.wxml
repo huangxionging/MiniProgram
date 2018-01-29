@@ -1,0 +1,46 @@
+<!--pages/camera/camera.wxml-->
+<view class='camera-container'>
+  <camera device-position='{{devicePosition}}' flash='{{flash}}' binderror='cameraError' bindstop='cameraStop' class='camera-view'></camera>
+  <view class='content-view'>
+    <view class='camera-property-view'>
+      <view class='devive-position-view'>
+        <text>摄像头:</text>
+        <radio-group class='device-position-radio' bindchange='deviceRadioChange'>
+          <label class="radio" wx:for='{{devicePositions}}' wx:key='id'>
+            <radio value='{{item.value}}' checked='{{item.checked}}'>{{item.name}}</radio>
+          </label>
+        </radio-group>
+      </view>
+      <view class='devive-flash-view'>
+        <text>闪光灯:</text>
+        <radio-group class='device-position-radio' bindchange='flashRadioChange'>
+          <label class="radio" wx:for='{{flashs}}' wx:key='id'>
+            <radio value='{{item.value}}' checked='{{item.checked}}'>{{item.name}}</radio>
+          </label>
+        </radio-group>
+      </view>
+    </view>
+    <view class='camera-action-view'>
+      <view>拍照
+        <switch type='switch' bindchange='switchChange'></switch>
+        视频
+      </view>
+      <block wx:if='{{isTakePhoto}}'>
+        <view class='main-button main-photo-button' hover-class='hover-photo-button' bindtap='takePhoto'>拍照</view>
+      </block>
+      <block wx:else>
+        <view wx:if='{{recordState==0}}' class='main-button main-photo-button' hover-class='hover-photo-button' bindtap='recordVideo'>录制</view>
+        <view wx:if='{{recordState==1}}' class='main-button main-record-video' bindtap='stopRecord'>录制中</view>
+        <view wx:if='{{recordState==2}}' class='main-button main-record-video'>录制完成</view>
+      </block>
+    </view>
+  </view>
+  <scroll-view class='preview-view' scroll-x='true' scroll-into-view='{{toView}}'>
+    <view>
+    <block wx:for='{{dataList}}' wx:key='id' wx:for-item='item'>
+      <image id='image{{index}}' class='image-list' src='{{item.thumbPath}}' bindtap='imageClick' data-type='{{item.type}}' data-src='{{item.src}}'></image>
+    </block>
+    </view>
+    
+  </scroll-view>
+</view>

@@ -1,62 +1,32 @@
 // pages/customerManger/classList/classList.js
 const app = getApp()
-const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const teamManager = require('../../../manager/teamManager.js')
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     loadDone: false,
     hasData: false,
-    dataList: [
-      {
-        date: '2018-01-01',
-        name: '小小牙医1班',
-        total: 10,
-        teamId: '',
-        id: 1
-      },
-      {
-        date: '2018-01-02',
-        name: '小小牙医2班',
-        teamId: '',
-        total: 12,
-        id: 2
-      },
-      {
-        date: '2018-01-03',
-        name: '小小牙医3班',
-        teamId: '',
-        total: 8,
-        id: 3
-      },
-      {
-        date: '2018-01-05',
-        name: '小小牙医4班',
-        teamId: '',
-        total: 23,
-        id: 4
-      },
-      {
-        date: '2018-01-06',
-        name: '小小牙医5班',
-        teamId: '',
-        total: 18,
-        id: 5
-      },
-    ]
+    pageNo: 1,
+    dataList: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this
+    that.pageQueryClass(that.data.pageNo)
+    baseMessageHandler.addMessageHandler('classListRefresh', this, that.onPullDownRefresh).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -91,14 +61,21 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    var that = this
+    that.data.pageNo = 1
+    that.setData({
+      dataList: []
+    })
+    that.pageQueryClass(that.data.pageNo)
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+    var that = this
+    that.data.pageNo++
+    that.pageQueryClass(that.data.pageNo)
   },
 
   /**
@@ -144,6 +121,47 @@ Page({
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
+    })
+  },
+  pageQueryClass: function() {
+    var that = this
+    wx.showNavigationBarLoading()
+    teamManager.pageQueryClass(that.data.pageNo).then(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      var hasData = that.data.hasData
+      var loadDone = true
+      var dataListResult = res.dataList
+      var dataList = that.data.dataList
+      if (dataListResult != undefined && dataListResult.length > 0) {
+        hasData = true
+        for (var index = 0; index < dataListResult.length; ++index) {
+          var item = dataListResult[index]
+          var date = item.activeTime
+          dataList.push({
+            name: item.title,
+            date: date,
+            teamId: item.id,
+            total: item.count,
+            activeState: item.activeState
+          })
+        }
+      }
+      that.setData({
+        loadDone: true,
+        hasData: hasData,
+        dataList: dataList
+      })
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      that.setData({
+        loadDone: true,
+        hasData: false,
+        dataList: []
+      })
     })
   }
 })

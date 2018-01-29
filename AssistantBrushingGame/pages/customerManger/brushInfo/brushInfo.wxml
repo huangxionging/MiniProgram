@@ -1,0 +1,140 @@
+<!--page/brushInfo/brushInfo.wxml-->
+<view class="top">
+   <view class="m {{tab1}}" bindtap="tab1">每日刷牙详情</view>
+   <view class="m {{tab2}}" bindtap="tab2">每月刷牙详情</view>
+</view>
+<view class="box">
+  <view class="one {{tab1}}">
+    <view class="date_box">
+      <view class="t"> 
+        <view class="t_l" bindtap="lastMonth">上一月</view>
+        <view class="t_m">{{now.y}}年{{now.m}}月早晚刷牙详情</view>
+        <view class="t_r" bindtap="nextMonth" wx:if="{{now.y!=today.y||now.m!=today.m}}">下一月</view>
+      </view>
+      <view class="m">
+        <view class="m_t">
+          <view class="m_t_m">日</view>
+          <view class="m_t_m">一</view>
+          <view class="m_t_m">二</view>
+          <view class="m_t_m">三</view>
+          <view class="m_t_m">四</view>
+          <view class="m_t_m">五</view>
+          <view class="m_t_m">六</view>
+        </view>
+        <view class="m_m">
+          <view class="m_m_m" wx:for="{{date_data}}" wx:key='day' wx:item='item'>
+            <view class="{{item.c}}" data-day="{{item.day}}" bindtap="getDayData">
+              {{item.v}}
+            </view>
+          </view>
+        </view>
+        <view class="m_b">
+          <view class="m_b_a"></view>
+          <view class="m_b_t">早晚刷牙</view>
+          <view class="m_b_b"></view>
+          <view class="m_b_t">未早晚刷牙</view>
+          <view class="m_b_c"></view>
+          <view class="m_b_t">无记录</view>
+          <view class="m_b_d" style='display:none'></view>
+          <view class="m_b_t" style='display:none'>今天</view> 
+        </view>
+      </view>
+    </view>
+    <view class="day_box">
+      <view class="t">
+        {{now_day.y}}年{{now_day.m}}月{{now_day.d}}日
+      </view>
+      <navigator url="../showTimes/showTimes?recordId={{item.recordId}}"  class="m" wx:for="{{request_data2}}" wx:key='date' data-recordId="{{item.recordId}}">
+        <view class="m_la">{{item.soonerOrLater}}</view>
+        <view class="m_lb">{{item.date}}</view>
+        <view class="m_ra">{{item.score}}分</view>
+        <view class="m_rb"></view>
+      </navigator >
+    </view>
+  </view>
+  <view class="two  {{tab2}}">
+    <view class="dateh_box">
+      <view class="t"> 
+        <view class="t_l" bindtap="lastMonth">上一月</view>
+        <view class="t_m">{{now.y}}年{{now.m}}月每日刷牙最高分</view>
+        <view class="t_r" bindtap="nextMonth" wx:if="{{now.y!=today.y||now.m!=today.m}}">下一月</view>
+      </view>
+      <view class="m">
+        <view class="l">
+          <view class="l100">100</view>
+          <view class="l60">60</view>
+          <view class="l0">0</view>
+        </view>
+        <view class="r">
+          <view class="r_m">
+            <view class="r_mo" wx:for="{{request_data1.recordMonthChildVos}}" wx:key='id'>
+              <view class="r_mm" style="height:{{item.highScore}}%"></view>
+            </view>
+          </view>
+          <view class="r_b">
+            <view class="r_bm">1</view>
+            <view class="r_bm">4</view>
+            <view class="r_bm">8</view>
+            <view class="r_bm">12</view>
+            <view class="r_bm">16</view>
+            <view class="r_bm">20</view>
+            <view class="r_bm">24</view>
+            <view class="r_bm">28</view>
+            <view class="r_bm">31</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="month_box">
+      <view class="t">
+        {{now.y}}年{{now.m}}月刷牙详情
+      </view>
+      <view class="m">
+        <view class="m_m">
+          <view class="m_ma">
+            <view class="m_mb">
+               {{request_data1.qualifiedCount}}
+            </view>
+            次
+          </view>
+          <view class="m_mc">
+            刷牙合格
+          </view>
+        </view>
+        <view class="m_m">
+          <view class="m_ma">
+            <view class="m_mb">
+               {{request_data1.unqualifiedCount}}
+            </view>
+            次
+          </view>
+          <view class="m_mc">
+            刷牙未合格
+          </view>
+        </view>
+        <view class="m_m">
+          <view class="m_ma">
+            <view class="m_mb">
+               {{request_data1.adhereToAFewDaysCount}}
+            </view>
+            次
+          </view>
+          <view class="m_mc">
+            早晚刷牙
+          </view>
+        </view>
+        <view class="m_m">
+          <view class="m_ma">
+            <view class="m_mb">
+               {{request_data1.noAdhereToAFewDaysCount}}
+            </view>
+            次
+          </view>
+          <view class="m_mc">
+            未早晚刷牙
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

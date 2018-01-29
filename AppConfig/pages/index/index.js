@@ -4,7 +4,7 @@ const app = getApp()
 
 Page({
   data: {
-    components: ['swiper', 'text', 'icon', 'progress', 'button', 'form', 'input', 'checkbox', 'radio', 'picker', 'slider', 'switch', 'label'],
+    components: ['swiper', 'text', 'icon', 'progress', 'button', 'form', 'input', 'checkbox', 'radio', 'picker', 'slider', 'switch', 'label', 'camera'],
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
@@ -82,6 +82,14 @@ Page({
           url: '../progress/progress',
         })
         break;
+      }
+      case 'camera': {
+        wx.navigateTo({
+          url: '../camera/camera',
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
+        })
       }
     }
   }

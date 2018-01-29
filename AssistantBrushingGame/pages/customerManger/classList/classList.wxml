@@ -1,9 +1,9 @@
 <!--pages/customerManger/classList/classList.wxml-->
 <import src='../../../template/customerManage.wxml'/>
 <view class='team-container'>
-  <block wx:if='{{!loadDone}}'>
+  <block wx:if='{{loadDone}}'>
     <button class='team-add-button' hover-class='hover-main-button' bindtap='createButton'>添加班级</button>
-    <block wx:if='{{hasData}}'>
+    <block wx:if='{{!hasData}}'>
       <image src='/resource/no_class.png' class='team-no-team-img'></image>
       <text class='team-no-team-title'>当前还没有创建班级哦</text>
     </block>

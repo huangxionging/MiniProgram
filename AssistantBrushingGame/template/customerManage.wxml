@@ -1,7 +1,11 @@
 <template name='teamItem'>
-  <navigator url='../classDetail/classDetail?classId={{classId}}'>
+  <navigator url='../classDetail/classDetail?classId={{teamId}}'>
     <view class='team-item-view'>
+    <view class='team-item-status'>
       <text class='team-item-date'>{{date}}</text> 
+      <text class='team-item-state' style="color:{{activeState==1?'#00a0e9':'#999'}}">{{activeState==1?'进行中':'已结束'}}</text> 
+    </view>
+      
       <view class='team-item-content-view'>
         <text class='team-item-name'>{{name}}</text> 
         <text class='team-item-members'>{{total}}</text> 
@@ -25,7 +29,7 @@
       <image src='{{imageUrl}}' class='score-item-image'></image>
       <text class='score-item-name'>{{name}}</text>
       <text class='score-item-value'>{{score}}</text>
-      <image src='../../../resource/right_arrow.png' class='right-arrow'></image>
+      <image src='../../../resource/right_arrow.png' class='right-arrow' wx:if='{{selectItemIndex == 0}}'></image>
     </view>
   <!-- </navigator> -->
 </template>
@@ -36,7 +40,7 @@
       <view class='group-userinfo-item blue'>
          <image src='{{blueUrl}}' class='image'></image>
          <view>
-          {{blueName}}<view wx:if='{{isBlueCaptain}}' class='captain' style='background-color:#00a0e9;margin-left:10rpx;'>队长</view> 
+          {{blueName}}<view wx:if='{{index==0}}' class='captain' style='background-color:#00a0e9;margin-left:10rpx;'>队长</view> 
          </view>  
       </view>
        <text class='group-score' style='right:50rpx'>{{blueScore}}</text> 
@@ -46,7 +50,7 @@
       <view class='group-userinfo-item red'>
          <image src='{{redUrl}}' class='image'></image>
          <view>
-          <view wx:if='{{isBlueCaptain}}' class='captain' style='background-color:#fe6d6d;margin-right:10rpx;'>队长</view>{{redName}}
+          <view wx:if='{{index==0}}' class='captain' style='background-color:#fe6d6d;margin-right:10rpx;'>队长</view>{{redName}}
          </view>  
       </view>
     </view>

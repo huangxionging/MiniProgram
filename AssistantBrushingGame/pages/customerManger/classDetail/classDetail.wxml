@@ -1,29 +1,41 @@
 <import src='../../../template/customerManage.wxml'/>
 <view class='detail-container'>
-  <block wx:if='{{!loadDone}}'>
-    <view class='item-view'>
+  <block wx:if='{{loadDone}}'>
+    <view class='item-view' wx:if='{{needItemList}}'>
       <block wx:for='{{itemList}}' wx:key='id' wx:item='item'> 
          <template is='detailMenu' data='{{...item,index}}'></template> 
       </block>
     </view>
     <view wx:if='{{selectItemIndex==0}}' class='table-view scoreList'>
+      <view class='personal-header'>
+        <text class='personal-header-text'>{{teamName}}</text>
+        <image src='../../../resource/modify.png' class='personal-modify' bindtap='modifyClick' wx:if='{{days < 7}}'></image>
+        <view class='personal-share-button' bindtap='shareClick' wx:if='{{days < 7}}'>分享</view>
+      </view>
       <block wx:for='{{personalList}}' wx:key='id' wx:item='item'> 
-         <template is='scoreItem' data='{{...item,index}}'></template> 
+         <template is='scoreItem' data='{{...item,index, selectItemIndex}}'></template> 
       </block>
     </view>
     <view wx:if='{{selectItemIndex==1}}' class='table-view'>
       <view class='group-header-view'>
         <image src='../../../resource/group.png' class='group-header-bg'></image>
         <view class='team-blue'>
-          <view>
-            蓝队<text>{{blueAverageScore}}</text>
+          <view class='team-name'>
+            蓝队<text class='blue-avg-score'>{{blueAverageScore}}</text>
           </view>
-          <view>
-            <image src=''></image>
-            <text>36</text>
+          <view class='blue-like-view'>
+            <image src='../../../resource/like_1.png' class='blue-like'></image>
+            <text class='blue-like-number'>{{blueLikes}}</text>
           </view>
         </view>
         <view class='team-red'> 
+          <view class='team-name'>
+            <text class='red-avg-score'>{{redAverageScore}}</text>红队
+          </view>
+          <view class='red-like-view'>
+            <image src='../../../resource/like_1.png' class='red-like'></image>
+            <text class='red-like-number'>{{redLikes}}</text>
+          </view>
         </view>
        </view> 
       <view class='group-content-view'>
@@ -35,7 +47,7 @@
     </view>
     <view wx:if='{{selectItemIndex==2}}' class='table-view scoreList'>
       <block wx:for='{{homeList}}' wx:key='id' wx:item='item'> 
-         <template is='scoreItem' data='{{...item,index}}'></template> 
+         <template is='scoreItem' data='{{...item,index, selectItemIndex}}'></template> 
       </block>
     </view>
   </block>

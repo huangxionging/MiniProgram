@@ -1,8 +1,5 @@
 // pages/my/brushContestDetail/brushContestDetail.js
 const app = getApp()
-const loginManager = require('../../../manager/loginManager.js')
-const baseWechat = require('../../../utils/baseWeChat.js')
-const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const myManager = require('../../../manager/myManager.js')
 

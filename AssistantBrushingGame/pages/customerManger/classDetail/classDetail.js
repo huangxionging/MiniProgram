@@ -1,10 +1,11 @@
 // pages/customerManger/classDetail/classDetail.js
 const app = getApp()
-const contestManager = require('../../../manager/contestManager.js')
 const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const teamManager = require('../../../manager/teamManager.js')
+const loginManager = require('../../../manager/loginManager.js')
 Page({
 
   /**
@@ -12,19 +13,26 @@ Page({
    */
   data: {
     days: 0,
+    classId: 0,
     loadDone: false,
-    selectItemIndex: 1,
+    selectItemIndex: 0,
+    teamName: '',
+    needItemList: false,
+    blueLikes: 0,
+    redLikes: 0,
+    blueAverageScore: 0,
+    redAverageScore: 0,
     itemList: [
       {
         itemName: '个人星球',
-        itemMenuId: 'detail-nomarl',
-        select: false,
+        itemMenuId: 'detail-select',
+        select: true,
         id: 0
       },
       {
         itemName: '团体星球',
-        itemMenuId: 'detail-select',
-        select: true,
+        itemMenuId: 'detail-nomarl',
+        select: false,
         id: 1
       },
       {
@@ -34,90 +42,27 @@ Page({
         id: 2
       }
     ],
-    personalList: [
-      {
-        score: 98.00,
-        name: 'Umiy',
-        imageUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3MAibUuicmwHF2E3pN9sPF2icg/0',
-        userId: 1,
-        color: '#ffb9e0'
-      },
-      {
-        score: 97.0,
-        name: 'Umidy',
-        imageUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3MAibUuicmwHF2E3pN9sPF2icg/0',
-        userId: 2,
-        color: '#fe6941'
-      },
-      {
-        score: 96.0,
-        name: 'Umidsy',
-        imageUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        userId: 3,
-        color: '#2cabee'
-      },
-      {
-        score: 95.0,
-        name: '黄雄',
-        imageUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        userId: 4
-      },
-      {
-        score: 92.0,
-        name: '黄的雄',
-        imageUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        userId: 5
-      }
-    ],
-    groupList: [
-      {
-        blueName: '我爱你一生一世哦哦',
-        blueUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        blueScore: 97.00,
-        isBlueCaptain: true,
-        redName: 'UimdssiY',
-        redUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        redScore: 97.00,
-        isRedCaptain: true
-      },
-      {
-        blueName: 'UimiY',
-        blueUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        blueScore: 97.00,
-        isBlueCaptain: false,
-        redName: 'UimiY',
-        redUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        redScore: 97.00,
-        isRedCaptain: false
-      },
-      {
-        blueName: 'UimiY',
-        blueUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3MAibUuicmwHF2E3pN9sPF2icg/0',
-        blueScore: 97.00,
-        isBlueCaptain: false,
-        redName: 'UimiY',
-        redUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3MAibUuicmwHF2E3pN9sPF2icg/0',
-        redScore: 97.00,
-        isRedCaptain: false
-      },
-      {
-        blueName: 'UimiY',
-        blueUrl: 'https://www.baidu.com/img/bd_logo1.png',
-        blueScore: 97.00,
-        isBlueCaptain: false,
-        redName: 'UimiY',
-        redUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3MAibUuicmwHF2E3pN9sPF2icg/0',
-        redScore: 97.00,
-        isRedCaptain: false
-      }
-    ]
+    personalList: [],
+    groupList: [],
+    homeList: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this
+    baseTool.print(options)
+    that.setData({
+      classId: options.classId
+    })
+    that.getTeamDetails()
+
+    baseMessageHandler.addMessageHandler('classListRefresh', this, that.onPullDownRefresh).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
 
   /**
@@ -152,7 +97,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    var that = this
+    that.getTeamDetails()
   },
 
   /**
@@ -188,7 +134,188 @@ Page({
     })
   },
   personalClick: function(e){
+    var that = this
+    var selectItemIndex = that.data.selectItemIndex
+    if (selectItemIndex == 0) {
+      var userId = that.data.personalList[e.currentTarget.dataset.index].userId
+      baseTool.print(userId)
+      wx.navigateTo({
+        url: '../brushInfo/brushInfo?userId=' + userId,
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+    }
+  },
+  getTeamDetails: function(){
+    var that = this
+    wx.showNavigationBarLoading()
+    //that.data.classId
+    teamManager.getTeamDetails(that.data.classId).then(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      var dataArray = res.data
+      var personalList = [] 
+      var groupList = []
+      var homeList = []
+      var itemList = that.data.itemList
+      var blueLikes = 0
+      var redLikes = 0
+      var blueAverageScore = 0.00
+      var redAverageScore = 0.00
+      var needItemList = false
+      if (dataArray != undefined) {
+        if (dataArray[0].length == 0) {
+          needItemList = false
+        } else {
+          var personal = dataArray[0]
+          for (var index = 0; index < personal.length; ++index) {
+            var item = {
+              score: personal[index].score,
+              name: personal[index].nickname,
+              imageUrl: personal[index].avatarurl,
+              userId: personal[index].uid,
+            }
+            if (index == 0) {
+              item.color = '#ffb9e0'
+            } else if (index == 1) {
+              item.color = '#fe6941'
+            } else if (index == 2) {
+              item.color = '#2cabee'
+            }
+            personalList.push(item)
+          }
+        }
+      }
+      if (dataArray[1] == null) {
+        if (itemList.length == 3) {
+          itemList.splice(1, 2)
+        }
+      } else {
+        blueLikes = dataArray[1].zan_blue
+        redLikes = dataArray[1].zan_red
+        blueAverageScore = dataArray[1].fs_blue
+        redAverageScore = dataArray[1].fs_red
+        var groupData = dataArray[1].list
+        var blueList = []
+        var redList = []
+        for(var index = 0; index < groupData.length; ++index) {
+          var item = groupData[index]
+          if (item.group != undefined && item.group == '2') {
+            blueList.push({
+              blueName: item.nickname,
+              blueUrl: item.avatarurl,
+              blueScore: item.score
+            })
+          } else if (item.group != undefined && item.group == '1') {
+            redList.push({
+              redName: item.nickname,
+              redUrl: item.avatarurl,
+              redScore: item.score
+            })
+          }
+        }
 
+        var maxLength = blueList.length
+        if (maxLength < redList.length){
+          maxLength = redList.length
+        }
+
+        for (var index = 0; index < maxLength; ++index) {
+          var item = {}
+          if (index < blueList.length) {
+            item.blueName = blueList[index].blueName
+            item.blueUrl = blueList[index].blueUrl
+            item.blueScore = blueList[index].blueScore
+          } else {
+            item.blueName = ''
+            item.blueUrl = ''
+            item.blueScore = ''
+          }
+
+          if (index < redList.length) {
+            item.redName = redList[index].redName
+            item.redUrl = redList[index].redUrl
+            item.redScore = redList[index].redScore
+          } else {
+            item.redName = ''
+            item.redUrl = ''
+            item.redScore = ''
+          }
+          groupList.push(item)
+        }
+        
+        if (dataArray[2] == null) {
+          if (itemList.length == 3) {
+            itemList.splice(2, 1)
+          } 
+        } else {
+          var home = dataArray[2]
+          baseTool.print(home)
+          for (var index = 0; index < home.length; ++index) {
+            var item = {
+              score: home[index].fscore,
+              name: home[index].nickname,
+              imageUrl: home[index].avatarurl,
+              userId: home[index].uid,
+            }
+            if (index == 0) {
+              item.color = '#ffb9e0'
+            } else if (index == 1) {
+              item.color = '#fe6941'
+            } else if (index == 2) {
+              item.color = '#2cabee'
+            }
+            homeList.push(item)
+          }
+        }
+      }
+
+      if (personalList.length > 0) {
+        needItemList = true
+      }
+      baseTool.print(needItemList)
+      that.setData({
+        teamName: res.room_name,
+        loadDone: true,
+        itemList: itemList,
+        needItemList: needItemList,
+        personalList: personalList,
+        groupList: groupList,
+        homeList: homeList,
+        blueLikes: blueLikes,
+        redLikes: redLikes,
+        blueAverageScore: blueAverageScore,
+        redAverageScore: redAverageScore,
+        days: res.now_day
+      })
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      baseTool.print(res)
+    })
+  },
+  shareClick: function() {
+    var that = this
+    wx.navigateToMiniProgram({
+      appId: 'wx315eebaa0466635a',
+      path: 'page/main/auto_code?room_id=' + that.data.classId + '&uid=' + loginManager.getMemberId(),
+      extraData: {
+        foo: 'bar'
+      },
+      envVersion: 'release',
+      success(res) {
+        // 打开成功
+      }
+    })
+  },
+  modifyClick: function() {
+    var that = this
+    wx.navigateTo({
+      url: '../createClass/createClass?classId=' + that.data.classId + '&isCreate=1&teamName=' + that.data.teamName,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   }
-
 })

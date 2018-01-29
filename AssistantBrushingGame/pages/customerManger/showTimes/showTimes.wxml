@@ -1,0 +1,59 @@
+<!--page/brushInfo/showTimes.wxml-->
+<view class="top_box">
+  <view class="t">
+    刷牙时间 {{d.brushTeethTime}}
+  </view>
+  <view class="m">
+    <view class="l">
+      <view class='canvars_box' style=''>
+      <canvas class="out" canvas-id="myCanvas"></canvas>
+      <canvas class="in" canvas-id="myCanvasa"></canvas>
+      </view>
+      <view class="mm">
+        <text class="mm_t">{{d.overallScore}}</text>
+        <view class="mm_b">清洁指数</view>
+      </view>
+    </view>
+    <view class="m">
+      <text class="m_t">{{d.duration}}</text>
+      <view class="m_b">有效时长</view>
+    </view>
+    <view class="r">
+      <text class="m_t">{{d.brushTeethAllDuration||d.duration}}</text>
+      <view class="m_b">总时长</view>
+    </view>
+    
+  </view>
+  <view class="b">
+    <image style="width:350rpx;margin-top:40rpx;height:350rpx;" src="{{top_pic}}"></image>
+  </view>
+</view>
+<scroll-view scroll-y style="height:550rpx;">
+<view class="m_box" wx:for="{{d.toothSurfaceVos}}"  wx:for-item="a" wx:if="{{a.toothSurfaceDetailsVos.length>1}}" wx:key='a.name'>
+  <view class="title">
+    {{a.name}}
+  </view>
+  <view class="m" bindtap="c_top_pic" data-pic="{{b.pic}}" wx:for="{{a.toothSurfaceDetailsVos}}"  wx:for-item="b" wx:key='b.name'>
+    <view class="m_la">
+      <image style="width:70rpx;height:70rpx;" src="{{b.pic}}"></image>
+    </view>
+    <view class="m_lb">
+        {{b.name}}
+    </view>
+    <view class="m_ra">
+      {{b.suggest}}
+    </view>
+    <view class="m_rb">
+    </view>
+  </view>
+</view>
+
+<view class="b_box">
+  <view class="t">
+    温馨提示
+  </view>
+  <view class="m">
+    刷牙无法完全去除牙菌斑，配合牙线清洁牙齿更健康。
+  </view>
+</view>
+</scroll-view>

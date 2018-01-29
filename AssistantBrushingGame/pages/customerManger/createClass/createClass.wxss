@@ -1,1 +1,67 @@
-/* pages/customerManger/createClass/createClass.wxss */
+page{
+  width: 100%;
+  height: 100%;
+}
+.create-container{
+  margin-top: 2rpx;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+.clinic-name-view{
+  width: 100%;
+  margin-top: 70rpx;
+  font-size: 36rpx;
+  color: #666;
+  text-align: center;
+}
+.team-name-view{
+  margin-top: 90rpx;
+  padding: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+}
+.team-name-tips{
+  margin-left: 15rpx;
+}
+.team-name-input-view{
+  position: relative;
+  height: 100rpx;
+  background-color: #f3f4f7;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  border-radius: 20rpx;
+  color: #9c9da3;
+}
+.team-name-input{
+  width: 100%;
+}
+.team-time-view{
+  position: relative;
+  margin-top: 30rpx;
+  padding: 0 30rpx; 
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+.down-arrow{
+  width: 24rpx;
+  height: 12rpx;
+  position: absolute;
+  right: 40rpx;
+  top: 38rpx;
+}
+.team-button{
+  margin-top: 350rpx;
+  width: 300rpx;
+  background-color: #00a0e9;
+  color: white;
+  border-radius: 80rpx;
+}
+.team-hover-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}

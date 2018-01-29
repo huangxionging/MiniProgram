@@ -90,5 +90,13 @@ module.exports = {
   /**
    * 添加班级
    */
-  addClass: 'addClass'
+  addClass: 'addClass',
+  /**
+   * 查询班级列表
+   */
+  pageQueryClass: 'pageQueryClass',
+  /**
+   * 更新班级名称
+   */
+  updateClassTitle: 'updateClassTitle'
 }

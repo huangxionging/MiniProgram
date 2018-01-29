@@ -4,25 +4,14 @@
 		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
-		"minified": true
+		"minified": true,
+		"newFeature": true
 	},
-	"compileType": "weapp",
-	"libVersion": "1.5.4",
+	"compileType": "miniprogram",
+	"libVersion": "1.9.1",
 	"appid": "wxde0380af73d9dbb9",
 	"projectname": "AppConfig",
 	"condition": {
-		"weapp": {
-			"current": -1,
-			"list": [
-				{
-					"id": 0,
-					"name": "调试 progress",
-					"pathName": "pages/progress/progress",
-					"query": "name=progress&id=1987",
-					"scene": "1011"
-				}
-			]
-		},
 		"search": {
 			"current": -1,
 			"list": []
@@ -30,6 +19,22 @@
 		"conversation": {
 			"current": -1,
 			"list": []
+		},
+		"game": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "调试video",
+					"pathName": "pages/video/video",
+					"query": "name=progress&id=1987",
+					"scene": "1011"
+				}
+			]
 		}
 	}
 }

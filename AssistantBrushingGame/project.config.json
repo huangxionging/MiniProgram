@@ -25,12 +25,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": -1,
 			"list": [
 				{
 					"id": 0,
 					"name": "的",
-					"pathName": "pages/customerManger/classDetail/classDetail",
+					"pathName": "pages/login/binding/binding",
 					"query": "gameId=2&macAddress='dd'"
 				}
 			]

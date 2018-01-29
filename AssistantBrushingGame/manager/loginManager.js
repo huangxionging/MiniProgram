@@ -51,9 +51,10 @@ function checkState() {
     baseWechat.checkSession().then((res) => {
       // 获取 memberId
       var memberId = baseTool.valueForKey('memberId')
+      var clinicId = baseTool.valueForKey('clinicId')
       // 如果 存在则结束流程
       // memberId = 'fff'
-      if (memberId) {
+      if (memberId && clinicId) {
         resolve(memberId)
       } else {
         reject({
@@ -120,7 +121,9 @@ function checkUserBindingState(code = '', userInfo = {}) {
           reject(res.data.msg)
         }
       },
-      fail: reject,
+      fail: function(res) {
+        reject(baseTool.errorMsg)
+      },
       complete: function (res) { },
     })
   })
@@ -165,7 +168,9 @@ function getVerifyCode(telphoneNumber = '') {
           }
         }
       },
-      fail: reject,
+      fail: function(res) {
+        reject(baseTool.errorMsg)
+      },
       complete: function (res) { },
     })
   })
@@ -196,7 +201,9 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
           }
         }
       },
-      fail: reject,
+      fail: function(res){
+        reject(baseTool.errorMsg)
+      },
       complete: function (res) { },
     })
   })
@@ -256,6 +263,15 @@ function loginFlow() {
         var wxUser = res.wxUser
         if (wxUser.clinicId != undefined) {
           baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
+        }
+        if (wxUser.clinicName != undefined){
+          baseTool.setValueForKey(wxUser.clinicName, 'clinicName')
+        }
+        if (wxUser.clinicPic != undefined) {
+          baseTool.setValueForKey(wxUser.clinicPic, 'clinicPic')
+        }
+        if (wxUser.clinicIntro != undefined) {
+          baseTool.setValueForKey(wxUser.clinicIntro, 'clinicIntro')
         }
         if (wxUser.memberId) {
           baseTool.setValueForKey(wxUser.memberId, 'memberId')
