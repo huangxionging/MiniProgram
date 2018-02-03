@@ -248,6 +248,7 @@ Page({
     var resType = e.currentTarget.dataset.type
     // 获得资源的路径
     var src = e.currentTarget.dataset.src
+    var thumbPath = e.currentTarget.dataset.thumbpath
     // 判断是否是图片还是视频
     if (resType == 'image') {
       // 预览图像
@@ -261,7 +262,7 @@ Page({
     } else if (resType == 'video'){
       // 挑转视频页面加载视频
       wx.navigateTo({
-        url: '../video/video?src=' + src,
+        url: '../video/video?src=' + src + '&posterImageUrl=' + thumbPath,
         success: function(res) {},
         fail: function(res) {},
         complete: function(res) {},

@@ -38,7 +38,7 @@
   <scroll-view class='preview-view' scroll-x='true' scroll-into-view='{{toView}}'>
     <view>
     <block wx:for='{{dataList}}' wx:key='id' wx:for-item='item'>
-      <image id='image{{index}}' class='image-list' src='{{item.thumbPath}}' bindtap='imageClick' data-type='{{item.type}}' data-src='{{item.src}}'></image>
+      <image id='image{{index}}' class='image-list' src='{{item.thumbPath}}' bindtap='imageClick' data-type='{{item.type}}' data-src='{{item.src}}' data-thumbPath='{{item.thumbPath}}'></image>
     </block>
     </view>
     

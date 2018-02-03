@@ -1,4 +1,15 @@
 <!--pages/video/video.wxml-->
 <view class='video-container'> 
-  <video src='{{src}}' class='video-view' initial-time='{{initTime}}' controls='false' duration='{{totalTime}}' danmu-btn='true' danmu-list='{{danmuList}}' enable-danmu='true' autoplay='true' loop='true' muted='true' page-gesture='true' direction='-90' show-progress='true' show-fullscreen-btn='true' show-play-btn='true' show-center-play-btn='true' enable-progress-gesture='false' bindplay='videoPlay' bindpause='videoPause' bindended='videoEnd' bindtimeupdate='videoUpdate' bindfullscreenchange='videoFullScreen' objectFit=''></video>
+  <video wx:if='{{loadDone}}' id='video-player' src='{{src}}' class='video-view' danmu-btn='true' danmu-list='{{danmuList}}' enable-danmu='true' loop='true' muted='true' page-gesture='true' direction='-90' show-progress='true' show-fullscreen-btn='true' show-play-btn='true' show-center-play-btn='true' enable-progress-gesture='false' bindplay='videoPlay' bindpause='videoPause' bindended='videoEnd' bindtimeupdate='videoUpdate' bindfullscreenchange='videoFullScreen' objectFit='contain' poster='{{posterImageUrl}}'></video>
+  <view class='danmu-input-view'>
+    <input placeholder='输入弹幕文字' class='danmu-input-item' bindblur='inputClick' bindinput='inputClick'></input>
+    <view class='danmu-button' hover-class='hover-danmu-button' bindtap='sendDanmuClick'>发送</view>
+  </view>
+  <view class='video-action-item'>
+    <view class='danmu-button item' hover-class='hover-danmu-button' bindtap='playClick'>播放</view>
+    <view class='danmu-button item' hover-class='hover-danmu-button' bindtap='pauseClick'>暂停</view>
+    <view class='danmu-button item' hover-class='hover-danmu-button' bindtap='seekClick'>跳转</view>
+    <view class='danmu-button item' hover-class='hover-danmu-button' bindtap='fullScreenClick'>全屏</view>
+  </view>
+  
 </view>

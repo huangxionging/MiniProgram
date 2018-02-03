@@ -1,18 +1,55 @@
 // pages/video/video.js
+/**
+ * 计算随机颜色
+ */
+function getRandomColor() {
+  let rgbValue = ''
+  for (let i = 0; i < 3; ++i) {
+    // 增加颜色值
+    let color = Math.floor(Math.random() * 256).toString(16)
+    color = color.length == 1 ? '0' + color : color
+    rgbValue += color
+  }
+  return '#' + rgbValue
+}
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    src: 'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+    loadDone: false,
+    posterImageUrl: '',
+    src: '',
+    danmuList: [
+      {
+        text: '第 1s 出现的弹幕',
+        color: '#ff0000',
+        time: 1
+      },
+      {
+        text: '第 3s 出现的弹幕',
+        color: '#ff00ff',
+        time: 3
+      }],
+    inputValue: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this
+    console.log(options)
+    that.setData({
+      // 设置视频地址, 或者网络请求
+      src: options.src,
+      // 视频封面的图片网络资源地址
+      posterImageUrl: options.posterImageUrl,
+      // 加载完成
+      loadDone: true
+    })
   },
 
   /**
@@ -65,5 +102,41 @@ Page({
   },
   videoPlay: function(e) {
     console.log(e)
+  },
+  videoUpdate: function(e) {
+    // console.log(e)
+  },
+  videoPause: function(e) {
+    console.log(e)
+  },
+  sendDanmuClick: function(e) {
+    var that = this
+    var ctx = wx.createVideoContext('video-player', that)
+    ctx.sendDanmu({
+      text: that.inputValue,
+      color: getRandomColor()
+    })
+  },
+  inputClick: function(e) {
+    console.log(e.detail.value)
+    this.inputValue = e.detail.value
+  },
+  playClick: function(){
+    var that = this
+    var ctx = wx.createVideoContext('video-player', that)
+    ctx.play()
+  },
+  pauseClick: function() {
+    var that = this
+    var ctx = wx.createVideoContext('video-player', that)
+    ctx.pause()
+  },
+  seekClick: function() {
+
+  },
+  fullScreenClick: function() {
+    var that = this
+    var ctx = wx.createVideoContext('video-player', that)
+    ctx.requestFullScreen()
   }
 })

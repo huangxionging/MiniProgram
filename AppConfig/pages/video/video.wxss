@@ -5,4 +5,41 @@
 }
 .video-view{
   width: 100%;
+  background-color: red;
+}
+.danmu-input-view{
+  margin-top: -10rpx;
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: #f3f3f3;
+}
+.danmu-input-item{
+  margin-left: 20rpx;
+  height: 100%;
+  flex: 1
+}
+.danmu-button{
+  width: 100rpx;
+  background-color: #00a0e9;
+  color:  white;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.hover-danmu-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+.video-action-item{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.video-action-item .item{
+  margin-left: 20rpx;
 }

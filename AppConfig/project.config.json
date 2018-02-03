@@ -25,13 +25,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": -1,
 			"list": [
 				{
 					"id": 0,
 					"name": "调试video",
-					"pathName": "pages/video/video",
-					"query": "name=progress&id=1987",
+					"pathName": "pages/camera/camera",
+					"query": "",
 					"scene": "1011"
 				}
 			]
