@@ -9,7 +9,8 @@
     "pages/icon/icon",
     "pages/progress/progress",
     "pages/camera/camera",
-    "pages/video/video"
+    "pages/video/video",
+    "pages/audio/audio"
   ],
   "window": {
     "backgroundTextStyle": "dark",

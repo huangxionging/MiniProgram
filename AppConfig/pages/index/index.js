@@ -1,15 +1,29 @@
 //index.js
 //获取应用实例
+function getRandomColor() {
+  let rgbValue = ''
+  for (let i = 0; i < 3; ++i) {
+    // 增加颜色值
+    let color = Math.floor(Math.random() * 256).toString(16)
+    color = color.length == 1 ? '0' + color : color
+    rgbValue += color
+  }
+  return '#' + rgbValue
+}
 const app = getApp()
 
 Page({
   data: {
-    components: ['swiper', 'text', 'icon', 'progress', 'button', 'form', 'input', 'checkbox', 'radio', 'picker', 'slider', 'switch', 'label', 'camera'],
+    components: ['swiper', 'text', 'icon', 'progress', 'button', 'form', 'input', 'checkbox', 'radio', 'picker', 'slider', 'switch', 'label', 'camera', 'audio'],
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    color: 'rgb(255, 255, 0)'
+    color: function(){
+      console.log('sddsfsdfsd')
+      return getRandomColor()
+    },
+    colors: 'dd'
   },
   //事件处理函数
   bindViewTap: function() {
@@ -86,6 +100,14 @@ Page({
       case 'camera': {
         wx.navigateTo({
           url: '../camera/camera',
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
+        })
+      }
+      case 'audio': {
+        wx.navigateTo({
+          url: '../audio/audio',
           success: function(res) {},
           fail: function(res) {},
           complete: function(res) {},
