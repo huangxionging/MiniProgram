@@ -109,7 +109,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
   },
 
   /**
@@ -125,13 +125,13 @@ Page({
     var that = this
     that.getHomePage()
     wx.closeBluetoothAdapter({
-      success: function(res) {
+      success: function (res) {
         baseTool.print([res, '成功释放资源'])
       },
-      fail: function(res) {
+      fail: function (res) {
         baseTool.print([res, '呵呵'])
       },
-      complete: function(res) {},
+      complete: function (res) { },
     })
   },
 
@@ -139,9 +139,9 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+
   },
-  getHomePage: function() {
+  getHomePage: function () {
     var that = this
     wx.showNavigationBarLoading()
     var getHomePagePromise = contestManager.getHomePage()
@@ -156,7 +156,7 @@ Page({
         data.loadingDone = true
         data.hasData = false
         that.setData(data)
-      } else if (typeof(res) == 'undefined'){
+      } else if (typeof (res) == 'undefined') {
         data.loadingDone = true
         data.hasData = false
         that.setData(data)
@@ -166,7 +166,7 @@ Page({
             url: '/pages/mask/contestMask/contestMask?imageName=contest-user_mask&isResync=false',
           })
         }
-      } 
+      }
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
@@ -176,13 +176,13 @@ Page({
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
       })
     })
   },
-  createContest: function(){
+  createContest: function () {
     var that = this
     var clinicId = baseTool.valueForKey('clinicId')
     if (clinicId == undefined || clinicId == '') {
@@ -194,18 +194,18 @@ Page({
         cancelColor: '#000',
         confirmText: '完善信息',
         confirmColor: '#00a0e9',
-        success: function(res) {
+        success: function (res) {
           if (res.confirm == true) {
             wx.navigateTo({
               url: '/pages/my/myClinic/myClinic',
-              success: function(res) {},
-              fail: function(res) {},
-              complete: function(res) {},
+              success: function (res) { },
+              fail: function (res) { },
+              complete: function (res) { },
             })
           }
         },
-        fail: function(res) {},
-        complete: function(res) {},
+        fail: function (res) { },
+        complete: function (res) { },
       })
       return
     }
@@ -215,30 +215,31 @@ Page({
     wx.showLoading({
       title: '加载中...',
       mask: true,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
     contestManager.addContest().then(res => {
-      
+      baseTool.print(res)
       if (typeof (res) != 'undefined') {
         var gameId = res.game.gameId
         var name = res.game.name
+        var createTime = res.game.createTime
         wx.navigateTo({
-          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no',
-          success: function(res) {
+          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no' + '&createTime=' + createTime,
+          success: function (res) {
             // wx.hideLoading()
           },
-          fail: function(res) {
+          fail: function (res) {
             // wx.hideLoading()
             that.setData({
               createButtonDisable: false
             })
           },
-          complete: function(res) {},
+          complete: function (res) { },
         })
       }
-      
+
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
@@ -256,7 +257,7 @@ Page({
         complete: function (res) { },
       })
     })
-    
+
   },
   contestReSyn: function (e) {
     var that = this
@@ -267,9 +268,9 @@ Page({
     wx.showLoading({
       title: '同步数据...',
       mask: true,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
 
     // 开启定时器, 3秒后
@@ -353,17 +354,17 @@ Page({
         return
       }
       wx.stopBluetoothDevicesDiscovery({
-        success: function(res) {
+        success: function (res) {
           // 停止搜索以后, 开始同步
           data.synExeLine = 284
           that.dispatchConnect()
         },
-        fail: function(res) {},
-        complete: function(res) {},
+        fail: function (res) { },
+        complete: function (res) { },
       })
     }, 25000)
 
-    wx.onBluetoothDeviceFound(function(res){
+    wx.onBluetoothDeviceFound(function (res) {
       var device = res.devices[0]
       // baseTool.print(device)
       if (device.name.indexOf('game') == -1) {
@@ -383,13 +384,13 @@ Page({
           // 停止搜索设备
           stopTimer = true
           wx.stopBluetoothDevicesDiscovery({
-            success: function(res) {
+            success: function (res) {
               // 开始连接设备
               data.synExeLine = 313
               that.dispatchConnect()
             },
-            fail: function(res) {},
-            complete: function(res) {},
+            fail: function (res) { },
+            complete: function (res) { },
           })
         }
       }
@@ -407,7 +408,7 @@ Page({
   /**
    * 解析数据
    */
-  parseData: function(res) {
+  parseData: function (res) {
     baseTool.print(res)
     var that = this
     data.contestTitle = res.name
@@ -431,8 +432,12 @@ Page({
         playerId: res.deviceList[index].playerId,
         macAddress: macAddress,
         score: res.deviceList[index].score,
-        brushingMethodId: res.deviceList[index].brushingMethodId
+        brushingMethodId: res.deviceList[index].brushingMethodId,
+        accuracy: res.deviceList[index].accuracy
       }
+
+      var demical = parseFloat("0." + item.accuracy)
+      item.score = item.score + (demical == 0 ? 0.00 : demical)
 
       if (res.deviceList[index].recordId != '') {
         baseTool.print(res.deviceList[index])
@@ -446,12 +451,17 @@ Page({
       // 添加数据集合
       data.dataList.push(item)
       // 待同步设备 mac 地址
-      data.synchronizeObject[macAddress] =  macAddress
+      data.synchronizeObject[macAddress] = macAddress
     }
     wx.hideNavigationBarLoading({})
     // 按分数从大到小排序
     data.dataList.sort((a, b) => {
-      return b.score - a.score
+      if (b.score == a.score) {
+        baseTool.print([a, b])
+        return b.accuracy - a.accuracy
+      } else {
+        return b.score - a.score
+      }
     })
     // 然后再改变值
     if (data.dataList.length > 0) {
@@ -473,9 +483,9 @@ Page({
           url: '/pages/mask/contestMask/contestMask?imageName=contest-mask&isResync=true',
         })
       }
-    } 
+    }
   },
-  deleteContest: function(res) {
+  deleteContest: function (res) {
     var that = this
     contestManager.deleteContest(res.gameId).then(res => {
       that.getHomePage()
@@ -502,11 +512,11 @@ Page({
         confirmText: '确定',
         confirmColor: '#00a0e9',
         success: function (res) {
-          if (data.isSave == false ) {
+          if (data.isSave == false) {
             contestManager.saveBrushRecord(data.gameId)
             data.isSave = true
           }
-          
+
           if (data.isSyn == false || data.synSuccessCount > 0) {
             wx.showModal({
               title: '小提示',
@@ -529,7 +539,7 @@ Page({
               complete: function (res) { },
             })
           }
-          
+
           that.setData({
             isSynNow: false
           })
@@ -597,7 +607,7 @@ Page({
     })
 
     var connectTimeOut = false
-    baseTool.startTimer(function(total) {
+    baseTool.startTimer(function (total) {
       if (connectTimeOut == true) {
         baseTool.print(['连接未超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
         return true
@@ -634,10 +644,10 @@ Page({
     // 创建连接
     wx.createBLEConnection({
       deviceId: device.deviceId,
-      success: function(res) {
+      success: function (res) {
         connectTimeOut = true
         // 50ms 以后执行下一步
-        setTimeout(function() {
+        setTimeout(function () {
           // 获得服务
           var serviceTimeOut = false
           baseTool.startTimer(function (total) {
@@ -669,7 +679,7 @@ Page({
             deviceId: device.deviceId,
             success: function (res) {
               serviceTimeOut = true
-              setTimeout(function (){
+              setTimeout(function () {
                 // 获得服务
                 var characteristicsTimeOut = false
                 // 10秒未获得服务跳过
@@ -703,7 +713,7 @@ Page({
                   serviceId: data.tailServiceUUID,
                   success: function (res) {
                     characteristicsTimeOut = true
-                    setTimeout(function() {
+                    setTimeout(function () {
                       // 获得服务
                       var notyfyCharacteristicsTimeOut = false
                       baseTool.startTimer(function (total) {
@@ -736,9 +746,9 @@ Page({
                       wx.showLoading({
                         title: '读取设备数据...',
                         mask: true,
-                        success: function(res) {},
-                        fail: function(res) {},
-                        complete: function(res) {},
+                        success: function (res) { },
+                        fail: function (res) { },
+                        complete: function (res) { },
                       })
                       that.deviceCharacteristicValueChange(device.deviceId)
                       wx.notifyBLECharacteristicValueChange({
@@ -750,7 +760,7 @@ Page({
                           notyfyCharacteristicsTimeOut = true
                           baseTool.print([res, '预订通知成功成功'])
                           // 50 ms 以后执行下一步
-                            // 定时器
+                          // 定时器
                           data.synNodataTimeOut = false
                           // 20s 无法同步完, 算失败
                           baseTool.startTimer(function (total) {
@@ -776,7 +786,7 @@ Page({
                             }
                             return false
                           }, 10, 2000)
-                            // 介绍设备数据
+                          // 介绍设备数据
                         },
                         fail: function (res) {
                           notyfyCharacteristicsTimeOut = true
@@ -800,7 +810,7 @@ Page({
                         complete: function (res) { },
                       })
                     }, 50)
-                    
+
                   },
                   fail: function (res) {
                     characteristicsTimeOut = true
@@ -823,7 +833,7 @@ Page({
                   complete: function (res) { },
                 })
               }, 50)
-              
+
             },
             fail: function (res) {
               baseTool.print([res, '获得服务失败'])
@@ -847,9 +857,9 @@ Page({
             complete: function (res) { },
           })
         }, 50)
-        
+
       },
-      fail: function(res) {
+      fail: function (res) {
         baseTool.print([res, '蓝牙连接失败'])
         // 无数据
         // 没超时
@@ -857,7 +867,7 @@ Page({
         if (data.synReconnectCount < 3) {
           data.synReconnectCount++
           // 500ms 后发起重连
-          setTimeout(function() {
+          setTimeout(function () {
             that.connectDevice(device)
           }, 500)
         } else {
@@ -865,18 +875,18 @@ Page({
           that.synNextDevice()
         }
       },
-      complete: function(res) {},
+      complete: function (res) { },
     })
   },
   deviceConnectionStateChange: function () {
-    wx.onBLEConnectionStateChange(function(res){
+    wx.onBLEConnectionStateChange(function (res) {
       baseTool.print([res, '蓝牙状态改变'])
     })
   },
   deviceCharacteristicValueChange: function (deviceId = '') {
     var that = this
     // 收到定时器
-    wx.onBLECharacteristicValueChange(function(res){
+    wx.onBLECharacteristicValueChange(function (res) {
       var values = new Uint8Array(res.value)
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
       baseTool.print([hex, '通知信息'])
@@ -906,13 +916,13 @@ Page({
       serviceId: data.tailServiceUUID,
       characteristicId: that.data.tailCharacteristicIdWrite,
       value: buffer,
-      success: function(res) {
+      success: function (res) {
         baseTool.print([res, '首次回复成功'])
       },
-      fail: function(res) {
+      fail: function (res) {
         baseTool.print([res, '首次回复失败'])
       },
-      complete: function(res) {},
+      complete: function (res) { },
     })
   },
   onceDataEndReplyDevice: function (deviceId = '') {
@@ -927,7 +937,7 @@ Page({
         baseTool.print([deviceId, '设备数据交互结束'])
         wx.closeBLEConnection({
           deviceId: deviceId,
-          success: function(res) {
+          success: function (res) {
             baseTool.print([res, '成功断开设备'])
 
             if (data.dataObjectList.length == 0) {
@@ -951,7 +961,7 @@ Page({
               // that.upStorageDataToService();
             }
           },
-          fail: function(res) {
+          fail: function (res) {
             baseTool.print([res, '设备写入信息失败'])
             if (data.dataObjectList.length == 0) {
               // 无数据
@@ -974,7 +984,7 @@ Page({
               // that.upStorageDataToService();
             }
           },
-          complete: function(res) {},
+          complete: function (res) { },
         })
       },
       fail: function (res) {
@@ -1035,7 +1045,7 @@ Page({
       },
       complete: function (res) { },
     })
-  }, 
+  },
   processOnceData: function (hex, values, deviceId = '') {
     // 刷牙数据
     var that = this
@@ -1113,7 +1123,7 @@ Page({
           complete: function (res) { },
         })
       })
-      
+
     }
   },
   newProcessOnceData: function (hex, values, deviceId = '') {
@@ -1198,7 +1208,7 @@ Page({
           complete: function (res) { },
         })
       })
-      
+
     }
   },
   upStorageDataToService: function () {
@@ -1207,9 +1217,9 @@ Page({
     wx.showLoading({
       title: '上传数据...',
       mask: true,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
     contestManager.uploadBrushRecord(data.gameId, data.createTime).then(res => {
       // 设备数据上传成功
@@ -1238,9 +1248,10 @@ Page({
       })
     })
   },
-  addContestUser: function() {
+  addContestUser: function () {
     var gameId = data.gameId
     var name = data.contestTitle
+    var createTime = data.createTime
     var that = this
     that.setData({
       createButtonDisable: true
@@ -1254,7 +1265,7 @@ Page({
       baseTool.print(res)
       // 成功了以后再跳转页面, 就不会出错了
       wx.navigateTo({
-        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes',
+        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes' + '&createTime=' + createTime,
         success: function (res) {
 
         },
@@ -1264,9 +1275,9 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
-    
+
   },
-  timeOut: function (callback = (total) => {}, inteval = 1000, total = 0) {
+  timeOut: function (callback = (total) => { }, inteval = 1000, total = 0) {
     baseTool.print(total)
     var that = this
     var stop = callback(total)
@@ -1306,11 +1317,11 @@ Page({
         that.dispatchConnect()
       }, 500)
     }
-    
-    
-    
+
+
+
   },
-  synNoDataNextDevice: function() {
+  synNoDataNextDevice: function () {
     var that = this
     if (data.synCommandCount < data.dataList.length && data.isSave == false) {
       var deviceInfo = data.dataList[data.synCommandCount]
@@ -1336,7 +1347,7 @@ Page({
       }, 500)
     }
   },
-  synSuccessNextDevice: function() {
+  synSuccessNextDevice: function () {
     var that = this
     setTimeout(function () {
       data.synSuccessCount++
@@ -1344,20 +1355,35 @@ Page({
       that.dispatchConnect()
     }, 500)
   },
-  scoreReportClick: function(e) {
+  scoreReportClick: function (e) {
     var that = this
-   
+
     var index = e.currentTarget.dataset.index
     var item = data.dataList[index]
     if (item.recordId) {
       wx.navigateTo({
         url: '/pages/my/brushScoreReport/brushScoreReport?name=' + item.name + '&recordId=' + item.recordId,
-        success: function(res) {},
-        fail: function(res) {
+        success: function (res) { },
+        fail: function (res) {
           baseTool.print(res)
         },
-        complete: function(res) {},
+        complete: function (res) { },
       })
+    } else {
+
     }
+  },
+  deleteItemClick: function(e) {
+    wx.showActionSheet({
+      itemList: ["删除"],
+      itemColor: '#000',
+      success: function(res) {
+        if (res.tapIndex == 0) {
+          baseTool.print(e)
+        }
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   }
 })

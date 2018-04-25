@@ -210,5 +210,8 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+  },
+  upload: function() {
+    baseTool.print("dssds")
   }
 })

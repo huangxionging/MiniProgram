@@ -20,7 +20,8 @@
       <view id='my-brush-section-select'>
         <template is='selectComponent' data='{{id, section: -100, row: -100, isSelect}}'></template>
       </view>
-      <text id='my-brush-section-date' bindtap='selectClick' data-id='{{id}}' data-section='-100' data-row='-100'>{{date}}</text>
+      <text id='my-brush-section-date' bindtap='selectClick' data-id='{{id}}' data-section='-100' data-row='-100'>{{date}} 
+      </text>
     </view>
     <view class='my-brush-section-content'>
       <block wx:for='{{contestList}}' wx:key='id' wx:item='item'>

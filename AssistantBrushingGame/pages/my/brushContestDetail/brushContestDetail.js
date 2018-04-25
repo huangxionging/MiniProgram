@@ -35,9 +35,9 @@ Page({
     // 设置导航栏标题
     wx.setNavigationBarTitle({
       title: options.name,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
     // 加载数据
     that.loadData()
@@ -51,28 +51,28 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+
   },
 
   /**
@@ -117,20 +117,27 @@ Page({
             tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
             macAddress: macAddress,
-            score: res[index].score
+            score: res[index].score,
+            accuracy: res[index].accuracy
           }
-
+          item.score = item.score + parseFloat("0." + item.accuracy)
           if (res[index].recordId) {
             item.recordId = res[index].recordId
           }
-          
+
           // 添加数据集合
           dataList.push(item)
         }
 
         // 按分数从大到小排序
         dataList.sort((a, b) => {
-          return b.score - a.score
+
+          if (b.score === a.score) {
+            baseTool.print(b)
+            return b.accuracy - a.accuracy
+          } else {
+            return b.score - a.score
+          }
         })
         // 然后再改变值
         if (dataList.length > 0) {

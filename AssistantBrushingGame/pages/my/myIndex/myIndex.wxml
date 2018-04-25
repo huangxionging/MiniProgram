@@ -2,7 +2,7 @@
 <import src='../../../template/myTemplate.wxml'/>
 <view class='my-container' wx:if='{{loadingDone}}'>
   <view id='my-info-view'>
-    <image id="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <image id="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover" bindtap='upload'></image>
     <text id="my-userinfo-nickname">{{userInfo.nickName}}</text>
   </view>
   <view id='my-table-view'>

@@ -15,6 +15,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    hasData: false,
     name: '',
     gameId: '',
     total: '比赛设备0支',
@@ -26,7 +27,11 @@ Page({
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
     bindedDevices: {},
-    systemInfo: {}
+    systemInfo: {},
+    valueTime: "",
+    valueDate: "",
+    startTime: "",
+    startDate: ""
   },
 
   /**
@@ -35,10 +40,19 @@ Page({
   onLoad: function (options) {
     var that = this
     baseTool.print(options)
-
+    var valueDate = options.createTime.split(" ")[0]
+    var valueTime = options.createTime.split(" ")[1]
+    var startTime = valueTime.substr(0, 5)
+    baseTool.print(startTime)
     that.setData({
+      hasData: true,
       gameId: options.gameId,
-      name: options.name
+      name: options.name,
+      valueTime: valueTime,
+      valueDate: valueDate,
+      startDate: valueDate,
+      startTime: startTime,
+      endTime: "23:59"
     })
     
     if (options.add == 'yes') {
@@ -184,6 +198,7 @@ Page({
   },
  
   getInputName: function(e) {
+    var that = this
     baseTool.print(e)
     if (e.detail.value == '') {
       wx.showModal({
@@ -198,10 +213,12 @@ Page({
       })
       return
     }
-    this.setData({
+    that.setData({
       name: e.detail.value
     })
-    contestManager.addContest(this.data.gameId, this.data.name).then(res => {
+    baseTool.print([that.data.gameId, that.data.name])
+    var createTime = that.data.valueDate + " " + that.data.valueTime
+    contestManager.addContest(that.data.gameId, that.data.name, createTime).then(res => {
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
@@ -311,7 +328,7 @@ Page({
             confirmText: '确定',
             confirmColor: '#00a0e9',
             success: function (res) {
-              wx.navigateBack()
+              // wx.navigateBack()
             },
             fail: function (res) { baseTool.print(res) },
             complete: function (res) { },
@@ -319,6 +336,48 @@ Page({
         },
       })
     }, 3000)
+  },
+
+  bindDateChange: function(e) {
+    baseTool.print(e)
+    var that = this
+    var startDate = baseTool.getCurrentDateWithoutTime()
+    var startTime = baseTool.getNextMinuteTimeWithNoDateZeroSecond()
+    var valueTime = that.data.valueTime
+    if (startDate != e.detail.value) {
+      startTime = "00:00"
+    } else {
+      valueTime = startTime + ":00"
+    }
+    that.setData({
+     valueDate: e.detail.value,
+     startDate: startDate,
+     startTime: startTime,
+     valueTime: valueTime
+    })
+    var createTime = that.data.valueDate + " " + that.data.valueTime
+    baseTool.print(createTime)
+
+    contestManager.addContest(this.data.gameId, this.data.name, createTime).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+  },
+  bindTimeChange: function(e) {
+    baseTool.print(e)
+    var that = this
+    that.setData({
+      valueTime: e.detail.value + ":00"
+    })
+
+    var createTime = that.data.valueDate + " " + that.data.valueTime
+    baseTool.print(createTime)
+    contestManager.addContest(this.data.gameId, this.data.name, createTime).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
   foundDevices: function () {
     var that = this

@@ -1,5 +1,5 @@
 <template name='contestUserScoreItem'>
-  <view class="item {{(index==0)?'':'item-orthers'}}" bindtap='scoreReportClick' data-index='{{index}}'>
+  <view class="item {{(index==0)?'':'item-orthers'}}" bindtap='scoreReportClick' data-index='{{index}}' >
     <view class='item-info-view'>
       <text id='item-rank' style='color:{{color}}'>{{index+1}}</text>
       <text id='item-name'>{{name}}</text>

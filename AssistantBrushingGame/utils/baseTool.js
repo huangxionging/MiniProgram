@@ -14,6 +14,7 @@ var isSimulator = (brand == 'devtools')
  */
 function print(e) {
   // 测试环境下或者模拟器状态下, 才输入内容到控制台
+  console.log(e)
   if (baseState || isSimulator) {
     // 打印内容
     console.log(e)
@@ -175,6 +176,60 @@ function getCurrentTime() {
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
 }
 
+function getCurrentTimeWithoutSecond() {
+  var date = new Date();
+  var year = date.getFullYear() + ''
+  var month = zeroFormat(date.getMonth() + 1 + '')
+  var day = zeroFormat(date.getDate() + '')
+  var hour = zeroFormat(date.getHours() + '')
+  var minute = zeroFormat(date.getMinutes() + '')
+
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute
+}
+
+function getNextMinuteTimeWithZeroSecond() {
+  var date = new Date();
+  var year = date.getFullYear() + ''
+  var month = zeroFormat(date.getMonth() + 1 + '')
+  var day = zeroFormat(date.getDate() + '')
+  var hour = zeroFormat(date.getHours() + '')
+  var minute = zeroFormat(date.getMinutes() + '')
+
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
+}
+
+function getNextMinuteTimeWithZeroSecond() {
+  var date = new Date();
+  var year = date.getFullYear() + ''
+  var month = zeroFormat(date.getMonth() + 1 + '')
+  var day = zeroFormat(date.getDate() + '')
+  var hour = zeroFormat(date.getHours() + '')
+  var minute = zeroFormat(date.getMinutes() + '')
+
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
+}
+
+
+function getNextMinuteTimeWithNoDateZeroSecond() {
+  var date = new Date();
+  var hour = zeroFormat(date.getHours() + '')
+  var minute = zeroFormat(date.getMinutes() + '')
+  return hour + ':' + minute
+}
+
+function getCurrentDateWithoutTime() {
+  var date = new Date();
+  var year = date.getFullYear() + ''
+  var month = zeroFormat(date.getMonth() + 1 + '')
+  var day = zeroFormat(date.getDate() + '')
+
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day
+}
+
 /**
  * 加 0 格式化字符串
  */
@@ -229,5 +284,11 @@ module.exports = {
   // 启动定时器功能
   startTimer: startTimer,
   // 获取当前时间
-  getCurrentTime: getCurrentTime
+  getCurrentTime: getCurrentTime,
+  // 获取当前时间, 时分, 无秒
+  getCurrentTimeWithoutSecond: getCurrentTimeWithoutSecond,
+  // 获取从下一分钟从0秒钟开始的时间
+  getNextMinuteTimeWithZeroSecond: getNextMinuteTimeWithZeroSecond,
+  getCurrentDateWithoutTime: getCurrentDateWithoutTime,
+  getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond
 }

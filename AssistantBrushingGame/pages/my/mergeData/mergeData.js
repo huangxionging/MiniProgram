@@ -107,8 +107,11 @@ Page({
             tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
             playerId: res[index].playerId,
             macAddress: macAddress,
-            score: res[index].score ? res[index].score : 0
+            score: res[index].score ? res[index].score : 0,
+            accuracy: res[index].accuracy
           }
+
+          item.score = item.score + parseFloat("0." + item.accuracy)
 
           if (res[index].recordId) {
             item.recordId = res[index].recordId
@@ -120,7 +123,14 @@ Page({
 
         // 按分数从大到小排序
         dataList.sort((a, b) => {
-          return b.score - a.score
+
+          if (b.score == a.score) {
+            baseTool.print('ddd')
+            return b.accuracy - a.accuracy
+          } else {
+            return b.score - a.score
+          }
+          
         })
         // 然后再改变值
         if (dataList.length > 0) {

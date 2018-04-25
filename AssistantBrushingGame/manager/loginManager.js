@@ -214,27 +214,28 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
  */
 function loginFlow() {
   return new Promise((resolve, reject) => {
-    // 检查状态
-    var checkStateAction = checkState()
-    // 成功
-    checkStateAction.then(res => {
-      baseTool.print(res)
-      // reLauch()
-      getUserInfo().then(res => {
-        const app = getApp()
-        app.globalData.userInfo = res.userInfo
-        resolve(res)
-      }).catch(res => {
+    // // 检查状态
+    // var checkStateAction = checkState()
+    // // 成功
+    // checkStateAction.then(res => {
+    //   baseTool.print(res)
+    //   // reLauch()
+    //   getUserInfo().then(res => {
+    //     const app = getApp()
+    //     app.globalData.userInfo = res.userInfo
+    //     resolve(res)
+    //   }).catch(res => {
         
-        reject(res)
-      })
-    }).catch(res => {
-      baseTool.print(res)
-      return baseTool.defaultPromise()
-    })
+    //     reject(res)
+    //   })
+    // }).catch(res => {
+    //   baseTool.print(res)
+    //   return baseTool.defaultPromise()
+    // })
 
     // 会话过期需要登录
-    var loginAction = baseTool.bindCatchPromise(checkStateAction, login)
+    // var loginAction = baseTool.bindCatchPromise(checkStateAction, login)
+    var loginAction = login()
 
     var code
     // 登录成功, 获得 code

@@ -98,5 +98,9 @@ module.exports = {
   /**
    * 更新班级名称
    */
-  updateClassTitle: 'updateClassTitle'
+  updateClassTitle: 'updateClassTitle',
+  /**
+   * 创建绑定关系
+   */
+  createParticipantsList: "createParticipantsList"
 }

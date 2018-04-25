@@ -11,8 +11,8 @@ function getHomePage() {
       success: function(res) {
         baseTool.print([res, '读取成功'])
         var gameObject = res.data
-        var gameList = gameObject.gameList
-        var gameItem = gameList[gameList.length - 1]
+        var gameItem = gameObject.gameItem
+
         resolve(gameItem)
       },
       fail: function(res) {
@@ -72,7 +72,8 @@ function getHomePage() {
                     recordId: (playersList[index].recordId ? playersList[index].recordId : ''),
                     tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
                     brushingMethodId: 'a002c7680a5f4f8ea0b1b47fa3f2b947',
-                    isBound: true            
+                    isBound: true,
+                    accuracy: playersList[index].accuracy         
                   }
                   deviceList.push(item)
                   deviceUserBindObject[playersList[index].name] = index
@@ -126,6 +127,7 @@ function getHomePage() {
  */
 function addContestUser(name = '', brushingMethodId = '') {
   return new Promise((resolve, reject) => {
+    baseTool.print([brushingMethodId, name])
     // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContestUser
     // var data = {
     //   name: name,
@@ -295,8 +297,10 @@ function selectContestUser(gameId = '') {
 /**
  * 创建比赛
  */
-function addContest(gameId = undefined, name = undefined) {
+function addContest(gameId = undefined, name = undefined, time = undefined) {
+  baseTool.print([gameId, name])
   return new Promise((resolve, reject) => {
+    baseTool.print([gameId, name, time])
     // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.addContest
     // var data = {
     //   memberId: loginManager.getMemberId(),
@@ -327,7 +331,8 @@ function addContest(gameId = undefined, name = undefined) {
     // })
 
     // 非空修改比赛 id
-    if (gameId != undefined) {
+    baseTool.print([gameId, name, time])
+    if (gameId != null) {
 
       wx.getStorage({
         key: 'gameObject',
@@ -342,6 +347,7 @@ function addContest(gameId = undefined, name = undefined) {
               delete gameNameObject[gameList[index].name]
               gameNameObject[name] = gameId
               gameList[index].name = name
+              gameList[index].createTime = time
               break
             }
           }
@@ -365,28 +371,27 @@ function addContest(gameId = undefined, name = undefined) {
       var gameObject = wx.getStorageSync('gameObject')
       if (!gameObject) {
         wx.setStorageSync('gameObject', {
-          // 记录数据
-          gameList: [],
-          // 去重名使用
-          gameNameObject: {},
+          // 记录数据, 现有比赛数据
+          gameItem: {},
+          // 新建比赛使用
+          gameNewItem: {},
           // 主键当做 id 使用
           primaryKey: 0
         })
         gameObject = baseTool.valueForKey('gameObject')
       }
-
-      var gameId = gameObject.primaryKey++
-      var name = '刷牙比赛' + gameObject.gameList.length
-      gameObject.gameList.push({
-        gameId: gameId,
-        name: name,
-        deviceUserBindObject: {},
-        deviceList: [],
-        createTime: baseTool.getCurrentTime(),
+      name = '刷牙比赛' + gameObject.primaryKey++
+      var createTime = baseTool.getNextMinuteTimeWithZeroSecond()
+      
+      gameObject.gameNewItem = {
+        gameId: null, // gameId
+        name: name, // 名字
+        deviceUserBindObject: {}, // 设备绑定关系
+        deviceList: [], // 设备绑定列表
+        createTime: createTime, // 创建时间
         isSyn: false, // 是否已经同步服务器
         isSave: false, // 是否第一次同步
-      })
-      gameObject.gameNameObject[name] = gameId
+      }
 
       wx.setStorage({
         key: 'gameObject',
@@ -395,7 +400,8 @@ function addContest(gameId = undefined, name = undefined) {
           resolve({
             game: {
               gameId: gameId,
-              name: name
+              name: name,
+              createTime: createTime
             }
           })
         },
@@ -711,6 +717,9 @@ function saveBrushRecord(gameId) {
 function uploadBrushRecord(gameId, createTime) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
+    
+    var memberId = loginManager.getMemberId()
+    baseTool.print("时间:" + createTime + ":" + memberId)
     wx.getStorage({
       key: 'deviceDataObject',
       success: function (res) {
@@ -974,6 +983,14 @@ function deleteDeviceDataObject(gameId) {
       },
       complete: function (res) { },
     })
+  })
+}
+
+function submitUserDeviceBindingRelationship() {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.createParticipantsList
+    var data = {
+    }
   })
 }
 
