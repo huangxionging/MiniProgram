@@ -22,17 +22,17 @@
   <view id='userInfo-view'>
     <view id='userInfo-name-view'>
       <image src='../../../resource/box-person.png' id='userInfo-name-image'></image>
-      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' value='{{name}}'  bindblur='getInputUserName' maxlength='10'></input>
+      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' value='{{name}}'  bindblur='getInputUserName' bindinput='getInputUserName' maxlength='10'></input>
     </view>
     <view id='userInfo-name-line'></view>
-    <view id='userInfo-brush-view'>
+    <!-- <view id='userInfo-brush-view'>
       <text id='userInfo-brush-title'>选择参赛刷牙方法</text>
       <view id='userInfo-brush-select-view'>
         <block wx:for='{{selects}}' wx:key='id' wx:item='item'>
           <template is='selectButton' data='{{...item}}'></template>
         </block>
       </view>
-    </view>
+    </view> -->
     <view id='userInfo-save-view'>
       <block wx:if='{{!isNext}}'>
         <button class='main-button' hover-class='hover-main-button' bindtap='userInfoSave'>保存</button>

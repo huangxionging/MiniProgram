@@ -411,4 +411,19 @@ Page({
       })
     })
   },
+  saveClick: function() {
+    wx.showLoading({
+      title: '正在保存...',
+      mask: true,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+
+    contestManager.submitUserDeviceBindingRelationship().then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+  }
 })

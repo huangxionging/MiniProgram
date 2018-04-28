@@ -16,20 +16,7 @@ Page({
     item: {
       isNext: false,
       name: '',
-      selects: [
-        {
-          selectButton: 'userInfo-brush-select-item',
-          title: '标准巴氏刷牙法 (6岁以上)',
-          id: 1,
-          select: true
-        },
-        {
-          selectButton: 'userInfo-brush-select-item',
-          title: '圆弧刷牙法 (6岁以下)',
-          id: 2,
-          select: false
-        }
-      ]
+      isSave: false,
     }
   },
 
@@ -125,12 +112,6 @@ Page({
     }
 
 
-    // 标准巴氏
-    var brushMethod = 'a002c7680a5f4f8ea0b1b47fa3f2b947'
-    if(!select) {
-      brushMethod = '6827c45622b141ef869c955e0c51f9f8'
-    }
-
     wx.showLoading({
       title: '正在添加',
       mask: true,
@@ -138,14 +119,14 @@ Page({
       fail: function(res) {},
       complete: function(res) {},
     })
-    contestManager.addContestUser(item.name, brushMethod).then(res => {
+    contestManager.addContestUser(item.name).then(res => {
       baseTool.print(res)
       wx.hideLoading()
       item.isNext = true
       item.name = ''
+      item.isSave = true
       // 终于渲染成功了
       that.setData({
-        select: select,
         item: item
       })
 
@@ -171,23 +152,14 @@ Page({
   getInputUserName: function (e){
     baseTool.print(e)
     var that = this
-    var intro = e.detail.value
-    var isTrue = intro.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
-    if (isTrue == null && intro != '' && intro != undefined) {
-      wx.showModal({
-        title: '提示',
-        content: '参赛者名称暂不支持表情哦~',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
-      })
-      return
-    }
     var item = that.data.item
-    item.name = e.detail.value
+    baseTool.print([item, e])
+    if (item.isSave == true ) {
+      item.name = ""
+      item.isSave = false
+    } else {
+      item.name = e.detail.value
+    }
     that.setData({
       item: item
     })

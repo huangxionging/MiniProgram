@@ -601,7 +601,7 @@ Page({
     var userId = userInfo.playerId
     // macAddress
     wx.showNavigationBarLoading()
-    contestManager.bindContestUser(that.data.gameId, name, userId, that.data.macAddress, userInfo.brushingMethodId).then(res => {
+    contestManager.bindContestUser(name, that.data.macAddress).then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       // 删除这个 Mac 地址下的
@@ -648,7 +648,7 @@ Page({
   loadData: function () {
     var that = this
     wx.showNavigationBarLoading()
-    contestManager.selectContestUser(that.data.gameId).then(res => {
+    contestManager.selectContestUser().then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
@@ -658,16 +658,17 @@ Page({
         data.loadingDone = true
         data.hasData = true
         data.dataList.splice(0, data.dataList.length)
+
         for (var index = 0; index < res.length; ++index) {
+          baseTool.print(["资源", res])
           data.dataList.push({
             name: res[index].name, // 名字
             playerId: res[index].playerId, // 参赛者的 id
-            brushingMethodId: res[index].brushingMethodId,
             id: index + 1, // 主key
             isSelect: res[index].isBound
           })
         }
-        baseTool.print(data)
+       
         that.setData(data)
       } else {
         var data = that.data

@@ -86,7 +86,6 @@ Page({
             id: index + 1, // 主key
             name: res[index].name, // 名字
             playerId: res[index].playerId, // 参赛者的 id
-            brushingMethodId: res[index].brushingMethodId,
           })
         }
         that.setData({

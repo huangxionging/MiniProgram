@@ -29,4 +29,5 @@
       <template is='createContestDeviceItem' data='{{...item, index, gameId}}'></template>
     </block>
   </view>
+  <view class='save-contest-view' hover-class='save-click-view' bindtap='saveClick'>保存比赛</view>
 </view>

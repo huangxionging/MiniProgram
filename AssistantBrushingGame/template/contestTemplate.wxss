@@ -156,7 +156,7 @@
 }
 
 #userInfo-save-view{
-  margin-top: 100rpx;
+  margin-top: 400rpx;
 }
 .contest-device-view{
   width: 100%;
