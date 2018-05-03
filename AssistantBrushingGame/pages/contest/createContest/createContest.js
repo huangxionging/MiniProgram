@@ -31,7 +31,10 @@ Page({
     valueTime: "",
     valueDate: "",
     startTime: "",
-    startDate: ""
+    startDate: "",
+    selectBrushMethod: 0,
+    brushMethodText: "巴氏刷牙法",
+    selectBrushMethodUsed: false
   },
 
   /**
@@ -40,8 +43,8 @@ Page({
   onLoad: function (options) {
     var that = this
     baseTool.print(options)
-    var valueDate = options.createTime.split(" ")[0]
-    var valueTime = options.createTime.split(" ")[1]
+    var valueDate = options.startTime.split(" ")[0]
+    var valueTime = options.startTime.split(" ")[1]
     var startTime = valueTime.substr(0, 5)
     baseTool.print(startTime)
     that.setData({
@@ -52,9 +55,12 @@ Page({
       valueDate: valueDate,
       startDate: valueDate,
       startTime: startTime,
-      endTime: "23:59"
+      endTime: "23:59",
+      selectBrushMethod: options.brushMethod == "1" ? 1 : 0,
+      brushMethodText: options.brushMethod ? "圆弧刷牙法" : "巴氏刷牙法",
+      selectBrushMethodUsed: options.add == 'yes' ? true : false
     })
-    
+
     if (options.add == 'yes') {
       baseMessageHandler.getMessage('createContest', res => {
         baseTool.print(['设备列表', res])
@@ -72,12 +78,12 @@ Page({
       that.openBle()
     }
     // 获取消息
-    
+
     baseMessageHandler.addMessageHandler('deleteDevice', that, res => {
       var that = this
       // 搜索 macAddress
       var bindedDevices = that.data.bindedDevices
-      
+
       var dataList = that.data.dataList.filter((value, index, arry) => {
 
         if (value.macAddress === res.toUpperCase()) {
@@ -96,9 +102,9 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
-    
+
   },
-  
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -106,7 +112,7 @@ Page({
   onReady: function (res) {
     baseTool.print('页面准备好')
 
-    
+
   },
 
   /**
@@ -194,10 +200,10 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+
   },
- 
-  getInputName: function(e) {
+
+  getInputName: function (e) {
     var that = this
     baseTool.print(e)
     if (e.detail.value == '') {
@@ -207,24 +213,18 @@ Page({
         showCancel: false,
         cancelColor: '确认',
         confirmColor: '#00a0e9',
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
       })
       return
     }
     that.setData({
       name: e.detail.value
     })
-    baseTool.print([that.data.gameId, that.data.name])
-    var createTime = that.data.valueDate + " " + that.data.valueTime
-    contestManager.addContest(that.data.gameId, that.data.name, createTime).then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
-    })
+    that.changeContest()
   },
-  contestDeviceClick: function(e) {
+  contestDeviceClick: function (e) {
     var that = this
     var deviceId = e.currentTarget.dataset.deviceid
     wx.hideLoading()
@@ -240,12 +240,12 @@ Page({
     wx.showLoading({
       title: '正在搜索设备',
       mask: true,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
 
-    setTimeout(function() {
+    setTimeout(function () {
       wx.openBluetoothAdapter({
         success: function (res) {
           baseTool.print("openBluetoothAdapter: success");
@@ -269,11 +269,11 @@ Page({
                 var dataList = that.data.dataList
                 var index = dataList.length
                 var macAddress = device.name.split('-')[1].toUpperCase()
-                
+
 
                 // 已经绑定过, 需要过滤掉
                 if (bindedDevices[macAddress]) {
-                  return 
+                  return
                 }
                 baseTool.print(['发现新设备', macAddress, device, device.RSSI])
                 var hexArray = new Uint8Array(device.advertisData)
@@ -310,7 +310,7 @@ Page({
               })
 
             },
-            fail: function(res) {
+            fail: function (res) {
               baseTool.print([res, '开始发现失败'])
             }
           })
@@ -338,7 +338,7 @@ Page({
     }, 3000)
   },
 
-  bindDateChange: function(e) {
+  bindDateChange: function (e) {
     baseTool.print(e)
     var that = this
     var startDate = baseTool.getCurrentDateWithoutTime()
@@ -350,30 +350,35 @@ Page({
       valueTime = startTime + ":00"
     }
     that.setData({
-     valueDate: e.detail.value,
-     startDate: startDate,
-     startTime: startTime,
-     valueTime: valueTime
+      valueDate: e.detail.value,
+      startDate: startDate,
+      startTime: startTime,
+      valueTime: valueTime
     })
-    var createTime = that.data.valueDate + " " + that.data.valueTime
-    baseTool.print(createTime)
-
-    contestManager.addContest(this.data.gameId, this.data.name, createTime).then(res => {
-      baseTool.print(res)
-    }).catch(res => {
-      baseTool.print(res)
-    })
+    that.changeContest()
   },
-  bindTimeChange: function(e) {
+  bindTimeChange: function (e) {
     baseTool.print(e)
     var that = this
     that.setData({
       valueTime: e.detail.value + ":00"
     })
+    that.changeContest()
+  },
+  bindBrushChange: function (e) {
+    baseTool.print(e)
+    var that = this
+    that.setData({
+      selectBrushMethod: e.detail.value == "0" ? 0 : 1,
+      brushMethodText: e.detail.value == "0" ? "巴氏刷牙法" : "圆弧刷牙法"
+    })
+    that.changeContest()
+  },
 
-    var createTime = that.data.valueDate + " " + that.data.valueTime
-    baseTool.print(createTime)
-    contestManager.addContest(this.data.gameId, this.data.name, createTime).then(res => {
+  changeContest: function() {
+    var that = this
+    var startTime = that.data.valueDate + " " + that.data.valueTime
+    contestManager.addContest(that.data.gameId, that.data.name, startTime, that.data.selectBrushMethod, "modify").then(res => {
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
@@ -411,19 +416,28 @@ Page({
       })
     })
   },
-  saveClick: function() {
+  saveClick: function () {
     wx.showLoading({
       title: '正在保存...',
       mask: true,
-      success: function(res) {},
-      fail: function(res) {},
-      complete: function(res) {},
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
 
     contestManager.submitUserDeviceBindingRelationship().then(res => {
       baseTool.print(res)
+      wx.hideLoading()
     }).catch(res => {
       baseTool.print(res)
+      wx.hideLoading()
+      wx.showModal({
+        title: "提示",
+        content: res.msg,
+        showCancel: false,
+        confirmText: "确定",
+        confirmColor: "#00a0e9"
+      })
     })
   }
 })

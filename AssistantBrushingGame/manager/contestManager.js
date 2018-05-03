@@ -30,7 +30,7 @@ function getHomePage() {
         var openid = baseTool.valueForKey('openid')
         var data = {
           memberId: loginManager.getMemberId(),
-          openid: openid 
+          openid: openid
         }
         baseTool.print(url)
         wx.request({
@@ -89,7 +89,7 @@ function getHomePage() {
                   name: name,
                   deviceUserBindObject: deviceUserBindObject,
                   deviceList: deviceList,
-                  createTime: gameInfo.createTime,
+                  startTime: gameInfo.startTime,
                   isSyn: true, // 是否已经同步服务器
                   isSave: true,
                   brushingMethodId: gameInfo.brushingMethodId ? gameInfo.brushingMethodId : brushMethods[0]
@@ -220,7 +220,7 @@ function selectContestUser() {
           } else {
             userList.push(obj)
           }
-          
+
         }
         // 拼接数组
         var allUserList = userList.concat(userBindList)
@@ -240,8 +240,9 @@ function selectContestUser() {
  * 创建比赛
  */
 
-function addContest(gameId = undefined, name = undefined, time = undefined, brushMethod = 0, type = "create") {
+function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 0, type = "create") {
   return new Promise((resolve, reject) => {
+    baseTool.print([gameId, name, time, brushMethod, type])
     if (type == "modify") {
       wx.getStorage({
         key: 'gameObject',
@@ -250,7 +251,7 @@ function addContest(gameId = undefined, name = undefined, time = undefined, brus
           var gameNewItem = gameObject.gameNewItem
           gameNewItem.gameId = gameId
           gameNewItem.name = name
-          gameNewItem.createTime = time
+          gameNewItem.startTime = time
           gameNewItem.brushingMethodId = brushMethods[brushMethod]
 
           wx.setStorage({
@@ -283,7 +284,7 @@ function addContest(gameId = undefined, name = undefined, time = undefined, brus
         gameObject = baseTool.valueForKey('gameObject')
       }
       name = '刷牙比赛' + gameObject.primaryKey++
-      var createTime = baseTool.getNextMinuteTimeWithZeroSecond()
+      var startTime = baseTool.getNextMinuteTimeWithZeroSecond()
 
 
       gameObject.gameNewItem = {
@@ -291,9 +292,10 @@ function addContest(gameId = undefined, name = undefined, time = undefined, brus
         name: name, // 名字
         deviceUserBindObject: {}, // 设备绑定关系
         deviceList: [], // 设备绑定列表
-        createTime: createTime, // 创建时间
+        startTime: startTime, // 创建时间
         isSyn: false, // 是否已经同步服务器
         isSave: false, // 是否第一次同步
+        isSynDeviceList: false, // 
         // 默认选巴氏刷牙法
         brushingMethodId: brushMethods[brushMethod] // 表示巴氏, "6827c45622b141ef869c955e0c51f9f8" 表示
       }
@@ -306,7 +308,7 @@ function addContest(gameId = undefined, name = undefined, time = undefined, brus
             game: {
               gameId: gameId,
               name: name,
-              createTime: createTime
+              startTime: startTime
             }
           })
         },
@@ -380,13 +382,12 @@ function deleteContest(gameId = '') {
 
 function bindContestUser(name = '', macAddress = '') {
   return new Promise((resolve, reject) => {
-
-    
     wx.getStorage({
       key: 'gameObject',
       success: function (res) {
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
+        gameNewItem.is
         gameNewItem.deviceList.push({
           name: name,
           macAddress: macAddress,
@@ -394,12 +395,14 @@ function bindContestUser(name = '', macAddress = '') {
           recordId: "",
           tail: '(game-' + macAddress.toLowerCase() + ')',
           isBound: true,
-          accuracy: ""
+          accuracy: "",
+          isSyn: false,
+          dataObjectList:[]
         })
         baseTool.print([name, macAddress, gameNewItem.deviceUserBindObject, "绑定"])
         // 记录绑定, 用于快速查询绑定数据
         gameNewItem.deviceUserBindObject[name] = gameNewItem.deviceList.length - 1
-
+        gameNewItem.isSynDeviceList = false
         wx.setStorage({
           key: 'gameObject',
           data: gameObject,
@@ -549,12 +552,12 @@ function saveBrushRecord(gameId) {
   wx.setStorageSync('gameObject', gameObject)
 }
 
-function uploadBrushRecord(gameId, createTime) {
+function uploadBrushRecord(gameId, startTime) {
   return new Promise((resolve, reject) => {
     baseTool.print('从本地数据库上传数据！')
 
     var memberId = loginManager.getMemberId()
-    baseTool.print("时间:" + createTime + ":" + memberId)
+    baseTool.print("时间:" + startTime + ":" + memberId)
     wx.getStorage({
       key: 'deviceDataObject',
       success: function (res) {
@@ -588,7 +591,7 @@ function uploadBrushRecord(gameId, createTime) {
                 memberId: loginManager.getMemberId(),
                 gameName: dataObjectList[indicate].gameName,
                 gameId: gameId.length > 0 ? gameId : '',
-                createTime: createTime,
+                startTime: startTime,
                 data: jsonData,
               },
               header: {
@@ -720,27 +723,20 @@ function tagSynGame(gameId = '') {
 
 function addDeviceDataObject(deviceDataOject, gameId, gameName) {
   return new Promise((resolve, reject) => {
+
+    deviceObjects
     wx.getStorage({
-      key: 'deviceDataObject',
+      key: 'gameObject',
       success: function (res) {
         baseTool.print(res)
-        var deviceDataObject = res.data
-        var dataObjectList = deviceDataObject.dataObjectList
+        var gameObject = res.data
+        var gameNewItem = gameObject.gameNewItem
         if (dataObjectList.length == 0) {
           dataObjectList.push({
             gameId: gameId,
             gameName: gameName,
             deviceDataObjectList: []
           })
-        }
-        var dataObjectItem = dataObjectList[dataObjectList.length - 1]
-        if (dataObjectItem != undefined && dataObjectItem.gameId != undefined && dataObjectItem.gameId != gameId) {
-          dataObjectList.push({
-            gameId: gameId,
-            gameName: gameName,
-            deviceDataObjectList: []
-          })
-          dataObjectItem = dataObjectList[dataObjectList.length - 1]
         }
         // 添加一条数据
         dataObjectItem.deviceDataObjectList.push(deviceDataOject)
@@ -839,7 +835,7 @@ function submitUserDeviceBindingRelationship() {
           var url = baseURL.baseDomain + baseURL.basePath + baseApiList.createParticipantsList
           var clinicId = baseTool.valueForKey('clinicId')
           var openid = baseTool.valueForKey('openid')
-          var deviceList = gameNewItem.deviceList.map(function(value, index, array) {
+          var deviceList = gameNewItem.deviceList.map(function (value, index, array) {
             return {
               name: value.name,
               macAddress: value.macAddress
@@ -849,9 +845,10 @@ function submitUserDeviceBindingRelationship() {
             memberId: loginManager.getMemberId(),
             gameId: gameNewItem.gameId,
             gameName: gameNewItem.name,
-            clinicId: clinicId, 
+            clinicId: clinicId,
             openid: openid,
-            data: deviceList
+            data: deviceList,
+            startTime: gameNewItem.startTime
           }
           baseTool.print([url, data])
           wx.request({
@@ -859,13 +856,72 @@ function submitUserDeviceBindingRelationship() {
             data: data,
             success: function (res) {
               baseTool.print(res)
+              if (res && res.data.code == "success") {
+                var gameInfo = res.data.data.gameInfo
+                var gameId = gameInfo.gameId
+                gameNewItem.gameId = gameId
+                gameNewItem.isSynDeviceList = true
+                // 
+                for (var index = 0; index < gameNewItem.deviceList.length; ++index) {
+                  gameNewItem.deviceList[index].isSyn = true
+                }
+                wx.setStorage({
+                  key: 'gameObject',
+                  data: gameObject,
+                  success: function (res1) {
+                    resolve(res)
+                  },
+                  fail: function (res) {
+                    reject(res)
+                  },
+                  complete: function (res) { },
+                })
+              } else {
+                reject({
+                  msg: "网络错误, 稍后重试"
+                })
+              }
             },
-            fail: function (res) { },
+            fail: function (res) {
+              reject({
+                msg: "网络错误, 稍后重试"
+              })
+            },
             complete: function (res) { },
           })
         }
       },
-      fail: function (res) { },
+      fail: function (res) { reject(res) },
+      complete: function (res) { },
+    })
+
+  })
+}
+
+function removeUnSavedDevice() {
+  return new Promise((resolve, reject) => {
+    wx.getStorage({
+      key: 'gameObject',
+      success: function (res) {
+        var gameObject = res.data
+        var gameNewItem = gameObject.gameNewItem
+        gameNewItem.deviceList = gameNewItem.deviceList.forEach(function (value, index, array) {
+          return (value.isSyn == true)
+        })
+        wx.setStorage({
+          key: 'gameObject',
+          data: gameObject,
+          success: function (res1) {
+            resolve(res)
+          },
+          fail: function (res) {
+            reject(res)
+          },
+          complete: function (res) { },
+        })
+
+      },
+      fail: function (res) { reject(res) },
       complete: function (res) { },
     })
 

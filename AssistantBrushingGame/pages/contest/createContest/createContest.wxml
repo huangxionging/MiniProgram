@@ -23,6 +23,13 @@
     </view>
   </picker>
   <view id='create-line'></view>
+  <picker value="{{selectBrushMethod}}" range="{{['巴氏刷牙法', '圆弧刷牙法']}}"  bindchange="bindBrushChange" class='picker' disabled="{{selectBrushMethodUsed}}">
+    <view class='pickerView' hover-class='clickPickerVeiw'>
+      选择刷牙方法: <text class='start'>{{brushMethodText}}</text>
+      <image src='../../../resource/right_arrow.png' id='user-arrow'></image> 
+    </view>
+  </picker>   
+  <view id='create-line'></view>
   <view id='create-total-device-view'>{{total}}</view>
   <view id='create-device-list-view'>
     <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>

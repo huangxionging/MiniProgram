@@ -18,7 +18,7 @@ var data = {
   gameId: '',
   contestTitle: '',
   contestDate: '',
-  createTime: '',
+  startTime: '',
   /**
    * 是否已经同步过
    */
@@ -80,13 +80,6 @@ Page({
     app.userInfoReadyCallback = res => {
       that.getHomePage()
     }
-
-    // baseTool.startTimer(function (total) {
-    //   if (total <= 0) {
-    //     return true
-    //   }
-    //   return false
-    // }, 10, 1000)
   },
 
   /**
@@ -149,6 +142,26 @@ Page({
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.print(res)
+      if (res.isSynDeviceList == false) {
+        wx.showModal({
+          title: '提示',
+          content: '您有未保存的比赛设备哦, 点击保存或者取消',
+          showCancel: true,
+          cancelText: '取消',
+          cancelColor: '#ff0000',
+          confirmText: '确定',
+          confirmColor: '#00a0e9',
+          success: function (res) {
+            if (res.confirm == true) {
+              that.saveDevice()
+            } else {
+              that.removeDevice()
+            }
+          },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      }
       if (typeof (res) != 'undefined' && res.deviceList && res.deviceList.length > 0) {
         that.parseData(res)
       } else if (typeof (res) != 'undefined') {
@@ -176,12 +189,47 @@ Page({
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
       })
     })
   },
+
+  saveDevice: function () {
+    var that = this
+    wx.showLoading({
+      title: '正在保存...',
+      mask: true,
+    })
+    contestManager.submitUserDeviceBindingRelationship().then(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      that.getHomePage()
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      wx.showModal({
+        title: "提示",
+        content: res.msg,
+        showCancel: false,
+        confirmText: "确定",
+        confirmColor: "#00a0e9"
+      })
+    })
+  },
+  removeDevice: function() {
+    // 
+    var that = this
+    wx.showLoading({
+      title: '正在删除比赛设备',
+    })
+    contestManager.removeUnSavedDevice().then((res) => {
+      wx.hideLoading()
+      that.getHomePage()
+    }).catch((res) => {
+      wx.hideLoading()
+      that.getHomePage()
+    })
+  },
+
   createContest: function () {
     var that = this
     var clinicId = baseTool.valueForKey('clinicId')
@@ -224,9 +272,9 @@ Page({
       if (typeof (res) != 'undefined') {
         var gameId = res.game.gameId
         var name = res.game.name
-        var createTime = res.game.createTime
+        var startTime = res.game.startTime
         wx.navigateTo({
-          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no' + '&createTime=' + createTime,
+          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no' + '&startTime=' + startTime,
           success: function (res) {
             // wx.hideLoading()
           },
@@ -412,9 +460,9 @@ Page({
     baseTool.print(res)
     var that = this
     data.contestTitle = res.name
-    data.contestDate = res.createTime
+    data.contestDate = res.startTime
     data.gameId = res.gameId
-    data.createTime = res.createTime
+    data.startTime = res.startTime
     data.loadingDone = true
     data.hasData = true
     data.synchronizeObject = null
@@ -427,12 +475,10 @@ Page({
       var macAddress = res.deviceList[index].macAddress
       // 待同步的列表项
       var item = {
-        name: res.deviceList[index].player,
+        name: res.deviceList[index].name,
         tail: res.deviceList[index].tail,
-        playerId: res.deviceList[index].playerId,
         macAddress: macAddress,
         score: res.deviceList[index].score,
-        brushingMethodId: res.deviceList[index].brushingMethodId,
         accuracy: res.deviceList[index].accuracy
       }
 
@@ -1221,7 +1267,7 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
-    contestManager.uploadBrushRecord(data.gameId, data.createTime).then(res => {
+    contestManager.uploadBrushRecord(data.gameId, data.startTime).then(res => {
       // 设备数据上传成功
       wx.hideLoading()
       data.synNodataTimeOut = true
@@ -1251,7 +1297,7 @@ Page({
   addContestUser: function () {
     var gameId = data.gameId
     var name = data.contestTitle
-    var createTime = data.createTime
+    var startTime = data.startTime
     var that = this
     that.setData({
       createButtonDisable: true
@@ -1265,7 +1311,7 @@ Page({
       baseTool.print(res)
       // 成功了以后再跳转页面, 就不会出错了
       wx.navigateTo({
-        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes' + '&createTime=' + createTime,
+        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes' + '&startTime=' + startTime,
         success: function (res) {
 
         },
@@ -1373,17 +1419,17 @@ Page({
 
     }
   },
-  deleteItemClick: function(e) {
+  deleteItemClick: function (e) {
     wx.showActionSheet({
       itemList: ["删除"],
       itemColor: '#000',
-      success: function(res) {
+      success: function (res) {
         if (res.tapIndex == 0) {
           baseTool.print(e)
         }
       },
-      fail: function(res) {},
-      complete: function(res) {},
+      fail: function (res) { },
+      complete: function (res) { },
     })
   }
 })

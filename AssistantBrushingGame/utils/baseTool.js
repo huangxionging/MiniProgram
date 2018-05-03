@@ -237,6 +237,13 @@ function zeroFormat(oldString = '') {
   return oldString.length == 1 ? '0' + oldString : oldString
 }
 
+/**
+ * 对象
+ */
+function objectToArray(object) {
+
+}
+
 // 添加接口
 module.exports = {
   // 打印
