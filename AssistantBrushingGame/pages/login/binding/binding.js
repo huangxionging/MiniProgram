@@ -16,6 +16,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    hasUserInfo: false,
     userInfo: {}, 
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -32,26 +33,30 @@ Page({
     app.userInfoReadyCallback = res => {
       if (app.globalData.userInfo) {
         that.setData({
-          userInfo: app.globalData.userInfo
+          userInfo: app.globalData.userInfo,
+          hasUserInfo: true
         })
       } else {
         loginManager.getUserInfo().then(res => {
           app.globalData.userInfo = res.userInfo
           that.setData({
-            userInfo: app.globalData.userInfo
+            userInfo: app.globalData.userInfo,
+            hasUserInfo: true
           })
         })
       }
     }
     if (app.globalData.userInfo) {
       that.setData({
-        userInfo: app.globalData.userInfo
+        userInfo: app.globalData.userInfo,
+        hasUserInfo: true
       })
     } else {
       loginManager.getUserInfo().then(res => {
         app.globalData.userInfo = res.userInfo
         that.setData({
-          userInfo: app.globalData.userInfo
+          userInfo: app.globalData.userInfo,
+          hasUserInfo: true
         })
       })
     }
@@ -69,6 +74,14 @@ Page({
    */
   onShow: function () {
   
+  },
+  getUserInfoClick: function(e) {
+    var that = this
+    baseTool.print(e)
+    that.setData({
+      userInfo: e.detail.userInfo,
+      hasUserInfo: true
+    })
   },
 
   /**

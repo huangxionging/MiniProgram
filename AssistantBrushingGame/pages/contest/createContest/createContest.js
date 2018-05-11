@@ -46,6 +46,8 @@ Page({
     var valueDate = options.startTime.split(" ")[0]
     var valueTime = options.startTime.split(" ")[1]
     var startTime = valueTime.substr(0, 5)
+    var brushingMethodId = options.brushingMethodId
+    var brushMethod = (brushingMethodId == "6827c45622b141ef869c955e0c51f9f8") ? 1 : 0
     baseTool.print(startTime)
     that.setData({
       hasData: true,
@@ -56,8 +58,8 @@ Page({
       startDate: valueDate,
       startTime: startTime,
       endTime: "23:59",
-      selectBrushMethod: options.brushMethod == "1" ? 1 : 0,
-      brushMethodText: options.brushMethod ? "圆弧刷牙法" : "巴氏刷牙法",
+      selectBrushMethod: brushMethod == "1" ? 1 : 0,
+      brushMethodText: brushMethod ? "圆弧刷牙法" : "巴氏刷牙法",
       selectBrushMethodUsed: options.add == 'yes' ? true : false
     })
 
@@ -65,7 +67,12 @@ Page({
       baseMessageHandler.getMessage('createContest', res => {
         baseTool.print(['设备列表', res])
         // 获取到设备列表
-        that.openBle()
+        // that.openBle()
+        wx.startPullDownRefresh({
+          success: function (res) { },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
         that.setData({
           bindedDevices: res
         })
@@ -75,7 +82,12 @@ Page({
         baseTool.print(res)
       })
     } else {
-      that.openBle()
+      // that.openBle()
+      wx.startPullDownRefresh({
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
     }
     // 获取消息
 
@@ -119,7 +131,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function (res) {
+    var that = this
     baseTool.print('页面显示')
+    var deviceList = contestManager.getBindUserDevices()
+    if (deviceList != null && deviceList.length > 0) {
+      that.setData({
+        selectBrushMethodUsed: true
+      })
+    }
   },
 
   /**
@@ -151,18 +170,16 @@ Page({
       baseTool.print(res)
     })
 
-    // 停止搜索
     wx.stopBluetoothDevicesDiscovery({
       success: function (res) {
         baseTool.print("stopBluetoothDevicesDiscovery: success");
-      },
-    })
-
-    // 关闭适配器释放资源
-    wx.closeBluetoothAdapter({
-      success: function (res) {
-        baseTool.print("closeBluetoothAdapter: success");
-      },
+        //close bt. adapter
+        wx.closeBluetoothAdapter({
+          success: function (res) {
+            baseTool.print("closeBluetoothAdapter: success");
+          }
+        })
+      }
     })
   },
   /**
@@ -206,30 +223,31 @@ Page({
   getInputName: function (e) {
     var that = this
     baseTool.print(e)
-    if (e.detail.value == '') {
+    var name = e.detail.value
+    var isTrue = name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null && name != '' && name != undefined) {
       wx.showModal({
         title: '提示',
-        content: '比赛名称不能为空哦!',
+        content: '比赛名称暂不支持特殊字符哦~',
         showCancel: false,
-        cancelColor: '确认',
+        confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
       })
       return
     }
+
     that.setData({
       name: e.detail.value
     })
-    that.changeContest()
+    
   },
   contestDeviceClick: function (e) {
     var that = this
     var deviceId = e.currentTarget.dataset.deviceid
+    var brushMethod = that.data.selectBrushMethod
     wx.hideLoading()
     wx.navigateTo({
-      url: e.currentTarget.dataset.url,
+      url: e.currentTarget.dataset.url + "&brushMethod=" + brushMethod,
     })
     baseTool.print(e)
   },
@@ -244,6 +262,9 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
+
+    // 关闭适配器释放资源
+    
 
     setTimeout(function () {
       wx.openBluetoothAdapter({
@@ -417,27 +438,49 @@ Page({
     })
   },
   saveClick: function () {
-    wx.showLoading({
-      title: '正在保存...',
-      mask: true,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
-
-    contestManager.submitUserDeviceBindingRelationship().then(res => {
+    var that = this
+    if (that.data.name == '') {
+      wx.showModal({
+        title: '提示',
+        content: '比赛名称不能为空哦!',
+        showCancel: false,
+        cancelColor: '确认',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
+    
+    var startTime = that.data.valueDate + " " + that.data.valueTime
+    contestManager.addContest(that.data.gameId, that.data.name, startTime, that.data.selectBrushMethod, "modify").then(res => {
       baseTool.print(res)
-      wx.hideLoading()
+      wx.showLoading({
+        title: '正在保存...',
+        mask: true,
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      contestManager.submitUserDeviceBindingRelationship().then(res => {
+        baseTool.print(res)
+        wx.hideLoading()
+        wx.navigateBack()
+      }).catch(res => {
+        baseTool.print(res)
+        wx.hideLoading()
+        wx.showModal({
+          title: "提示",
+          content: res.msg,
+          showCancel: false,
+          confirmText: "确定",
+          confirmColor: "#00a0e9"
+        })
+      })
     }).catch(res => {
       baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: "提示",
-        content: res.msg,
-        showCancel: false,
-        confirmText: "确定",
-        confirmColor: "#00a0e9"
-      })
     })
+    
   }
 })

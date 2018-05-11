@@ -111,7 +111,17 @@ Page({
       return
     }
 
-
+    var isTrue = item.name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null && item.name != '' && item.name != undefined) {
+      wx.showModal({
+        title: '提示',
+        content: '名字暂不支持特殊字符哦~',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+      })
+      return
+    }
     wx.showLoading({
       title: '正在添加',
       mask: true,

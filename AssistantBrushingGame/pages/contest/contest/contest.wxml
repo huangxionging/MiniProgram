@@ -52,3 +52,7 @@
     <!-- </view> -->
   </block>
 </view>
+<view class='contest-container' wx:if='{{!loadingDone}}'>
+  <button open-type='getUserInfo' bindgetuserinfo='getUserInfoClick'>用户授权</button>
+</view>
+

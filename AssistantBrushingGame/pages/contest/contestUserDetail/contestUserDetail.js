@@ -143,7 +143,17 @@ Page({
       return
     }
 
-
+    var isTrue = item.name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
+    if (isTrue == null && item.name != '' && item.name != undefined) {
+      wx.showModal({
+        title: '提示',
+        content: '名字暂不支持特殊字符哦~',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+      })
+      return
+    }
     var brushMethod = 'a002c7680a5f4f8ea0b1b47fa3f2b947'
     if (!select) {
       brushMethod = '6827c45622b141ef869c955e0c51f9f8'

@@ -76,7 +76,7 @@
 #userInfo-view{
   margin-top: 120rpx;
   width: 630rpx;
-  height: 800rpx;
+  height: 600rpx;
   border-radius: 15rpx;
   background-color: #fff;
   flex-direction: column;
@@ -156,7 +156,7 @@
 }
 
 #userInfo-save-view{
-  margin-top: 400rpx;
+  margin-top: 200rpx;
 }
 .contest-device-view{
   width: 100%;

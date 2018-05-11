@@ -3,8 +3,37 @@
 .my-brush-contest-detail-container{
   width: 100%;
   height: 100;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
-#contest-table-view{
+.contest-table-view{
   margin-top: 2rpx;
+  width: 100%;
+  margin-bottom: 98rpx;
 }
+
+.brush-contest-view{
+  width: 100%;
+  height: 98rpx; 
+  position: fixed;
+  bottom: 0;
+  font-size: 30rpx;
+  background-color: #00a0e9; 
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  font-weight: normal;
+}
+
+.brush-click-view{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+

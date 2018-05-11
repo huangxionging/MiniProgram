@@ -1,8 +1,13 @@
 <!--pages/binding/binding.wxml-->
 <view class='binding-container'>
   <view class='userinfo'>
-    <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    <block wx:if="{{hasUserInfo}}">
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+    <block wx:else>
+      <button open-type='getUserInfo' bindgetuserinfo='getUserInfoClick'>用户授权</button>
+    </block>
     <view class='binding-tel'>
       <text class='binding-tel-label'>手机号码</text>
       <input class='binding-tel-input' maxlength='11' bindinput='getInputContent' placeholder='填写手机号码' type='number' confirm-type='next'></input>

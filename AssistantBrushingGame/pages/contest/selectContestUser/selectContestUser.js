@@ -43,9 +43,9 @@ Page({
       gameId: options.gameId,
       deviceId: options.deviceId,
       macAddress: options.macAddress.toUpperCase(),
-      deviceName: options.name
+      deviceName: options.name,
+      brushMethod: (options.brushMethod == "0") ? "a002c7680a5f4f8ea0b1b47fa3f2b947" : "6827c45622b141ef869c955e0c51f9f8"
     })
-
     baseTool.print(that.data.deviceId)
     that.loadData()
     app.userInfoReadyCallback = res => {
@@ -74,7 +74,7 @@ Page({
 
   },
 
-  /**
+  /** 
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
@@ -407,6 +407,8 @@ Page({
                         },
                         fail: function (res) {
                           notyfyCharacteristicsTimeOut = true
+                          connectTimeOut = true
+                          characteristicsTimeOut = true
                           baseTool.print([res, '预订通知失败'])
                           wx.hideLoading()
                           if (that.data.failTips == false) {
@@ -434,6 +436,7 @@ Page({
                   fail: function (res) {
                     baseTool.print([res, '获得特征值失败'])
                     characteristicsTimeOut == true
+                    connectTimeOut = true
                     wx.closeBLEConnection({
                       deviceId: that.data.deviceId,
                       success: function (res) {
@@ -498,29 +501,32 @@ Page({
         connectTimeOut = true
         var reconnectCount = that.data.reconnectCount
         baseTool.print([res, '蓝牙连接失败', reconnectCount])
+        wx.hideLoading()
+        if (that.data.failTips == false) {
+          that.setData({
+            failTips: true
+          })
+          wx.showModal({
+            title: '提示',
+            content: '蓝牙连接失败',
+            showCancel: false,
+            confirmText: '确定',
+            confirmColor: '#00a0e9',
+            success: function (res) {
+              wx.navigateBack()
+            },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+        }
+
         if (reconnectCount >= 3 && reconnectCount < 100) {
           reconnectCount = 100
           that.setData({
             reconnectCount: reconnectCount
           })
-          wx.hideLoading()
-          if (that.data.failTips == false) {
-            that.setData({
-              failTips: true
-            })
-            wx.showModal({
-              title: '提示',
-              content: '蓝牙连接失败',
-              showCancel: false,
-              confirmText: '确定',
-              confirmColor: '#00a0e9',
-              success: function (res) {
-                wx.navigateBack()
-              },
-              fail: function (res) { },
-              complete: function (res) { },
-            })
-          }
+          // wx.hideLoading()
+          
         } else if (reconnectCount < 3) {
           reconnectCount++
           that.setData({
@@ -607,7 +613,7 @@ Page({
       // 删除这个 Mac 地址下的
       baseMessageHandler.sendMessage('deleteDevice', that.data.macAddress)
       var buffer = null
-      if (userInfo.brushingMethodId == 'a002c7680a5f4f8ea0b1b47fa3f2b947') {
+      if (that.data.brushMethod == 'a002c7680a5f4f8ea0b1b47fa3f2b947') {
         buffer = bleCommandManager.connectReplyDeviceCommand()
       } else {
         buffer = bleCommandManager.connectReplyDeviceCommand('00')
@@ -637,11 +643,7 @@ Page({
         title: '提示',
         content: res,
         confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function (res) {
-        },
-        fail: function (res) { },
-        complete: function (res) { },
+        confirmColor: '#00a0e9'
       })
     })
   },
@@ -680,15 +682,12 @@ Page({
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
+      
       wx.showModal({
         title: '提示',
         content: res,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function (res) {
-        },
-        fail: function (res) { },
-        complete: function (res) { },
       })
     })
   },

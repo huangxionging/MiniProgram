@@ -8,7 +8,7 @@ const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 const bleCommandManager = require('../../../manager/bleCommandManager.js')
 const baseHexConvertTool = require('../../../utils/baseHexConvertTool.js')
 const bluetoothManager = require('../../../manager/bluetoothManager.js')
-
+const loginManager = require('../../../manager/loginManager.js')
 var data = {
   /**
     * 是否加载完成
@@ -58,7 +58,10 @@ var data = {
   // 执行行数
   synExeLine: 54,
   createButtonDisable: false,
+  brushingMethodId: "",
+  synSingle: false
 }
+
 Page({
 
   /**
@@ -77,6 +80,15 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+
+    // 重置比赛
+    
+    baseMessageHandler.addMessageHandler('refreshContest', this, that.getHomePage).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+
     app.userInfoReadyCallback = res => {
       that.getHomePage()
     }
@@ -95,6 +107,17 @@ Page({
     var that = this
     that.setData({
       createButtonDisable: false
+    })
+  },
+  getUserInfoClick: function(e) {
+    baseTool.print(e)
+    var that = this
+    loginManager.loginFlow().then(res => {
+      // baseTool.print(res)
+      that.getHomePage()
+    }).catch(res => {
+      // baseTool.print(res)
+      that.getHomePage()
     })
   },
 
@@ -145,7 +168,7 @@ Page({
       if (res.isSynDeviceList == false) {
         wx.showModal({
           title: '提示',
-          content: '您有未保存的比赛设备哦, 点击保存或者取消',
+          content: '您有未保存的比赛设备哦, 请点击保存或取消',
           showCancel: true,
           cancelText: '取消',
           cancelColor: '#ff0000',
@@ -162,7 +185,8 @@ Page({
           complete: function (res) { },
         })
       }
-      if (typeof (res) != 'undefined' && res.deviceList && res.deviceList.length > 0) {
+      
+      if (typeof (res) != 'undefined' && res.deviceListObject && Object.keys(res.deviceListObject).length > 0) {
         that.parseData(res)
       } else if (typeof (res) != 'undefined') {
         that.deleteContest(res)
@@ -312,6 +336,7 @@ Page({
     that.setData({
       isSynNow: true
     })
+    data.synSingle = false
     wx.hideLoading()
     wx.showLoading({
       title: '同步数据...',
@@ -463,6 +488,7 @@ Page({
     data.contestDate = res.startTime
     data.gameId = res.gameId
     data.startTime = res.startTime
+    data.brushingMethodId = res.brushingMethodId
     data.loadingDone = true
     data.hasData = true
     data.synchronizeObject = null
@@ -471,23 +497,27 @@ Page({
     data.isSyn = res.isSyn
     data.isSave = res.isSave
     data.dataList.length = 0
-    for (var index = 0; index < res.deviceList.length; ++index) {
-      var macAddress = res.deviceList[index].macAddress
+
+    baseTool.print(res.deviceListObject)
+    var deviceList = res.deviceListObject ? baseTool.values(res.deviceListObject) : null
+    for (var index = 0; index < Object.keys(res.deviceListObject).length; ++index) {
+      var macAddress = deviceList[index].macAddress
       // 待同步的列表项
       var item = {
-        name: res.deviceList[index].name,
-        tail: res.deviceList[index].tail,
+        name: deviceList[index].name,
+        tail: deviceList[index].tail,
         macAddress: macAddress,
-        score: res.deviceList[index].score,
-        accuracy: res.deviceList[index].accuracy
+        score: deviceList[index].score,
+        accuracy: deviceList[index].accuracy,
+        playerId: deviceList[index].playerId
       }
 
       var demical = parseFloat("0." + item.accuracy)
       item.score = item.score + (demical == 0 ? 0.00 : demical)
 
-      if (res.deviceList[index].recordId != '') {
-        baseTool.print(res.deviceList[index])
-        item.recordId = res.deviceList[index].recordId
+      if (deviceList[index].recordId != '') {
+        baseTool.print(deviceList[index])
+        item.recordId = deviceList[index].recordId
       }
 
       if (data.isSave == false && item.score == -1) {
@@ -533,6 +563,7 @@ Page({
   },
   deleteContest: function (res) {
     var that = this
+    // // 停止搜索
     contestManager.deleteContest(res.gameId).then(res => {
       that.getHomePage()
     }).catch(res => {
@@ -547,7 +578,7 @@ Page({
     baseTool.print('synSuccessCount:' + data.synSuccessCount)
     baseTool.print('synFailCount:' + data.synFailCount)
     baseTool.print('synNoDataCount:' + data.synNoDataCount)
-    if (data.synCommandCount == data.dataList.length) {
+    if (data.synCommandCount == data.dataList.length ) {
       // 同步结束
       wx.hideLoading()
       var content = '本地同步成功:' + data.synSuccessCount + '个; ' + '本地同步未达标' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
@@ -559,7 +590,6 @@ Page({
         confirmColor: '#00a0e9',
         success: function (res) {
           if (data.isSave == false) {
-            contestManager.saveBrushRecord(data.gameId)
             data.isSave = true
           }
 
@@ -660,29 +690,32 @@ Page({
       }
       if (total == 0) {
         // 发起重连
-        if (data.synReconnectCount < 3) {
-          data.synReconnectCount++
-          // 500ms 后发起重连
-          setTimeout(function () {
-            that.connectDevice(device)
-          }, 500)
-        } else {
-          baseTool.print(['连接超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
-          wx.closeBLEConnection({
-            deviceId: device.deviceId,
-            success: function (res) {
-              // 无数据
-              data.synExeLine = 495
-              that.synNextDevice()
-            },
-            fail: function (res) {
-              // 无数据
-              data.synExeLine = 499
-              that.synNextDevice()
-            },
-            complete: function (res) { },
-          })
-        }
+
+        baseTool.print(['连接超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
+        wx.closeBLEConnection({
+          deviceId: device.deviceId,
+          success: function (res) {
+            // 无数据
+            data.synExeLine = 495
+            that.synNextDevice()
+          },
+          fail: function (res) {
+            // 无数据
+            data.synExeLine = 499
+            that.synNextDevice()
+          },
+          complete: function (res) { },
+        })
+
+        // if (data.synReconnectCount < 3) {
+        //   data.synReconnectCount++
+        //   // 500ms 后发起重连
+        //   setTimeout(function () {
+        //     that.connectDevice(device)
+        //   }, 500)
+        // } else {
+          
+        // }
         return true
       }
       return false
@@ -696,6 +729,7 @@ Page({
         setTimeout(function () {
           // 获得服务
           var serviceTimeOut = false
+
           baseTool.startTimer(function (total) {
             if (serviceTimeOut == true) {
               baseTool.print(['获得服务未超时, 停止定时器', device, data.synCommandCount, data.synFailCount, data.synNoDataCount, data.synSuccessCount])
@@ -835,23 +869,23 @@ Page({
                           // 介绍设备数据
                         },
                         fail: function (res) {
-                          notyfyCharacteristicsTimeOut = true
-                          baseTool.print([res, '预订通知失败'])
-                          // 关闭连接
-                          wx.closeBLEConnection({
-                            deviceId: device.deviceId,
-                            success: function (res) {
-                              // 无数据
-                              data.synExeLine = 655
-                              that.synNextDevice()
-                            },
-                            fail: function (res) {
-                              // 无数据
-                              data.synExeLine = 660
-                              that.synNextDevice()
-                            },
-                            complete: function (res) { },
-                          })
+                          // notyfyCharacteristicsTimeOut = true
+                          // baseTool.print([res, '预订通知失败'])
+                          // // 关闭连接
+                          // wx.closeBLEConnection({
+                          //   deviceId: device.deviceId,
+                          //   success: function (res) {
+                          //     // 无数据
+                          //     data.synExeLine = 655
+                          //     that.synNextDevice()
+                          //   },
+                          //   fail: function (res) {
+                          //     // 无数据
+                          //     data.synExeLine = 660
+                          //     that.synNextDevice()
+                          //   },
+                          //   complete: function (res) { },
+                          // })
                         },
                         complete: function (res) { },
                       })
@@ -859,22 +893,22 @@ Page({
 
                   },
                   fail: function (res) {
-                    characteristicsTimeOut = true
-                    // 关闭连接
-                    wx.closeBLEConnection({
-                      deviceId: device.deviceId,
-                      success: function (res) {
-                        // 无数据
-                        data.synExeLine = 678
-                        that.synNextDevice()
-                      },
-                      fail: function (res) {
-                        // 无数据
-                        data.synExeLine = 683
-                        that.synNextDevice()
-                      },
-                      complete: function (res) { },
-                    })
+                    // characteristicsTimeOut = true
+                    // // 关闭连接
+                    // wx.closeBLEConnection({
+                    //   deviceId: device.deviceId,
+                    //   success: function (res) {
+                    //     // 无数据
+                    //     data.synExeLine = 678
+                    //     that.synNextDevice()
+                    //   },
+                    //   fail: function (res) {
+                    //     // 无数据
+                    //     data.synExeLine = 683
+                    //     that.synNextDevice()
+                    //   },
+                    //   complete: function (res) { },
+                    // })
                   },
                   complete: function (res) { },
                 })
@@ -883,22 +917,22 @@ Page({
             },
             fail: function (res) {
               baseTool.print([res, '获得服务失败'])
-              serviceTimeOut = true
-              // 关闭连接
-              wx.closeBLEConnection({
-                deviceId: device.deviceId,
-                success: function (res) {
-                  // 无数据
-                  data.synExeLine = 702
-                  that.synNextDevice()
-                },
-                fail: function (res) {
-                  // 无数据
-                  data.synExeLine = 707
-                  that.synNextDevice()
-                },
-                complete: function (res) { },
-              })
+              // serviceTimeOut = true
+              // // 关闭连接
+              // wx.closeBLEConnection({
+              //   deviceId: device.deviceId,
+              //   success: function (res) {
+              //     // 无数据
+              //     data.synExeLine = 702
+              //     that.synNextDevice()
+              //   },
+              //   fail: function (res) {
+              //     // 无数据
+              //     data.synExeLine = 707
+              //     that.synNextDevice()
+              //   },
+              //   complete: function (res) { },
+              // })
             },
             complete: function (res) { },
           })
@@ -909,17 +943,17 @@ Page({
         baseTool.print([res, '蓝牙连接失败'])
         // 无数据
         // 没超时
-        connectTimeOut = true
-        if (data.synReconnectCount < 3) {
-          data.synReconnectCount++
-          // 500ms 后发起重连
-          setTimeout(function () {
-            that.connectDevice(device)
-          }, 500)
-        } else {
-          data.synExeLine = 736
-          that.synNextDevice()
-        }
+        // connectTimeOut = true
+        // if (data.synReconnectCount < 3) {
+        //   data.synReconnectCount++
+        //   // 500ms 后发起重连
+        //   setTimeout(function () {
+        //     that.connectDevice(device)
+        //   }, 500)
+        // } else {
+        //   data.synExeLine = 736
+        //   that.synNextDevice()
+        // }
       },
       complete: function (res) { },
     })
@@ -1298,6 +1332,7 @@ Page({
     var gameId = data.gameId
     var name = data.contestTitle
     var startTime = data.startTime
+    var brushingMethodId = data.brushingMethodId
     var that = this
     that.setData({
       createButtonDisable: true
@@ -1311,7 +1346,7 @@ Page({
       baseTool.print(res)
       // 成功了以后再跳转页面, 就不会出错了
       wx.navigateTo({
-        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes' + '&startTime=' + startTime,
+        url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=yes' + '&startTime=' + startTime + "&brushingMethodId=" + brushingMethodId,
         success: function (res) {
 
         },
@@ -1340,7 +1375,7 @@ Page({
   },
   synNextDevice: function () {
     var that = this
-    if (data.synCommandCount < data.dataList.length && data.isSave == false) {
+    if (data.synCommandCount < data.dataList.length) {
       var deviceInfo = data.dataList[data.synCommandCount]
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 
@@ -1358,8 +1393,6 @@ Page({
       })
     } else {
       setTimeout(function () {
-        data.synFailCount++
-        data.synCommandCount++
         that.dispatchConnect()
       }, 500)
     }
@@ -1369,7 +1402,7 @@ Page({
   },
   synNoDataNextDevice: function () {
     var that = this
-    if (data.synCommandCount < data.dataList.length && data.isSave == false) {
+    if (data.synCommandCount < data.dataList.length) {
       var deviceInfo = data.dataList[data.synCommandCount]
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 
@@ -1387,8 +1420,6 @@ Page({
       })
     } else {
       setTimeout(function () {
-        data.synNoDataCount++
-        data.synCommandCount++
         that.dispatchConnect()
       }, 500)
     }
@@ -1406,6 +1437,7 @@ Page({
 
     var index = e.currentTarget.dataset.index
     var item = data.dataList[index]
+    baseTool.print(item)
     if (item.recordId) {
       wx.navigateTo({
         url: '/pages/my/brushScoreReport/brushScoreReport?name=' + item.name + '&recordId=' + item.recordId,
@@ -1415,21 +1447,42 @@ Page({
         },
         complete: function (res) { },
       })
-    } else {
-
+    } else if (item.playerId && data.isSyn == false) {
+      var that = this
+      wx.showActionSheet({
+        itemList: ["删除"],
+        itemColor: '#000',
+        success: function (res) {
+          if (res.tapIndex == 0) {
+            wx.showNavigationBarLoading()
+            wx.showLoading({
+              title: '正在删除...',
+              mask: true,
+              success: function(res) {},
+              fail: function(res) {},
+              complete: function(res) {},
+            })
+            contestManager.deleteBindUserDevice(item.playerId, item.macAddress, item.name).then(res => {
+              wx.hideLoading()
+              wx.hideNavigationBarLoading()
+              that.getHomePage()
+            }).catch((res) => {
+              wx.showModal({
+                title: '提示',
+                content: res,
+                showCancel: false,
+                confirmText: '确定',
+                confirmColor: '#00a0e9',
+              })
+            })
+          }
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
     }
-  },
-  deleteItemClick: function (e) {
-    wx.showActionSheet({
-      itemList: ["删除"],
-      itemColor: '#000',
-      success: function (res) {
-        if (res.tapIndex == 0) {
-          baseTool.print(e)
-        }
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
+  }, 
+  longpressClick: function (e) {
+    
   }
 })

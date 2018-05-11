@@ -237,11 +237,14 @@ function zeroFormat(oldString = '') {
   return oldString.length == 1 ? '0' + oldString : oldString
 }
 
-/**
- * 对象
- */
-function objectToArray(object) {
-
+function values(obj) {
+  var vals = [], key;
+  for (key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      vals.push(obj[key]);
+    }
+  }
+  return vals;
 }
 
 // 添加接口
@@ -297,5 +300,7 @@ module.exports = {
   // 获取从下一分钟从0秒钟开始的时间
   getNextMinuteTimeWithZeroSecond: getNextMinuteTimeWithZeroSecond,
   getCurrentDateWithoutTime: getCurrentDateWithoutTime,
-  getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond
+  getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond,
+  // 仿写 Object.values, 兼容
+  values: values
 }

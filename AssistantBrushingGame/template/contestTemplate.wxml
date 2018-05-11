@@ -10,7 +10,7 @@
 </template>
 
 <template name='contestUserItem'>
-  <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}&brushingMethodId={{brushingMethodId}}'>
+  <navigator url='../contestUserDetail/contestUserDetail?playerId={{playerId}}&name={{name}}'>
     <view class="item {{(id==1)?'':'item-orthers'}}">
       <text id='user-item-name'>{{name}}</text>
       <image src='../../../resource/right_arrow.png' id='user-arrow'></image>
@@ -22,7 +22,7 @@
   <view id='userInfo-view'>
     <view id='userInfo-name-view'>
       <image src='../../../resource/box-person.png' id='userInfo-name-image'></image>
-      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' value='{{name}}'  bindblur='getInputUserName' bindinput='getInputUserName' maxlength='10'></input>
+      <input id='userInfo-name-input' placeholder='请输入参赛者姓名' type='text' value='{{name}}'  bindblur='getInputUserName' bindinput='getInputUserName' maxlength='8'></input>
     </view>
     <view id='userInfo-name-line'></view>
     <!-- <view id='userInfo-brush-view'>

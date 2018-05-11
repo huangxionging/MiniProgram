@@ -315,10 +315,8 @@ function getMemberId() {
       } else {
         if (app.userInfoReadyCallback) {
           app.userInfoReadyCallback(res)
-        }
-        
+        }        
       }
-      
     }).catch(res => {
       baseTool.print(res)
     })

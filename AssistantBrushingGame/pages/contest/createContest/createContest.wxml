@@ -1,12 +1,12 @@
 <!--pages/createContest/createContest.wxml-->
 <import src='../../../template/contestTemplate.wxml' />
 <view class='create-contest-container'>
-  <view id='create-name-view'>
+  <view class='create-name-view'>
     <text id='create-name-title'>填写比赛名称:</text>
-    <view class='create-input-view'>
-      <input type='text' id='create-input' value='{{name}}' bindinput='getInputName'></input>
-      <view id='create-line'></view>
-    </view>
+     <view class='create-input-view'> 
+       <input type='text' id='create-input' value='{{name}}' bindinput='getInputName'></input> 
+       <view id='create-line'></view> 
+     </view> 
   </view>
   <!-- <view id='create-line'></view> -->
   <picker mode="date" value="{{valueDate}}" start="{{startDate}}"  bindchange="bindDateChange" class='picker'>

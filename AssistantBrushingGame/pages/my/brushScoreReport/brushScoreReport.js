@@ -151,7 +151,7 @@ Page({
     var that = this
     wx.showActionSheet({
       itemList: ['保存图片'],
-      itemColor: 'black',
+      itemColor: '#000',
       success: function(res) {
         if(res.tapIndex == 0) {
           that.downloadImage()
@@ -213,9 +213,6 @@ Page({
           showCancel: false,
           confirmText: '确定',
           confirmColor: '#00a0e9',
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
         })},
       complete: function(res) {},
     })

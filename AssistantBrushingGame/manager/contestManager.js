@@ -18,7 +18,11 @@ function getHomePage() {
         var gameNewItem = gameObject.gameNewItem
         var gameItem = gameObject.gameItem
         // 有绑定设备
-        if (gameNewItem.deviceList && gameNewItem.deviceList.length > 0) {
+        var deviceList = null
+        if (gameNewItem && gameNewItem.deviceListObject) {
+          deviceList = baseTool.values(gameNewItem.deviceListObject)
+        }
+        if (deviceList && deviceList.length > 0) {
           resolve(gameNewItem)
         } else {
           resolve(gameItem)
@@ -66,35 +70,41 @@ function getHomePage() {
                 var name = gameInfo.name
 
                 // 缓存比赛
-                var deviceList = []
+                var deviceListObject = {}
                 var deviceUserBindObject = {}
                 for (var index = 0; index < playersList.length; ++index) {
                   var macAddress = playersList[index].macAddress.toUpperCase()
                   // 待同步的列表项
                   baseTool.print(playersList[index])
                   var item = {
+                    playerId: playersList[index].playerId,
                     name: playersList[index].name,
                     macAddress: macAddress,
                     score: (playersList[index].score != undefined ? playersList[index].score : -1),
                     recordId: (playersList[index].recordId ? playersList[index].recordId : ''),
                     tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
                     isBound: true,
-                    accuracy: playersList[index].accuracy
+                    accuracy: playersList[index].accuracy,
+                    isSyn: true,
+                    dataObjectList: []
                   }
-                  deviceList.push(item)
-                  deviceUserBindObject[playersList[index].name] = index
+                  deviceListObject[macAddress] = item
+                  deviceUserBindObject[playersList[index].name] = macAddress
                 }
+
                 var gameItem = {
                   gameId: gameInfo.gameId,
                   name: name,
                   deviceUserBindObject: deviceUserBindObject,
-                  deviceList: deviceList,
+                  deviceListObject: deviceListObject,
                   startTime: gameInfo.startTime,
                   isSyn: true, // 是否已经同步服务器
                   isSave: true,
-                  brushingMethodId: gameInfo.brushingMethodId ? gameInfo.brushingMethodId : brushMethods[0]
+                  brushingMethodId: gameInfo.brushingMethodId ? gameInfo.brushingMethodId : brushMethods[0],
+                  isSynDeviceList: true
                 }
                 gameObject.gameItem = gameItem
+                gameObject.gameNewItem = gameItem
                 wx.setStorage({
                   key: 'gameObject',
                   data: gameObject,
@@ -235,6 +245,8 @@ function selectContestUser() {
   })
 }
 
+
+
 /**
  * @param type 表示修改(modify)或者创建(create), 默认是创建
  * 创建比赛
@@ -291,7 +303,7 @@ function addContest(gameId = "", name = undefined, time = undefined, brushMethod
         gameId: "", // gameId
         name: name, // 名字
         deviceUserBindObject: {}, // 设备绑定关系
-        deviceList: [], // 设备绑定列表
+        deviceListObject: {}, // 设备绑定对象, 用 macAddress 作 key
         startTime: startTime, // 创建时间
         isSyn: false, // 是否已经同步服务器
         isSave: false, // 是否第一次同步
@@ -355,21 +367,40 @@ function deleteContest(gameId = '') {
       success: function (res) {
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
+        var gameItem = gameObject.gameItem
         // 没有设备列表将被删除
-        if (gameNewItem.deviceList.length == 0) {
-          gameObject.gameNewItem = {}
+        var deviceList = baseTool.values(gameNewItem.deviceListObject)
+        var oldDeviceList = baseTool.values(gameItem.deviceListObject)
+        
+        if (deviceList.length == 0 && oldDeviceList.length > 0) {
+          // 复原
+          gameObject.gameNewItem = gameItem
+          wx.setStorage({
+            key: 'gameObject',
+            data: gameObject,
+            success: function (res) {
+              resolve(res)
+            },
+            fail: function (res) {
+              reject(res)
+            },
+            complete: function (res) { },
+          })
+        } else if (deviceList.length == 0 && oldDeviceList.length == 0){
+          wx.removeStorage({
+            key: 'gameObject',
+            success: function(res) {
+              resolve(res)
+            },
+            fail: function(res) {
+              reject(res)
+            },
+            complete: function(res) {},
+          })
+        } else {
+          resolve(res)
         }
-        wx.setStorage({
-          key: 'gameObject',
-          data: gameObject,
-          success: function (res) {
-            resolve(res)
-          },
-          fail: function (res) {
-            reject(res)
-          },
-          complete: function (res) { },
-        })
+        
       },
       fail: function (res) {
         reject(res)
@@ -387,8 +418,9 @@ function bindContestUser(name = '', macAddress = '') {
       success: function (res) {
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
-        gameNewItem.is
-        gameNewItem.deviceList.push({
+
+        var obj = {
+          playerId: -1,
           name: name,
           macAddress: macAddress,
           score: -1,
@@ -397,11 +429,12 @@ function bindContestUser(name = '', macAddress = '') {
           isBound: true,
           accuracy: "",
           isSyn: false,
-          dataObjectList:[]
-        })
+          dataObjectList: []
+        }
+        gameNewItem.deviceListObject[macAddress] = obj
         baseTool.print([name, macAddress, gameNewItem.deviceUserBindObject, "绑定"])
         // 记录绑定, 用于快速查询绑定数据
-        gameNewItem.deviceUserBindObject[name] = gameNewItem.deviceList.length - 1
+        gameNewItem.deviceUserBindObject[name] = macAddress
         gameNewItem.isSynDeviceList = false
         wx.setStorage({
           key: 'gameObject',
@@ -472,31 +505,6 @@ function updatePlayers(name = '', playerId = '', brushingMethodId = '') {
 
 function delPlayers(playerId = '') {
   return new Promise((resolve, reject) => {
-    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
-    // var data = {
-    //   memberId: loginManager.getMemberId(),
-    //   playerId: playerId,
-    // }
-    // baseTool.print(data)
-    // wx.request({
-    //   url: url,
-    //   data: data,
-    //   success: function (res) {
-    //     baseTool.print(res)
-    //     if (res.data.code == 'success') {
-    //       resolve(res.data.data);
-    //     } else {
-    //       if (res.data.msg != 'memberId不能为空') {
-    //         reject(res.data.msg)
-    //       }
-    //     }
-    //   },
-    //   fail: function () {
-    //     reject(baseTool.errorMsg)
-    //   },
-    //   complete: function (res) { },
-    // })
-
     wx.getStorage({
       key: 'contestUserObject',
       success: function (res) {
@@ -559,134 +567,153 @@ function uploadBrushRecord(gameId, startTime) {
     var memberId = loginManager.getMemberId()
     baseTool.print("时间:" + startTime + ":" + memberId)
     wx.getStorage({
-      key: 'deviceDataObject',
+      key: 'gameObject',
       success: function (res) {
-        var deviceDataObject = res.data
-        baseTool.print(deviceDataObject)
-        var dataObjectList = deviceDataObject.dataObjectList
-        var indicate = -100
-        for (var index = dataObjectList.length - 1; index >= 0; --index) {
-          if (dataObjectList[index].gameId == gameId) {
-            indicate = index
-            break
-          }
+        var gameObject = res.data
+        var gameNewItem = gameObject.gameNewItem
+        var deviceList = baseTool.values(gameNewItem.deviceListObject)
+        var deviceDataObjectList = []
+        for (var key in gameNewItem.deviceListObject) {
+          baseTool.print([key, gameNewItem.deviceListObject[key]])
+          deviceDataObjectList = deviceDataObjectList.concat(gameNewItem.deviceListObject[key].dataObjectList)
         }
-        if (indicate != -100) {
-          var dataStorageAll = dataObjectList[indicate].deviceDataObjectList
-          console.log('wx getStorage', dataStorageAll)
-          if (dataStorageAll != null && dataStorageAll.length >= 1) {
-            var jsonData = JSON.stringify(dataStorageAll)
-            console.log('send:', jsonData);
-            console.log('dataObjectList:', dataObjectList[indicate])
-            var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
-            baseTool.print(url)
-            wx.request({
-              //上传数据接口
-              url: url,
-              //如果设为json，会尝试对返回的数据做一次 JSON.parse
-              dataType: 'json',
-              data: {
-                sign: '123456',
-                timestamp: Date.parse(new Date()),
-                memberId: loginManager.getMemberId(),
-                gameName: dataObjectList[indicate].gameName,
-                gameId: gameId.length > 0 ? gameId : '',
-                startTime: startTime,
-                data: jsonData,
-              },
-              header: {
-                "sourceType": "wx",
-                'content-type': 'application/x-www-form-urlencoded', // 默认值
-              },
-              method: 'POST',
-              success: function (res) {
-                console.log(res.data)
-                //上传数据返回成功之后刷新主页分数
-                baseTool.print(res)
-                if (res.data.code == 'success') {
-                  // resolve(res.data.data);
-                  var gameObjectItem = res.data.data
-                  if (gameObjectItem != undefined && gameObjectItem.scoreList != undefined && gameObjectItem.scoreList.length > 0) {
-                    wx.getStorage({
-                      key: 'gameObject',
-                      success: function (res) {
-                        var gameObject = res.data
-                        var gameList = gameObject.gameList
-                        baseTool.print(gameObject)
-                        for (var index = 0; index < gameList.length; ++index) {
-                          var gameItem = gameList[index]
-                          baseTool.print(gameItem)
-                          if (gameItem.gameId == gameId) {
-                            baseTool.print(gameItem)
-                            for (var index1 = 0; index1 < gameObjectItem.scoreList.length; ++index1) {
-                              var item = gameObjectItem.scoreList[index1]
-                              var player = item.playerName
-                              baseTool.print(item)
-                              if (player != undefined && gameItem.deviceUserBindObject[player] != undefined) {
-                                var indicate = gameItem.deviceUserBindObject[player]
-                                var deviceItem = gameItem.deviceList[indicate]
-                                if (item.macAddress == deviceItem.macAddress) {
-                                  baseTool.print(item)
-                                  if (item.overallScore > deviceItem.score) {
-                                    baseTool.print(item)
-                                    deviceItem.score = item.overallScore
-                                    deviceItem.recordId = item.recordId
-                                    // 替换 gameId
-                                    deviceItem.gameId = item.gameId
-                                  }
-                                }
-                              }
-                            }
-                            // 替换 gameId
-                            gameItem.gameId = gameObjectItem.gameId
-                            gameItem.isSyn = true
-                            gameObject.gameNameObject[gameObjectItem.name] = gameObjectItem.gameId
-                          }
-                        }
 
-                        wx.setStorage({
-                          key: 'gameObject',
-                          data: gameObject,
-                          success: function (res) {
-                            baseTool.print(res)
-                            deleteDeviceDataObject(gameId).then(res => {
-                              baseTool.print(res)
-                              resolve(res)
-                            }).catch(res => {
-                              baseTool.print(res)
-                              resolve(res)
-                            })
-                          },
-                          fail: function (res) {
-                            resolve(res)
-                          },
-                          complete: function (res) { },
-                        })
-                      },
-                      fail: function (res) {
-                        reject(res)
-                      },
-                      complete: function (res) { },
-                    })
-                  } else {
-                    resolve(gameObjectItem)
-                  }
-                } else {
-                  if (res.data.msg != 'memberId不能为空') {
-                    reject(res.data.msg)
-                  }
+        console.log('wx getStorage', deviceDataObjectList)
+        if (deviceDataObjectList != null && deviceDataObjectList.length >= 1) {
+          var jsonData = JSON.stringify(deviceDataObjectList)
+          console.log('send:', jsonData);
+          var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
+          baseTool.print(url)
+          wx.request({
+            //上传数据接口
+            url: url,
+            //如果设为json，会尝试对返回的数据做一次 JSON.parse
+            dataType: 'json',
+            data: {
+              sign: '123456',
+              timestamp: Date.parse(new Date()),
+              memberId: loginManager.getMemberId(),
+              gameName: gameNewItem.name,
+              gameId: gameId.length > 0 ? gameId : '',
+              startTime: startTime,
+              data: jsonData,
+            },
+            header: {
+              "sourceType": "wx",
+              'content-type': 'application/x-www-form-urlencoded', // 默认值
+            },
+            method: 'POST',
+            success: function (res) {
+              console.log(res.data)
+              //上传数据返回成功之后刷新主页分数
+              baseTool.print(res)
+              if (res.data.code == 'success') {
+                // resolve(res.data.data);
+                wx.removeStorageSync("gameObject")
+                resolve(res)
+                // var gameObjectItem = res.data.data
+                // if (gameObjectItem != undefined && gameObjectItem.scoreList != undefined && gameObjectItem.scoreList.length > 0) {
+                //   gameNewItem.isSyn = true
+                //   for (var index = 0; index < gameObjectItem.scoreList.length; ++index) {
+                //     var item = gameObjectItem.scoreList[index]
+                //     var macAddress = item.macAddress
+                //     var deviceObject = gameNewItem.deviceListObject[macAddress]
+                //     baseTool.print([item, deviceObject])
+                //     deviceObject.recordId = item.recordId
+                //     // 分数
+                //     if (item.overallScore >= deviceObject.score) {
+                //       deviceObject.score = item.overallScore
+
+                //       // 小数
+
+                //       if (deviceObject.accuracy == "" || parseFloat(item.accuracy) > parseFloat(deviceObject.accuracy)) {
+                //         deviceObject.accuracy = item.accuracy
+                //       }
+                //     }
+
+
+                //     deviceObject.isSyn = true
+                //     // 清空上传数据
+                //     deviceObject.dataObjectList.splice(0, deviceObject.dataObjectList.length)
+                //   }
+                //   baseTool.print(["所有数据", gameObject])
+                //   gameObject.gameItem = gameNewItem
+                //   wx.setStorage({
+                //     key: 'gameObject',
+                //     data: gameObject,
+                //     success: function (res) {
+                //       baseTool.print(res)
+                //       resolve(res)
+                //     },
+                //     fail: function (res) {
+                //       resolve(res)
+                //     },
+                //     complete: function (res) { },
+                //   })
+                // } else {
+                //   resolve(gameObjectItem)
+                // }
+              } else {
+                if (res.data.msg != 'memberId不能为空') {
+                  reject(res.data.msg)
                 }
-              },
-              fail: function (res) {
-                reject(baseTool.errorMsg)
               }
-            })
-          } else {
-            reject('全部无数据')
-          }
+            },
+            fail: function (res) {
+              reject(baseTool.errorMsg)
+            }
+          })
         } else {
-          reject('gameId 不存在')
+          reject('全部无数据')
         }
+      }
+    })
+  })
+}
+
+
+function uploadHistoryBrushRecord(gameId, gameName, deviceObject) {
+  return new Promise((resolve, reject) => {
+    baseTool.print('从本地数据库上传数据！')
+    var deviceDataObjectList = []
+    for (var key in deviceObject) {
+      deviceDataObjectList = deviceDataObjectList.concat(deviceObject[key].dataObjectList)
+    }
+    var memberId = loginManager.getMemberId()
+
+    var jsonData = JSON.stringify(deviceDataObjectList)
+    console.log('send:', jsonData);
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
+    baseTool.print(url)
+    wx.request({
+      //上传数据接口
+      url: url,
+      //如果设为json，会尝试对返回的数据做一次 JSON.parse
+      dataType: 'json',
+      data: {
+        sign: '123456',
+        timestamp: Date.parse(new Date()),
+        memberId: loginManager.getMemberId(),
+        gameName: gameName,
+        gameId: gameId.length > 0 ? gameId : '',
+        data: jsonData,
+      },
+      header: {
+        "sourceType": "wx",
+        'content-type': 'application/x-www-form-urlencoded', // 默认值
+      },
+      method: 'POST',
+      success: function (res) {
+        var gameObject = wx.getStorageSync("gameObject")
+        var gameNewItem = gameObject.gameNewItem
+        // 如果是同一场比赛
+        if (gameId == gameNewItem.gameId) {
+          wx.removeStorageSync("gameObject")
+        }
+        resolve(res)
+      },
+      fail: function (res) {
+        reject(baseTool.errorMsg)
       }
     })
   })
@@ -724,25 +751,19 @@ function tagSynGame(gameId = '') {
 function addDeviceDataObject(deviceDataOject, gameId, gameName) {
   return new Promise((resolve, reject) => {
 
-    deviceObjects
     wx.getStorage({
       key: 'gameObject',
       success: function (res) {
-        baseTool.print(res)
+        baseTool.print([res, "设备数据:", deviceDataOject, "设备地址: ", deviceDataOject.macAddress])
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
-        if (dataObjectList.length == 0) {
-          dataObjectList.push({
-            gameId: gameId,
-            gameName: gameName,
-            deviceDataObjectList: []
-          })
-        }
+        var macAddress = deviceDataOject.macAddress
+        var deviceItem = gameNewItem.deviceListObject[macAddress]
+        deviceItem.dataObjectList.push(deviceDataOject)
         // 添加一条数据
-        dataObjectItem.deviceDataObjectList.push(deviceDataOject)
         wx.setStorage({
-          key: 'deviceDataObject',
-          data: deviceDataObject,
+          key: 'gameObject',
+          data: gameObject,
           success: function (res) {
             resolve(res)
           },
@@ -751,63 +772,6 @@ function addDeviceDataObject(deviceDataOject, gameId, gameName) {
           },
           complete: function (res) { },
         })
-      },
-      fail: function (res) {
-        var deviceDataObject = {
-          dataObjectList: [{
-            gameId: gameId,
-            gameName: gameName,
-            deviceDataObjectList: [
-              deviceDataOject
-            ]
-          }]
-        }
-        wx.setStorage({
-          key: 'deviceDataObject',
-          data: deviceDataObject,
-          success: function (res) {
-            resolve(res)
-          },
-          fail: function (res) {
-            reject(res)
-          },
-          complete: function (res) { },
-        })
-      },
-      complete: function (res) { },
-    })
-  })
-}
-/**
- * 删除设备数据
- */
-function deleteDeviceDataObject(gameId) {
-  return new Promise((resolve, reject) => {
-    wx.getStorage({
-      key: 'deviceDataObject',
-      success: function (res) {
-        var deviceDataObject = res.data
-        var dataObjectList = deviceDataObject.dataObjectList
-        for (var index = dataObjectList.length - 1; index >= 0; --index) {
-          var dataObjectItem = dataObjectList[index]
-          if (dataObjectItem.gameId == gameId) {
-            // 删除数据
-            dataObjectList.splice(index, 1)
-            wx.setStorage({
-              key: 'deviceDataObject',
-              data: deviceDataObject,
-              success: function (res) {
-                resolve(res)
-              },
-              fail: function (res) {
-                reject(res)
-              },
-              complete: function (res) { },
-            })
-            break
-          }
-        }
-
       },
       fail: function (res) {
         reject(res)
@@ -816,6 +780,7 @@ function deleteDeviceDataObject(gameId) {
     })
   })
 }
+
 
 function submitUserDeviceBindingRelationship() {
   return new Promise((resolve, reject) => {
@@ -826,7 +791,7 @@ function submitUserDeviceBindingRelationship() {
         var gameNewItem = gameObject.gameNewItem
 
         // 没有设备列表
-        if (gameNewItem.deviceList.length == 0) {
+        if (Object.keys(gameNewItem.deviceListObject).length == 0) {
           reject({
             state: "fail",
             msg: "您还未绑定比赛设备哦"
@@ -835,7 +800,7 @@ function submitUserDeviceBindingRelationship() {
           var url = baseURL.baseDomain + baseURL.basePath + baseApiList.createParticipantsList
           var clinicId = baseTool.valueForKey('clinicId')
           var openid = baseTool.valueForKey('openid')
-          var deviceList = gameNewItem.deviceList.map(function (value, index, array) {
+          var deviceList = baseTool.values(gameNewItem.deviceListObject).map(function (value, index, array) {
             return {
               name: value.name,
               macAddress: value.macAddress
@@ -848,7 +813,8 @@ function submitUserDeviceBindingRelationship() {
             clinicId: clinicId,
             openid: openid,
             data: deviceList,
-            startTime: gameNewItem.startTime
+            startTime: gameNewItem.startTime,
+            brushingMethodId: gameNewItem.brushingMethodId
           }
           baseTool.print([url, data])
           wx.request({
@@ -862,8 +828,16 @@ function submitUserDeviceBindingRelationship() {
                 gameNewItem.gameId = gameId
                 gameNewItem.isSynDeviceList = true
                 // 
-                for (var index = 0; index < gameNewItem.deviceList.length; ++index) {
-                  gameNewItem.deviceList[index].isSyn = true
+
+                var playerList = res.data.data.playerList
+                baseTool.print(playerList)
+                if (playerList && playerList.length) {
+                  for (var index = 0; index < playerList.length; ++index) {
+                    var item = playerList[index]
+                    var deviceItem = gameNewItem.deviceListObject[item.macAddress]
+                    deviceItem.playerId = item.playerId
+                    deviceItem.isSyn = true
+                  }
                 }
                 wx.setStorage({
                   key: 'gameObject',
@@ -905,9 +879,13 @@ function removeUnSavedDevice() {
       success: function (res) {
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
-        gameNewItem.deviceList = gameNewItem.deviceList.forEach(function (value, index, array) {
-          return (value.isSyn == true)
-        })
+        for (var key in gameNewItem.deviceListObject) {
+          var obj = gameNewItem.deviceListObject[key]
+          if (obj.isSyn == false) {
+            delete gameNewItem.deviceListObject[key]
+            delete gameNewItem.deviceUserBindObject[obj.name]
+          }
+        }
         wx.setStorage({
           key: 'gameObject',
           data: gameObject,
@@ -926,6 +904,62 @@ function removeUnSavedDevice() {
     })
 
   })
+}
+
+function deleteBindUserDevice(playerId = '', macAddress = '', name ='') {
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.delPlayers
+    var data = {
+      memberId: loginManager.getMemberId(),
+      playerId: playerId,
+    }
+    baseTool.print(data)
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        baseTool.print(res)
+        if (res.data.code == 'success') {
+          var gameObject = wx.getStorageSync("gameObject")
+          var gameNewItem = gameObject.gameNewItem
+          delete gameNewItem.deviceListObject[macAddress]
+          delete gameNewItem.deviceUserBindObject[name]
+          if(Object.keys(gameNewItem.deviceUserBindObject).length == 0) {
+            wx.removeStorageSync("gameObject")
+          } else {
+            wx.setStorageSync("gameObject", gameObject)
+          }
+          
+          resolve(res.data.data);
+        } else {
+          if (res.data.msg != 'memberId不能为空') {
+            reject(res.data.msg)
+          }
+        }
+      },
+      fail: function () {
+        reject(baseTool.errorMsg)
+      },
+      complete: function (res) { },
+    })
+  })
+}
+
+function getBindUserDevices() {
+
+  var gameObject = wx.getStorageSync("gameObject")
+  if (gameObject) {
+    var gameNewItem = gameObject.gameNewItem
+    if (gameNewItem && gameNewItem.deviceListObject) {
+      var deviceListObject = gameNewItem.deviceListObject
+      var deviceList = baseTool.values(deviceListObject)
+      return deviceList
+    } else {
+      return null
+    }
+  } else {
+    return null
+  }
 }
 
 module.exports = {
@@ -953,9 +987,14 @@ module.exports = {
   tagSynGame: tagSynGame,
   // 添加设备数据
   addDeviceDataObject: addDeviceDataObject,
-  // 删除已同步的数据
-  deleteDeviceDataObject: deleteDeviceDataObject,
   // 保存结果
   saveBrushRecord: saveBrushRecord,
   submitUserDeviceBindingRelationship: submitUserDeviceBindingRelationship,
+  // 删除设备
+  removeUnSavedDevice: removeUnSavedDevice,
+  uploadHistoryBrushRecord: uploadHistoryBrushRecord,
+  // 删除绑定设备
+  deleteBindUserDevice: deleteBindUserDevice,
+  // 获得绑定关系
+  getBindUserDevices: getBindUserDevices,
 }
