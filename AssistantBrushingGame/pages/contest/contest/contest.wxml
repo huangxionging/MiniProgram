@@ -15,7 +15,7 @@
   </block>
   <block wx:else>
     <!-- <view class='contest-content-view'> -->
-      <view id='contest-main-view'>
+      <view class='contest-main-view'>
         <image  src='../../../resource/contest_background.png' id='contest-background'></image>
         <view id='contest-info-view' background-size='cover'>
           <text id='contest-title'>{{contestTitle}}</text>
@@ -36,8 +36,8 @@
         <navigator url='../contestUser/contestUser'>
         <image src='../../../resource/contest_user.png' id='contest-create-image'></image> 
         </navigator>
-        
       </view>
+      <view class='contest-table-line'></view>
       <view wx:if='{{!isSynNow && !isSyn}}' class='add-contest-user-view' bindtap='addContestUser'>
         <view class='add-contest-user-content-view'>
           <text>添加参赛者</text>
@@ -52,7 +52,11 @@
     <!-- </view> -->
   </block>
 </view>
-<view class='contest-container' wx:if='{{!loadingDone}}'>
-  <button open-type='getUserInfo' bindgetuserinfo='getUserInfoClick'>用户授权</button>
+<view class='contest-get-container' wx:if='{{!loadingDone}}'>
+  <button class='get-user-info-button' open-type='getUserInfo' bindgetuserinfo='getUserInfoClick'>
+    <text class='get-user-info-tips'>感谢您使用小小牙医活动助手, 祝愿您的刷牙比赛顺利完成~</text>
+    <view class='get-user-info-line'></view>
+    <text class='get-user-info-action'>开启刷牙比赛之旅</text>
+  </button>
 </view>
 

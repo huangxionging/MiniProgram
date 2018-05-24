@@ -254,6 +254,169 @@ function chooseImageFrom(sourceType = 'camera') {
   })
 }
 
+function uploadHistoryBrushRecord() {
+  return new Promise((resolve, reject) => {
+    baseTool.print('从本地数据库上传数据！')
+    var historyGameObject = wx.getStorageSync("historyGameObject")
+    if (historyGameObject && historyGameObject.deviceListObject) {
+      var deviceObject = historyGameObject.deviceListObject
+      var deviceDataObjectList = []
+      for (var key in deviceObject) {
+        deviceDataObjectList = deviceDataObjectList.concat(deviceObject[key].dataObjectList)
+      }
+      var memberId = loginManager.getMemberId()
+
+      var jsonData = JSON.stringify(deviceDataObjectList)
+      baseTool.print(['send:', jsonData])
+      var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
+      baseTool.print(url)
+      wx.request({
+        //上传数据接口
+        url: url,
+        //如果设为json，会尝试对返回的数据做一次 JSON.parse
+        dataType: 'json',
+        data: {
+          sign: '123456',
+          timestamp: Date.parse(new Date()),
+          memberId: loginManager.getMemberId(),
+          gameName: historyGameObject.name,
+          gameId: historyGameObject.gameId,
+          data: jsonData,
+        },
+        header: {
+          "sourceType": "wx",
+          'content-type': 'application/x-www-form-urlencoded', // 默认值
+        },
+        method: 'POST',
+        success: function (res) {
+          var gameObject = wx.getStorageSync("gameObject")
+          var gameNewItem = gameObject.gameNewItem
+          // 如果是同一场比赛
+          if (historyGameObject.gameId == gameNewItem.gameId) {
+            wx.removeStorageSync("gameObject")
+          }
+          // 删除历史数据
+          wx.removeStorageSync("historyGameObject")
+          resolve(res)
+        },
+        fail: function (res) {
+          reject(baseTool.errorMsg)
+        }
+      })
+    } else {
+      reject("数据不存在")
+    }
+    
+  })
+}
+
+/**
+ * 创建历史比赛缓存对象
+ */
+function createHistoryGameObject(gameId = '', gameName = '', deviceList = []) {
+  return new Promise((resolve, reject) => {
+    var gameOject = wx.getStorageSync("historyGameObject")
+    if (gameOject && gameOject.gameId == gameId) {
+      resolve(gameOject)
+    } else {
+      if (deviceList.length == 0) {
+        reject("设备列表为空")
+      } else {
+        var historyGameObject = {
+          gameId: gameId,
+          name: gameName,
+          deviceUserBindObject: {},
+          deviceListObject: {},
+          isSyn: false
+        }
+        for (var index = 0; index < deviceList.length; ++index) {
+          var deviceItem = deviceList[index]
+          var macAddress = deviceItem.macAddress
+          var name = deviceItem.name
+          historyGameObject.deviceUserBindObject[name] = macAddress
+          historyGameObject.deviceListObject[macAddress] = {
+            macAddress: macAddress,
+            name: name,
+            dataObjectList: []
+          }
+        }
+        wx.setStorage({
+          key: 'historyGameObject',
+          data: historyGameObject,
+          success: function (res) {
+            resolve(res)
+          },
+          fail: function (res) {
+            reject(res)
+          }
+        })
+      }
+    }
+    
+  })
+}
+
+function checkNeedSyn() {
+  var historyGameObject = wx.getStorageSync("historyGameObject")
+  if (historyGameObject && historyGameObject.deviceListObject) {
+    var deviceObject = historyGameObject.deviceListObject
+    var deviceDataObjectList = []
+    for (var key in deviceObject) {
+      deviceDataObjectList = deviceDataObjectList.concat(deviceObject[key].dataObjectList)
+    }
+    if (deviceDataObjectList.length > 0) {
+      return true
+    } else {
+      return false
+    }
+  } else {
+    return false
+  }
+}
+
+function addDeviceDataObject(dataObject = {}) {
+  return new Promise((resolve, reject) => {
+    wx.getStorage({
+      key: 'historyGameObject',
+      success: function(res) {
+        var historyGameObject = res.data
+        var macAddress = dataObject.macAddress
+        var deviceListItem = historyGameObject.deviceListObject[macAddress]
+        deviceListItem.dataObjectList.push(dataObject)
+        historyGameObject.deviceListObject[macAddress] = deviceListItem
+        // 添加一条数据
+        baseTool.print(historyGameObject)
+        wx.setStorage({
+          key: 'historyGameObject',
+          data: historyGameObject,
+          success: function (res) {
+            resolve(res)
+          },
+          fail: function (res) {
+            reject(res)
+          },
+          complete: function (res) { },
+        })
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  })
+}
+
+function removeHistoryGameObject() {
+  return new Promise((resolve, reject) => {
+    wx.removeStorage({
+      key: 'historyGameObject',
+      success: function(res) {
+        resolve(res)
+      },
+      fail: function(res) {
+        reject(res)
+      }
+    })
+  })
+}
 
 module.exports = {
   pageQueryContest: pageQueryContest,
@@ -265,4 +428,9 @@ module.exports = {
   getClinicInfo: getClinicInfo,
   getUploadToken: getUploadToken,
   chooseImageFrom: chooseImageFrom,
+  uploadHistoryBrushRecord: uploadHistoryBrushRecord,
+  createHistoryGameObject: createHistoryGameObject,
+  checkNeedSyn: checkNeedSyn,
+  addDeviceDataObject: addDeviceDataObject,
+  removeHistoryGameObject: removeHistoryGameObject
 }

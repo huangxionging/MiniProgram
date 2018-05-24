@@ -252,7 +252,7 @@ function selectContestUser() {
  * 创建比赛
  */
 
-function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 0, type = "create") {
+function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 1, type = "create") {
   return new Promise((resolve, reject) => {
     baseTool.print([gameId, name, time, brushMethod, type])
     if (type == "modify") {
@@ -307,7 +307,7 @@ function addContest(gameId = "", name = undefined, time = undefined, brushMethod
         startTime: startTime, // 创建时间
         isSyn: false, // 是否已经同步服务器
         isSave: false, // 是否第一次同步
-        isSynDeviceList: false, // 
+        isSynDeviceList: true, // 
         // 默认选巴氏刷牙法
         brushingMethodId: brushMethods[brushMethod] // 表示巴氏, "6827c45622b141ef869c955e0c51f9f8" 表示
       }
@@ -316,13 +316,7 @@ function addContest(gameId = "", name = undefined, time = undefined, brushMethod
         key: 'gameObject',
         data: gameObject,
         success: function (res) {
-          resolve({
-            game: {
-              gameId: gameId,
-              name: name,
-              startTime: startTime
-            }
-          })
+          resolve(gameObject.gameNewItem)
         },
         fail: function (res) {
           reject(res)
@@ -339,29 +333,6 @@ function addContest(gameId = "", name = undefined, time = undefined, brushMethod
  */
 function deleteContest(gameId = '') {
   return new Promise((resolve, reject) => {
-    // var url = baseURL.baseDomain + baseURL.basePath + baseApiList.deleteContest
-    // var data = {
-    //   memberId: loginManager.getMemberId(),
-    //   gameId: gameId,
-    // }
-    // wx.request({
-    //   url: url,
-    //   data: data,
-    //   success: function (res) {
-    //     if (res.data.code == 'success') {
-    //       resolve(res.data.data);
-    //     } else {
-    //       if (res.data.msg != 'memberId不能为空') {
-    //         reject(res.data.msg)
-    //       }
-    //     }
-    //   },
-    //   fail: function () {
-    //     reject(baseTool.errorMsg)
-    //   },
-    //   complete: function (res) { },
-    // })
-
     wx.getStorage({
       key: 'gameObject',
       success: function (res) {
@@ -672,52 +643,7 @@ function uploadBrushRecord(gameId, startTime) {
 }
 
 
-function uploadHistoryBrushRecord(gameId, gameName, deviceObject) {
-  return new Promise((resolve, reject) => {
-    baseTool.print('从本地数据库上传数据！')
-    var deviceDataObjectList = []
-    for (var key in deviceObject) {
-      deviceDataObjectList = deviceDataObjectList.concat(deviceObject[key].dataObjectList)
-    }
-    var memberId = loginManager.getMemberId()
 
-    var jsonData = JSON.stringify(deviceDataObjectList)
-    console.log('send:', jsonData);
-    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.gameUploadBrushTeethRecord
-    baseTool.print(url)
-    wx.request({
-      //上传数据接口
-      url: url,
-      //如果设为json，会尝试对返回的数据做一次 JSON.parse
-      dataType: 'json',
-      data: {
-        sign: '123456',
-        timestamp: Date.parse(new Date()),
-        memberId: loginManager.getMemberId(),
-        gameName: gameName,
-        gameId: gameId.length > 0 ? gameId : '',
-        data: jsonData,
-      },
-      header: {
-        "sourceType": "wx",
-        'content-type': 'application/x-www-form-urlencoded', // 默认值
-      },
-      method: 'POST',
-      success: function (res) {
-        var gameObject = wx.getStorageSync("gameObject")
-        var gameNewItem = gameObject.gameNewItem
-        // 如果是同一场比赛
-        if (gameId == gameNewItem.gameId) {
-          wx.removeStorageSync("gameObject")
-        }
-        resolve(res)
-      },
-      fail: function (res) {
-        reject(baseTool.errorMsg)
-      }
-    })
-  })
-}
 
 function tagSynGame(gameId = '') {
   return new Promise((resolve, reject) => {
@@ -886,6 +812,8 @@ function removeUnSavedDevice() {
             delete gameNewItem.deviceUserBindObject[obj.name]
           }
         }
+        gameNewItem.isSynDeviceList = true
+        gameObject.gameNewItem = gameNewItem
         wx.setStorage({
           key: 'gameObject',
           data: gameObject,
@@ -992,7 +920,6 @@ module.exports = {
   submitUserDeviceBindingRelationship: submitUserDeviceBindingRelationship,
   // 删除设备
   removeUnSavedDevice: removeUnSavedDevice,
-  uploadHistoryBrushRecord: uploadHistoryBrushRecord,
   // 删除绑定设备
   deleteBindUserDevice: deleteBindUserDevice,
   // 获得绑定关系

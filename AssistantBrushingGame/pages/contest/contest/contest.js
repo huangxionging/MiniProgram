@@ -74,22 +74,33 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    baseTool.print("首页:77")
     that.getHomePage()
     baseMessageHandler.addMessageHandler('deleteContest', this, that.deleteContest).then(res => {
+      baseTool.print("首页:80")
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
     })
 
     // 重置比赛
-    
     baseMessageHandler.addMessageHandler('refreshContest', this, that.getHomePage).then(res => {
+      baseTool.print("首页:87")
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+
+    // 重置比赛
+    baseMessageHandler.addMessageHandler('unSavedContest', this, that.unSavedContest).then(res => {
+      baseTool.print("首页:87")
       baseTool.print(res)
     }).catch(res => {
       baseTool.print(res)
     })
 
     app.userInfoReadyCallback = res => {
+      baseTool.print("首页:94")
       that.getHomePage()
     }
   },
@@ -109,14 +120,38 @@ Page({
       createButtonDisable: false
     })
   },
-  getUserInfoClick: function(e) {
+  unSavedContest: function (e) {
+    baseTool.print(e)
+    var that = this
+    wx.showModal({
+      title: '提示',
+      content: '您修改的比赛信息暂未保存, 请点击保存或取消',
+      showCancel: true,
+      cancelText: '取消',
+      cancelColor: '#ff0000',
+      confirmText: '确定',
+      confirmColor: '#00a0e9',
+      success: function (res) {
+        if (res.confirm == true) {
+          that.saveDevice(e)
+        } else {
+          that.removeDevice(e)
+        }
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+  getUserInfoClick: function (e) {
     baseTool.print(e)
     var that = this
     loginManager.loginFlow().then(res => {
       // baseTool.print(res)
+      baseTool.print("首页:119")
       that.getHomePage()
     }).catch(res => {
       // baseTool.print(res)
+      baseTool.print("首页:123")
       that.getHomePage()
     })
   },
@@ -132,6 +167,20 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    // 删除通知
+    baseMessageHandler.removeSpecificInstanceMessageHandler("deleteContest", this).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+
+    // 删除通知
+    baseMessageHandler.removeSpecificInstanceMessageHandler("unSavedContest", this).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+    })
+    
   },
 
   /**
@@ -139,6 +188,7 @@ Page({
    */
   onPullDownRefresh: function () {
     var that = this
+    baseTool.print("首页:146")
     that.getHomePage()
     wx.closeBluetoothAdapter({
       success: function (res) {
@@ -160,35 +210,15 @@ Page({
   getHomePage: function () {
     var that = this
     wx.showNavigationBarLoading()
-    var getHomePagePromise = contestManager.getHomePage()
-    var del = getHomePagePromise.then(res => {
+    contestManager.getHomePage().then(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseTool.print(res)
-      if (res.isSynDeviceList == false) {
-        wx.showModal({
-          title: '提示',
-          content: '您有未保存的比赛设备哦, 请点击保存或取消',
-          showCancel: true,
-          cancelText: '取消',
-          cancelColor: '#ff0000',
-          confirmText: '确定',
-          confirmColor: '#00a0e9',
-          success: function (res) {
-            if (res.confirm == true) {
-              that.saveDevice()
-            } else {
-              that.removeDevice()
-            }
-          },
-          fail: function (res) { },
-          complete: function (res) { },
-        })
-      }
-      
+      baseTool.print(["获取首页数据", res])
+
       if (typeof (res) != 'undefined' && res.deviceListObject && Object.keys(res.deviceListObject).length > 0) {
         that.parseData(res)
       } else if (typeof (res) != 'undefined') {
+
         that.deleteContest(res)
         data.loadingDone = true
         data.hasData = false
@@ -216,30 +246,38 @@ Page({
       })
     })
   },
-
-  saveDevice: function () {
+  saveDevice: function (e) {
     var that = this
-    wx.showLoading({
-      title: '正在保存...',
-      mask: true,
-    })
-    contestManager.submitUserDeviceBindingRelationship().then(res => {
+    contestManager.addContest(e.gameId, e.name, e.startTime, e.selectBrushMethod, "modify").then(res => {
       baseTool.print(res)
-      wx.hideLoading()
-      that.getHomePage()
+      wx.showLoading({
+        title: '正在保存...',
+        mask: true,
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      contestManager.submitUserDeviceBindingRelationship().then(res => {
+        baseTool.print(res)
+        wx.hideLoading()
+        that.getHomePage()
+      }).catch(res => {
+        baseTool.print(res)
+        wx.hideLoading()
+        wx.showModal({
+          title: "提示",
+          content: res.msg,
+          showCancel: false,
+          confirmText: "确定",
+          confirmColor: "#00a0e9"
+        })
+      })
     }).catch(res => {
       baseTool.print(res)
-      wx.hideLoading()
-      wx.showModal({
-        title: "提示",
-        content: res.msg,
-        showCancel: false,
-        confirmText: "确定",
-        confirmColor: "#00a0e9"
-      })
     })
+
   },
-  removeDevice: function() {
+  removeDevice: function (e) {
     // 
     var that = this
     wx.showLoading({
@@ -247,9 +285,11 @@ Page({
     })
     contestManager.removeUnSavedDevice().then((res) => {
       wx.hideLoading()
+      baseTool.print("首页:256")
       that.getHomePage()
     }).catch((res) => {
       wx.hideLoading()
+      baseTool.print("首页:261")
       that.getHomePage()
     })
   },
@@ -294,11 +334,12 @@ Page({
     contestManager.addContest().then(res => {
       baseTool.print(res)
       if (typeof (res) != 'undefined') {
-        var gameId = res.game.gameId
-        var name = res.game.name
-        var startTime = res.game.startTime
+        var gameId = res.gameId
+        var name = res.name
+        var startTime = res.startTime
+        var brushingMethodId = res.brushingMethodId
         wx.navigateTo({
-          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no' + '&startTime=' + startTime,
+          url: '../createContest/createContest?' + 'gameId=' + gameId + '&name=' + name + '&add=no' + '&startTime=' + startTime + "&brushingMethodId=" + brushingMethodId,
           success: function (res) {
             // wx.hideLoading()
           },
@@ -564,7 +605,9 @@ Page({
   deleteContest: function (res) {
     var that = this
     // // 停止搜索
+    baseTool.print(["首页:576", this])
     contestManager.deleteContest(res.gameId).then(res => {
+      baseTool.print("首页:566")
       that.getHomePage()
     }).catch(res => {
       baseTool.print(res)
@@ -578,7 +621,7 @@ Page({
     baseTool.print('synSuccessCount:' + data.synSuccessCount)
     baseTool.print('synFailCount:' + data.synFailCount)
     baseTool.print('synNoDataCount:' + data.synNoDataCount)
-    if (data.synCommandCount == data.dataList.length ) {
+    if (data.synCommandCount == data.dataList.length) {
       // 同步结束
       wx.hideLoading()
       var content = '本地同步成功:' + data.synSuccessCount + '个; ' + '本地同步未达标' + data.synNoDataCount + '个; ' + '未连接:' + data.synFailCount + '个'
@@ -606,6 +649,7 @@ Page({
                 if (res.confirm == true) {
                   that.upStorageDataToService()
                 } else {
+                  baseTool.print("首页:610")
                   that.getHomePage()
                 }
               },
@@ -714,7 +758,7 @@ Page({
         //     that.connectDevice(device)
         //   }, 500)
         // } else {
-          
+
         // }
         return true
       }
@@ -1306,6 +1350,7 @@ Page({
       wx.hideLoading()
       data.synNodataTimeOut = true
       baseTool.print([res, '数据上传成功'])
+      baseTool.print("首页:1311")
       that.getHomePage()
       that.setData({
         isSynNow: false
@@ -1449,40 +1494,51 @@ Page({
       })
     } else if (item.playerId && data.isSyn == false) {
       var that = this
-      wx.showActionSheet({
-        itemList: ["删除"],
-        itemColor: '#000',
-        success: function (res) {
-          if (res.tapIndex == 0) {
-            wx.showNavigationBarLoading()
-            wx.showLoading({
-              title: '正在删除...',
-              mask: true,
-              success: function(res) {},
-              fail: function(res) {},
-              complete: function(res) {},
-            })
-            contestManager.deleteBindUserDevice(item.playerId, item.macAddress, item.name).then(res => {
-              wx.hideLoading()
-              wx.hideNavigationBarLoading()
-              that.getHomePage()
-            }).catch((res) => {
-              wx.showModal({
-                title: '提示',
-                content: res,
-                showCancel: false,
-                confirmText: '确定',
-                confirmColor: '#00a0e9',
+      if (data.dataList.length <= 1) {
+        wx.showModal({
+          title: '温馨提示',
+          content: '每场比赛至少保留一个参赛设备哦!',
+          showCancel: false,
+          confirmText: '确定',
+          confirmColor: '#00a0e9'
+        })
+      } else if (data.dataList.length) {
+        wx.showActionSheet({
+          itemList: ["删除"],
+          itemColor: '#000',
+          success: function (res) {
+            if (res.tapIndex == 0) {
+              wx.showNavigationBarLoading()
+              wx.showLoading({
+                title: '正在删除...',
+                mask: true,
+                success: function (res) { },
+                fail: function (res) { },
+                complete: function (res) { },
               })
-            })
-          }
-        },
-        fail: function (res) { },
-        complete: function (res) { },
-      })
+              contestManager.deleteBindUserDevice(item.playerId, item.macAddress, item.name).then(res => {
+                wx.hideLoading()
+                wx.hideNavigationBarLoading()
+                baseTool.print("首页:1471")
+                that.getHomePage()
+              }).catch((res) => {
+                wx.hideLoading()
+                wx.hideNavigationBarLoading()
+                wx.showModal({
+                  title: '提示',
+                  content: res,
+                  showCancel: false,
+                  confirmText: '确定',
+                  confirmColor: '#00a0e9',
+                })
+              })
+            }
+          },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      }
+
     }
-  }, 
-  longpressClick: function (e) {
-    
-  }
+  },
 })

@@ -28,8 +28,11 @@ Page({
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
     reconnectCount: 0,
-    dataTimeOut: false,
-    failTips: false
+    reServiceCount: 0,
+    reCharacteristic: 0,
+    reNotify: 0,
+    lightSuccess: false,
+    failTips: false,
   },
 
   /**
@@ -44,6 +47,12 @@ Page({
       deviceId: options.deviceId,
       macAddress: options.macAddress.toUpperCase(),
       deviceName: options.name,
+      reconnectCount: 0,
+      reServiceCount: 0,
+      reCharacteristic: 0,
+      reNotify: 0,
+      failTips: false,
+      lightSuccess: false,
       brushMethod: (options.brushMethod == "0") ? "a002c7680a5f4f8ea0b1b47fa3f2b947" : "6827c45622b141ef869c955e0c51f9f8"
     })
     baseTool.print(that.data.deviceId)
@@ -61,12 +70,11 @@ Page({
     // 找服务, 找特征
     wx.showLoading({
       title: '正在连接设备...',
-      mask: true,
+      mask: false,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
     })
-
     setTimeout(function () {
       that.connectDevice()
       that.deviceConnectionStateChange()
@@ -116,24 +124,34 @@ Page({
       baseTool.print(res)
     })
     baseTool.print(that.data.deviceId)
-    var buffer = bleCommandManager.closeLightCommand()
-    wx.writeBLECharacteristicValue({
-      deviceId: that.data.deviceId,
-      serviceId: that.data.tailServiceUUID,
-      characteristicId: that.data.tailCharacteristicIdWrite,
-      value: buffer,
-      success: function (res) {
-        baseTool.print([res, '成功关灯'])
-        wx.closeBLEConnection({
-          deviceId: that.data.deviceId,
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
-        })
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
+
+    if (that.data.failTips == false) {
+      var buffer = bleCommandManager.closeLightCommand()
+      wx.writeBLECharacteristicValue({
+        deviceId: that.data.deviceId,
+        serviceId: that.data.tailServiceUUID,
+        characteristicId: that.data.tailCharacteristicIdWrite,
+        value: buffer,
+        success: function (res) {
+          baseTool.print([res, '成功关灯'])
+          wx.closeBLEConnection({
+            deviceId: that.data.deviceId,
+            success: function (res) { },
+            fail: function (res) { },
+            complete: function (res) { },
+          })
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+    } else {
+      wx.closeBLEConnection({
+        deviceId: that.data.deviceId,
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+    }
 
   },
 
@@ -158,391 +176,140 @@ Page({
   onShareAppMessage: function () {
 
   },
-  connectDevice: function () {
+  showConnectFail: function() {
     var that = this
-    var connectTimeOut = false
-    baseTool.startTimer(function (total) {
-      if (connectTimeOut == true) {
-        baseTool.print(['连接未超时, 停止定时器'])
-        return true
-      }
-      if (total == 0) {
-        // 发起重连
-        baseTool.print('连接超时')
-        var reconnectCount = that.data.reconnectCount
-        if (reconnectCount >= 3 && reconnectCount < 100) {
-          reconnectCount = 100
-          that.setData({
-            reconnectCount: reconnectCount
-          })
-          wx.hideLoading()
-          if (that.data.failTips == false) {
-            that.setData({
-              failTips: true
-            })
-            wx.showModal({
-              title: '提示',
-              content: '蓝牙连接失败',
-              showCancel: false,
-              confirmText: '确定',
-              confirmColor: '#00a0e9',
-              success: function (res) {
-                wx.navigateBack()
-              },
-              fail: function (res) { },
-              complete: function (res) { },
-            })
-          }
-
-        } else if (reconnectCount < 3) {
-          baseTool.print('发起重连')
-          reconnectCount++
-          that.setData({
-            reconnectCount: reconnectCount
-          })
-          // 500ms 以后重连
-          setTimeout(function () {
-            that.connectDevice()
-          }, 500)
-        }
-        return true
-      }
-      return false
-    }, 10, 500)
-    baseTool.print(that.data.deviceId)
-    wx.createBLEConnection({
+    var failTips = that.data.failTips
+    if (failTips == false && this) {
+      that.data.failTips = true
+      wx.showModal({
+        title: '提示',
+        content: '蓝牙连接失败',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+          baseTool.print(["连接失败", 205])
+          wx.navigateBack()
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+    }
+    
+  },
+  getServices: function () {
+    var that = this
+    wx.getBLEDeviceServices({
       deviceId: that.data.deviceId,
       success: function (res) {
-        connectTimeOut = true
-        // 50ms 以后执行下一步
-        setTimeout(function () {
-          // 获得服务
-          var serviceTimeOut = false
-          // 获得服务
-          baseTool.startTimer(function (total) {
-            if (serviceTimeOut == true) {
-              baseTool.print('获得服务未超时')
-              return true
-            }
-            if (total == 0) {
-              baseTool.print('获得服务超时')
-              wx.closeBLEConnection({
-                deviceId: that.data.deviceId,
-                success: function (res) {
-                },
-                fail: function (res) {
-                  // 无数据
-                },
-                complete: function (res) { },
-              })
-              wx.hideLoading()
-              if (that.data.failTips == false) {
-                that.setData({
-                  failTips: true
-                })
-                wx.showModal({
-                  title: '提示',
-                  content: '蓝牙连接失败',
-                  showCancel: false,
-                  confirmText: '确定',
-                  confirmColor: '#00a0e9',
-                  success: function (res) {
-                    wx.navigateBack()
-                  },
-                  fail: function (res) { },
-                  complete: function (res) { },
-                })
-              }
-              return true
-            }
-            return false
-          }, 10, 500)
-          wx.getBLEDeviceServices({
-            deviceId: that.data.deviceId,
-            success: function (res) {
-              baseTool.print([res, '获得服务成功'])
-              serviceTimeOut = true
-              setTimeout(function () {
-                // 获得服务
-                var characteristicsTimeOut = false
-                // 获得服务
-                baseTool.startTimer(function (total) {
-                  if (characteristicsTimeOut == true) {
-                    baseTool.print('获得特征值未超时')
-                    return true
-                  }
-                  if (total == 0) {
-                    baseTool.print('获得特征值超时')
-                    wx.closeBLEConnection({
-                      deviceId: that.data.deviceId,
-                      success: function (res) {
-                      },
-                      fail: function (res) {
-                        // 无数据
-                      },
-                      complete: function (res) { },
-                    })
-                    wx.hideLoading()
-                    if (that.data.failTips == false) {
-                      that.setData({
-                        failTips: true
-                      })
-                      wx.showModal({
-                        title: '提示',
-                        content: '蓝牙连接失败',
-                        showCancel: false,
-                        confirmText: '确定',
-                        confirmColor: '#00a0e9',
-                        success: function (res) {
-                          wx.navigateBack()
-                        },
-                        fail: function (res) { },
-                        complete: function (res) { },
-                      })
-                    }
-                    return true
-                  }
-                  return false
-                }, 10, 500)
-                wx.getBLEDeviceCharacteristics({
-                  deviceId: that.data.deviceId,
-                  serviceId: that.data.tailServiceUUID,
-                  success: function (res) {
-                    characteristicsTimeOut = true
-                    setTimeout(function () {
-                      // 获得服务
-                      var notyfyCharacteristicsTimeOut = false
-                      baseTool.startTimer(function (total) {
-                        if (notyfyCharacteristicsTimeOut == true) {
-                          baseTool.print('预定通知未超时')
-                          return true
-                        }
-                        if (total == 0) {
-                          baseTool.print('预定通知超时')
-                          wx.closeBLEConnection({
-                            deviceId: that.data.deviceId,
-                            success: function (res) {
-                            },
-                            fail: function (res) {
-                              // 无数据
-                            },
-                            complete: function (res) { },
-                          })
-                          wx.hideLoading()
-                          if (that.data.failTips == false) {
-                            that.setData({
-                              failTips: true
-                            })
-                            wx.showModal({
-                              title: '提示',
-                              content: '蓝牙连接失败',
-                              showCancel: false,
-                              confirmText: '确定',
-                              confirmColor: '#00a0e9',
-                              success: function (res) {
-                                wx.navigateBack()
-                              },
-                              fail: function (res) { },
-                              complete: function (res) { },
-                            })
-                          }
-                          return true
-                        }
-                        return false
-                      }, 10, 500)
-                      baseTool.print([res, '获得特征值成功'])
-                      // 预订通知
-                      that.deviceCharacteristicValueChange(that.data.deviceId)
-                      wx.notifyBLECharacteristicValueChange({
-                        deviceId: that.data.deviceId,
-                        serviceId: that.data.tailServiceUUID,
-                        characteristicId: that.data.tailCharacteristicIdNotify,
-                        state: true,
-                        success: function (res) {
-                          baseTool.print([res, '预订通知成功成功'])
-                          notyfyCharacteristicsTimeOut = true
-
-                          // 50 ms 以后执行下一步
-                          // 定时器
-                          that.setData({
-                            dataTimeOut: false
-                          })
-                          // 20s 无法同步完, 算失败
-                          baseTool.startTimer(function (total) {
-                            if (that.data.dataTimeOut == true) {
-                              return true
-                            }
-                            if (total == 0) {
-                              wx.closeBLEConnection({
-                                deviceId: that.data.deviceId,
-                                success: function (res) {
-                                },
-                                fail: function (res) {
-                                },
-                                complete: function (res) { },
-                              })
-                              wx.hideLoading()
-                              if (that.data.failTips == false) {
-                                that.setData({
-                                  failTips: true
-                                })
-                                wx.showModal({
-                                  title: '提示',
-                                  content: '数据传输超时',
-                                  showCancel: false,
-                                  confirmText: '确定',
-                                  confirmColor: '#00a0e9',
-                                  success: function (res) {
-                                    wx.navigateBack()
-                                  },
-                                  fail: function (res) { },
-                                  complete: function (res) { },
-                                })
-                              }
-                              return true
-                            }
-                            return false
-                          }, 10, 2000)
-                          // 介绍设备数据
-                        },
-                        fail: function (res) {
-                          notyfyCharacteristicsTimeOut = true
-                          connectTimeOut = true
-                          characteristicsTimeOut = true
-                          baseTool.print([res, '预订通知失败'])
-                          wx.hideLoading()
-                          if (that.data.failTips == false) {
-                            that.setData({
-                              failTips: true
-                            })
-                            wx.showModal({
-                              title: '提示',
-                              content: '蓝牙连接失败',
-                              showCancel: false,
-                              confirmText: '确定',
-                              confirmColor: '#00a0e9',
-                              success: function (res) {
-                                wx.navigateBack()
-                              },
-                              fail: function (res) { },
-                              complete: function (res) { },
-                            })
-                          }
-                        },
-                        complete: function (res) { },
-                      })
-                    }, 50)
-                  },
-                  fail: function (res) {
-                    baseTool.print([res, '获得特征值失败'])
-                    characteristicsTimeOut == true
-                    connectTimeOut = true
-                    wx.closeBLEConnection({
-                      deviceId: that.data.deviceId,
-                      success: function (res) {
-                      },
-                      fail: function (res) {
-                        // 无数据
-                      },
-                      complete: function (res) { },
-                    })
-                    wx.hideLoading()
-                    if (that.data.failTips == false) {
-                      that.setData({
-                        failTips: true
-                      })
-                      wx.showModal({
-                        title: '提示',
-                        content: '蓝牙连接失败',
-                        showCancel: false,
-                        confirmText: '确定',
-                        confirmColor: '#00a0e9',
-                        success: function (res) {
-                          wx.navigateBack()
-                        },
-                        fail: function (res) { },
-                        complete: function (res) { },
-                      })
-                    }
-                  },
-                  complete: function (res) { },
-                })
-              }, 50)
-            },
-            fail: function (res) {
-              baseTool.print([res, '蓝牙获得服务失败'])
-              serviceTimeOut = true
-              wx.hideLoading()
-              if (that.data.failTips == false) {
-                that.setData({
-                  failTips: true
-                })
-                wx.showModal({
-                  title: '提示',
-                  content: '蓝牙连接失败',
-                  showCancel: false,
-                  confirmText: '确定',
-                  confirmColor: '#00a0e9',
-                  success: function (res) {
-                    wx.navigateBack()
-                  },
-                  fail: function (res) { },
-                  complete: function (res) { },
-                })
-              }
-            },
-            complete: function (res) { },
-          })
-        }, 50)
+        baseTool.print(['获得服务成功', baseTool.getCurrentTime()])
+        // 获得特征值
+        that.getCharacteristics()
       },
       fail: function (res) {
-        // baseTool.print([res, '蓝牙连接失败8'])
-        // 重连
-        connectTimeOut = true
-        var reconnectCount = that.data.reconnectCount
-        baseTool.print([res, '蓝牙连接失败', reconnectCount])
-        wx.hideLoading()
-        if (that.data.failTips == false) {
-          that.setData({
-            failTips: true
-          })
-          wx.showModal({
-            title: '提示',
-            content: '蓝牙连接失败',
-            showCancel: false,
-            confirmText: '确定',
-            confirmColor: '#00a0e9',
-            success: function (res) {
-              wx.navigateBack()
-            },
-            fail: function (res) { },
-            complete: function (res) { },
-          })
-        }
-
-        if (reconnectCount >= 3 && reconnectCount < 100) {
-          reconnectCount = 100
-          that.setData({
-            reconnectCount: reconnectCount
-          })
-          // wx.hideLoading()
-          
-        } else if (reconnectCount < 3) {
-          reconnectCount++
-          that.setData({
-            reconnectCount: reconnectCount
-          })
+        baseTool.print(res)
+        var reServiceCount = that.data.reServiceCount
+        if (reServiceCount <= 3) {
           // 500ms 以后重连
+          that.data.reServiceCount++
+          baseTool.print(["重新获得服务", reServiceCount, baseTool.getCurrentTime()])
           setTimeout(function () {
-            that.connectDevice()
+            that.getServices()
           }, 500)
-
+        } else {
+          that.showConnectFail()
         }
       },
       complete: function (res) { },
     })
-  }
-  ,
+  },
+  getCharacteristics: function () {
+    var that = this
+    wx.getBLEDeviceCharacteristics({
+      deviceId: that.data.deviceId,
+      serviceId: that.data.tailServiceUUID,
+      success: function (res) {
+        baseTool.print(['获得特征值成功', baseTool.getCurrentTime()])
+        that.deviceCharacteristicValueChange(that.data.deviceId)
+        that.notifyCharacteristicValueChange()
+      },
+      fail: function (res) { 
+        baseTool.print(res)
+        var reCharacteristic = that.data.reCharacteristic
+        if (reCharacteristic <= 3) {
+          // 500ms 以后重连
+          that.data.reCharacteristic++
+          baseTool.print(["重新获得服务", reCharacteristic, baseTool.getCurrentTime()])
+          setTimeout(function () {
+            that.getCharacteristics()
+          }, 500)
+        } else {
+          that.showConnectFail()
+        }
+      },
+      complete: function (res) { },
+    })
+  },
+  notifyCharacteristicValueChange: function () {
+    var that = this
+    wx.notifyBLECharacteristicValueChange({
+      deviceId: that.data.deviceId,
+      serviceId: that.data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdNotify,
+      state: true,
+      success: function (res) {
+        baseTool.print([res, '预订通知成功成功', baseTool.getCurrentTime()])
+      },
+      fail: function (res) {
+        baseTool.print([res, '预订通知成功成功', baseTool.getCurrentTime()])
+        reNotify
+        baseTool.print(res)
+        var reNotify = that.data.reNotify
+        if (reNotify <= 3) {
+          // 500ms 以后重连
+          that.data.reCharacteristic++
+          baseTool.print(["重新获得服务", reNotify, baseTool.getCurrentTime()])
+          setTimeout(function () {
+            that.notifyCharacteristicValueChange()
+          }, 500)
+        } else {
+          that.showConnectFail()
+        }
+      },
+      complete: function (res) { },
+    })
+
+
+  },
+  connectDevice: function () {
+    var that = this
+    wx.createBLEConnection({
+      deviceId: that.data.deviceId,
+      success: function (res) {
+        baseTool.print(['连接成功', baseTool.getCurrentTime()])
+        // 下一步获得服务
+        that.getServices()
+      },
+      fail: function (res) {
+        if (res.errCode == -1) {
+          return
+        }
+        var reconnectCount = that.data.reconnectCount
+        baseTool.print([res, '连接失败', reconnectCount, baseTool.getCurrentTime()])
+        if (reconnectCount <= 3) {
+          // 500ms 以后重连
+          that.data.reconnectCount++
+          baseTool.print(["发起重连", reconnectCount, baseTool.getCurrentTime()])
+          setTimeout(function () {
+            that.connectDevice()
+          }, 500)
+        } else {
+          that.showConnectFail()
+        }
+      },
+      complete: function (res) { },
+    })
+  },
   addContestUser: function () {
     var that = this
     wx.navigateTo({
@@ -633,7 +400,7 @@ Page({
       })
     }).catch(res => {
       baseTool.print(res)
-      wx.hideNavigationBarLoading()
+      wx.hideNavigationBarLoading() 
       wx.startPullDownRefresh({
         success: function (res) { },
         fail: function (res) { },
@@ -670,7 +437,7 @@ Page({
             isSelect: res[index].isBound
           })
         }
-       
+
         that.setData(data)
       } else {
         var data = that.data
@@ -682,7 +449,7 @@ Page({
     }).catch(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
-      
+
       wx.showModal({
         title: '提示',
         content: res,
@@ -692,10 +459,11 @@ Page({
     })
   },
   deviceConnectionStateChange: function () {
+    var that = this
     wx.onBLEConnectionStateChange(function (res) {
       baseTool.print([res, '蓝牙状态改变'])
-      if (res.connected == false) {
-
+      if (res.connected == false && that.lightSuccess == false) {
+        that.showConnectFail()
       }
     })
   },
@@ -724,9 +492,7 @@ Page({
         })
       } else if (hex.indexOf('f30c') == 0) {
         baseTool.print([res, '设备常亮'])
-        that.setData({
-          dataTimeOut: true
-        })
+        that.data.lightSuccess = true
         wx.hideLoading()
         wx.showToast({
           title: '点亮设备',

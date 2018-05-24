@@ -1,14 +1,30 @@
 /* pages/contest/contest.wxss */
+
 /* 引入模板*/
 @import '../../../template/contestTemplate.wxss';
-
+page{
+  width: 100%;
+  height: 100%;
+}
 .contest-container {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: normal; 
+  font-weight: normal;
+  position: relative; 
+}
+
+.contest-get-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  font-weight: normal;
 }
 
 #contest-user {
@@ -33,35 +49,35 @@
   border-radius: 50%;
 }
 
-#contest-no-contest-text{
+#contest-no-contest-text {
   margin-top: 50rpx;
   font-size: 26rpx;
   color: #9c9da3;
 }
 
-#contest-create-contest-button{
+#contest-create-contest-button {
   margin-top: 280rpx;
 }
 
-#contest-main-view{
+.contest-main-view {
   width: 100%;
   height: 400rpx;
-  display: flex;  
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  font-weight: normal;  
+  font-weight: normal;
   background-color: #f5f5f5;
-  position: relative
+  position: absolute;  
 }
 
- #contest-background{
+#contest-background {
   margin-top: 0;
   width: 100%;
   height: 100%;
-} 
+}
 
-#contest-create-image{
-  position: absolute; 
+#contest-create-image {
+  position: absolute;
   width: 70rpx;
   height: 70rpx;
   border-radius: 50%;
@@ -69,7 +85,7 @@
   top: 60rpx;
 }
 
-#contest-synchronize-image{
+#contest-synchronize-image {
   position: absolute;
   width: 70rpx;
   height: 70rpx;
@@ -77,23 +93,25 @@
   right: 30rpx;
   top: 160rpx;
 }
-#contest-info-view{
+
+#contest-info-view {
   position: absolute;
   width: 100%;
   top: 90rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: normal; 
+  font-weight: normal;
   color: white;
 }
-#contest-title{
+
+#contest-title {
   position: relative;
   font-size: 40rpx;
   font-weight: bold;
 }
 
-.add-contest-user-view{
+.add-contest-user-view {
   width: 100%;
   height: 70rpx;
   display: flex;
@@ -102,33 +120,64 @@
   justify-content: center;
 }
 
-.add-contest-user-content-view{
+.add-contest-user-content-view {
   font-size: 28rpx;
   color: #00a0e9;
 }
 
-.add-contest-user-view-line{
+.add-contest-user-view-line {
   width: 100%;
   height: 2rpx;
   background-color: #00a0e9;
 }
 
-#contest-date{
+#contest-date {
   position: relative;
   font-size: 26rpx;
   font-weight: normal;
 }
 
-#contest-syn-button{
+#contest-syn-button {
   position: relative;
   margin-top: 80rpx;
 }
 
-#contest-synchronization{
-  margin-top: 70rpx; 
+.contest-table-line {
+  margin-top: 400rpx; 
+}
+
+#contest-synchronization {
+  margin-top: 70rpx;
   background-color: #68b9de;
 }
 
-#contest-table-view{
+#contest-table-view {
   width: 100%;
+}
+
+.get-user-info-button {
+  color: white;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}           
+.get-user-info-tips{
+  margin-top: 60rpx;
+  color: #333;
+  line-height: 60rpx;
+}
+
+.get-user-info-line{
+  margin-top: 70rpx;
+  width: 100%;
+  height: 2rpx;
+  background-color: #a4a4a4;
+}
+.get-user-info-action{
+  margin-top: 2rpx;
+  color: #00a0e9;
 }

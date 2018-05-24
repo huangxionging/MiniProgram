@@ -195,7 +195,7 @@ Page({
       } else {
         buffer = bleCommandManager.connectReplyDeviceCommand('00')
       }
-      baseTool.print([baseHexConvertTool.arrayBufferToHexString(buffer), '颠三倒四多'])
+      baseTool.print([baseHexConvertTool.arrayBufferToHexString(buffer), '结果'])
       wx.writeBLECharacteristicValue({
         deviceId: that.data.deviceId,
         serviceId: that.data.tailServiceUUID,

@@ -27,6 +27,7 @@ Page({
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
     bindedDevices: {},
+    deviceListObject: {},
     systemInfo: {},
     valueTime: "",
     valueDate: "",
@@ -34,7 +35,11 @@ Page({
     startDate: "",
     selectBrushMethod: 0,
     brushMethodText: "巴氏刷牙法",
-    selectBrushMethodUsed: false
+    selectBrushMethodUsed: false,
+    options: {},
+    saveClicked: false,
+    needUpdate: false,
+    primaryKey: 0,
   },
 
   /**
@@ -47,7 +52,7 @@ Page({
     var valueTime = options.startTime.split(" ")[1]
     var startTime = valueTime.substr(0, 5)
     var brushingMethodId = options.brushingMethodId
-    var brushMethod = (brushingMethodId == "6827c45622b141ef869c955e0c51f9f8") ? 1 : 0
+    var brushMethod = (brushingMethodId == "6827c45622b141ef869c955e0c51f9f8") ? "1" : "0"
     baseTool.print(startTime)
     that.setData({
       hasData: true,
@@ -60,7 +65,9 @@ Page({
       endTime: "23:59",
       selectBrushMethod: brushMethod == "1" ? 1 : 0,
       brushMethodText: brushMethod ? "圆弧刷牙法" : "巴氏刷牙法",
-      selectBrushMethodUsed: options.add == 'yes' ? true : false
+      selectBrushMethodUsed: options.add == 'yes' ? true : false,
+      options: options,
+      primaryKey: 0,
     })
 
     if (options.add == 'yes') {
@@ -108,6 +115,8 @@ Page({
       that.setData({
         dataList: dataList,
         total: '比赛设备' + (index) + '支',
+        bindedDevices: bindedDevices,
+        needUpdate: true
       })
     }).then(res => {
       baseTool.print(res)
@@ -139,6 +148,14 @@ Page({
         selectBrushMethodUsed: true
       })
     }
+    wx.startBluetoothDevicesDiscovery({
+      services: [],
+      allowDuplicatesKey: true,
+      interval: 0,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   },
 
   /**
@@ -146,6 +163,11 @@ Page({
    */
   onHide: function (res) {
     baseTool.print('页面隐藏')
+    wx.stopBluetoothDevicesDiscovery({
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   },
 
   /**
@@ -163,6 +185,24 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+
+    // 未保存消息发送
+    var startTime = that.data.valueDate + " " + that.data.valueTime
+    var brushingMethodId = that.data.options.brushingMethodId
+    var brushMethod = (brushingMethodId == "6827c45622b141ef869c955e0c51f9f8") ? 1 : 0
+    if ((that.data.options.name != that.data.name || that.data.options.startTime != startTime || that.data.selectBrushMethod != brushMethod || that.data.needUpdate == true) && that.data.saveClicked == false && Object.keys(that.data.bindedDevices).length > 0) {
+      baseMessageHandler.sendMessage('unSavedContest', {
+        gameId: that.data.gameId,
+        name: that.data.name,
+        startTime: startTime,
+        selectBrushMethod: that.data.selectBrushMethod
+      }).then(res => {
+        baseTool.print(res)
+      }).catch(res => {
+        baseTool.print(res)
+      })
+    }
+    
 
     baseMessageHandler.removeSpecificInstanceMessageHandler('deleteDevice', this).then(res => {
       baseTool.print(res)
@@ -190,16 +230,18 @@ Page({
     var that = this
     that.setData({
       dataList: [],
+      deviceListObject: {},
       total: '比赛设备' + (0) + '支',
+      primaryKey: 0
     })
 
     wx.stopBluetoothDevicesDiscovery({
       success: function (res) {
-        console.log("stopBluetoothDevicesDiscovery: success");
+        baseTool.print("stopBluetoothDevicesDiscovery: success");
         //close bt. adapter
         wx.closeBluetoothAdapter({
           success: function (res) {
-            console.log("closeBluetoothAdapter: success");
+            baseTool.print("closeBluetoothAdapter: success");
             that.openBle()
           },
           fail: function (res) {
@@ -232,6 +274,19 @@ Page({
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',
+      })
+      return
+    }
+    if (name == '') {
+      wx.showModal({
+        title: '提示',
+        content: '比赛名称不能为空哦!',
+        showCancel: false,
+        cancelColor: '确认',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
       })
       return
     }
@@ -287,16 +342,20 @@ Page({
                 if (device.name.indexOf('game') == -1) {
                   return
                 }
-                var dataList = that.data.dataList
-                var index = dataList.length
+                
                 var macAddress = device.name.split('-')[1].toUpperCase()
-
-
+                var deviceListObject = that.data.deviceListObject
+               
                 // 已经绑定过, 需要过滤掉
-                if (bindedDevices[macAddress]) {
+                if (bindedDevices[macAddress] || deviceListObject[macAddress]) {
                   return
                 }
+                // 去重
+                deviceListObject[macAddress] = macAddress
                 baseTool.print(['发现新设备', macAddress, device, device.RSSI])
+                var dataList = that.data.dataList
+                var index = dataList.length
+               
                 var hexArray = new Uint8Array(device.advertisData)
                 var power = hexArray[hexArray.byteLength - 1]
                 var imageUrl = ''
@@ -312,7 +371,7 @@ Page({
 
                 // 广播数据先不弄
                 dataList.push({
-                  id: dataList.length + 1,
+                  id: that.data.primaryKey++,
                   name: device.name,
                   macAddress: macAddress,
                   deviceId: device.deviceId,
@@ -323,7 +382,7 @@ Page({
                 dataList.sort((a, b) => {
                   return b.rssi - a.rssi
                 })
-                dataList.s
+                
                 that.setData({
                   dataList: dataList,
                   total: '比赛设备' + (index + 1) + '支',
@@ -374,26 +433,26 @@ Page({
       valueDate: e.detail.value,
       startDate: startDate,
       startTime: startTime,
-      valueTime: valueTime
+      valueTime: valueTime,
     })
-    that.changeContest()
+    // that.changeContest()
   },
   bindTimeChange: function (e) {
     baseTool.print(e)
     var that = this
     that.setData({
-      valueTime: e.detail.value + ":00"
+      valueTime: e.detail.value + ":00",
     })
-    that.changeContest()
+    // that.changeContest()
   },
   bindBrushChange: function (e) {
     baseTool.print(e)
     var that = this
     that.setData({
       selectBrushMethod: e.detail.value == "0" ? 0 : 1,
-      brushMethodText: e.detail.value == "0" ? "巴氏刷牙法" : "圆弧刷牙法"
+      brushMethodText: e.detail.value == "0" ? "巴氏刷牙法" : "圆弧刷牙法",
     })
-    that.changeContest()
+    // that.changeContest()
   },
 
   changeContest: function() {
@@ -422,7 +481,7 @@ Page({
 
       // 已经绑定过, 需要过滤掉
       if (bindedDevices[macAddress]) {
-        // return
+        return
       }
       // 广播数据先不弄
       dataList.push({
@@ -431,6 +490,7 @@ Page({
         macAddress: macAddress,
         deviceId: res.deviceId,
       })
+      bindedDevices[macAddress]
       that.setData({
         dataList: dataList,
         total: '比赛设备' + (index + 1) + '支',
@@ -466,6 +526,8 @@ Page({
       contestManager.submitUserDeviceBindingRelationship().then(res => {
         baseTool.print(res)
         wx.hideLoading()
+        that.data.needUpdate = false,
+        that.data.saveClicked = true,
         wx.navigateBack()
       }).catch(res => {
         baseTool.print(res)

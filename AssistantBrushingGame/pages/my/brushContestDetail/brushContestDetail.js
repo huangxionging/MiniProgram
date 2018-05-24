@@ -65,6 +65,43 @@ Page({
     app.userInfoReadyCallback = res => {
       that.loadData()
     }
+
+    that.checkSyn()
+  },
+
+  checkSyn: function() {
+    var that = this
+    var needSyn = myManager.checkNeedSyn()
+    if (needSyn == true) {
+      wx.showModal({
+        title: '提示',
+        content: '您有之前的同步数据未上传, 请选择放弃或者上传',
+        showCancel: true,
+        cancelText: '放弃',
+        cancelColor: '#ff0000',
+        confirmText: '上传',
+        confirmColor: '#00a0e9',
+        success: function(res) {
+          if (res.confirm == true) {
+            that.upStorageDataToService()
+          } else if(res.cancel == true) {
+            wx.showLoading({
+              title: '正在删除...',
+              mask: true,
+              success: function(res) {},
+              fail: function(res) {},
+              complete: function(res) {},
+            })
+            myManager.removeHistoryGameObject().then(res => {
+              wx.hideLoading()
+            }).catch(res => {
+            })
+          }
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+    }
   },
 
   /**
@@ -92,7 +129,23 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    wx.hideLoading()
+    wx.hideNavigationBarLoading()
+    wx.stopBluetoothDevicesDiscovery({
+      success: function (res) {
+        baseTool.print("stopBluetoothDevicesDiscovery: success");
+        //close bt. adapter
+        wx.closeBluetoothAdapter({
+          success: function (res) {
+            baseTool.print("closeBluetoothAdapter: success");
+          },
+          fail: function (res) {
+          }
+        })
+      },
+      fail: function (res) {
+      }
+    })
   },
 
   /**
@@ -140,10 +193,10 @@ Page({
             accuracy: res[index].accuracy,
           }
           that.data.synDeviceNameObject[macAddress] = macAddress
-          if (item.score >0 ) {
+          if (item.score > 0) {
             item.score = item.score + parseFloat("0." + item.accuracy)
           }
-          
+
           if (res[index].recordId) {
             item.recordId = res[index].recordId
           }
@@ -204,6 +257,18 @@ Page({
     }
   },
   synClick: function (e) {
+    var that = this
+    myManager.createHistoryGameObject(that.data.gameId, that.data.title, that.data.dataList).then(res => {
+      that.synFlow()
+    }).catch(res => {
+      wx.showModal({
+        title: '提示',
+        content: '获取历史记录失败, 请稍后重试',
+      })
+    })
+
+  },
+  synFlow: function() {
     var that = this
     that.data.deviceObject = {}
     that.data.synData = false
@@ -297,7 +362,7 @@ Page({
         success: function (res) {
           // 停止搜索以后, 开始同步
           that.data.synExeLine = 284
-         
+
           for (var key in that.data.synDeviceNameObject) {
             if (!that.data.deviceObject[key]) {
               that.data.deviceObject[key] = {
@@ -420,21 +485,21 @@ Page({
         return true
       }
       if (total == 0) {
-          baseTool.print(['连接超时, 停止定时器', device, that.data.synCommandCount, that.data.synFailCount, that.data.synNoDataCount, that.data.synSuccessCount])
-          wx.closeBLEConnection({
-            deviceId: device.deviceId,
-            success: function (res) {
-              // 无数据
-              that.data.synExeLine = 495
-              that.synNextDevice()
-            },
-            fail: function (res) {
-              // 无数据
-              that.data.synExeLine = 499
-              that.synNextDevice()
-            },
-            complete: function (res) { },
-          })
+        baseTool.print(['连接超时, 停止定时器', device, that.data.synCommandCount, that.data.synFailCount, that.data.synNoDataCount, that.data.synSuccessCount])
+        wx.closeBLEConnection({
+          deviceId: device.deviceId,
+          success: function (res) {
+            // 无数据
+            that.data.synExeLine = 495
+            that.synNextDevice()
+          },
+          fail: function (res) {
+            // 无数据
+            that.data.synExeLine = 499
+            that.synNextDevice()
+          },
+          complete: function (res) { },
+        })
         return true
       }
       return false
@@ -720,7 +785,7 @@ Page({
   },
   onceDataEndReplyDevice: function (deviceId = '', macAddress = '') {
     var that = this
-    baseTool.print([{"设备地址": deviceId, "mac 地址" : macAddress, "设备列表": that.data.deviceObject}])
+    baseTool.print([{ "设备地址": deviceId, "mac 地址": macAddress, "设备列表": that.data.deviceObject }])
     var buffer = bleCommandManager.onceDataEndReplyDeviceCommand()
     wx.writeBLECharacteristicValue({
       deviceId: deviceId,
@@ -733,7 +798,7 @@ Page({
           deviceId: deviceId,
           success: function (res) {
             baseTool.print([res, '成功断开设备'])
-            
+
             if (that.data.deviceObject[macAddress].dataObjectList.length == 0) {
               // 无数据
               that.data.synExeLine = 793
@@ -840,6 +905,28 @@ Page({
       complete: function (res) { },
     })
   },
+  replyOnceComplete: function (deviceId = "") {
+    //一条完整数据回复
+    var that = this
+    var oneDataWrite = "f103" + that.data.dataHead;
+    var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
+    baseTool.print(['reply', typedArray])
+    var oneDataWriteBuffer = typedArray.buffer
+
+    wx.writeBLECharacteristicValue({
+      deviceId: deviceId,
+      serviceId: that.data.tailServiceUUID,
+      characteristicId: that.data.tailCharacteristicIdWrite,
+      value: oneDataWriteBuffer,
+      success: function (res) {
+        baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
+      },
+      fail: function (res) {
+        baseTool.print([res, '设备常亮失败'])
+      },
+      complete: function (res) { },
+    })
+  },
   processOnceData: function (hex, values, deviceId = '') {
     // 刷牙数据
     var that = this
@@ -862,34 +949,16 @@ Page({
 
       var typedArrayOneDate = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneCompleteData))
       baseTool.print([typedArrayOneDate, '一天的数据'])
-      var deviceInfo = that.data.dataList[that.data.synCommandCount] 
+      var deviceInfo = that.data.dataList[that.data.synCommandCount]
       var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId);
 
       baseTool.print(["dataObject", dataObject])
-
-      //放入数据集合
-      var macAddress = dataObject.macAddress
-      var deviceObjectItem = that.data.deviceObject[macAddress]
-      deviceObjectItem.dataObjectList.push(dataObject)
-      //一条完整数据回复
-      var oneDataWrite = "f103" + that.data.dataHead;
-      var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-      baseTool.print(['reply', typedArray])
-      var oneDataWriteBuffer = typedArray.buffer
-
-      wx.writeBLECharacteristicValue({
-        deviceId: deviceId,
-        serviceId: that.data.tailServiceUUID,
-        characteristicId: that.data.tailCharacteristicIdWrite,
-        value: oneDataWriteBuffer,
-        success: function (res) {
-          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-        },
-        fail: function (res) {
-          baseTool.print([res, '设备常亮失败'])
-        },
-        complete: function (res) { },
+      myManager.addDeviceDataObject(dataObject).then(res => {
+        that.replyOnceComplete(deviceId)
+      }).catch(res => {
+        that.replyOnceComplete(deviceId)
       })
+      
     }
   },
   newProcessOnceData: function (hex, values, deviceId = '') {
@@ -922,31 +991,12 @@ Page({
       baseTool.print([that.data.synCommandCount, deviceInfo, '设备信息'])
       var dataObject = bleCommandManager.dataBoxCommand(typedArrayOneDate, deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId);
       console.log("dataObject", dataObject)
-
-
-
       //放入数据集合
-      var macAddress = dataObject.macAddress
-      var deviceObjectItem = that.data.deviceObject[macAddress]
-      deviceObjectItem.dataObjectList.push(dataObject)
-      //一条完整数据回复
-      var oneDataWrite = "f103" + that.data.dataHead;
-      var typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-      baseTool.print(['reply', typedArray])
-      var oneDataWriteBuffer = typedArray.buffer
-
-      wx.writeBLECharacteristicValue({
-        deviceId: deviceId,
-        serviceId: that.data.tailServiceUUID,
-        characteristicId: that.data.tailCharacteristicIdWrite,
-        value: oneDataWriteBuffer,
-        success: function (res) {
-          baseTool.print([res, 'writeBLECharacteristicValue success 一次数据读取完毕!'])
-        },
-        fail: function (res) {
-          baseTool.print([res, '设备常亮失败'])
-        },
-        complete: function (res) { },
+      baseTool.print(["dataObject", dataObject])
+      myManager.addDeviceDataObject(dataObject).then(res => {
+        that.replyOnceComplete(deviceId)
+      }).catch(res => {
+        that.replyOnceComplete(deviceId)
       })
     }
   },
@@ -960,20 +1010,20 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
-    contestManager.uploadHistoryBrushRecord(that.data.gameId, that.data.name, that.data.deviceObject).then(res => {
+    myManager.uploadHistoryBrushRecord().then(res => {
       // 设备数据上传成功
       wx.hideLoading()
       that.data.synNodataTimeOut = true
       baseTool.print([res, '数据上传成功'])
       that.data.synData = true
       wx.startPullDownRefresh({
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
       })
-      
+
       baseMessageHandler.sendMessage("refreshContest", res)
- 
+
     }).catch(res => {
       wx.hideLoading()
       baseTool.print([res, '错误信息'])
@@ -1014,21 +1064,20 @@ Page({
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 
       baseTool.print(["dataObject", dataObject])
-      //放入数据集合
-      var macAddress = dataObject.macAddress
-      if (!that.data.deviceObject[macAddress]) {
-        that.data.deviceObject[macAddress] = {
-          macAddress: macAddress,
-          dataObjectList: []
-        }
-      }
-      var deviceObjectItem = that.data.deviceObject[macAddress]
-      deviceObjectItem.dataObjectList.push(dataObject)
-      setTimeout(function () {
-        that.data.synFailCount++
-        that.data.synCommandCount++
-        that.dispatchConnect()
-      }, 500)
+      myManager.addDeviceDataObject(dataObject).then(res => {
+        setTimeout(function () {
+          that.data.synFailCount++
+          that.data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      }).catch(res => {
+        setTimeout(function () {
+          that.data.synFailCount++
+          that.data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      })
+      
     } else {
       setTimeout(function () {
         that.dispatchConnect()
@@ -1042,22 +1091,22 @@ Page({
       var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
 
       baseTool.print(["dataObject", dataObject])
-      //放入数据集合
-      //放入数据集合
-      var macAddress = dataObject.macAddress
-      if (!that.data.deviceObject[macAddress]) {
-        that.data.deviceObject[macAddress] = {
-          macAddress: macAddress,
-          dataObjectList: []
-        }
-      }
-      var deviceObjectItem = that.data.deviceObject[macAddress]
-      deviceObjectItem.dataObjectList.push(dataObject)
-      setTimeout(function () {
-        that.data.synNoDataCount++
-        that.data.synCommandCount++
-        that.dispatchConnect()
-      }, 500)
+      var dataObject = bleCommandManager.dataBoxCommand([], deviceInfo.macAddress, deviceInfo.name, deviceInfo.brushingMethodId)
+
+      baseTool.print(["dataObject", dataObject])
+      myManager.addDeviceDataObject(dataObject).then(res => {
+        setTimeout(function () {
+          that.data.synFailCount++
+          that.data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      }).catch(res => {
+        setTimeout(function () {
+          that.data.synFailCount++
+          that.data.synCommandCount++
+          that.dispatchConnect()
+        }, 500)
+      })
     } else {
       setTimeout(function () {
         that.dispatchConnect()
