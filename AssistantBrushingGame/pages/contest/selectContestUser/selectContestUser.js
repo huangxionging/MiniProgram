@@ -70,7 +70,7 @@ Page({
     // 找服务, 找特征
     wx.showLoading({
       title: '正在连接设备...',
-      mask: false,
+      mask: true,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
@@ -127,6 +127,7 @@ Page({
 
     if (that.data.failTips == false) {
       var buffer = bleCommandManager.closeLightCommand()
+      wx.onBLEConnectionStateChange(res => {})
       wx.writeBLECharacteristicValue({
         deviceId: that.data.deviceId,
         serviceId: that.data.tailServiceUUID,
@@ -136,20 +137,30 @@ Page({
           baseTool.print([res, '成功关灯'])
           wx.closeBLEConnection({
             deviceId: that.data.deviceId,
-            success: function (res) { },
-            fail: function (res) { },
-            complete: function (res) { },
+            complete: function (res) {
+              that.data = null
+              that = null
+             },
           })
         },
-        fail: function (res) { },
-        complete: function (res) { },
+        fail: function (res) {
+          that.data = null
+          that = null
+         },
+        complete: function (res) { 
+        },
       })
     } else {
       wx.closeBLEConnection({
         deviceId: that.data.deviceId,
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
+        success: function (res) { 
+        },
+        fail: function (res) { 
+        },
+        complete: function (res) { 
+          that.data = null
+          that = null
+        },
       })
     }
 
@@ -179,7 +190,8 @@ Page({
   showConnectFail: function() {
     var that = this
     var failTips = that.data.failTips
-    if (failTips == false && this) {
+    baseTool.print(that)
+    if (failTips == false && this && that.data.deviceId != '') {
       that.data.failTips = true
       wx.showModal({
         title: '提示',
@@ -204,12 +216,13 @@ Page({
       success: function (res) {
         baseTool.print(['获得服务成功', baseTool.getCurrentTime()])
         // 获得特征值
+        that.data.reServiceCount = 4
         that.getCharacteristics()
       },
       fail: function (res) {
         baseTool.print(res)
         var reServiceCount = that.data.reServiceCount
-        if (reServiceCount <= 3) {
+        if (reServiceCount <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reServiceCount++
           baseTool.print(["重新获得服务", reServiceCount, baseTool.getCurrentTime()])
@@ -230,13 +243,14 @@ Page({
       serviceId: that.data.tailServiceUUID,
       success: function (res) {
         baseTool.print(['获得特征值成功', baseTool.getCurrentTime()])
+        that.data.reCharacteristic = 4
         that.deviceCharacteristicValueChange(that.data.deviceId)
         that.notifyCharacteristicValueChange()
       },
       fail: function (res) { 
         baseTool.print(res)
         var reCharacteristic = that.data.reCharacteristic
-        if (reCharacteristic <= 3) {
+        if (reCharacteristic <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reCharacteristic++
           baseTool.print(["重新获得服务", reCharacteristic, baseTool.getCurrentTime()])
@@ -265,9 +279,9 @@ Page({
         reNotify
         baseTool.print(res)
         var reNotify = that.data.reNotify
-        if (reNotify <= 3) {
+        if (reNotify <= 3 && that != null) {
           // 500ms 以后重连
-          that.data.reCharacteristic++
+          that.data.reNotify++
           baseTool.print(["重新获得服务", reNotify, baseTool.getCurrentTime()])
           setTimeout(function () {
             that.notifyCharacteristicValueChange()
@@ -288,6 +302,7 @@ Page({
       success: function (res) {
         baseTool.print(['连接成功', baseTool.getCurrentTime()])
         // 下一步获得服务
+        that.data.reconnectCount = 4
         that.getServices()
       },
       fail: function (res) {
@@ -296,7 +311,7 @@ Page({
         }
         var reconnectCount = that.data.reconnectCount
         baseTool.print([res, '连接失败', reconnectCount, baseTool.getCurrentTime()])
-        if (reconnectCount <= 3) {
+        if (reconnectCount <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reconnectCount++
           baseTool.print(["发起重连", reconnectCount, baseTool.getCurrentTime()])
@@ -335,7 +350,7 @@ Page({
       wx.showModal({
         title: '提示',
         content: dataList[index].name + ' 在本次比赛中将与设备 ' + that.data.deviceName + ' 绑定',
-        showCancel: true,
+        showCancel: false,
         cancelText: '取消',
         cancelColor: '#999',
         confirmText: '确定',
@@ -462,7 +477,7 @@ Page({
     var that = this
     wx.onBLEConnectionStateChange(function (res) {
       baseTool.print([res, '蓝牙状态改变'])
-      if (res.connected == false && that.lightSuccess == false) {
+      if (res.connected == false && that.data.lightSuccess == false && res.deviceId == that.data.deviceId && that.data.reconnectCount >= 3) {
         that.showConnectFail()
       }
     })

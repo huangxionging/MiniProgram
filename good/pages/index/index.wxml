@@ -1,0 +1,9 @@
+<view class='create-contest-container'>
+  <view class='create-name-view'>
+    <text class='create-name-title'>填写比赛名称:</text>
+     <view class='create-input-view'> 
+       <input type='text' class='create-input' value='{{name}}' bindinput='getInputName' maxlength='10'></input> 
+       <view class='create-line'></view> 
+     </view> 
+  </view>
+</view>

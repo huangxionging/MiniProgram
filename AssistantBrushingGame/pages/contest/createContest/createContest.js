@@ -51,20 +51,21 @@ Page({
     var valueDate = options.startTime.split(" ")[0]
     var valueTime = options.startTime.split(" ")[1]
     var startTime = valueTime.substr(0, 5)
+    var startDate = baseTool.getCurrentDateWithoutTime()
     var brushingMethodId = options.brushingMethodId
     var brushMethod = (brushingMethodId == "6827c45622b141ef869c955e0c51f9f8") ? "1" : "0"
-    baseTool.print(startTime)
+    baseTool.print([valueTime, startTime, brushMethod, startDate])
     that.setData({
       hasData: true,
       gameId: options.gameId,
       name: options.name,
       valueTime: valueTime,
       valueDate: valueDate,
-      startDate: valueDate,
+      startDate: startDate,
       startTime: startTime,
-      endTime: "23:59",
+      endTime: "23:59:00",
       selectBrushMethod: brushMethod == "1" ? 1 : 0,
-      brushMethodText: brushMethod ? "圆弧刷牙法" : "巴氏刷牙法",
+      brushMethodText: brushMethod == "1" ? "圆弧刷牙法" : "巴氏刷牙法",
       selectBrushMethodUsed: options.add == 'yes' ? true : false,
       options: options,
       primaryKey: 0,
@@ -264,7 +265,12 @@ Page({
 
   getInputName: function (e) {
     var that = this
-    baseTool.print(e)
+    var keyCode = e.detail.keyCode
+    baseTool.print(e.detail)
+    if (keyCode && keyCode == 8) {
+      return;
+    }
+    baseTool.print(e.detail)
     var name = e.detail.value
     var isTrue = name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
     if (isTrue == null && name != '' && name != undefined) {
@@ -277,7 +283,7 @@ Page({
       })
       return
     }
-    if (name == '') {
+    if (name === '') {
       wx.showModal({
         title: '提示',
         content: '比赛名称不能为空哦!',
@@ -512,7 +518,7 @@ Page({
       })
       return
     }
-    
+    baseTool.print(that.data.name)
     var startTime = that.data.valueDate + " " + that.data.valueTime
     contestManager.addContest(that.data.gameId, that.data.name, startTime, that.data.selectBrushMethod, "modify").then(res => {
       baseTool.print(res)

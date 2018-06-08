@@ -121,6 +121,7 @@ page{
 }
 
 .add-contest-user-content-view {
+  position: relative;
   font-size: 28rpx;
   color: #00a0e9;
 }
@@ -144,6 +145,8 @@ page{
 
 .contest-table-line {
   margin-top: 400rpx; 
+  width: 100%;
+  /* height: 2rpx; */
 }
 
 #contest-synchronization {
@@ -152,6 +155,8 @@ page{
 }
 
 #contest-table-view {
+  position: relative;
+  margin-top: 1rpx;
   width: 100%;
 }
 

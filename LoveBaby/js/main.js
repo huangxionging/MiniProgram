@@ -89,6 +89,7 @@ export default class Main {
 
   // 游戏结束后的触摸事件处理逻辑
   touchEventHandler(e) {
+    console.log(e)
     e.preventDefault()
 
     let x = e.touches[0].clientX
