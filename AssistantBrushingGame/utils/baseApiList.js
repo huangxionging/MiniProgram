@@ -102,5 +102,9 @@ module.exports = {
   /**
    * 创建绑定关系
    */
-  createParticipantsList: "createParticipantsList"
+  createParticipantsList: "createParticipantsList",
+  /**
+   * 获得比赛房间信息
+   */
+  getGameQrcode: "getGameQrcode",
 }

@@ -1,0 +1,24 @@
+<!--pages/my/brushContestShare/brushContestShare.wxml-->
+<view class='share-container'>
+  <image class='share-background' src='../../../resource/brush_share.png'></image>
+  <view class='share-content'>
+    <view class='share-clinic-info'>
+      <image src='{{clinicUrl}}' class='clinic-logo'></image>
+      <text class='clinic-name'>{{clinicName}}</text>
+      <text class='contest'>{{contestName}}</text>
+    </view>
+    <view class='qrcode'>
+      <image class='qrcode-background' src='../../../resource/qrcode.png'></image>
+      <view class='qrcode-content'>
+        <image class='qrcode-img' src='{{qrcodeUrl}}' bindtap='previewClick' ></image> 
+        <text class='qrcode-tips-text'>-扫描二维码查看比赛结果-</text>
+        <image class='qrcode-tip-img' src='../../../resource/qrcode_tip.png'></image>
+      </view>
+    </view>
+    
+      
+    
+    <text class='customer-service-tip'>客服电话: 400-888-8888</text>
+  </view>
+  
+</view>

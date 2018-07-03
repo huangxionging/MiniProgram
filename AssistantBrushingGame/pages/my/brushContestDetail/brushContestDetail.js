@@ -40,6 +40,7 @@ Page({
     //尾巴读取数据的特征值 write
     tailCharacteristicIdWrite: '0000FFA1-0000-1000-8000-00805F9B34FB',
     synData: false,
+    qrcodeUrl: "",
   },
 
   /**
@@ -168,8 +169,12 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    var that = this
+    var path = "pages/my/brushContestShare/brushContestShare" + "?gameId=" + that.data.gameId
     return {
-      title: ''
+      title: "比赛详情",
+      path: path,
+      imageUrl: that.data.qrcodeUrl,
     }
   },
   loadData() {
@@ -179,26 +184,31 @@ Page({
       baseTool.print(res)
       var dataList = []
       dataList.splice(0, dataList.length)
-      if (res && res.length > 0) {
+      if (res && res.gameInfo && res.gameInfo.qrcodeUrl) {
+        that.setData({
+          qrcodeUrl: res.gameInfo.qrcodeUrl
+        })
+      }
+      if (res && res.playersList && res.playersList.length > 0) {
         baseTool.print(dataList)
-        for (var index = 0; index < res.length; ++index) {
-          var macAddress = res[index].macAddress.toUpperCase()
+        for (var index = 0; index < res.playersList.length; ++index) {
+          var macAddress = res.playersList[index].macAddress.toUpperCase()
           // 待同步的列表项
           var item = {
-            name: res[index].name,
-            tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
-            playerId: res[index].playerId,
+            name: res.playersList[index].name,
+            tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
+            playerId: res.playersList[index].playerId,
             macAddress: macAddress,
-            score: res[index].score,
-            accuracy: res[index].accuracy,
+            score: res.playersList[index].score,
+            accuracy: res.playersList[index].accuracy,
           }
           that.data.synDeviceNameObject[macAddress] = macAddress
           if (item.score > 0) {
             item.score = item.score + parseFloat("0." + item.accuracy)
           }
 
-          if (res[index].recordId) {
-            item.recordId = res[index].recordId
+          if (res.playersList[index].recordId) {
+            item.recordId = res.playersList[index].recordId
           }
 
           // 添加数据集合

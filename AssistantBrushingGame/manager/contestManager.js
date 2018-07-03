@@ -890,6 +890,10 @@ function getBindUserDevices() {
   }
 }
 
+function getGameQrcode(gameId = '', memberId = '') {
+  
+}
+
 module.exports = {
   // 首页接口
   getHomePage: getHomePage,
@@ -924,4 +928,6 @@ module.exports = {
   deleteBindUserDevice: deleteBindUserDevice,
   // 获得绑定关系
   getBindUserDevices: getBindUserDevices,
+  //
+  getGameQrcode: getGameQrcode,
 }

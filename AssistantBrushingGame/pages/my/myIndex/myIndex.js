@@ -212,6 +212,12 @@ Page({
     })
   },
   upload: function() {
-    baseTool.print("dssds")
+    // baseTool.print("dssds")
+    // wx.navigateTo({
+    //   url: '../brushContestShare/brushContestShare',
+    //   success: function(res) {},
+    //   fail: function(res) {},
+    //   complete: function(res) {},
+    // })
   }
 })

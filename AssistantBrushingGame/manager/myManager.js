@@ -71,6 +71,7 @@ function getContestgMembers(gameId ='') {
       data: data,
       success: function (res) {
         if (res.data.code == 'success') {
+          baseTool.print(res)
           resolve(res.data.data);
         } else {
           if (res.data.msg != 'memberId不能为空') {
@@ -418,6 +419,27 @@ function removeHistoryGameObject() {
   })
 }
 
+function getGameQrcode(gameId = ''){
+  return new Promise((resolve, reject) => {
+    var url = baseURL.baseDomain + baseURL.basePath + baseApiList.getGameQrcode
+    baseTool.print(url)
+    wx.request({
+      url: url,
+      data: {
+        gameId: gameId
+      },
+      success: function (res) {
+        if (res.data.code == 'success') {
+          resolve(res.data.data);
+        } else {
+            reject("获取失败")
+        }
+      },
+      fail: reject,
+      complete: function (res) { },
+    })
+  })
+}
 module.exports = {
   pageQueryContest: pageQueryContest,
   getMyGameCount: getMyGameCount,
@@ -432,5 +454,6 @@ module.exports = {
   createHistoryGameObject: createHistoryGameObject,
   checkNeedSyn: checkNeedSyn,
   addDeviceDataObject: addDeviceDataObject,
-  removeHistoryGameObject: removeHistoryGameObject
+  removeHistoryGameObject: removeHistoryGameObject,
+  getGameQrcode: getGameQrcode 
 }

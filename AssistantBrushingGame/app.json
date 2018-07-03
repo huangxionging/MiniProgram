@@ -19,7 +19,8 @@
     "pages/customerManger/classDetail/classDetail",
     "pages/customerManger/classList/classList",
     "pages/customerManger/brushInfo/brushInfo",
-    "pages/customerManger/showTimes/showTimes"
+    "pages/customerManger/showTimes/showTimes",
+    "pages/my/brushContestShare/brushContestShare"
   ],
   "window": {
     "backgroundTextStyle": "dark",
