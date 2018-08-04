@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/home/homeIndex/homeIndex",
+    "pages/teach/teachIndex/teachIndex",
+    "pages/brush/brushIndex/brushIndex",
+    "pages/home/doctorInfoDetail/doctorInfoDetail",
+    "pages/home/brushReportDetail/brushReportDetail",
+    "pages/authorization/authorization/authorization"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "医生教刷牙",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "color": "#999",
+    "selectedColor": "#00a0e9",
+    "list": [
+      {
+        "pagePath": "pages/home/homeIndex/homeIndex",
+        "text": "首页",
+        "iconPath": "resource/home_normal.png",
+        "selectedIconPath": "resource/home_select.png"
+      },
+      {
+        "pagePath": "pages/teach/teachIndex/teachIndex",
+        "text": "刷牙教学",
+        "iconPath": "resource/teach_normal.png",
+        "selectedIconPath": "resource/teach_select.png"
+      },
+      {
+        "pagePath": "pages/brush/brushIndex/brushIndex",
+        "iconPath": "resource/brush_normal.png",
+        "selectedIconPath": "resource/brush_select.png",
+        "text": "一起刷牙"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 20000,
+    "connectSocket": 20000,
+    "uploadFile": 20000,
+    "downloadFile": 20000
+  }
+}

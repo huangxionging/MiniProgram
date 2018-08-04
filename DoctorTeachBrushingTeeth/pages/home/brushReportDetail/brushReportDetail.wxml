@@ -1,0 +1,4 @@
+<!--pages/home/brushReportDetail/brushReportDetail.wxml-->
+<view>
+  <image src='{{brushReportUrl}}'></image>
+</view>

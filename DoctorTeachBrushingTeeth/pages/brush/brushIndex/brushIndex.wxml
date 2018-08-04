@@ -1,0 +1,4 @@
+<!--pages/brush/brushIndex.wxml-->
+<view class='container'>
+  <image src='../../../resource/banner.png'></image>
+</view>

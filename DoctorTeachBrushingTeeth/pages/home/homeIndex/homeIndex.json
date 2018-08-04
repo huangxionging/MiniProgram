@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "医生信息",
+  "usingComponents": {
+    "doctorInfo": "/components/doctorInfo/doctorInfo",
+    "brushReport": "/components/brushReport/brushReport"
+  }
+}

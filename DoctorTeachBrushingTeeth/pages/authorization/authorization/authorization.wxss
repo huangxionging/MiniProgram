@@ -1,0 +1,29 @@
+/* pages/authorization/authorization/authorization.wxss */
+.lauch-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.authorization{
+  align-self: center;
+  margin-top: 110rpx;
+  width: 636rpx;
+  height: 685rpx;
+}
+
+.lauch-tip1{
+  font-size: 70rpx;
+  margin-top: 150rpx;
+}
+.lauch-tip2{
+  margin-top: 30rpx;
+  font-size: 30rpx;
+}
+
+.lauch-button{
+  margin-top: 20rpx;
+  width: 300rpx;
+  font-size: 20rpx;
+}

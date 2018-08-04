@@ -1,0 +1,7 @@
+<view class='lauch-container'>
+  <image src='/resource/lauch.png' class='authorization'></image>
+  <text class='lauch-tip1'>教学刷牙</text>
+  <text class='lauch-tip2'>教您正确的刷牙方法, 授权后即可学习刷牙方法</text>
+  <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>
+</view>
+

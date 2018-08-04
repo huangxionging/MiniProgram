@@ -15,10 +15,7 @@
         <image class='qrcode-tip-img' src='../../../resource/qrcode_tip.png'></image>
       </view>
     </view>
-    
-      
-    
-    <text class='customer-service-tip'>客服电话: 400-888-8888</text>
+    <text class='customer-service-tip' bindtap='phoneCallClick' >客服电话: 400-900-3032</text>
   </view>
   
 </view>

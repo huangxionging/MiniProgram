@@ -1,0 +1,41 @@
+<!--components/brushReport/brushReport.wxml-->
+<view class='brush-report-container'>
+  <view class='report-content'>
+    <text class='report-time'>刷牙时间: {{brushTime}}</text>
+    <view class='report-score-content'>
+      <view class='brush-total-time'>
+        <text class='total-time'>4'16"</text>
+        <text class='brush-content-tip'>刷牙总时长</text>
+      </view>
+      <!-- 白色的线 -->
+      <view class='white-line' />
+      <view class='brush-clean'>
+        <text class='clean-index'>67</text>
+        <text class='brush-content-tip'>清洁指数</text>
+      </view>
+      <!-- 白色的线 -->
+      <view class='white-line' />
+      <view class='brush-effective-time'>
+        <text class='effective-time'>4'16"</text>
+        <text class='brush-content-tip'>有效时长</text>
+      </view>
+    </view>
+    <view class='star-index'>
+      <view class='star-index-content'>
+        <text>正姿指数</text>
+        <view>
+          <block></block>
+        </view>
+      </view>
+      <view class='star-index-content'>
+        <text>认真指数</text>
+        <view>
+          <block>
+           <image src='../../resource/star.png' style='width:30rpx;height:30rpx'></image>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

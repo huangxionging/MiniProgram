@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "一起刷牙",
+  "usingComponents": {
+    "doctorInfo": "/components/userBrushItem/userBrushItem"
+  }
+}

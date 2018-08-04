@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "刷牙教学",
+  "usingComponents": {
+    "tagSegment": "/components/tagSegment/tagSegment"
+  }
+}

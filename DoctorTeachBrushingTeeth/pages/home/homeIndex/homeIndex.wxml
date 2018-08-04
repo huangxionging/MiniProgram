@@ -1,0 +1,12 @@
+<!--pages/home/homeIndex.wxml-->
+<view class="doctor-container" wx:if="{{loadDone}}">
+  <doctorInfo class="doctorInfo" binddoctorInfoClick="onDoctorInfoClick" avatar="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLard73s4fMYN22P07rbGOPnVSNcywficjBSJUsLqxLffMwEKlkjdKq3ZqFMytV9AIibqGSicjZI5XkA/132"
+  name="张医生" department="口腔科" jobTitle="副主任医师" hospital="深圳市第6人民医院"/>
+  <text class='text-tip'>{{}}张医生最近的刷牙报告</text>
+  <view class='text-line'/>
+  <view class='report-view'>
+    <brushReport/>
+    <brushReport/>
+  </view>
+  
+</view>

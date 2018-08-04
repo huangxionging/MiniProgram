@@ -14,7 +14,7 @@ var isSimulator = (brand == 'devtools')
  */
 function print(e) {
   // 测试环境下或者模拟器状态下, 才输入内容到控制台
-  console.log(e)
+  // console.log(e)
   if (baseState || isSimulator) {
     // 打印内容
     console.log(e)
@@ -246,6 +246,18 @@ function values(obj) {
   }
   return vals;
 }
+/**
+ * showInfo: 只用来展示信息
+ */
+function showInfo(info = '') {
+  wx.showModal({
+    title: '提示',
+    content: info,
+    showCancel: false,
+    confirmText: '好的',
+    confirmColor: '#00a0e9',
+  })
+}
 
 // 添加接口
 module.exports = {
@@ -302,5 +314,6 @@ module.exports = {
   getCurrentDateWithoutTime: getCurrentDateWithoutTime,
   getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond,
   // 仿写 Object.values, 兼容
-  values: values
+  values: values,
+  showInfo: showInfo,
 }

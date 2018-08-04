@@ -89,7 +89,7 @@ page{
   font-size: 24rpx;
 }
 .qrcode-tip-img{
-  margin-top: 5rpx;
+  margin-top: 15rpx;
   width: 90rpx;
   height: 90rpx;
   flex-direction: column;

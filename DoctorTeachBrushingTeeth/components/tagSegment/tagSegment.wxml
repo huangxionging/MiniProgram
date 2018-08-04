@@ -1,0 +1,5 @@
+<!--components/tagSegment/tagSegment.wxml-->
+<view>
+  <text>{{text}}</text>
+  <view></view>
+</view>

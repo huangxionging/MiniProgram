@@ -1,0 +1,11 @@
+<!--pages/teach/teachIndex.wxml-->
+<view class='container'>
+  <view>
+    <view>
+      <text></text>
+    </view>
+    <view>
+    </view>
+  </view>
+  <video src='{{videoUrl}}'></video>
+</view>

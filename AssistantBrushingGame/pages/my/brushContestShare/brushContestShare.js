@@ -97,5 +97,10 @@ Page({
       current: that.data.qrcodeUrl,
       urls: [that.data.qrcodeUrl],
     })
+  },
+  phoneCallClick: function() {
+    wx.makePhoneCall({
+      phoneNumber: '4009003032',
+    })
   }
 })
