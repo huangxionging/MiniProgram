@@ -1,4 +1,16 @@
 <!--pages/brush/brushIndex.wxml-->
-<view class='container'>
-  <image src='../../../resource/banner.png'></image>
+<view class='navigation-bar-line'/>
+<view class='brush-container' wx:if='{{loadDone}}'>
+  <image src='../../../resource/banner.png' class='brush-banner'></image>
+  <view class='brush-table-view'>
+    <block wx:for='{{brushDataList}}' wx:key='id' wx:item='item'>
+      <view class="brush-cell {{index==0?'':'others'}}">
+        <userBrushItem
+          data='{{item}}'
+        />
+        <view class='brush-cell-line' />
+      </view>
+    </block>
+  </view>
+  
 </view>

@@ -2,13 +2,13 @@
 const baseURL = require('/baseURL.js')
 
 // 获得状态
-var baseState = baseURL.baseState
+let baseState = baseURL.baseState
 // 系统信息
-var systemInfo = wx.getSystemInfoSync()
+let systemInfo = wx.getSystemInfoSync()
 // 品牌名称
-var brand = String(systemInfo.brand).toLowerCase()
+let brand = String(systemInfo.brand).toLowerCase()
 // 是否模拟器
-var isSimulator = (brand == 'devtools')
+let isSimulator = (brand == 'devtools')
 /**
  * e 是要打印的参数
  */
@@ -55,7 +55,7 @@ function removeAllObjects () {
  * 震动
  */
 function vibrate() {
-  var that = this
+  let that = this
   wx.vibrateLong({
     success: function (res) {
       that.print(res)
@@ -149,8 +149,8 @@ function getSystemInfoAsync() {
 }
 
 function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
-  var that = this
-  var stop = callback(total)
+  let that = this
+  let stop = callback(total)
   if (stop == true) {
     return
   } else {
@@ -164,49 +164,49 @@ function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
 }
 
 function getCurrentTime() {
-  var date = new Date();
-  var year = date.getFullYear() + ''
-  var month = zeroFormat(date.getMonth() + 1 + '')
-  var day = zeroFormat(date.getDate() + '')
-  var hour = zeroFormat(date.getHours() + '')
-  var minute = zeroFormat(date.getMinutes() + '')
-  var second = zeroFormat(date.getSeconds() + '')
+  let date = new Date();
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
+  let second = zeroFormat(date.getSeconds() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
 }
 
 function getCurrentTimeWithoutSecond() {
-  var date = new Date();
-  var year = date.getFullYear() + ''
-  var month = zeroFormat(date.getMonth() + 1 + '')
-  var day = zeroFormat(date.getDate() + '')
-  var hour = zeroFormat(date.getHours() + '')
-  var minute = zeroFormat(date.getMinutes() + '')
+  let date = new Date();
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  var date = new Date();
-  var year = date.getFullYear() + ''
-  var month = zeroFormat(date.getMonth() + 1 + '')
-  var day = zeroFormat(date.getDate() + '')
-  var hour = zeroFormat(date.getHours() + '')
-  var minute = zeroFormat(date.getMinutes() + '')
+  let date = new Date();
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  var date = new Date();
-  var year = date.getFullYear() + ''
-  var month = zeroFormat(date.getMonth() + 1 + '')
-  var day = zeroFormat(date.getDate() + '')
-  var hour = zeroFormat(date.getHours() + '')
-  var minute = zeroFormat(date.getMinutes() + '')
+  let date = new Date();
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
@@ -214,17 +214,17 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  var date = new Date();
-  var hour = zeroFormat(date.getHours() + '')
-  var minute = zeroFormat(date.getMinutes() + '')
+  let date = new Date();
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
 }
 
 function getCurrentDateWithoutTime() {
-  var date = new Date();
-  var year = date.getFullYear() + ''
-  var month = zeroFormat(date.getMonth() + 1 + '')
-  var day = zeroFormat(date.getDate() + '')
+  let date = new Date();
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day
@@ -238,7 +238,7 @@ function zeroFormat(oldString = '') {
 }
 
 function values(obj) {
-  var vals = [], key;
+  let vals = [], key;
   for (key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       vals.push(obj[key]);
@@ -256,6 +256,54 @@ function showInfo(info = '') {
     showCancel: false,
     confirmText: '好的',
     confirmColor: '#00a0e9',
+  })
+}
+
+/**
+ * 模型转换适配器
+ * model 待转换的模型, key 是我们需要的 key, value 是转换对应的 key
+ * value 是转换之前的键值对
+ */
+function modelAdapter(model = {}, value = {}) {
+  // if (!value) {
+  //   return
+  // }
+  // 遍历模型
+  let keys = Object.keys(model)
+  for (let index = 0; index < keys.length; ++index) {
+    // 获得新 key
+    let key = keys[index]
+    let newkey = model[key]
+    // 在值中查找新 key 对应的值
+    if (value[newkey]) {
+      // 获得新值
+      model[key] = value[newkey]
+    } 
+  }
+}
+
+/**
+ * 统一处理网络请求
+ * url 请求地址
+ * data 是请求参数
+ */
+function request(url = '', data = {}) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: url,
+      data: data,
+      success: function (res) {
+        print(res)
+        if (res.data.code == 'success') {
+          resolve(res.data.data)
+        } else {
+          reject('网络有点点问题')
+        }
+      },
+      fail: function (res) {
+        reject('网络有点点问题')
+      },
+    })
   })
 }
 
@@ -284,7 +332,7 @@ module.exports = {
   // 震动
   vibrate: vibrate,
   getNet: function () {
-    var that = this
+    let that = this
     wx.onNetworkStatusChange(function(res){
       that.print(res)
       wx.showModal({
@@ -316,4 +364,6 @@ module.exports = {
   // 仿写 Object.values, 兼容
   values: values,
   showInfo: showInfo,
+  modelAdapter: modelAdapter,
+  request: request,
 }

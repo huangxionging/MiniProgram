@@ -58,22 +58,7 @@ function loginWithUserInfo(code, userInfo, doctorId) {
     baseTool.print(data)
     // url
     baseTool.print(url)
-    wx.request({
-      url: url,
-      data: data,
-      success: res => {
-        baseTool.print(res)
-        if (res.data.code == 'success') {
-          resolve(res.data.data);
-        } else {
-          reject(res.data.msg)
-        }
-      },
-      fail: function (res) {
-        reject(baseTool.errorMsg)
-      },
-      complete: function (res) { },
-    })
+    baseTool.request(url, data).then(resolve, reject)
   })
 }
 

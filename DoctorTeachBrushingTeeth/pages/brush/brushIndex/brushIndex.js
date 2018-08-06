@@ -1,18 +1,24 @@
 // pages/brush/brushIndex.js
+const baseTool = require('../../../utils/baseTool.js')
+const brushManager = require('../../../manager/brushManager.js')
+const brushAdapter = require('../../../adapter/brushAdapter.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    loadDone:false,
+    brushDataList: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    let that = this
+    that.loadData()
+    wx.startPullDownRefresh()
   },
 
   /**
@@ -47,7 +53,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    let that = this
+    that.loadData()
   },
 
   /**
@@ -62,5 +69,19 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  loadData: function() {
+    let that = this
+    wx.showNavigationBarLoading()
+    brushManager.getBrushRecord().then(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      let data = brushAdapter.brushRecordAdapter(res)
+      baseTool.print(data)
+      that.setData(data)
+    }).catch(res => {
+      baseTool.showInfo(res)
+    })
   }
 })

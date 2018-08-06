@@ -3,5 +3,6 @@
   "usingComponents": {
     "doctorInfo": "/components/doctorInfo/doctorInfo",
     "brushReport": "/components/brushReport/brushReport"
-  }
+  },
+  "enablePullDownRefresh": true
 }

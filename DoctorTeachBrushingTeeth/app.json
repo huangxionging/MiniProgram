@@ -8,13 +8,14 @@
     "pages/authorization/authorization/authorization"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "医生教刷牙",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
   },
   "tabBar": {
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#fff",
     "color": "#999",
     "selectedColor": "#00a0e9",
     "list": [

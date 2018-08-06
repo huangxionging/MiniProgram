@@ -1,7 +1,7 @@
 /**
  * 用于消息传递使用
  */
-var allMessageHandler = {
+let allMessageHandler = {
 }
 
 const baseTool = require('../utils/baseTool.js')
@@ -17,7 +17,7 @@ function addMessageHandler(name, instance, messageHandler) {
     if (typeof (allMessageHandler[name]) === 'undefined') {
       // 消息处理
       allMessageHandler[name] = []
-      var messageHandlers = allMessageHandler[name]
+      let messageHandlers = allMessageHandler[name]
       messageHandlers.push({
         instance: instance,
         messageHandler: messageHandler
@@ -28,11 +28,11 @@ function addMessageHandler(name, instance, messageHandler) {
         msg: '添加成功'
       })
     } else {
-      var messageHandlers = allMessageHandler[name]
-      var isCorrect = true
+      let messageHandlers = allMessageHandler[name]
+      let isCorrect = true
       // 遍历查找 instance, 是否有重复
-      for (var index = 0; index < messageHandlers.length; ++index) {
-        var dict = messageHandlers[index]
+      for (let index = 0; index < messageHandlers.length; ++index) {
+        let dict = messageHandlers[index]
         // === 三个等于号
         if (dict['instance'] === instance) {
           isCorrect = false
@@ -75,10 +75,10 @@ function sendMessage(name = '', message) {
         msg: '该消息未注册'
       })
     } else {
-      var messageHandlers = allMessageHandler[name]
+      let messageHandlers = allMessageHandler[name]
       // 遍历发送消息
-      for (var index = 0; index < messageHandlers.length; ++index) {
-        var dict = messageHandlers[index]
+      for (let index = 0; index < messageHandlers.length; ++index) {
+        let dict = messageHandlers[index]
         dict['messageHandler'](message)
       }
       resolve({
@@ -124,11 +124,11 @@ function removeSpecificInstanceMessageHandler(name = '', instance) {
         msg: '该消息未注册'
       })
     } else {
-      var messageHandlers = allMessageHandler[name]
-      var isCorrect = false
+      let messageHandlers = allMessageHandler[name]
+      let isCorrect = false
       // 遍历发送消息
-      for (var index = 0; index < messageHandlers.length; ++index) {
-        var dict = messageHandlers[index]
+      for (let index = 0; index < messageHandlers.length; ++index) {
+        let dict = messageHandlers[index]
         // === 三个等于号
         if (dict['instance'] === instance) {
           isCorrect = true

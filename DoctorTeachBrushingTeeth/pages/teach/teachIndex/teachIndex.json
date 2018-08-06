@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "刷牙教学",
   "usingComponents": {
-    "tagSegment": "/components/tagSegment/tagSegment"
-  }
+    "modalDialog": "/components/modalDialog/modalDialog"
+  },
+  "enablePullDownRefresh": true
 }

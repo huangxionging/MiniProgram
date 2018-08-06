@@ -1,18 +1,28 @@
 // pages/home/doctorInfoDetail/doctorInfoDetail.js
+const baseTool = require('../../../utils/baseTool.js')
+const doctorInfoAdapter = require('../../../adapter/doctorInfoAdapter.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    loadDone: false,
+    avatar: '',
+    doctorName: '',
+    department: '',
+    jobTitle: '',
+    hospital: '',
+    goodat: '',
+    experience: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    let that = this
+    that.getDoctorInfoDetail()
   },
 
   /**
@@ -56,11 +66,10 @@ Page({
   onReachBottom: function () {
   
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  getDoctorInfoDetail: function() {
+    let that = this
+    let doctorInfo = baseTool.valueForKey('doctorInfo')
+    let data = doctorInfoAdapter.doctorInfoDetailAdapter(doctorInfo)
+    that.setData(data)
   }
 })

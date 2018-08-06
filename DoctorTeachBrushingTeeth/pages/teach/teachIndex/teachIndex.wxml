@@ -1,11 +1,24 @@
 <!--pages/teach/teachIndex.wxml-->
-<view class='container'>
-  <view>
-    <view>
-      <text></text>
+<view class='navigation-bar-line'/>
+<view class='teach-container' wx:if='{{loadDone}}'>
+  <view class='segment'>
+    <view class='segment-item' bindtap='segmentClick' data-index='1'>
+      <text class="{{isSelect?'segment-color':''}}">看视频</text>
+      <view wx:if='{{isSelect}}' class='segment-item-line'/>
     </view>
-    <view>
+    <view class='segment-line'/>
+    <view class='segment-item' bindtap='segmentClick' data-index='2'>
+      <text class="{{!isSelect?'segment-color':''}}">学刷牙</text>
+      <view wx:if='{{!isSelect}}' class='segment-item-line'/>
     </view>
   </view>
-  <video src='{{videoUrl}}'></video>
+  <view wx:if='{{isSelect}}' class='look-video-view'>
+    <video src='{{videoUrl}}' class='look-video'></video>
+    <view class='text-tip'>{{title}}</view>
+    <view class='text-line'></view>
+    <view class='text-info'>
+      <text space='ensp'>    {{info}}</text>
+    </view>
+  </view>
+  <modalDialog wx:if='{{showModal}}' data='{{modalDialog}}'/>
 </view>

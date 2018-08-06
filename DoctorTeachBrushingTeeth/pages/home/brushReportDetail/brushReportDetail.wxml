@@ -1,4 +1,5 @@
 <!--pages/home/brushReportDetail/brushReportDetail.wxml-->
-<view>
-  <image src='{{brushReportUrl}}'></image>
+<view class='navigation-bar-line'/>
+<view class='brush-score-container' wx:if='{{loadDone}}'>
+  <image src='{{brushReportUrl}}' class='image-view' bindload='imageLoadDone' mode='widthFix' bindtap='previewImage' lazy-load='true' binderror='imageLoadError' bindlongpress='imageLongTapClick'></image>
 </view>

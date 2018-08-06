@@ -1,28 +1,15 @@
 <!--components/userBrushItem/userBrushItem.wxml-->
-<view>
-  <view>
-    <image></image>
-    <view>
-      <text></text>
-      <text></text>
+<view class='user-brush-container'>
+  <view class='brush-content'>
+    <image class='avatar' src='{{data.avatar}}'></image>
+    <view class='brush-info'>
+      <text class='user-name'>{{data.name}}</text>
+      <text class='user-brush-text'>用护牙者刷了{{data.score}}分</text>
+      <brushReport 
+        class='brush-report' 
+        id='{{index}}'
+        data='{{data}}'
+         />
     </view>
-  </view>
-  <view>
-    <view>
-      <view>
-        <text></text>
-      </view>
-      <view></view>
-    </view>
-    <view>
-      <view>
-        <text></text>
-      </view>
-      <view></view>
-    </view>
-  </view>
-  <view>
-    <image></image>
-    <text></text>
   </view>
 </view>

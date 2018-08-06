@@ -1,6 +1,8 @@
 {
   "navigationBarTitleText": "一起刷牙",
   "usingComponents": {
-    "doctorInfo": "/components/userBrushItem/userBrushItem"
-  }
+    "userBrushItem": "/components/userBrushItem/userBrushItem",
+    "brushReport": "/components/brushReport/brushReport"
+  },
+  "enablePullDownRefresh": true
 }

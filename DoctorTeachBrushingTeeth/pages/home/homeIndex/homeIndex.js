@@ -2,14 +2,21 @@
 const baseTool = require('../../../utils/baseTool.js')
 const loginManager = require('../../../manager/loginManager.js')
 const doctorInfoManager = require("../../../manager/doctorInfoManager.js")
-
+const doctorInfoAdapter = require('../../../adapter/doctorInfoAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    loadDone: false
+    loadDone: false,
+    avatar: '',
+    doctorName: '',
+    department: '',
+    jobTitle: '',
+    hospital: '',
+    reportDataList: []
   },
 
   /**
@@ -17,11 +24,12 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    options.doctorId = "004867f5369ddee301c348cb18885fbd"
+    options.doctorId = "40f595d7a10fbdeef11280cca5837bc8"
     if (options.doctorId) {
       baseTool.setValueForKey(options.doctorId, "doctorId")
     }
-    that.getDoctorInfo();
+    that.getDoctorInfo()
+    wx.startPullDownRefresh()
   },
 
   /**
@@ -56,7 +64,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    let that = this
+    that.getDoctorInfo()
   },
 
   /**
@@ -73,17 +82,30 @@ Page({
   
   },
   onDoctorInfoClick: function(e) {
-    baseTool.print(e)
+    wx.navigateTo({
+      url: '../doctorInfoDetail/doctorInfoDetail',
+    })
   },
   getDoctorInfo: function() {
-    baseTool.print("ddd")
     let that = this
+    wx.showNavigationBarLoading()
     doctorInfoManager.getDoctorInfo().then(res => {
-      that.setData({
-        loadDone: true
-      })
+      wx.stopPullDownRefresh()
+      wx.hideNavigationBarLoading()
+      // 从适配器获得数据
+      let data = doctorInfoAdapter.homePageAdapter(res)
+      that.setData(data)
     }).catch(res => {
-
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+    })
+  },
+  reportTapClick: function(e) {
+    baseTool.print(e)
+    let recordId = e.detail.data.recordId
+    wx.navigateTo({
+      url: '../brushReportDetail/brushReportDetail?recordId='+recordId,
     })
   }
 })

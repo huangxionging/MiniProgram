@@ -1,11 +1,12 @@
 /* components/brushReport/brushReport.wxss */
 .brush-report-container {
-  height: 340rpx;
   width: 100%;
 }
+.others{
+  margin-top: 20rpx;
+}
 .report-content{
-  margin-left: 20rpx;
-  margin-right: 20rpx;
+  width: 100%;
   height: 100%;
   background: linear-gradient(#00a0e9, #67b5f9);
   display: flex;
@@ -97,7 +98,23 @@
   display: flex;
   flex-direction: row;
 }
-.star-index-content{
+.index-content{
+  margin-top: 50rpx;
   width: 50%;
   color: white;
+  font-size: 25rpx;
+}
+.star{
+  text-align: left;
+  padding-left: 20rpx;
+}
+.face{
+  padding-right: 20rpx;
+  text-align: right;
+}
+.star-image{
+
+}
+.index-others{
+  margin-left: 5rpx;
 }
