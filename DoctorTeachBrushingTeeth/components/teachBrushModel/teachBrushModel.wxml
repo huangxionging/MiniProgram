@@ -1,0 +1,6 @@
+<!--components/teachBrushModel/teachBrushModel.wxml-->
+<view class='teach-brush-container'>
+  <image src='{{data.imageUrl}}' class='brush-model-image'></image>
+  <image src='../../resource/grid.png' class='brush-grid-image'></image>
+  <view class='brush-name-view'>{{data.name}}</view>
+</view>

@@ -24,9 +24,11 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    options.doctorId = "40f595d7a10fbdeef11280cca5837bc8"
+    
     if (options.doctorId) {
       baseTool.setValueForKey(options.doctorId, "doctorId")
+    } else {
+      baseTool.setValueForKey('', "doctorId")
     }
     that.getDoctorInfo()
     wx.startPullDownRefresh()

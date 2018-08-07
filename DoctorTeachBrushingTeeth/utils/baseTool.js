@@ -289,6 +289,7 @@ function modelAdapter(model = {}, value = {}) {
  */
 function request(url = '', data = {}) {
   return new Promise((resolve, reject) => {
+    print([url, data])
     wx.request({
       url: url,
       data: data,
@@ -296,6 +297,8 @@ function request(url = '', data = {}) {
         print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data)
+        } else if (res.data.msg){
+          reject(res.data.msg)
         } else {
           reject('网络有点点问题')
         }

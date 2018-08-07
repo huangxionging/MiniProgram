@@ -15,4 +15,16 @@ module.exports = {
    * 获得视频信息
    */
   getVideoDetails: 'getVideoDetails',
+  /**
+   * 刷牙教学视频
+   */
+  getBrushingVideoDetails: 'getBrushingVideoDetails',
+  /**
+   * 验证码
+   */
+  getVerifyCode: 'generateCode',
+  /**
+   * 绑定手机号
+   */
+  bindPhoneNumber: 'bindPhoneNumber'
 }

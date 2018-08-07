@@ -8,9 +8,9 @@
 }
 .authorization{
   align-self: center;
-  margin-top: 110rpx;
-  width: 636rpx;
-  height: 685rpx;
+  margin-top: 7vw;
+  width: 84%;
+  height: 91vw;
 }
 
 .lauch-tip1{

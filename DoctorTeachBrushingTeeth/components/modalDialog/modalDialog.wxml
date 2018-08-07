@@ -1,4 +1,7 @@
 <!--components/modalDialog/modalDialog.wxml-->
-<view class='modal-mask' bindtap='hideModal' catchtouchmove='preventTouch' wx:if='{{data.showModal}}'/>
-<view class='modal-dialog' wx:if='{{data.showModal}}'>
+<view class='modal-mask' bindtap='hideModal' catchtouchmove='preventTouch' wx:if='{{data.showModal}}'>
 </view>
+<slot></slot>
+<!-- <view class='modal-dialog' wx:if='{{data.showModal}}'>
+  
+</view> -->

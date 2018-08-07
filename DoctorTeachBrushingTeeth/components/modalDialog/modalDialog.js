@@ -1,4 +1,5 @@
 // components/modalDialog/modalDialog.js
+const baseTool = require('../../utils/baseTool.js')
 Component({
   /**
    * 组件的属性列表
@@ -21,6 +22,13 @@ Component({
    * 组件的方法列表
    */
   methods: {
-
+    preventTouch: function (e) {
+      baseTool.print(e)
+    },
+    hideModal: function(e) {
+      let that = this
+      baseTool.print(e)
+      that.triggerEvent('hideModal', {}, {})
+    }
   }
 })

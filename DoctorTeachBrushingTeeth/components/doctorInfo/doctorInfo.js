@@ -39,8 +39,9 @@ Component({
    */
   methods: {
     onTapClick: function(e) {
+      let that = this
       baseTool.print(e)
-      this.triggerEvent('doctorInfoClick', {}, {})
+      that.triggerEvent('doctorInfoClick', {}, {})
     }
   }
 })
