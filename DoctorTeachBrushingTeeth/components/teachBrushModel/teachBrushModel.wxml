@@ -3,4 +3,5 @@
   <image src='{{data.imageUrl}}' class='brush-model-image'></image>
   <image src='../../resource/grid.png' class='brush-grid-image'></image>
   <view class='brush-name-view'>{{data.name}}</view>
+  <view class='brush-mode-mirror'>当前为镜像模式</view>
 </view>

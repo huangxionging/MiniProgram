@@ -81,6 +81,8 @@ Page({
       baseTool.print(data)
       that.setData(data)
     }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
       baseTool.showInfo(res)
     })
   }

@@ -2,6 +2,8 @@
   "navigationBarTitleText": "刷牙教学",
   "usingComponents": {
     "modalDialog": "/components/modalDialog/modalDialog",
-    "teachBrushModel": "/components/teachBrushModel/teachBrushModel"
-  }
+    "teachBrushModel": "/components/teachBrushModel/teachBrushModel",
+    "newsComponent": "/components/newsComponent/newsComponent"
+  },
+  "enablePullDownRefresh": false
 }

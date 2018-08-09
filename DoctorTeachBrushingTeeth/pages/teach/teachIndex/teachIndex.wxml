@@ -13,15 +13,19 @@
     </view>
   </view>
   <view wx:if='{{isSelect}}' class='look-video-view'>
-    <video src='{{videoUrl}}' class='look-video'></video>
-    <view class='text-tip'>{{title}}</view>
-    <view class='text-line'></view>
-    <view class='text-info'>
-      <text space='ensp'>    {{info}}</text>
+    <video src='{{videoUrl}}' class='look-video' autoplay='true'>
+      <!-- <cover-image src='{{avatar}}' class='avatar'></cover-image> -->
+    </video>
+    <view class='news-table-view'>
+      <block wx:for='{{newsList}}' wx:key='id' wx:item='item'>
+        <newsComponent data='{{item}}' class='news-item'/>
+      </block>
     </view>
   </view>
   <view wx:if='{{!isSelect && isTel}}' class='teach-video-view'>
-    <video src='{{teachVideoUrl}}' class='look-video' binderror='binderror' autoplay='true' bindended='videoPlayEnd'></video>
+    <video src='{{teachVideoUrl}}' class='look-video' binderror='binderror' autoplay='true' bindended='videoPlayEnd'>
+      <cover-image src='{{avatar}}' class='avatar'></cover-image>
+    </video>
     <view class='teach-content'>
       <view class='teach-tip'>一起来找牙面</view>
       <swiper class='teach-model-container' current='{{currentIndex}}' bindchange='scrollChange' previous-margin='80rpx' next-margin='30rpx'>
@@ -39,7 +43,11 @@
 <modalDialog wx:if='{{showModal}}' data='{{modalDialog}}' bind:hideModal='hideModal' catchtouchmove='preventTouch'>
   <view class='modal-dialog'>
     <view class='modal-content'  catchtouchmove='preventTouch'>
-      <view class='modal-title'>实时刷牙 立即体验</view>
+      <view class='modal-title'>
+        <image class='modal-title-image' src='../../../resource/bind_tel_tip.png'></image>
+      </view>
+      
+      
       <view class='tel-view' catchtouchmove='preventTouch'>
         <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder' catchtouchmove='preventTouch'></input>
       </view>

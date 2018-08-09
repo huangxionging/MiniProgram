@@ -17,12 +17,14 @@ Page({
     modalDialog: {
       showModal: false
     },
+    newsList: [],
     brushModels: [],
     currentIndex: 0,
     telphoneNumber: '',
     verifyCode: '',
     isTimeCountDown: false,
     verifyCodeDisabled: true,
+    avatar: ''
   },
 
   /**
@@ -30,8 +32,12 @@ Page({
    */
   onLoad: function (options) {
     let that = this
+    that.setData({
+      avatar: teachManager.getDoctorAvatar()
+    })
     that.loadData()
-    wx.startPullDownRefresh()
+    // wx.startPullDownRefresh()
+    
   },
 
   /**
@@ -89,6 +95,7 @@ Page({
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       let data = teachAdapter.videoAdapter(res)
+      baseTool.print(data)
       that.setData(data)
     }).catch(res => {
       wx.hideNavigationBarLoading()
@@ -177,7 +184,18 @@ Page({
     teachManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
       baseTool.print(res)
       wx.hideLoading()
-      teachAdapter.telphoneAdapter(res)
+      teachAdapter.telphoneAdapter(res.wxUser)
+      that.setData({
+        isSelect: false,
+        isTel: true,
+        showModal: false,
+        modalDialog: {
+          showModal: false
+        }
+      })
+      if (that.data.brushModels.length == 0) {
+        that.getBrushingVideoDetails()
+      }
     }).catch(res => {
       wx.hideLoading()
       baseTool.showInfo(res)
@@ -303,6 +321,18 @@ Page({
     let verifyCode = e.detail.value
     that.setData({
       verifyCode: verifyCode
+    })
+  },
+  videoPlay: function(e) {
+    let that = this
+    that.setData({
+      hideAvatar: true
+    })
+  },
+  videoPause: function(e) {
+    let that = this
+    that.setData({
+      hideAvatar: false
     })
   }
 })

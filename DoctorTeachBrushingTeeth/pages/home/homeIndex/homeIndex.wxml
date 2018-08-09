@@ -3,7 +3,7 @@
 <view class='doctor-container' wx:if='{{loadDone}}'>
   <doctorInfo class='doctorInfo' binddoctorInfoClick='onDoctorInfoClick' avatar='{{avatar}}'
   name='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}'/>
-  <text class='text-tip'>{{doctorName}}医生最近的刷牙报告</text>
+  <text class='text-tip'>跟着{{doctorName}}医生一起刷出干净的牙齿</text>
   <view class='text-line'/>
   <view class='report-view'>
     <block wx:for='{{reportDataList}}' wx:key='id' wx:item='item'>

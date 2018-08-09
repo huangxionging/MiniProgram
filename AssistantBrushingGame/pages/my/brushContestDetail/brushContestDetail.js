@@ -181,7 +181,7 @@ Page({
     var that = this
     wx.showNavigationBarLoading()
     myManager.getContestgMembers(that.data.gameId).then(res => {
-      baseTool.print(res)
+      baseTool.print(["res = ", res])
       var dataList = []
       dataList.splice(0, dataList.length)
       if (res && res.gameInfo && res.gameInfo.qrcodeUrl) {
@@ -237,7 +237,7 @@ Page({
         if (dataList.length > 2) {
           dataList[2].color = '#2cabee'
         }
-
+        baseTool.print(["data数据", dataList])
         that.setData({
           loadingDone: true,
           hasData: true,

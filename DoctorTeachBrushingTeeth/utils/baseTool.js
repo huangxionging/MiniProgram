@@ -278,7 +278,7 @@ function modelAdapter(model = {}, value = {}) {
     if (value[newkey]) {
       // 获得新值
       model[key] = value[newkey]
-    } 
+    }
   }
 }
 
@@ -308,6 +308,41 @@ function request(url = '', data = {}) {
       },
     })
   })
+}
+
+/**
+ * 从 URL 中提取参数, url 是完成的 url 字符串
+ */
+function getParameterFromURL(url = '') {
+  decodeURI(url)
+  // 是否包含问号
+  if (url.indexOf('?')) {
+    // 切割 url 地址和参数
+    let allComponents = url.split('?')
+    if (allComponents.length == 2) {
+      // 获得参数部分字符串
+      let parameterString = allComponents[1]
+      // 通过 & 字符串切割成键值字符串数组
+      let allParameters = parameterString.split('&')
+      let parameterData = {}
+      // 遍历该数组
+      for(let index = 0; index < allParameters.length; ++index) {
+        let param = allParameters[index]
+        if (param.indexOf('=')) {
+          // 通过 = 字符串切割成 key 和 value
+          let keyValues = param.split('=')
+          if (keyValues.length == 2) {
+            let key = keyValues[0]
+            let value = keyValues[1]
+            // 生成 key 对应的 value
+            parameterData[key] = value
+          }
+        }
+      }
+      return parameterData
+    }
+  }
+  return null
 }
 
 // 添加接口
@@ -369,4 +404,5 @@ module.exports = {
   showInfo: showInfo,
   modelAdapter: modelAdapter,
   request: request,
+  getParameterFromURL: getParameterFromURL,
 }

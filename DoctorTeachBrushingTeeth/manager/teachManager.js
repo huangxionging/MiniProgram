@@ -94,10 +94,21 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
   })
 }
 
+function getDoctorAvatar() {
+  let doctorInfo = baseTool.valueForKey('doctorInfo')
+  if (doctorInfo && doctorInfo.doctorHeadimgurl) {
+    return doctorInfo.doctorHeadimgurl
+  } else {
+    return ''
+  }
+  
+}
+
 module.exports = {
   getTeachVideoInfo: getTeachVideoInfo,
   getBrushingVideoDetails: getBrushingVideoDetails,
   getTelphone: getTelphone,
   getVerifyCode: getVerifyCode,
-  bindingTelphone: bindingTelphone
+  bindingTelphone: bindingTelphone,
+  getDoctorAvatar: getDoctorAvatar
 }

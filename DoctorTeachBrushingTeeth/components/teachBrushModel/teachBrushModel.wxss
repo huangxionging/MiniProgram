@@ -3,6 +3,7 @@
 .teach-brush-container {
   width: 100%;
   height: 100%;
+  position: relative;
   background-color: white;
   border-radius: 20rpx;
   display: flex;
@@ -27,4 +28,12 @@
   flex-direction: column;
   justify-content: center;
   letter-spacing: 10rpx;
+}
+.brush-mode-mirror{
+  position: absolute;
+  z-index: 9999999;
+  right: 30rpx;
+  top: 30rpx;
+  color: #999;
+  writing-mode: vertical-rl;
 }

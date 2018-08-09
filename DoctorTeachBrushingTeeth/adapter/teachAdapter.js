@@ -7,12 +7,25 @@ function videoAdapter(videoInfo = {}) {
   let data = {
     loadDone: true,
     videoUrl: 'videoUrl',
-    title: 'tag',
-    info: 'intro'
+    newsList: []
   }
   // 模型适配器转换
   baseTool.print(videoInfo)
   baseTool.modelAdapter(data, videoInfo)
+  let newsItem1 = {
+    title: 'title',
+    content: 'intro',
+    picUrl: 'picUrl'
+  }
+  baseTool.modelAdapter(newsItem1, videoInfo)
+  data.newsList.push(newsItem1)
+  let newsItem2 = {
+    title: 'titleTwo',
+    content: 'introTwo',
+    picUrl: 'picUrlTwo'
+  }
+  baseTool.modelAdapter(newsItem2, videoInfo)
+  data.newsList.push(newsItem2)
   return data
 }
 

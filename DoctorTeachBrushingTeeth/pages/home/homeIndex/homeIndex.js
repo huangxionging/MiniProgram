@@ -24,11 +24,26 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    
-    if (options.doctorId) {
-      baseTool.setValueForKey(options.doctorId, "doctorId")
+    // baseTool.print(["带过来的参数",options.q])
+    if (options.q) {
+      let url = decodeURIComponent(options.q)
+     
+      let parameter = baseTool.getParameterFromURL(url)
+      baseTool.print(["带过来的参数", parameter])
+      if (parameter.doctorId) {
+        baseTool.setValueForKey(parameter.doctorId, "doctorId")
+      } else {
+        baseTool.setValueForKey('', "doctorId")
+      }
     } else {
-      baseTool.setValueForKey('', "doctorId")
+      if (options.doctorId) {
+        baseTool.setValueForKey(options.doctorId, "doctorId")
+      } else  {
+        let doctorId = baseTool.valueForKey('doctorId')
+        if (!doctorId) {
+          baseTool.setValueForKey('', "doctorId")
+        }
+      }
     }
     that.getDoctorInfo()
     wx.startPullDownRefresh()
@@ -81,7 +96,9 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+    return {
+      
+    }
   },
   onDoctorInfoClick: function(e) {
     wx.navigateTo({

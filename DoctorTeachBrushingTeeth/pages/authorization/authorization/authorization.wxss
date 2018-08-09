@@ -9,13 +9,13 @@
 .authorization{
   align-self: center;
   margin-top: 7vw;
-  width: 84%;
-  height: 91vw;
+  width: 630rpx;
+  height: 688rpx;
 }
 
 .lauch-tip1{
   font-size: 70rpx;
-  margin-top: 150rpx;
+  margin-top: 8vh;
 }
 .lauch-tip2{
   margin-top: 30rpx;
@@ -24,6 +24,9 @@
 
 .lauch-button{
   margin-top: 20rpx;
-  width: 300rpx;
-  font-size: 20rpx;
+  width: 400rpx;
+  font-size: 25rpx;
+}
+.lauch-space{
+  height: 40rpx;
 }
