@@ -13,7 +13,7 @@
     </view>
   </view>
   <view wx:if='{{isSelect}}' class='look-video-view'>
-    <video src='{{videoUrl}}' class='look-video' autoplay='true'>
+    <video src='{{videoUrl}}' class='look-video'>
       <!-- <cover-image src='{{avatar}}' class='avatar'></cover-image> -->
     </video>
     <view class='news-table-view'>
@@ -46,7 +46,6 @@
       <view class='modal-title'>
         <image class='modal-title-image' src='../../../resource/bind_tel_tip.png'></image>
       </view>
-      
       
       <view class='tel-view' catchtouchmove='preventTouch'>
         <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder' catchtouchmove='preventTouch'></input>
