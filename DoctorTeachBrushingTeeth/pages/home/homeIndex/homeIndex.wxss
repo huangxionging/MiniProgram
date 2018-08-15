@@ -22,3 +22,7 @@
   margin-left: 20rpx;
   margin-right: 20rpx;
 }
+
+.image-view{
+  width: 100%;
+}

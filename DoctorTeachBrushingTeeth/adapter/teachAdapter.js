@@ -18,6 +18,10 @@ function videoAdapter(videoInfo = {}) {
     picUrl: 'picUrl'
   }
   baseTool.modelAdapter(newsItem1, videoInfo)
+  if (newsItem1.title == 'title') {
+    newsItem1.title = ''
+    newsItem1.content = ''
+  }
   data.newsList.push(newsItem1)
   let newsItem2 = {
     title: 'titleTwo',
@@ -25,6 +29,10 @@ function videoAdapter(videoInfo = {}) {
     picUrl: 'picUrlTwo'
   }
   baseTool.modelAdapter(newsItem2, videoInfo)
+  if (newsItem2.title == 'titleTwo') {
+    newsItem2.title = ''
+    newsItem2.content = ''
+  }
   data.newsList.push(newsItem2)
   return data
 }

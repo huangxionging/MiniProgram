@@ -24,7 +24,14 @@ Page({
     verifyCode: '',
     isTimeCountDown: false,
     verifyCodeDisabled: true,
-    avatar: ''
+    avatar: '',
+    bindDisabled: true,
+    showCover: true,
+    showAvatar: false,
+    showContent: true,
+    showPoster: true,
+    showTeachPlay: true,
+    doctorName: ''
   },
 
   /**
@@ -33,10 +40,11 @@ Page({
   onLoad: function (options) {
     let that = this
     that.setData({
-      avatar: teachManager.getDoctorAvatar()
+      avatar: teachManager.getDoctorAvatar(),
+      doctorName: teachManager.getDoctorName()
     })
     that.loadData()
-    // wx.startPullDownRefresh()
+    wx.startPullDownRefresh()
     
   },
 
@@ -44,21 +52,29 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    this.lookVideoContext = wx.createVideoContext('look-video', this)
+    this.teachVideoContext = wx.createVideoContext('teach-video', this)
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function (e) {
+  
 
+    let that = this
+    if (that.data.isSelect) {
+      that.lookVideoContext.pause()
+    } else {
+      that.teachVideoContext.pause()
+    }
   },
 
   /**
@@ -110,13 +126,20 @@ Page({
     switch (index) {
       case '1': {
         that.setData({
-          isSelect: true
+          isSelect: true,
+          showCover: false,
+          showAvatar: false,
+          showContent: false,
+          showTeachPlay: true
         })
         break
       }
       case '2': {
         baseTool.print(e.currentTarget.dataset.index)
         let telphone = teachManager.getTelphone()
+        that.setData({
+          showPoster: true
+        })
         baseTool.print(telphone)
         if (telphone) {
           that.setData({
@@ -125,15 +148,24 @@ Page({
           })
           if (that.data.brushModels.length == 0) {
             that.getBrushingVideoDetails()
+          } else {
+            let brushModels = that.data.brushModels
+            that.setData({
+              isSelect: false,
+              showCover: true,
+              showAvatar: false,
+              showContent: true,
+              currentIndex: 0,
+              title: '请准备好你的牙刷',
+              content: '实时跟刷就要开始啦',
+              brushModels: brushModels,
+              teachVideoUrl: brushModels[0].videoUrl
+            })
           }
         } else {
           that.setData({
             isSelect: false,
-            showModal: true,
             isTel: false,
-            modalDialog: {
-              showModal: true
-            }
           })
         }
         break
@@ -150,6 +182,8 @@ Page({
       that.setData({
         isSelect: false,
         currentIndex: 0,
+        title: '请准备好你的牙刷',
+        content: '实时跟刷就要开始啦',
         brushModels: brushModels,
         teachVideoUrl: brushModels[0].videoUrl
       })
@@ -165,7 +199,6 @@ Page({
   cancleClick: function (e) {
     let that = this
     that.setData({
-      isSelect: true,
       showModal: false,
       modalDialog: {
         showModal: false
@@ -188,10 +221,6 @@ Page({
       that.setData({
         isSelect: false,
         isTel: true,
-        showModal: false,
-        modalDialog: {
-          showModal: false
-        }
       })
       if (that.data.brushModels.length == 0) {
         that.getBrushingVideoDetails()
@@ -219,9 +248,42 @@ Page({
     baseTool.print(currentIndex)
     if (currentIndex < that.data.brushModels.length - 1) {
       let brushModel = that.data.brushModels[currentIndex + 1]
+  
+
+      let title = '即将开始播放第' + (currentIndex + 2) + '个牙面'
       that.setData({
         currentIndex: currentIndex + 1,
-        teachVideoUrl: brushModel.videoUrl
+        teachVideoUrl: brushModel.videoUrl,
+        title: title,
+        showContent: false,
+        showCover: true,
+        showAvatar: false,
+      })
+      baseTool.startTimer(function (total) {
+        baseTool.print(total)
+        if (total == 0) {
+          that.setData({
+            showCover: false,
+            showAvatar: true
+          })
+          that.teachVideoContext.play()
+          return true
+        } else if (total <= 5) {
+          that.setData({
+            secondTime: total
+          })
+          return false
+        }
+      }, 1000, 5)
+    } else {
+      let that = this
+      let random = Math.round(Math.random() * 100) % 2 + 4
+      that.setData({
+        face: random,
+        showModal: true,
+        modalDialog: {
+          showModal: true
+        }
       })
     }
   },
@@ -267,17 +329,21 @@ Page({
     // 检查是否是11位
     if (telphoneNumber.length == 11) {
       // 检查是否已经在倒计时
+      let bindDisabled = (that.data.verifyCode.length == 4) ? false : true
       if (!isTimeCountDown) {
         // 如果不是, 重新渲染按钮到可以点击状态
         that.setData({
           verifyCodeDisabled: false,
           telphoneNumber: telphoneNumber,
+          bindDisabled: bindDisabled
         });
+
       }
     } else {
       // 不是11位则渲染成初始状态
       that.setData({
         verifyCodeDisabled: true,
+        bindDisabled: true,
         telphoneNumber: telphoneNumber
       });
     }
@@ -319,20 +385,64 @@ Page({
     let that = this
     // 获得手机号
     let verifyCode = e.detail.value
+    let bindDisabled = (that.data.telphoneNumber.length == 11 && verifyCode.length == 4) ? false : true
     that.setData({
-      verifyCode: verifyCode
+      verifyCode: verifyCode,
+      bindDisabled: bindDisabled
     })
   },
+  lookVideoPlay: function(e) {
+    baseTool.print(e)
+  },
   videoPlay: function(e) {
+    baseTool.print(e)
     let that = this
     that.setData({
-      hideAvatar: true
+      showPoster: false
     })
+    that.lookVideoContext.play()
+    // let random = Math.round(Math.random() * 100) % 2 + 4
+    // that.setData({
+    //   face: random,
+    //   showModal: true,
+    //   modalDialog: {
+    //     showModal: true
+    //   }
+    // })
   },
   videoPause: function(e) {
     let that = this
     that.setData({
-      hideAvatar: false
+      showPoster: true
     })
+      baseTool.print(['e', 'dddd'])
+  },
+  teachVideoPlay: function(e) {
+    let that = this
+    that.setData({
+      showTeachPlay: false
+    })
+    
+    baseTool.startTimer(function (total) {
+      baseTool.print(total)
+      if (that.data.isSelect == true) {
+        return true
+      }
+      if (total == 0) {
+        that.setData({
+          showCover: false,
+          showAvatar: true
+        })
+        that.teachVideoContext.play()
+        return true
+      } else if (total <= 5) {
+        that.setData({
+          title: '即将开始播放第1个牙面',
+          showContent: false,
+          secondTime: total
+        })
+        return false
+      }
+    }, 1000, 5)
   }
 })

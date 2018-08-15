@@ -94,6 +94,9 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
   })
 }
 
+/**
+ * 获得医生头像
+ */
 function getDoctorAvatar() {
   let doctorInfo = baseTool.valueForKey('doctorInfo')
   if (doctorInfo && doctorInfo.doctorHeadimgurl) {
@@ -101,7 +104,18 @@ function getDoctorAvatar() {
   } else {
     return ''
   }
-  
+}
+
+/**
+ * 获得医生名称
+ */
+function getDoctorName() {
+  let doctorInfo = baseTool.valueForKey('doctorInfo')
+  if (doctorInfo && doctorInfo.doctorName) {
+    return doctorInfo.doctorName
+  } else {
+    return ''
+  }
 }
 
 module.exports = {
@@ -110,5 +124,6 @@ module.exports = {
   getTelphone: getTelphone,
   getVerifyCode: getVerifyCode,
   bindingTelphone: bindingTelphone,
-  getDoctorAvatar: getDoctorAvatar
+  getDoctorAvatar: getDoctorAvatar,
+  getDoctorName: getDoctorName
 }

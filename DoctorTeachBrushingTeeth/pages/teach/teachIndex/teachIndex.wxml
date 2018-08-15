@@ -13,24 +13,33 @@
     </view>
   </view>
   <view wx:if='{{isSelect}}' class='look-video-view'>
-    <video src='{{videoUrl}}' class='look-video'>
-      <!-- <cover-image src='{{avatar}}' class='avatar'></cover-image> -->
+    <video src='{{videoUrl}}' class='look-video' bindpause='videoPause' id='look-video' bindplay='lookVideoPlay'>
+      <cover-view wx:if='{{showPoster}}' class='poster'>
+        <cover-image src='http://qnimage.hydrodent.cn/174034ZRITII0.png' class='poster-image' />
+        <cover-image src='../../../resource/paly.png' class='poster-play' bindtap='videoPlay' />
+      </cover-view>
     </video>
     <view class='news-table-view'>
       <block wx:for='{{newsList}}' wx:key='id' wx:item='item'>
-        <newsComponent data='{{item}}' class='news-item'/>
+        <newsComponent data='{{item}}' class='news-item' />
       </block>
     </view>
   </view>
   <view wx:if='{{!isSelect && isTel}}' class='teach-video-view'>
-    <video src='{{teachVideoUrl}}' class='look-video' binderror='binderror' autoplay='true' bindended='videoPlayEnd'>
-      <cover-image src='{{avatar}}' class='avatar'></cover-image>
+    <video id='teach-video' src='{{teachVideoUrl}}' class='look-video' binderror='binderror' bindended='videoPlayEnd'>
+      <cover-view class='cover-view' wx:if='{{showCover}}'>
+        <cover-view>{{title}}</cover-view>
+        <cover-view wx:if='{{showContent}}'>{{content}}</cover-view>
+        <cover-view wx:else>{{secondTime}}</cover-view>
+        <cover-image wx:if='{{showTeachPlay}}' src='../../../resource/paly.png' class='poster-play' bindtap='teachVideoPlay' />
+      </cover-view>
+      <cover-image wx:if='{{showAvatar}}' src='{{avatar}}' class='avatar'></cover-image>
     </video>
     <view class='teach-content'>
       <view class='teach-tip'>一起来找牙面</view>
       <swiper class='teach-model-container' current='{{currentIndex}}' bindchange='scrollChange' previous-margin='80rpx' next-margin='30rpx'>
         <block wx:for='{{brushModels}}' wx:key='id' wx:item='item'>
-          <swiper-item item-id='{{index}}'>
+          <swiper-item item-id='{{index}}' catchtouchmove=''>
             <view class='teach-model'>
               <teachBrushModel data='{{item}}' />
             </view>
@@ -39,38 +48,65 @@
       </swiper>
     </view>
   </view>
-</view>
-<modalDialog wx:if='{{showModal}}' data='{{modalDialog}}' bind:hideModal='hideModal' catchtouchmove='preventTouch'>
-  <view class='modal-dialog'>
-    <view class='modal-content'  catchtouchmove='preventTouch'>
-      <view class='modal-title'>
-        <image class='modal-title-image' src='../../../resource/bind_tel_tip.png'></image>
+  <view wx:if='{{!isSelect && !isTel}}' class='bind-view'>
+
+    <image class='bind-image' src='{{avatar}}' />
+    <view class='modal-tip'>马上报名，跟着{{doctorName}}医生学会相见恨晚的护牙方法！</view>
+    <view class='tel-view'>
+      <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>
+    </view>
+    <view class='verify-view'>
+      <view class='verify-input-view'>
+        <input type='number' class='verify-input' placeholder='验证码' maxlength='4' bindinput='getInputVerifyCode' placeholder-class='placeholder'></input>
       </view>
-      
-      <view class='tel-view' catchtouchmove='preventTouch'>
-        <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder' catchtouchmove='preventTouch'></input>
-      </view>
-      <view class='verify-view' catchtouchmove='preventTouch'>
-        <view class='verify-input-view' catchtouchmove='preventTouch'>
-          <input type='number' class='verify-input' placeholder='验证码' bindinput='getInputVerifyCode' placeholder-class='placeholder' catchtouchmove='preventTouch'></input>
-        </view>
-        <view wx:if='{{verifyCodeDisabled}}' class='get-verify-code' style='background-color:#f5f5f5;color:#999'>
+      <view wx:if='{{verifyCodeDisabled}}' class='get-verify-code' style='background-color:#f5f5f5;color:#999'>
         {{verifyTitle}}
       </view>
-      <view wx:else class='get-verify-code' hover-class='get-verify-code-hover' bindtap='getVerifyCodeClick' catchtouchmove='preventTouch'>
-        {{verifyTitle}} 
+      <view wx:else class='get-verify-code' hover-class='get-verify-code-hover' bindtap='getVerifyCodeClick'>
+        {{verifyTitle}}
       </view>
-      </view>
-      <view class='modal-tip'>输入手机号参与体验实时跟刷哦~</view>
-      <view class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
-        <image class='confirm_image' src='../../../resource/confirm_button.png'></image>
-        <text class='confirm_text'>立即参与</text>
-      </view>
-      <view style='width:100%;height:35rpx;'/>
     </view>
-    <view class='cancle-button-view' bindtap='cancleClick'>
-      <image class='cancle-button' src='../../../resource/cancle_button.png'></image>
+    <view wx:if='{{bindDisabled}}' class='confirm_button'>
+      <image class='confirm_image' src='../../../resource/confirm_button_disabled.png'></image>
+      <text class='confirm_text'>立即参与</text>
     </view>
-    
+    <view wx:else class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
+      <image class='confirm_image' src='../../../resource/confirm_button.png'></image>
+      <text class='confirm_text'>立即参与</text>
+    </view>
+    <view style='width:100%;height:35rpx;' />
   </view>
+</view>
+<modalDialog class='modal-view' wx:if='{{showModal}}' data='{{modalDialog}}' bind:hideModal='hideModal' catchtouchmove='preventTouch'>
+  <cover-view class='modal-dialog'>
+    <cover-view class='modal-content'>
+      <cover-view class='modal-title-back' />
+      <cover-view class='modal-title-view'>
+        <cover-view>恭喜您已经完成初步学习</cover-view>
+      </cover-view>
+      <cover-view class='modal-index'>
+        <cover-view class='modal-serious-index'>
+          <cover-view space='ensp'>本次认真指数: </cover-view>
+          <cover-view class='modal-serious-face'>
+            <block wx:for='{{[1, 2, 3, 4, 5]}}' wx:key='id' wx:item='item'>
+              <cover-image wx:if='{{item <= face}}' src='../../../resource/face.png' style='width:30rpx;height:30rpx' class="{{(item==1)?'':'index-others'}}" />
+              <cover-image wx:else src='../../../resource/face_dark.png' style='width:30rpx;height:30rpx' class="{{(item==1)?'':'index-others'}}" />
+            </block>
+          </cover-view>
+        </cover-view>
+        <cover-view class='modal-position-index'>
+          <cover-view space='ensp'>本次正姿指数</cover-view>
+          <cover-view space='ensp' style='margin-left:20rpx;'>无</cover-view>
+        </cover-view>
+      </cover-view>
+      <cover-view class='modal-result-tip'>
+        <cover-view>再接再厉哦~</cover-view>
+        <cover-view style='margin-top:20rpx;'>爱牙护牙, 从正确刷牙做起</cover-view>
+      </cover-view>
+    </cover-view>
+    <cover-image src='../../../resource/teach_result.png' class='teach_result-image' />
+    <cover-view class='cancle-button-view' bindtap='cancleClick'>
+      <cover-image class='cancle-button' src='../../../resource/cancle_button.png' />
+    </cover-view>
+  </cover-view>
 </modalDialog>

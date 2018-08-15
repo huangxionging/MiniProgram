@@ -1,5 +1,5 @@
 <!--components/userBrushItem/userBrushItem.wxml-->
-<view class='user-brush-container'>
+<view class='user-brush-container' bindtap='reportTapClick'>
   <view class='brush-content'>
     <image class='avatar' src='{{data.avatar}}'></image>
     <view class='brush-info'>

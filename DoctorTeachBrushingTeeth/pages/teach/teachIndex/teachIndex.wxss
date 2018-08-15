@@ -12,7 +12,6 @@ page {
   width: 100%;
   height: 100%;
   flex-direction: column;
-  background-color: white;
 }
 
 .segment {
@@ -55,6 +54,7 @@ page {
   position: relative;
   width: 100%;
   margin-top: 0rpx;
+  background-color: white;
 }
 
 .look-video {
@@ -86,12 +86,15 @@ page {
   margin-right: 20rpx;
 }
 
+.modal-view {
+}
+
 .modal-dialog {
   width: 80%;
   position: fixed;
   z-index: 9999;
   display: flex;
-  top: 20%;
+  top: 15%;
   left: 10%;
   flex-direction: column;
   justify-content: center;
@@ -102,6 +105,7 @@ page {
 .modal-content {
   width: 100%;
   position: relative;
+  margin-top: 100rpx;
   background-color: white;
   border-radius: 30rpx;
   display: flex;
@@ -123,10 +127,12 @@ page {
   width: 430rpx;
   height: 63rpx;
 }
+
 .tel-view {
   width: 90%;
   height: 80rpx;
-  border: 2rpx solid #d6d6d6;
+  /* border: 2rpx solid #d6d6d6; */
+  background-color: white;
 }
 
 .tel-input {
@@ -136,7 +142,7 @@ page {
 }
 
 .placeholder {
-  color: #3c3c3c;
+  color: #999;
   font-size: 35rpx;
 }
 
@@ -153,7 +159,8 @@ page {
 .verify-input-view {
   width: 1000rpx;
   height: 80rpx;
-  border: 2rpx solid #d6d6d6;
+  /* border: 2rpx solid #d6d6d6; */
+  background-color: white;
 }
 
 .verify-input {
@@ -163,15 +170,15 @@ page {
 }
 
 .confirm_button {
-  position: relative;
+  /* opacity: 0.5; */
   text-align: center;
   display: flex;
-  overflow: hidden;
   justify-content: center;
   align-items: center;
   width: 390rpx;
   height: 90rpx;
   color: white;
+  margin-top: 60rpx;
 }
 
 .confirm_text {
@@ -212,14 +219,16 @@ page {
 }
 
 .modal-tip {
-  width: 100%;
+  /* width: 100%; */
   height: 122rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: 25rpx;
-  color: #3c3c3c;
+  font-size: 32rpx;
+  color: #00a0e9;
 }
 
 .teach-model {
@@ -259,6 +268,14 @@ page {
 
 .confirm_button-hover {
   opacity: 0.5;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 390rpx;
+  height: 90rpx;
+  color: white;
+  margin-top: 60rpx;
 }
 
 .binding-getVerifyCode-view {
@@ -277,7 +294,7 @@ page {
   align-items: center;
 }
 
-.avatar{
+.avatar {
   position: absolute;
   right: 10rpx;
   top: 10rpx;
@@ -285,12 +302,136 @@ page {
   height: 140rpx;
   border-radius: 50%;
 }
-.news-table-view{
+
+.news-table-view {
   margin-top: 0rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
   height: 100%;
 }
-.news-item{
+
+.news-item {
   width: 100%;
+}
+
+.bind-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bind-image {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 50%;
+  margin-top: 70rpx;
+}
+
+.cover-view {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 60rpx;
+  line-height: 100rpx;
+}
+
+.teach_result-image {
+  position: absolute;
+  top: 0rpx;
+  width: 100%;
+  height: 260rpx;
+  z-index: 9999;
+}
+
+.modal-title-back {
+  height: 160rpx;
+  width: 100%;
+  background-color: #75ceff;
+  border-radius: 30rpx 30rpx 0rpx 0rpx;
+}
+
+.modal-title-view {
+  position: relative;
+  /* width: 100%; */
+  height: 140rpx;
+  font-size: 38rpx;
+  color: #00a0e9;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* background-color: red; */
+  
+}
+
+.modal-serious-index {
+  /* background-color: black; */
+  height: 70rpx;
+  font-size: 24rpx;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  align-items: center;
+  /* flex: 1; */
+}
+
+.index-others {
+  margin-left: 5rpx;
+}
+
+.modal-serious-face {
+  margin-left: 20rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-position-index {
+  width: 100%;
+  height: 70rpx;
+  font-size: 24rpx;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  /* background-color: yellow; */
+  align-items: center;
+}
+
+.modal-result-tip {
+  width: 100%;
+  height: 150rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+  color: #00a0e9;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+}
+
+.poster-image {
+  width: 100%;
+  height: 100%;
+}
+
+.poster-play {
+  position: absolute;
+  left: 20rpx;
+  bottom: 20rpx;
+  width: 100rpx;
+  height: 100rpx;
 }

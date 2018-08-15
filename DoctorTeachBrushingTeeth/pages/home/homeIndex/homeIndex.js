@@ -16,7 +16,8 @@ Page({
     department: '',
     jobTitle: '',
     hospital: '',
-    reportDataList: []
+    reportDataList: [],
+    brushReportUrl: ''
   },
 
   /**
@@ -109,22 +110,111 @@ Page({
     let that = this
     wx.showNavigationBarLoading()
     doctorInfoManager.getDoctorInfo().then(res => {
-      wx.stopPullDownRefresh()
-      wx.hideNavigationBarLoading()
+     
       // 从适配器获得数据
       let data = doctorInfoAdapter.homePageAdapter(res)
-      that.setData(data)
+      // 获得刷牙报告
+      doctorInfoManager.brushScoreReport(data.reportDataList[0].recordId).then(res => {
+        wx.stopPullDownRefresh()
+        wx.hideNavigationBarLoading()
+        baseTool.print(res)
+        data.brushReportUrl = res
+        that.setData(data)
+      }).catch(res => {
+        wx.hideLoading()
+        wx.hideNavigationBarLoading()
+        baseTool.showInfo('报告加载失败')
+      })
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.showInfo(res)
     })
   },
-  reportTapClick: function(e) {
-    baseTool.print(e)
-    let recordId = e.detail.data.recordId
-    wx.navigateTo({
-      url: '../brushReportDetail/brushReportDetail?recordId='+recordId,
+  imageLoadDone: function (e) {
+    wx.hideLoading()
+    wx.hideNavigationBarLoading()
+  },
+  imageLoadError: function (e) {
+    wx.hideLoading()
+    wx.hideNavigationBarLoading()
+  },
+  previewImage: function (e) {
+    let that = this
+    let data = that.data
+    wx.previewImage({
+      current: data.brushReportUrl,
+      urls: [data.brushReportUrl],
+      success: function (res) {
+        baseTool.print(res)
+      },
+      fail: function (res) {
+        baseTool.print(res)
+      },
+      complete: function (res) { },
+    })
+  },
+  imageLongTapClick: function (e) {
+    let that = this
+    wx.showActionSheet({
+      itemList: ['保存图片'],
+      itemColor: '#000',
+      success: function (res) {
+        if (res.tapIndex == 0) {
+          that.downloadImage()
+        } else if (res.tapIndex == 1) {
+          that.onShareAppMessage()
+        }
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+  downloadImage: function () {
+    let that = this
+    let data = that.data
+    wx.showNavigationBarLoading()
+    wx.showLoading({
+      title: '正在保存图片...',
+      mask: true,
+    })
+    wx.getImageInfo({
+      src: data.brushReportUrl,
+      success: function (res) {
+        baseTool.print(res)
+        wx.saveImageToPhotosAlbum({
+          filePath: res.path,
+          success: function (res) {
+            wx.hideNavigationBarLoading()
+            wx.hideLoading()
+          },
+          fail: function (res) {
+            wx.hideNavigationBarLoading()
+            wx.hideLoading()
+            if (res.errMsg && res.errMsg.indexOf("fail auth deny", 0)) {
+              wx.showModal({
+                title: '提示',
+                content: '访问相册权限授权失败, 如需授权, 点击授权按钮进入设置页',
+                showCancel: true,
+                cancelText: "取消",
+                confirmText: '授权',
+                confirmColor: '#00a0e9',
+                success: function (res) {
+                  wx.openSetting({
+                  })
+                }
+              })
+            } else {
+              baseTool.showInfo('图片保存失败')
+            }
+          }
+        })
+      },
+      fail: function (res) {
+        wx.hideNavigationBarLoading()
+        wx.hideLoading()
+        baseTool.showInfo('图片保存失败')
+      }
     })
   }
 })

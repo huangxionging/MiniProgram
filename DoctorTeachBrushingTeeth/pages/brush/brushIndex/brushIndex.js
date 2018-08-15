@@ -85,5 +85,12 @@ Page({
       wx.stopPullDownRefresh()
       baseTool.showInfo(res)
     })
-  }
+  },
+  reportTapClick: function (e) {
+    baseTool.print(e)
+    let recordId = e.detail.data.recordId
+    wx.navigateTo({
+      url: '../../home/brushReportDetail/brushReportDetail?recordId=' + recordId,
+    })
+  },
 })

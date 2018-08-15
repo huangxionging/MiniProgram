@@ -61,6 +61,9 @@ Component({
    * 组件的方法列表
    */
   methods: {
-
+    reportTapClick: function(e) {
+      let that = this
+      this.triggerEvent('reportTap', that.data)
+    }
   }
 })
