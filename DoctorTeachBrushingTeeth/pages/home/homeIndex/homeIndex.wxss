@@ -5,7 +5,7 @@
 }
 
 .text-tip {
-  height: 80rpx;
+  height: 80rpx vmin;
   font-size: 35rpx;
   margin-left: 20rpx;
 }

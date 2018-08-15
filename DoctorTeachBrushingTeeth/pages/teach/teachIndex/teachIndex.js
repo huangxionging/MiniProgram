@@ -11,6 +11,7 @@ Page({
     verifyTitle: '获取验证码',
     isSelect: true,
     videoUrl: '',
+    videPicUrl: '',
     teachVideoUrl: '',
     showModal: false,
     isTel: false,
@@ -60,7 +61,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    let that = this
+    if (that.data.isSelect && that.lookVideoContext) {
+      that.lookVideoContext.pause()
+    } else if (!that.data.isSelect && that.teachVideoContext){
+      that.teachVideoContext.pause()
+    }
   },
 
   /**
@@ -393,8 +399,12 @@ Page({
   },
   lookVideoPlay: function(e) {
     baseTool.print(e)
+    let that = this
+    if (that.data.showPoster == true) {
+      that.lookVideoContext.pause()
+    }
   },
-  videoPlay: function(e) {
+  videoPlayClick: function(e) {
     baseTool.print(e)
     let that = this
     that.setData({

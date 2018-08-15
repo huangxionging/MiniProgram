@@ -1,0 +1,9 @@
+<!--components/newsComponent/newsComponent.wxml-->
+<view class='news-container' bindtap='tap'>
+  <view wx:if='{{data.title}}' class='news-title'>{{data.title}}</view>
+  <view wx:if='{{data.title}}' class='news-line'></view>
+  <view wx:if='{{data.content}}' class='news-content'>
+    <text space='ensp'>    {{data.content}}</text>
+  </view>
+  <image  class='news-pic' mode='widthFix' src='{{data.picUrl}}' lazy-load='true'></image>
+</view>

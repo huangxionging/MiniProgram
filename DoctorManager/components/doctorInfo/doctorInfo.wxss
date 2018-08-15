@@ -1,0 +1,47 @@
+/* component/doctorInfo/doctorInfo.wxss */
+.doctor-container{
+  width: 100%;
+  height: 280rpx;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+}
+.doctor-info {
+  margin: 20rpx;
+  height: 240rpx;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10rpx;
+}
+.avatar{
+  margin-left: 20rpx;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+}
+.doctor-intro{
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-name{
+  font-size: 35rpx;
+  color: black;
+}
+.doctor-department{
+  font-size: 25rpx;
+  color: #999;
+  margin-left: 50rpx;
+}
+.doctor-job-title{
+  font-size: 25rpx;
+  color: #999;
+  margin-left: 20rpx;
+}
+.doctor-address{
+  margin-top: 60rpx;
+  font-size: 25rpx;
+}

@@ -15,8 +15,8 @@
   <view wx:if='{{isSelect}}' class='look-video-view'>
     <video src='{{videoUrl}}' class='look-video' bindpause='videoPause' id='look-video' bindplay='lookVideoPlay'>
       <cover-view wx:if='{{showPoster}}' class='poster'>
-        <cover-image src='http://qnimage.hydrodent.cn/174034ZRITII0.png' class='poster-image' />
-        <cover-image src='../../../resource/paly.png' class='poster-play' bindtap='videoPlay' />
+        <cover-image src='{{videPicUrl}}' class='poster-image' />
+        <cover-image src='../../../resource/paly.png' class='poster-play' bindtap='videoPlayClick' />
       </cover-view>
     </video>
     <view class='news-table-view'>
@@ -39,7 +39,7 @@
       <view class='teach-tip'>一起来找牙面</view>
       <swiper class='teach-model-container' current='{{currentIndex}}' bindchange='scrollChange' previous-margin='80rpx' next-margin='30rpx'>
         <block wx:for='{{brushModels}}' wx:key='id' wx:item='item'>
-          <swiper-item item-id='{{index}}' catchtouchmove=''>
+          <swiper-item item-id='{{index}}' catchtouchmove='preventTouch'>
             <view class='teach-model'>
               <teachBrushModel data='{{item}}' />
             </view>

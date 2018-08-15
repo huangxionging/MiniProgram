@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    isAuthorization: false
   },
 
   /**
@@ -81,6 +81,7 @@ Page({
     }
   },
   loginFlow: function (e) {
+    let that = this
     wx.showLoading({
       title: '处理中',
     })
@@ -89,16 +90,19 @@ Page({
         baseTool.print(res)
         if (res.code) {
           let doctorId = baseTool.valueForKey('doctorId')
-
           loginManager.loginWithUserInfo(res.code, e, doctorId).then(res => {
             baseTool.print(res)
             wx.hideLoading()
             if (res && res.wxUser && res.wxUser.openid) {
               baseTool.setValueForKey(res.wxUser.openid, 'openid')
-              if (res.wxUser.telephone) {
-                // baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
+              if (res.wxUser.telephone && res.wxUser.memberId) {
+                baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
+                loginManager.reLauch()
+              } else {
+                that.setData({
+                  isAuthorization: true
+                })
               }
-              loginManager.reLauch()
             } else {
               baseTool.showInfo('获取信息失败')
             }

@@ -1,0 +1,14 @@
+<!--component/doctorInfo/doctorInfo.wxml-->
+<view class='doctor-container' bindtap='onTapClick'>
+  <view class='doctor-info'>
+    <image src='{{avatar}}' class='avatar'></image>
+    <view class='doctor-intro'>
+      <view class='doctor-personal'>
+        <text class='doctor-name'>{{name}}</text>
+        <text class='doctor-department'>{{department}}</text>
+        <text class='doctor-job-title'>{{jobTitle}}</text>
+      </view>
+      <text class='doctor-address'>{{hospital}}</text>
+    </view>
+  </view>
+</view>
