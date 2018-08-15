@@ -1,4 +1,4 @@
-<view class='lauch-container'>
+<view wx:if='{{loadDone}}' class='lauch-container'>
   <view wx:if='{{!isAuthorization}}' class='lauch-container'>
     <image src='/resource/lauch.png' class='authorization'></image>
     <text class='lauch-tip1'>自我口腔风险管理</text>

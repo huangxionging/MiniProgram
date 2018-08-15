@@ -71,16 +71,22 @@ Page({
   },
   getDoctorInfo: function() {
     let that = this
-    let doctorInfo = baseTool.valueForKey('doctorInfo')
-    baseTool.print('ddd')
-    doctorInfoManager.getDoctorInfo("ff808081651d7d9301651d7ebcd70000").then(res => {
+    doctorInfoManager.getDoctorInfo().then(res => {
       baseTool.print(res)
       let data = doctorInfoAdapter.getdoctorInfoAdapter(res)
       that.setData(data)
     }).catch(res => {
       baseTool.showInfo(res)
     })
-
-    // that.setData(data)
+  },
+  editDoctorInfoClick: function(e) {
+    wx.navigateTo({
+      url: '../editDoctorInfo/editDoctorInfo',
+    })
+  },
+  qrcodeDoctorInfoClick: function(e) {
+    wx.navigateTo({
+      url: '../doctorQRCode/doctorQRCode',
+    })
   }
 })

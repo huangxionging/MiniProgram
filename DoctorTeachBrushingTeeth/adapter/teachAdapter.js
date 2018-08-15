@@ -18,22 +18,20 @@ function videoAdapter(videoInfo = {}) {
     content: 'intro',
     picUrl: 'picUrl'
   }
-  baseTool.modelAdapter(newsItem1, videoInfo)
-  if (newsItem1.title == 'title') {
-    newsItem1.title = ''
-    newsItem1.content = ''
-  }
+  baseTool.modelAdapter(newsItem1, videoInfo, res => {
+    newsItem1[res] = ''
+  })
+
   data.newsList.push(newsItem1)
   let newsItem2 = {
     title: 'titleTwo',
     content: 'introTwo',
     picUrl: 'picUrlTwo'
   }
-  baseTool.modelAdapter(newsItem2, videoInfo)
-  if (newsItem2.title == 'titleTwo') {
-    newsItem2.title = ''
-    newsItem2.content = ''
-  }
+  baseTool.modelAdapter(newsItem2, videoInfo, res => {
+    newsItem2[res] = ''
+  })
+
   data.newsList.push(newsItem2)
   return data
 }

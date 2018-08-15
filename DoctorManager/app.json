@@ -2,7 +2,9 @@
   "pages": [
     "pages/home/homeIndex/homeIndex",
     "pages/authorization/authorization/authorization",
-    "pages/statistics/statistics/statistics"
+    "pages/statistics/statistics/statistics",
+    "pages/home/editDoctorInfo/editDoctorInfo",
+    "pages/home/doctorQRCode/doctorQRCode"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -18,9 +20,9 @@
     "list": [
       {
         "pagePath": "pages/home/homeIndex/homeIndex",
-        "text": "首页",
         "iconPath": "resource/home_normal.png",
-        "selectedIconPath": "resource/home_select.png"
+        "selectedIconPath": "resource/home_select.png",
+        "text": "首页"
       },
       {
         "pagePath": "pages/statistics/statistics/statistics",

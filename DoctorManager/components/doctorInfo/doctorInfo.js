@@ -41,7 +41,15 @@ Component({
     onTapClick: function(e) {
       let that = this
       baseTool.print(e)
-      that.triggerEvent('doctorInfoClick', {}, {})
+      
+    },
+    editDoctorInfoClick: function (e) {
+      let that = this
+      that.triggerEvent('editDoctorInfoClick', {}, {})
+    },
+    qrcodeDoctorInfoClick: function(e) {
+      let that = this
+      that.triggerEvent('qrcodeDoctorInfoClick', {}, {})
     }
   }
 })

@@ -263,8 +263,9 @@ function showInfo(info = '') {
  * 模型转换适配器
  * model 待转换的模型, key 是我们需要的 key, value 是转换对应的 key
  * value 是转换之前的键值对
+ * func 用于处理找不到键值的情况
  */
-function modelAdapter(model = {}, value = {}) {
+function modelAdapter(model = {}, value = {}, func = Function) {
   // if (!value) {
   //   return
   // }
@@ -278,6 +279,8 @@ function modelAdapter(model = {}, value = {}) {
     if (value[newkey]) {
       // 获得新值
       model[key] = value[newkey]
+    } else if (func) {
+      func(key)
     }
   }
 }

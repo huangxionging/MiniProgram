@@ -1,14 +1,28 @@
 <!--component/doctorInfo/doctorInfo.wxml-->
-<view class='doctor-container' bindtap='onTapClick'>
+<view class='doctor-container'>
   <view class='doctor-info'>
     <image src='{{avatar}}' class='avatar'></image>
     <view class='doctor-intro'>
       <view class='doctor-personal'>
         <text class='doctor-name'>{{name}}</text>
+      </view>
+      <view class='doctor-job-view'>
         <text class='doctor-department'>{{department}}</text>
         <text class='doctor-job-title'>{{jobTitle}}</text>
       </view>
-      <text class='doctor-address'>{{hospital}}</text>
+      <view>
+        <text class='doctor-address'>{{hospital}}</text>
+      </view>
+    </view>
+    <view class='edit-button' >
+      <view hover-class='hover' class='edit-item' bindtap='editDoctorInfoClick'>
+        <image src='../../resource/edit.png' class='image' ></image>
+      </view>
+      <view hover-class='hover' class='edit-item' bindtap='qrcodeDoctorInfoClick'>
+        <image src='../../resource/qrcode.png' class='image'></image>
+      </view>
+      
     </view>
   </view>
+
 </view>

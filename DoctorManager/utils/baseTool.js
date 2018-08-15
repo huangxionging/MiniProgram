@@ -250,6 +250,7 @@ function values(obj) {
  * showInfo: 只用来展示信息
  */
 function showInfo(info = '') {
+  print(info)
   wx.showModal({
     title: '提示',
     content: info,
@@ -264,7 +265,7 @@ function showInfo(info = '') {
  * model 待转换的模型, key 是我们需要的 key, value 是转换对应的 key
  * value 是转换之前的键值对
  */
-function modelAdapter(model = {}, value = {}) {
+function modelAdapter(model = {}, value = {}, func = Function) {
   // if (!value) {
   //   return
   // }
@@ -278,6 +279,8 @@ function modelAdapter(model = {}, value = {}) {
     if (value[newkey]) {
       // 获得新值
       model[key] = value[newkey]
+    } else if (func) {
+      func(key)
     }
   }
 }

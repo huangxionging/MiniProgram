@@ -9,6 +9,9 @@ function getOpenId() {
   return baseTool.valueForKey('openid')
 }
 
+function getMeberId() {
+  return baseTool.valueForKey('memberId')
+}
 
 
 /**
@@ -16,14 +19,13 @@ function getOpenId() {
  * userInfo: 用户授权的用户信息
  * doctorId: 医生 id
  */
-function loginWithUserInfo(code, userInfo, doctorId) {
+function loginWithUserInfo(code, userInfo) {
   return new Promise((resolve, reject) => {
     baseTool.print(code)
     baseTool.print(userInfo)
     let url = baseURL.baseDomain + baseURL.basePath + baseApiList.login
     let data = { 
-      'code': code,
-      'doctorId': doctorId
+      'code': code
     }
 
     // 头像
@@ -75,9 +77,53 @@ function startAuthorization(){
   })
 }
 
+function getVerifyCode(telphoneNumber = '') {
+  
+  return new Promise((resolve, reject) => {
+
+    let openid = getOpenId()
+    baseTool.print(openid)
+    if (openid) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getVerifyCode
+      let data = {
+        openid: openid,
+        'telephone': telphoneNumber
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      startAuthorization()
+    }
+  })
+}
+
+/**
+ * 绑定手机号
+ */
+function bindingTelphone(telphoneNumber = '', validcode = '') {
+  return new Promise((resolve, reject) => {
+    let openid = getOpenId()
+    if (openid) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindPhoneNumber
+      let data = {
+        openid: openid,
+        validcode: validcode,
+        telephone: telphoneNumber
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      startAuthorization()
+    }
+  })
+}
+
 module.exports = {
   getOpenId: getOpenId,
+  getMeberId: getMeberId,
   reLauch: reLauch,
   startAuthorization: startAuthorization,
   loginWithUserInfo: loginWithUserInfo,
+  getVerifyCode: getVerifyCode,
+  bindingTelphone: bindingTelphone,
 }

@@ -3,11 +3,12 @@ const baseTool = require('../utils/baseTool.js')
 const baseApiList = require('../utils/baseApiList.js')
 const loginManager = require('./loginManager.js')
 
-function getDoctorInfo(memberId = ''){
+function getDoctorInfo(){
   return new Promise((resolve, reject) => {
     let openid = loginManager.getOpenId()
-    if (openid) {
-      // loginManager.startAuthorization()
+    let memberId = loginManager.getMeberId()
+    if (openid && memberId) {
+      
       let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getDoctorInfo
       let data = {
         memberId: memberId
@@ -15,6 +16,7 @@ function getDoctorInfo(memberId = ''){
       // 统一处理
       baseTool.request(url, data).then(resolve, reject)
     } else {
+      loginManager.startAuthorization()
     }
   }); 
 }

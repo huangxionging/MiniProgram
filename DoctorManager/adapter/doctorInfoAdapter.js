@@ -49,7 +49,11 @@ function getdoctorInfoAdapter(doctorInfo = {}) {
   }
   // 模型适配器转换
   baseTool.print(doctorInfo)
-  baseTool.modelAdapter(data, doctorInfo)
+  baseTool.modelAdapter(data, doctorInfo, res => {
+    if (res != 'loadDone') {
+      data[res] = '未填写'
+    }
+  })
   return data;
 }
 
