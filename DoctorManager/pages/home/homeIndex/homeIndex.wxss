@@ -14,7 +14,7 @@
 
 .resume-tip {
   margin-left: 20rpx;
-  font-size: 30rpx;
+  font-size: 40rpx;
 }
 
 .text-line {
@@ -28,6 +28,7 @@
 .experience {
   margin-left: 20rpx;
   margin-right: 20rpx;
+  font-size: 35rpx;
 }
 
 .experience-tip {
@@ -38,8 +39,11 @@
   margin-top: 35rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
+  font-size: 35rpx;
 }
 
 .goodat-tip {
   color: #00a0e9;
 }
+
+

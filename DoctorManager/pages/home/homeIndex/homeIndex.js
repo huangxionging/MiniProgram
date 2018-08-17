@@ -17,7 +17,9 @@ Page({
     jobTitle: '',
     hospital: '',
     goodat: '',
-    experience: ''
+    experience: '',
+    bindDisabled: true,
+    orinal: 'home',
   },
 
   /**
@@ -26,6 +28,10 @@ Page({
   onLoad: function (options) {
     let that = this
     that.getDoctorInfo()
+    baseMessageHandler.addMessageHandler('refresh', that, res => {
+      let that = this
+      that.getDoctorInfo()
+    })
   },
 
   /**
@@ -71,20 +77,37 @@ Page({
   },
   getDoctorInfo: function() {
     let that = this
+    wx.showLoading({
+      title: '请求中...',
+      mask: true
+    })
+    wx.showNavigationBarLoading()
     doctorInfoManager.getDoctorInfo().then(res => {
       baseTool.print(res)
-      let data = doctorInfoAdapter.getdoctorInfoAdapter(res)
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
+      let data = doctorInfoAdapter.getDoctorInfoAdapter(res)
       that.setData(data)
     }).catch(res => {
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
       baseTool.showInfo(res)
     })
   },
   editDoctorInfoClick: function(e) {
+    let that = this
+    baseMessageHandler.postMessage('doctorInfo', callBack => {
+      callBack(that.data)
+    })
     wx.navigateTo({
       url: '../editDoctorInfo/editDoctorInfo',
     })
   },
   qrcodeDoctorInfoClick: function(e) {
+    let that = this
+    baseMessageHandler.postMessage('doctorInfo', callBack => {
+      callBack(that.data)
+    })
     wx.navigateTo({
       url: '../doctorQRCode/doctorQRCode',
     })

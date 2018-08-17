@@ -1,1 +1,91 @@
 /* pages/home/doctorQRCode/doctorQRCode.wxss */
+page{
+  background-color: #00a0e9;
+  width: 100%;
+  /* height: 100%; */
+}
+.doctor-QRCode-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.doctor-QRCode{
+  width: 500rpx;
+  height: 500rpx;
+}
+.doctor-content{
+  margin-top: 80rpx;
+  display: flex;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  background-color: white;
+  flex-direction: column;
+  padding: 40rpx;
+  align-items: center;
+  border-radius: 10rpx;
+}
+
+.doctor-info {
+  width: 100%;
+  margin: 20rpx;
+  height: 240rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.avatar{
+  margin-left: 30rpx;
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+}
+.doctor-intro{
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-name{
+  font-size: 35rpx;
+  color: black;
+}
+.doctor-department{
+  font-size: 25rpx;
+  color: #999;
+  margin-left: 50rpx;
+}
+.doctor-job-title{
+  font-size: 25rpx;
+  color: #999;
+  margin-left: 20rpx;
+}
+.doctor-address{
+  margin-top: 60rpx;
+  font-size: 25rpx;
+}
+.scan-tip {
+  margin-top: 30rpx;
+  color: #999;
+  font-size: 30rpx;
+}
+.save-button{
+  width: 524rpx;
+  height: 80rpx;
+  font-size: 25rpx;
+  margin-top: 60rpx;
+  border: 2rpx solid #00a0e9;
+  border-radius: 10rpx;
+  color: #00a0e9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.save-button-hover{
+  background-color: #02557c;
+  color: #a6c4d2;
+}

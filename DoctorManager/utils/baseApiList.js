@@ -8,17 +8,9 @@ module.exports = {
    */
   getDoctorInfo: 'getDoctorInfo',
   /**
-   * 获得刷牙记录
+   * 更新医生信息
    */
-  getTopDeviceMemberRecord: 'getTopDeviceMemberRecord',
-  /**
-   * 获得视频信息
-   */
-  getVideoDetails: 'getVideoDetails',
-  /**
-   * 刷牙教学视频
-   */
-  getBrushingVideoDetails: 'getBrushingVideoDetails',
+  updateDoctorInfo: 'updateDoctorInfo',
   /**
    * 验证码
    */
@@ -26,5 +18,9 @@ module.exports = {
   /**
    * 绑定手机号
    */
-  bindPhoneNumber: 'bindPhoneNumber'
+  bindPhoneNumber: 'bindPhoneNumber',
+  /**
+   * 上传图片
+   */
+  uploadImageURL: 'qn_upload',
 }

@@ -1,0 +1,28 @@
+/* pages/statistics/knowledgeMoneyRule/knowledgeMoneyRule.wxss */
+
+.knowledge-rule-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.develop-image{
+  margin-top: 300rpx;
+  width: 411rpx;
+  height: 350rpx;
+  margin-bottom: 20rpx;
+}
+.develop-view{
+  font-size: 25rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+}
+.money-yesterday{
+  margin-top: 20rpx;
+  font-size: 25rpx;
+}

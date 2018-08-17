@@ -52,7 +52,6 @@ page{
   width: 220rpx;
   height: 220rpx;
   border-radius: 50%;
-  background-color: yellow;
 }
 
 .tel-view {
@@ -99,8 +98,9 @@ page{
 
 .confirm_button {
   /* opacity: 0.5; */
+  position: relative;
   text-align: center;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   width: 390rpx;
@@ -110,14 +110,28 @@ page{
 }
 
 .confirm_text {
-  position: fixed;
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
   text-align: center;
   font-size: 30rpx;
+  /* left: 0; */
+  /* background-color: red; */
+  z-index: 99999999;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  /* display: block; */
 }
 
 .confirm_image {
   width: 390rpx;
   height: 90rpx;
+  z-index: 999;
 }
 
 .get-verify-code {

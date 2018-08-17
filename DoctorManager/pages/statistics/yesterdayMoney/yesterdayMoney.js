@@ -1,15 +1,10 @@
-// pages/statistics/statistics/statistics.js
+// pages/statistics/yesterdayMoney/yesterdayMoney.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    loadDone: true,
-    yesterdayMoney: '0.50',
-    totalMoney: '1024.51',
-    weekMoney: '203.60',
-    monthMoney: ' 421.11 ',
     dataList: [
       {
         title: '加入零蛀牙训练营',
@@ -92,20 +87,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  knowledgeMoneyRuleClick: function(e) {
-    wx.navigateTo({
-      url: '../knowledgeMoneyRule/knowledgeMoneyRule',
-    })
-  },
-  withdrawClick: function(e) {
-    wx.navigateTo({
-      url: '../withdrawMoney/withdrawMoney',
-    })
-  },
-  yesterdayClick: function(e) {
-    wx.navigateTo({
-      url: '../yesterdayMoney/yesterdayMoney',
-    })
   }
 })

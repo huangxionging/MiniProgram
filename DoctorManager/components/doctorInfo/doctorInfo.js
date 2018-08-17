@@ -9,7 +9,7 @@ Component({
       type: String,
       value: ""
     },
-    name: {
+    doctorName: {
       type: String,
       value: ""
     },

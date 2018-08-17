@@ -1,7 +1,7 @@
 <!--pages/home/doctorInfoDetail/homeIndex.wxml-->
 <view class='navigation-bar-line'/>
 <view class='doctorInfoDetail-container' wx:if='{{loadDone}}'>
-  <doctorInfo class='doctorInfo' avatar='{{avatar}}' name='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' bind:qrcodeDoctorInfoClick='qrcodeDoctorInfoClick' bind:editDoctorInfoClick='editDoctorInfoClick' />
+  <doctorInfo class='doctorInfo' avatar='{{avatar}}' doctorName='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' bind:qrcodeDoctorInfoClick='qrcodeDoctorInfoClick' bind:editDoctorInfoClick='editDoctorInfoClick' />
   <view class='resume'>
     <view class='resume-view'>
       <text class='resume-tip'>个人简历</text>

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "医生简历",
+  "navigationBarTitleText": "个人信息",
   "usingComponents": {
     "doctorInfo": "/components/doctorInfo/doctorInfo"
   }

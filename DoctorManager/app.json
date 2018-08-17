@@ -4,7 +4,10 @@
     "pages/authorization/authorization/authorization",
     "pages/statistics/statistics/statistics",
     "pages/home/editDoctorInfo/editDoctorInfo",
-    "pages/home/doctorQRCode/doctorQRCode"
+    "pages/home/doctorQRCode/doctorQRCode",
+    "pages/statistics/yesterdayMoney/yesterdayMoney",
+    "pages/statistics/knowledgeMoneyRule/knowledgeMoneyRule",
+    "pages/statistics/withdrawMoney/withdrawMoney"
   ],
   "window": {
     "backgroundTextStyle": "dark",

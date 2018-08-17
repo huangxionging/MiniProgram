@@ -4,7 +4,7 @@
     <image src='{{avatar}}' class='avatar'></image>
     <view class='doctor-intro'>
       <view class='doctor-personal'>
-        <text class='doctor-name'>{{name}}</text>
+        <text class='doctor-name'>{{doctorName}}</text>
       </view>
       <view class='doctor-job-view'>
         <text class='doctor-department'>{{department}}</text>
@@ -21,7 +21,6 @@
       <view hover-class='hover' class='edit-item' bindtap='qrcodeDoctorInfoClick'>
         <image src='../../resource/qrcode.png' class='image'></image>
       </view>
-      
     </view>
   </view>
 

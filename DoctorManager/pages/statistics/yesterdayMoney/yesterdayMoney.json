@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "知识变现收益",
+  "navigationBarTitleText": "昨日收益明细",
   "usingComponents": {
     "moneyDetailCell": "/components/moneyDetailCell/moneyDetailCell"
   }

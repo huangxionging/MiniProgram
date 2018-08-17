@@ -2,6 +2,7 @@
 const baseTool = require('../../../utils/baseTool.js')
 const loginManager = require('../../../manager/loginManager.js')
 const loginAdapter = require('../../../adapter/loginAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
@@ -129,7 +130,6 @@ Page({
               if (res.wxUser.telephone && res.wxUser.memberId) {
                 baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
                 baseTool.setValueForKey(res.wxUser.memberId, 'memberId')
-                
                 loginManager.reLauch()
               } else {
                 wx.setNavigationBarTitle({
@@ -164,29 +164,11 @@ Page({
     let that = this
     // 获得手机号
     let telphoneNumber = e.detail.value
-    let isTimeCountDown = that.data.isTimeCountDown
-    baseTool.print(isTimeCountDown)
-    // 检查是否是11位
-    if (telphoneNumber.length == 11) {
-      // 检查是否已经在倒计时
-      let bindDisabled = (that.data.verifyCode.length == 4) ? false : true
-      if (!isTimeCountDown) {
-        // 如果不是, 重新渲染按钮到可以点击状态
-        that.setData({
-          verifyCodeDisabled: false,
-          telphoneNumber: telphoneNumber,
-          bindDisabled: bindDisabled
-        });
 
-      }
-    } else {
-      // 不是11位则渲染成初始状态
-      that.setData({
-        verifyCodeDisabled: true,
-        bindDisabled: true,
-        telphoneNumber: telphoneNumber
-      });
-    }
+    that.setData({
+      telphoneNumber: telphoneNumber,
+    })
+    that.refreshState()
   },
   /**
    * 倒计时定时器
@@ -197,24 +179,18 @@ Page({
     // 自减一
     timeCount--
     // 更新倒计时按钮文本内容
-    this.setData({
+    that.setData({
       verifyTitle: '倒计时' + timeCount + '秒'
     })
 
     // 计数为 0
     if (timeCount == 0) {
-      // 更新倒计时状态
-      if (telphoneNumber.length == 11) {
-
-        that.setData({
-          verifyCodeDisabled: false,
-        });
-      }
       // 渲染标题
-      this.setData({
+      that.setData({
         isTimeCountDown: false,
         verifyTitle: '获取验证码',
       })
+      that.refreshState()
       return
     }
     // 继续执行定时器
@@ -225,11 +201,10 @@ Page({
     let that = this
     // 获得手机号
     let verifyCode = e.detail.value
-    let bindDisabled = (that.data.telphoneNumber.length == 11 && verifyCode.length == 4) ? false : true
     that.setData({
-      verifyCode: verifyCode,
-      bindDisabled: bindDisabled
+      verifyCode: verifyCode
     })
+    that.refreshState()
   },
   getVerifyCodeClick: function (e) {
     let that = this
@@ -270,11 +245,42 @@ Page({
       baseTool.print(res)
       wx.hideLoading()
       loginAdapter.telphoneAdapter(res.wxUser)
-      loginManager.reLauch()
+      // loginManager.reLauch()
+      baseMessageHandler.postMessage('doctorInfo', callBack => {
+        callBack({
+          loadDone: true,
+          orinal: 'login', // 来源
+          doctorName: res.wxUser.nickname,
+          avatar: res.wxUser.headimgurl
+        })
+      })
+      wx.reLaunch({
+        url: '/pages/home/editDoctorInfo/editDoctorInfo',
+      })
     }).catch(res => {
       baseTool.print(res)
       wx.hideLoading()
       baseTool.showInfo(res)
+    })
+  },
+  refreshState: function () {
+    let that = this
+    let telphoneNumber = that.data.telphoneNumber
+    let verifyCode = that.data.verifyCode
+    let isTimeCountDown = that.data.isTimeCountDown
+    let verifyCodeDisabled = true
+    let bindDisabled = true
+    if (telphoneNumber.length == 11 && verifyCode.length == 4) {
+      bindDisabled = false
+    }
+    if (isTimeCountDown == false) {
+      if (telphoneNumber.length == 11) {
+        verifyCodeDisabled = false
+      }
+    } 
+    that.setData({
+      verifyCodeDisabled: verifyCodeDisabled,
+      bindDisabled: bindDisabled
     })
   },
 })

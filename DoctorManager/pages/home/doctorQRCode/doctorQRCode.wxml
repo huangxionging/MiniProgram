@@ -1,2 +1,19 @@
 <!--pages/home/doctorQRCode/doctorQRCode.wxml-->
-<text>pages/home/doctorQRCode/doctorQRCode.wxml</text>
+<view wx:if='{{loadDone}}' class='doctor-QRCode-container'>
+  <view class='doctor-content'>
+    <view class='doctor-info'>
+    <image src='{{avatar}}' class='avatar'></image>
+    <view class='doctor-intro'>
+      <view class='doctor-personal'>
+        <text class='doctor-name'>{{doctorName}}</text>
+        <text class='doctor-department'>{{department}}</text>
+        <text class='doctor-job-title'>{{jobTitle}}</text>
+      </view>
+      <text class='doctor-address'>{{hospital}}</text>
+    </view>
+  </view>
+    <image src='{{imgData}}' class='doctor-QRCode'></image>
+    <view class='scan-tip'>用微信扫一扫, 跟医生学刷牙</view>
+    <view class='save-button' bindtap='saveImageClick' hover-class='save-button-hover' >点击下载打印高清二维码</view>
+  </view>
+</view>

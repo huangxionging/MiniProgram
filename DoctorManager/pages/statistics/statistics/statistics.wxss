@@ -1,1 +1,128 @@
 /* pages/statistics/statistics/statistics.wxss */
+.statistics-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.money-header{
+  width: 100%;
+  background-color: #00a0e9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.traffic-revenue{
+  margin-top: 30rpx;
+  width: 100%;
+  background-color: #00a0e9;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.traffic-revenue{
+  background-color: #83c9fa;
+}
+.revenue{
+  width: 50%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.knowledge-money-rule-view{
+  width: 100%;
+  padding-right: 20rpx;
+  padding-top: 20rpx;
+  text-align: right;
+  display: flex;
+  font-size: 25rpx;
+  justify-content:flex-end;
+  color: white;
+}
+.knowledge-line{
+  width: 100%;
+  height: 2rpx;
+  background-color: white;
+}
+.money-view{
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.money-yesterday{
+  margin-top: 20rpx;
+  font-size: 25rpx;
+}
+
+.yesterday-number{
+  margin-top: 20rpx;
+  font-size: 60rpx;
+  font: bold;
+}
+.total-money{
+  margin-top: 20rpx;
+  font-size: 25rpx;
+}
+.withdraw-cash{
+  margin-top: 20rpx;
+  width: 120rpx;
+  height: 44rpx;
+  font-size: 20rpx;
+  color: white;
+  border: 2rpx solid white;
+  border-radius: 22rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.revenue-money{
+  margin-top: 20rpx;
+  font-size: 35rpx;
+}
+.revenue-tip{
+  font-size: 25rpx;
+  margin-bottom: 10rpx;
+}
+.white-line{
+  width: 2rpx;
+  height: 80rpx;
+  background-color: white;
+}
+.column-line{
+  height: 20rpx;
+  width: 100%;
+  background-color: #eee;
+}
+.money-table-view{
+  padding: 0rpx 20rpx;
+}
+.money-table-tip{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.money-table-title-view{
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+}
+.blue-line{
+  margin-right: 20rpx;
+  height: 40rpx;
+  width: 4rpx;
+  background-color: #00a0e9;
+}
+.tip-line{
+  width: 100%;
+  height: 2rpx;
+  background-color: #eee;
+}

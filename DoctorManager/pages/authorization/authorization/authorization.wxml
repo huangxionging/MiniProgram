@@ -24,11 +24,11 @@
     </view>
     <view wx:if='{{bindDisabled}}' class='confirm_button'>
       <image class='confirm_image' src='../../../resource/confirm_button_disabled.png'></image>
-      <text class='confirm_text'>立即参与</text>
+      <view class='confirm_text'>立即参与</view>
     </view>
     <view wx:else class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
       <image class='confirm_image' src='../../../resource/confirm_button.png'></image>
-      <text class='confirm_text'>立即参与</text>
+      <view class='confirm_text'>立即参与</view>
     </view>
     <view style='width:100%;height:35rpx;' />
   </view>
