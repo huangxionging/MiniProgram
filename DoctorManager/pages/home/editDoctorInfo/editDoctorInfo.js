@@ -87,7 +87,7 @@ Page({
   getNameContent: function (e) {
     let that = this
     that.setData({
-      name: e.detail
+      doctorName: e.detail
     })
     that.showSubmit()
   },

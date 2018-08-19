@@ -42,5 +42,4 @@ function encodeDoctorInfoAdapter(doctorInfo = {}) {
 module.exports = {
   getDoctorInfoAdapter: getDoctorInfoAdapter,
   encodeDoctorInfoAdapter: encodeDoctorInfoAdapter,
-  
 }

@@ -50,6 +50,7 @@ function updateDoctorInfo(doctorInfo = {}) {
 
 function doctorInfoComplete(doctorInfo = {}) {
   let complete = false
+  baseTool.print(doctorInfo)
   if (doctorInfo.avatar && doctorInfo.doctorName && doctorInfo.department && doctorInfo.jobTitle && doctorInfo.hospital && doctorInfo.goodat && doctorInfo.experience) {
     complete = true
   }
