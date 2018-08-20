@@ -375,7 +375,7 @@ function chooseImageFrom(sourceType = 'camera') {
  * items 包含选项以冒号:区分, 例如 item1:item2:item3
  * color 是 item 颜色, 默认为黑色
  */
-function showSheetInfo(items = '', color = '#black') {
+function showSheetInfo(items = '', color = '#000') {
   return new Promise((resolve, reject) => {
     let itemList = items.split(':')
     wx.showActionSheet({
