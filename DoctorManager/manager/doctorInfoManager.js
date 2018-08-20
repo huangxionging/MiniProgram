@@ -83,7 +83,9 @@ function chooseDoctorAvatar(items = '', url = '') {
                   reject('上传失败')
                 }
               }).catch(reject)
-            }).catch(reject)
+            }).catch(res  => {
+              baseTool.print(res)
+            })
             break
           }
         case 2:
@@ -92,6 +94,8 @@ function chooseDoctorAvatar(items = '', url = '') {
             break
           }
       }
+    }).catch(res => {
+      baseTool.print(res)
     })
   })
 }
