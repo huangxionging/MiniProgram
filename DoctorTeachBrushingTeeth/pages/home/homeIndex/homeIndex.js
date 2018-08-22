@@ -16,8 +16,7 @@ Page({
     department: '',
     jobTitle: '',
     hospital: '',
-    reportDataList: [],
-    brushReportUrl: ''
+    doctorActivityList: []
   },
 
   /**
@@ -119,6 +118,9 @@ Page({
         wx.hideNavigationBarLoading()
         baseTool.print(res)
         data.brushReportUrl = res
+        data.persons = 83
+        data.doctorActivityList = doctorInfoAdapter.doctorActivityListAdapter(data)
+        baseTool.print(data)
         that.setData(data)
       }).catch(res => {
         wx.hideLoading()

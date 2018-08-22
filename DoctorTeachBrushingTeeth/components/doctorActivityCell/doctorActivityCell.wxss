@@ -1,0 +1,49 @@
+/* components/doctorActivityCell/doctorActivityCell.wxss */
+.cell-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-title-view {
+  padding: 20rpx;
+  font-size: 35rpx;
+  display: flex;
+}
+
+.cell-title-content{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* background-color: red; */
+}
+
+.cell-title{
+ margin-left: 20rpx;
+}
+
+.news-pic{
+  width: 100%;
+}
+
+.cell-line{
+  width: 100%;
+  height: 2rpx;
+  background-color: #eee;
+ 
+}
+
+.title-flag-line{
+  position: absolute;
+  height: 40rpx;
+  width: 6rpx;
+  background-color: #00a0e9;
+}
+
+.cell-pic-container{
+  padding: 20rpx;
+}
+
+.cell-pic{
+  width: 100%;
+}

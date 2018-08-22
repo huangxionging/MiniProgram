@@ -16,7 +16,7 @@
       <text class='text-must' space='ensp'> (*必填)</text>
     </view>
     <view class='textField-container'>
-      <textField title='姓名' value='{{doctorName}}' placeholder='请输入您的姓名' bind:getInput='getNameContent'></textField>
+      <textField title='姓名' value='{{doctorName}}' placeholder='请输入您的姓名' bind:getInput='getNameContent' maxlength='5'></textField>
     </view>
     <view class='textField-container'>
       <textField title='医院名' value='{{hospital}}' placeholder='请输入您所在医院的全称' bind:getInput='getHospitalContent'></textField>

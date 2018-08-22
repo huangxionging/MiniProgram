@@ -20,15 +20,14 @@
         <view class='revenue-money'>{{weekMoney}}</view>
         <view class='revenue-tip'>近一周流量收益</view>
       </view>
-      <view class='white-line' />
+      <view class='white-line'/>
       <view class='revenue'>
-        <view class='revenue-money' >{{monthMoney}}</view>
+        <view class='revenue-money'>{{monthMoney}}</view>
         <view class='revenue-tip'>近一月流量收益</view>
       </view>
     </view>
-
   </view>
-  <view class='column-line' />
+  <view class='column-line'/>
   <view class='money-table-view'>
     <view class='money-table-tip'>
       <view class='money-table-title-view'>

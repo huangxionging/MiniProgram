@@ -52,7 +52,22 @@ function doctorInfoDetailAdapter(doctorInfo = {}) {
   return data;
 }
 
+/**
+ * 构造活动列表适配器
+ */
+function doctorActivityListAdapter(doctorData) {
+  let data = [{
+    title: '干净的牙齿不会病，' + doctorData.persons + '人正跟着' + doctorData.doctorName + '医生一起用正确的方法及牙线把牙齿清洁干净吧!',
+    picUrl: '../../resource/zero.png'
+  }, {
+      title: doctorData.doctorName + '医生今天的刷牙报告',
+      picUrl: doctorData.brushReportUrl
+  }]
+  return data;
+}
+
 module.exports = {
   homePageAdapter: homePageAdapter,
   doctorInfoDetailAdapter: doctorInfoDetailAdapter,
+  doctorActivityListAdapter: doctorActivityListAdapter
 }

@@ -1,7 +1,7 @@
 <!--pages/teach/teachIndex.wxml-->
 <view class='navigation-bar-line' />
 <view class='teach-container' wx:if='{{loadDone}}'>
-  <view class='segment'>
+  <!-- <view class='segment'>
     <view class='segment-item' bindtap='segmentClick' data-index='1'>
       <text class="{{isSelect?'segment-color':''}}">看视频</text>
       <view wx:if='{{isSelect}}' class='segment-item-line' />
@@ -11,7 +11,7 @@
       <text class="{{!isSelect?'segment-color':''}}">学刷牙</text>
       <view wx:if='{{!isSelect}}' class='segment-item-line' />
     </view>
-  </view>
+  </view> -->
   <view wx:if='{{isSelect}}' class='look-video-view'>
     <video src='{{videoUrl}}' class='look-video' bindpause='videoPause' id='look-video' bindplay='lookVideoPlay'>
       <cover-view wx:if='{{showPoster}}' class='poster'>

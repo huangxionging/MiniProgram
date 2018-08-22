@@ -5,5 +5,5 @@
   <view wx:if='{{data.content}}' class='news-content'>
     <text space='ensp'>    {{data.content}}</text>
   </view>
-  <image  class='news-pic' mode='widthFix' src='{{data.picUrl}}' lazy-load='true'></image>
+  <image  class='news-pic' style='width:{{data.width}};height:{{data.height}}' mode='widthFix' src='{{data.picUrl}}' lazy-load='true'></image>
 </view>

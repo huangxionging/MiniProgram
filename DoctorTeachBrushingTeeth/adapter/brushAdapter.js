@@ -28,6 +28,8 @@ function brushRecordAdapter(records = []) {
   return data
 }
 
+
+
 module.exports = {
   brushRecordAdapter: brushRecordAdapter
 }

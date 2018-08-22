@@ -34,8 +34,8 @@
 }
 .knowledge-money-rule-view{
   width: 100%;
-  padding-right: 20rpx;
-  padding-top: 20rpx;
+  margin-right: 20rpx;
+  margin-top: 20rpx;
   text-align: right;
   display: flex;
   font-size: 25rpx;

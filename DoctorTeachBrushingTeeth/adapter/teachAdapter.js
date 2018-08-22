@@ -21,7 +21,8 @@ function videoAdapter(videoInfo = {}) {
   baseTool.modelAdapter(newsItem1, videoInfo, res => {
     newsItem1[res] = ''
   })
-
+  newsItem1.width = 760
+  newsItem1.height = 2000
   data.newsList.push(newsItem1)
   let newsItem2 = {
     title: 'titleTwo',
@@ -31,7 +32,8 @@ function videoAdapter(videoInfo = {}) {
   baseTool.modelAdapter(newsItem2, videoInfo, res => {
     newsItem2[res] = ''
   })
-
+  newsItem2.width = 711
+  newsItem2.height = 2108
   data.newsList.push(newsItem2)
   return data
 }
