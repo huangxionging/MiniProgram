@@ -9,8 +9,6 @@ function getOpenId() {
   return baseTool.valueForKey('openid')
 }
 
-
-
 /**
  * code: 登陆后获取的 code
  * userInfo: 用户授权的用户信息

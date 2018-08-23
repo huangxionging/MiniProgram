@@ -11,6 +11,8 @@ Page({
     loadDone:false,
     brushDataList: [],
     isTel: false,
+    doctors: '87',
+    users: '2667'
   },
 
   /**
@@ -28,7 +30,7 @@ Page({
     } else {
       that.setData({
         loadDone: true,
-        isTel: false
+        isTel: true
       })
     }
   },
@@ -102,7 +104,15 @@ Page({
     baseTool.print(e)
     let recordId = e.detail.data.recordId
     wx.navigateTo({
-      url: '../../home/brushReportDetail/brushReportDetail?recordId=' + recordId,
+      url: '/pages/home/brushReportDetail/brushReportDetail?recordId=' + recordId,
     })
   },
+  confirmClick: function(e) {
+    wx.navigateTo({
+      url: '/pages/brush/applyZeroTeeth/applyZeroTeeth',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  }
 })

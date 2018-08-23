@@ -5,7 +5,8 @@
     "pages/brush/brushIndex/brushIndex",
     "pages/home/doctorInfoDetail/doctorInfoDetail",
     "pages/home/brushReportDetail/brushReportDetail",
-    "pages/authorization/authorization/authorization"
+    "pages/authorization/authorization/authorization",
+    "pages/brush/applyZeroTeeth/applyZeroTeeth"
   ],
   "window": {
     "backgroundTextStyle": "dark",

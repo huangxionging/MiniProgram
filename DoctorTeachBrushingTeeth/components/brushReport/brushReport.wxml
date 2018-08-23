@@ -26,12 +26,12 @@
         <view style='margin-top:10rpx;'>
          <block wx:for='{{[1, 2, 3, 4, 5]}}' wx:key='id' wx:item='item'>
             <image wx:if='{{(data.star-item) >= 0}}'
-              src='../../resource/star.png' 
+              src='/resource/star.png' 
               style='width:30rpx;height:30rpx' 
               class="{{(item==1)?'':'index-others'}}"
             />
             <image wx:else
-              src='../../resource/star_dark.png' 
+              src='/resource/star_dark.png' 
               style='width:30rpx;height:30rpx' 
               class="{{(item==1)?'':'index-others'}}"
             />
@@ -43,12 +43,12 @@
         <view style='margin-top:10rpx;'>
           <block wx:for='{{[1, 2, 3, 4, 5]}}' wx:key='id' wx:item='item'>
             <image wx:if='{{(item + data.face - 5) > 0}}'
-              src='../../resource/face.png' 
+              src='/resource/face.png' 
               style='width:30rpx;height:30rpx' 
               class="{{(item==1)?'':'index-others'}}"
             />
             <image wx:else
-              src='../../resource/face_dark.png' 
+              src='/resource/face_dark.png' 
               style='width:30rpx;height:30rpx' 
               class="{{(item==1)?'':'index-others'}}"
             />

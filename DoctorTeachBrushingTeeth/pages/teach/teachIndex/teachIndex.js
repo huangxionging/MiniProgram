@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    verifyTitle: '获取验证码',
+    
     isSelect: true,
     videoUrl: '',
     videPicUrl: '',
@@ -21,12 +21,7 @@ Page({
     newsList: [],
     brushModels: [],
     currentIndex: 0,
-    telphoneNumber: '',
-    verifyCode: '',
-    isTimeCountDown: false,
-    verifyCodeDisabled: true,
     avatar: '',
-    bindDisabled: true,
     showCover: true,
     showAvatar: false,
     showContent: true,
@@ -211,31 +206,7 @@ Page({
       }
     })
   },
-  confirmClick: function (e) {
-    baseTool.print(e)
-    let that = this
-    let telphoneNumber = that.data.telphoneNumber
-    let verifyCode = that.data.verifyCode
-    wx.showLoading({
-      title: '处理中...',
-      mask: true,
-    })
-    teachManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      teachAdapter.telphoneAdapter(res.wxUser)
-      that.setData({
-        isSelect: false,
-        isTel: true,
-      })
-      if (that.data.brushModels.length == 0) {
-        that.getBrushingVideoDetails()
-      }
-    }).catch(res => {
-      wx.hideLoading()
-      baseTool.showInfo(res)
-    })
-  },
+ 
   scrollChange: function (e) {
     baseTool.print(e)
     let index = e.detail.current
@@ -296,107 +267,7 @@ Page({
   preventTouch: function (e) {
     baseTool.print(e)
   },
-  getVerifyCodeClick: function (e) {
-    let that = this
-    let telphoneNumber = that.data.telphoneNumber
-    // 电话号码
-    if (telphoneNumber.length != 11) {
-      baseTool.showInfo('请输入正确的手机号')
-      return
-    }
-
-    // 获取验证码接口
-    teachManager.getVerifyCode(telphoneNumber).then(res => {
-      // 倒计时开始
-      
-      // 重新渲染按钮
-      that.setData({
-        verifyCodeDisabled: true,
-        isTimeCountDown: true
-      })
-
-      // 倒计时 60s
-      that.timeCountDown(60)
-    }).catch(res => {
-      baseTool.showInfo(res)
-    })
-  },
-  /**
-   * 获得输入内容, 以改变
-   */
-  getInputContent: function (e) {
   
-    // 获得输入框内容
-    let that = this
-    // 获得手机号
-    let telphoneNumber = e.detail.value
-    let isTimeCountDown = that.data.isTimeCountDown
-    baseTool.print(isTimeCountDown)
-    // 检查是否是11位
-    if (telphoneNumber.length == 11) {
-      // 检查是否已经在倒计时
-      let bindDisabled = (that.data.verifyCode.length == 4) ? false : true
-      if (!isTimeCountDown) {
-        // 如果不是, 重新渲染按钮到可以点击状态
-        that.setData({
-          verifyCodeDisabled: false,
-          telphoneNumber: telphoneNumber,
-          bindDisabled: bindDisabled
-        });
-
-      }
-    } else {
-      // 不是11位则渲染成初始状态
-      that.setData({
-        verifyCodeDisabled: true,
-        bindDisabled: true,
-        telphoneNumber: telphoneNumber
-      });
-    }
-  },
-  /**
-   * 倒计时定时器
-   */
-  timeCountDown: function (timeCount) {
-    let that = this
-    let telphoneNumber = that.data.telphoneNumber
-    // 自减一
-    timeCount--
-    // 更新倒计时按钮文本内容
-    this.setData({
-      verifyTitle: '倒计时' + timeCount + '秒'
-    })
-
-    // 计数为 0
-    if (timeCount == 0) {
-      // 更新倒计时状态
-      if (telphoneNumber.length == 11) {
-        
-          that.setData({
-            verifyCodeDisabled: false,
-          });
-      }
-      // 渲染标题
-      this.setData({
-        isTimeCountDown: false,
-        verifyTitle: '获取验证码',
-      })
-      return
-    }
-    // 继续执行定时器
-    setTimeout(function () { that.timeCountDown(timeCount) }, 1000)
-  },
-  getInputVerifyCode: function (e) {
-    // 获得输入框内容
-    let that = this
-    // 获得手机号
-    let verifyCode = e.detail.value
-    let bindDisabled = (that.data.telphoneNumber.length == 11 && verifyCode.length == 4) ? false : true
-    that.setData({
-      verifyCode: verifyCode,
-      bindDisabled: bindDisabled
-    })
-  },
   lookVideoPlay: function(e) {
     baseTool.print(e)
     let that = this
