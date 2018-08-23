@@ -4,7 +4,7 @@
   <doctorInfo class='doctorInfo' binddoctorInfoClick='onDoctorInfoClick' avatar='{{avatar}}' name='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' />
   <view class='home-table-view'>
     <block wx:for='{{doctorActivityList}}' wx:key='id' wx:item='item'>
-      <doctorActivityCell data='{{item}}' />
+      <doctorActivityCell data='{{item}}' id='{{index}}' bind:activityDelegate='activityDelegate'/>
     </block>
   </view>
 

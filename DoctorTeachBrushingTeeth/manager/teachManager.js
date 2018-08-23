@@ -19,7 +19,7 @@ function getTeachVideoInfo() {
     } else {
       loginManager.startAuthorization()
     }
-  });
+  })
 }
 function getBrushingVideoDetails() {
   return new Promise((resolve, reject) => {
@@ -37,62 +37,9 @@ function getBrushingVideoDetails() {
     } else {
       loginManager.startAuthorization()
     }
-  });
-}
-
-/**
- * 获得手机号
- */
-function getTelphone() {
-  return baseTool.valueForKey('telephone')
-}
-
-/**
- * 根据手机号获取验证码
- */
-function getVerifyCode(telphoneNumber = '') {
-  
-  return new Promise((resolve, reject) => {
-
-    let openid = loginManager.getOpenId()
-    if (openid) {
-      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getVerifyCode
-      let doctorId = baseTool.valueForKey('doctorId')
-      let data = {
-        doctorId: doctorId,
-        openid: openid,
-        'telephone': telphoneNumber 
-      }
-      // 统一处理
-      baseTool.request(url, data).then(resolve, reject)
-    } else {
-      loginManager.startAuthorization()
-    }
   })
 }
 
-/**
- * 绑定手机号
- */
-function bindingTelphone(telphoneNumber = '', validcode = '') {
-  return new Promise((resolve, reject) => {
-    let openid = loginManager.getOpenId()
-    if (openid) {
-      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindPhoneNumber
-      let doctorId = baseTool.valueForKey('doctorId')
-      let data = {
-        doctorId: doctorId,
-        openid: openid,
-        validcode: validcode,
-        telephone: telphoneNumber
-      }
-      // 统一处理
-      baseTool.request(url, data).then(resolve, reject)
-    } else {
-      loginManager.startAuthorization()
-    }
-  })
-}
 
 /**
  * 获得医生头像
@@ -121,9 +68,6 @@ function getDoctorName() {
 module.exports = {
   getTeachVideoInfo: getTeachVideoInfo,
   getBrushingVideoDetails: getBrushingVideoDetails,
-  getTelphone: getTelphone,
-  getVerifyCode: getVerifyCode,
-  bindingTelphone: bindingTelphone,
   getDoctorAvatar: getDoctorAvatar,
   getDoctorName: getDoctorName
 }

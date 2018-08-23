@@ -19,7 +19,7 @@ function getDoctorInfo(){
     } else {
       loginManager.startAuthorization()
     }
-  }); 
+  })
 }
 /**
  * 刷牙报告

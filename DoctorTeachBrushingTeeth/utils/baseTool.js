@@ -164,7 +164,7 @@ function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
 }
 
 function getCurrentTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -177,7 +177,7 @@ function getCurrentTime() {
 }
 
 function getCurrentTimeWithoutSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -189,7 +189,7 @@ function getCurrentTimeWithoutSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -201,7 +201,7 @@ function getNextMinuteTimeWithZeroSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -214,14 +214,14 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  let date = new Date();
+  let date = new Date()
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
 }
 
 function getCurrentDateWithoutTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -238,13 +238,13 @@ function zeroFormat(oldString = '') {
 }
 
 function values(obj) {
-  let vals = [], key;
+  let vals = [], key
   for (key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      vals.push(obj[key]);
+      vals.push(obj[key])
     }
   }
-  return vals;
+  return vals
 }
 /**
  * showInfo: 只用来展示信息

@@ -20,6 +20,7 @@
   width: 200rpx;
   height: 200rpx;
   border-radius: 50%;
+  transform: rotate(70deg);
 }
 .doctor-intro{
   margin-left: 20rpx;

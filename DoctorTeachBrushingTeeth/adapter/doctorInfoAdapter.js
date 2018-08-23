@@ -49,7 +49,7 @@ function doctorInfoDetailAdapter(doctorInfo = {}) {
   }
   // 模型适配器转换
   baseTool.modelAdapter(data, doctorInfo)
-  return data;
+  return data
 }
 
 /**
@@ -61,9 +61,16 @@ function doctorActivityListAdapter(doctorData) {
     picUrl: '../../resource/zero.png'
   }, {
       title: doctorData.doctorName + '医生今天的刷牙报告',
-      picUrl: doctorData.brushReportUrl
+      picUrl: '',
+      brushTime: doctorData.reportDataList[0].brushTime,
+      totalTime: doctorData.reportDataList[0].totalTime,
+      cleanIndex: doctorData.reportDataList[0].cleanIndex,
+      effectiveTime: doctorData.reportDataList[0].effectiveTime,
+      star: doctorData.reportDataList[0].star,
+      face: doctorData.reportDataList[0].face,
+      recordId: doctorData.reportDataList[0].recordId
   }]
-  return data;
+  return data
 }
 
 module.exports = {

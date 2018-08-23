@@ -2,7 +2,9 @@
   "navigationBarTitleText": "医生信息",
   "usingComponents": {
     "doctorInfo": "/components/doctorInfo/doctorInfo",
-    "doctorActivityCell": "/components/doctorActivityCell/doctorActivityCell"
+    "doctorActivityCell": "/components/doctorActivityCell/doctorActivityCell",
+    "brushReport": "/components/brushReport/brushReport"
+    
   },
   "enablePullDownRefresh": true
 }

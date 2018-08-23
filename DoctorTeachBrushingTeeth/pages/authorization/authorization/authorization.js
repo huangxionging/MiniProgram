@@ -96,7 +96,7 @@ Page({
             if (res && res.wxUser && res.wxUser.openid) {
               baseTool.setValueForKey(res.wxUser.openid, 'openid')
               if (res.wxUser.telephone) {
-                // baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
+                baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
               }
               loginManager.reLauch()
             } else {

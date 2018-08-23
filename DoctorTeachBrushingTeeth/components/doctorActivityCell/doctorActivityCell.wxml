@@ -1,5 +1,5 @@
 <!--components/doctorActivityCell/doctorActivityCell.wxml-->
-<view class='cell-container' bindtap='tap'>
+<view class='cell-container'>
   <view class='cell-title-view' wx:if='{{data.title}}'>
     <view class='cell-title-content'>
       <view class='title-flag-line' />
@@ -7,8 +7,11 @@
     </view>
   </view>
   <view wx:if='{{data.title}}' class='cell-line' />
-  <view class='cell-pic-container'>
-    <image class='cell-pic' style='width:{{data.width}};height:{{data.height}}' mode='widthFix' src='{{data.picUrl}}' lazy-load='true'/>
+  <view wx:if='{{data.picUrl}}' class='cell-pic-container'>
+    <image class='cell-pic' style='width:{{data.width}};height:{{data.height}}' mode='widthFix' src='{{data.picUrl}}' lazy-load='true' bindtap='imageClick'/>
   </view>
-  
+  <view wx:else class='report-view'>
+    <brushReport data='{{data}}' bind:reportTap='reportClick' />
+  </view>
+  <view class='column-line'/>
 </view>

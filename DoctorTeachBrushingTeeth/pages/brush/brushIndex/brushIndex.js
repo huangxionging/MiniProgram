@@ -9,7 +9,8 @@ Page({
    */
   data: {
     loadDone:false,
-    brushDataList: []
+    brushDataList: [],
+    isTel: false,
   },
 
   /**
@@ -17,8 +18,19 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    that.loadData()
-    wx.startPullDownRefresh()
+    let telphone = !brushManager.getTelphone()
+    if (telphone) {
+      that.setData({
+        isTel: true
+      })
+      that.loadData()
+      wx.startPullDownRefresh()
+    } else {
+      that.setData({
+        loadDone: true,
+        isTel: false
+      })
+    }
   },
 
   /**

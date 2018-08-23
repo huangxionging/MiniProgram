@@ -22,8 +22,15 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    tap: function (e) {
-      baseTool.print(this)
+    imageClick: function (e) {
+      let that = this
+      that.data.index = this.id
+      this.triggerEvent('activityDelegate', that.data)
+    },
+    reportClick: function(e){
+      let that = this
+      that.data.index = this.id
+      this.triggerEvent('activityDelegate', that.data)
     }
   }
 })
