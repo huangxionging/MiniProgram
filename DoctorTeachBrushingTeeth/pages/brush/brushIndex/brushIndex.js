@@ -12,7 +12,9 @@ Page({
     brushDataList: [],
     isTel: false,
     doctors: '87',
-    users: '2667'
+    users: '2667',
+    userName: 'gggg',
+    day: '6'
   },
 
   /**
@@ -20,9 +22,10 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    let telphone = !brushManager.getTelphone()
+    let telphone = brushManager.getTelphone()
     if (telphone) {
       that.setData({
+        loadDone: true,
         isTel: true
       })
       that.loadData()
@@ -30,7 +33,7 @@ Page({
     } else {
       that.setData({
         loadDone: true,
-        isTel: true
+        isTel: false
       })
     }
   },

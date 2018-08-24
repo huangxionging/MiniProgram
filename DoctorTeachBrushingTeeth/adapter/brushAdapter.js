@@ -21,7 +21,7 @@ function brushRecordAdapter(records = []) {
       face: 'seriouslyPoint',
       recordId: 'recordId'
     }
-    
+    recordItem.height = '450rpx'
     baseTool.modelAdapter(recordItem, records[index])
     data.brushDataList.push(recordItem)
   }

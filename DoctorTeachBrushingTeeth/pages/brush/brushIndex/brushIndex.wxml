@@ -2,10 +2,28 @@
 <view class='navigation-bar-line' />
 <view class='brush-container' wx:if='{{loadDone}}'>
   <view wx:if='{{isTel}}'>
-    <image src='/resource/banner.png' class='brush-banner'></image>
+    <view class='brush-header'>
+      <image src='/resource/banner.png' class='brush-banner'></image>
+      <view class='brush-content-container'>
+        <view class='brush-user'>
+          <image class='avatar' src='{{avatar}}'></image>
+          <view class='user'>
+            <view class='name'>{{userName}}</view>
+            <view class='tip'>你已经坚持签到{{day}}天, 继续保持</view>
+          </view>
+        </view>
+        <view wx:if='{{signDisabled}}' class='sign-view'>
+          <image class='sign_image' src='../../../resource/confirm_button_disabled.png'></image>
+        </view>
+        <view wx:else class='sign-view' bindtap='' hover-class='sign-hover'>
+          <image class='sign_image' src='../../../resource/confirm_button.png'></image>
+        </view>
+      </view>
+    </view>
+
     <view class='brush-table-view'>
       <block wx:for='{{brushDataList}}' wx:key='id' wx:item='item'>
-        <view class="brush-cell {{index==0?'':'others'}}">
+        <view class="brush-cell {{index==0?'':'others'}}" style='height:{{item.height}}'>
           <userBrushItem data='{{item}}' bind:reportTap='reportTapClick' />
           <view class='brush-cell-line' />
         </view>
@@ -16,7 +34,7 @@
     <view class='zero-tip-view'>
       <image class='zero-bg-image' src='/resource/zero_tip_bg.png' />
       <view class='zero-tip-number'>
-        <image class='zero-tip-number-image' src='/resource/zero_tip.png'/>
+        <image class='zero-tip-number-image' src='/resource/zero_tip.png' />
         <view class='zero-number-container'>
           {{doctors}}位医生带领{{users}}人正在参加
         </view>

@@ -1,4 +1,3 @@
-
 const baseURL = require('/baseURL.js')
 
 // 获得状态
@@ -18,7 +17,7 @@ function print(e) {
   if (baseState || isSimulator) {
     // 打印内容
     console.log(e)
-  } 
+  }
 }
 
 /**
@@ -47,7 +46,7 @@ function removeObjectForKey(key = '') {
 /**
  * 删除所有对象
  */
-function removeAllObjects () {
+function removeAllObjects() {
   wx.clearStorageSync()
 }
 
@@ -70,14 +69,16 @@ function vibrate() {
  * 默认的 Promise, 不会 resolve 也不会 reject
  */
 function defaultPromise() {
-  return new Promise((resolve, reject) => {})
+  return new Promise((resolve, reject) => { })
 }
 
 /**
  * 默认的 Then Promise, 会 resolve
  */
 function defaultThenPromise() {
-  return new Promise((resolve, reject) => {resolve()})
+  return new Promise((resolve, reject) => {
+    resolve()
+  })
 }
 
 /**
@@ -112,7 +113,7 @@ function setValueForKeyAsync(value, key) {
       data: value,
       success: resolve,
       fail: reject,
-      complete: function(res) {},
+      complete: function (res) { },
     })
   })
 }
@@ -123,7 +124,7 @@ function valueForKeyAsync(key) {
       key: key,
       success: resolve,
       fail: reject,
-      complete: function(res) {},
+      complete: function (res) { },
     })
   })
 }
@@ -164,7 +165,7 @@ function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
 }
 
 function getCurrentTime() {
-  let date = new Date()
+  let date = new Date();
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -177,7 +178,7 @@ function getCurrentTime() {
 }
 
 function getCurrentTimeWithoutSecond() {
-  let date = new Date()
+  let date = new Date();
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -189,7 +190,7 @@ function getCurrentTimeWithoutSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date()
+  let date = new Date();
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -201,7 +202,7 @@ function getNextMinuteTimeWithZeroSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date()
+  let date = new Date();
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -214,14 +215,14 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  let date = new Date()
+  let date = new Date();
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
 }
 
 function getCurrentDateWithoutTime() {
-  let date = new Date()
+  let date = new Date();
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -238,18 +239,20 @@ function zeroFormat(oldString = '') {
 }
 
 function values(obj) {
-  let vals = [], key
+  let vals = [],
+    key;
   for (key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      vals.push(obj[key])
+      vals.push(obj[key]);
     }
   }
-  return vals
+  return vals;
 }
 /**
  * showInfo: 只用来展示信息
  */
 function showInfo(info = '') {
+  print(info)
   wx.showModal({
     title: '提示',
     content: info,
@@ -263,7 +266,6 @@ function showInfo(info = '') {
  * 模型转换适配器
  * model 待转换的模型, key 是我们需要的 key, value 是转换对应的 key
  * value 是转换之前的键值对
- * func 用于处理找不到键值的情况
  */
 function modelAdapter(model = {}, value = {}, func = Function) {
   // if (!value) {
@@ -300,7 +302,7 @@ function request(url = '', data = {}) {
         print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data)
-        } else if (res.data.msg){
+        } else if (res.data.msg) {
           reject(res.data.msg)
         } else {
           reject('网络有点点问题')
@@ -329,7 +331,7 @@ function getParameterFromURL(url = '') {
       let allParameters = parameterString.split('&')
       let parameterData = {}
       // 遍历该数组
-      for(let index = 0; index < allParameters.length; ++index) {
+      for (let index = 0; index < allParameters.length; ++index) {
         let param = allParameters[index]
         if (param.indexOf('=')) {
           // 通过 = 字符串切割成 key 和 value
@@ -346,6 +348,97 @@ function getParameterFromURL(url = '') {
     }
   }
   return null
+}
+
+/**
+ * 选择图片
+ */
+function chooseImageFrom(sourceType = 'camera') {
+  print(sourceType)
+  return new Promise((resolve, reject) => {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: [sourceType],
+      success: function (res) {
+        resolve(res.tempFilePaths[0])
+      },
+      fail: function (res) {
+        reject(res)
+      }
+    })
+  })
+}
+
+/**
+ * 展示普通的 actionSheet 风格
+ * items 包含选项以冒号:区分, 例如 item1:item2:item3
+ * color 是 item 颜色, 默认为黑色
+ */
+function showSheetInfo(items = '', color = '#000') {
+  return new Promise((resolve, reject) => {
+    let itemList = items.split(':')
+    wx.showActionSheet({
+      itemList: itemList,
+      itemColor: color,
+      success: function (res) {
+        resolve(res.tapIndex)
+      },
+      fail: reject,
+    })
+  })
+}
+
+
+/**
+ * 上传本地文件
+ * url 是上传地址
+ * filePath 是文件路径
+ * tips 是上传进度提示
+ */
+function uploadLocalFile(url = '', filePath = '', tips = '上传进度:') {
+  return new Promise((resolve, reject) => {
+    wx.showLoading({
+      title: tips + '0%',
+      mask: true
+    })
+    let uploadTask = wx.uploadFile({
+      url: url,
+      filePath: filePath,
+      name: 'json',
+      success: function (res) {
+        wx.hideLoading()
+        if (res.statusCode == 200) {
+          resolve(res.data)
+        } else {
+          reject('上传失败')
+        }
+      },
+      fail: function (res) {
+        wx.hideLoading()
+        reject(res)
+      },
+    })
+    uploadTask.onProgressUpdate(function (res) {
+      wx.showLoading({
+        title: tips + res.progress + '%',
+        mask: true
+      })
+    })
+  })
+}
+
+/**
+ * 预览单张图片
+ * url 是图片地址
+ */
+function previewSingleImage(url) {
+  wx.previewImage({
+    current: url,
+    urls: [url],
+    success: function (res) { },
+    fail: function (res) { },
+  })
 }
 
 // 添加接口
@@ -374,7 +467,7 @@ module.exports = {
   vibrate: vibrate,
   getNet: function () {
     let that = this
-    wx.onNetworkStatusChange(function(res){
+    wx.onNetworkStatusChange(function (res) {
       that.print(res)
       wx.showModal({
         title: '网络改变',
@@ -408,4 +501,8 @@ module.exports = {
   modelAdapter: modelAdapter,
   request: request,
   getParameterFromURL: getParameterFromURL,
+  chooseImageFrom: chooseImageFrom,
+  showSheetInfo: showSheetInfo,
+  uploadLocalFile: uploadLocalFile,
+  previewSingleImage: previewSingleImage
 }

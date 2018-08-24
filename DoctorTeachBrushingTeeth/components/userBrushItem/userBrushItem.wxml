@@ -1,14 +1,15 @@
 <!--components/userBrushItem/userBrushItem.wxml-->
-<view class='user-brush-container' bindtap='reportTapClick'>
+<view class='user-brush-container'>
   <view class='brush-content'>
     <image class='avatar' src='{{data.avatar}}'></image>
     <view class='brush-info'>
       <text class='user-name'>{{data.name}}</text>
       <text class='user-brush-text'>用护牙者刷了{{data.score}}分</text>
-      <brushReport 
+      <brushReport wx:if='{{1}}'
         class='brush-report' 
         id='{{index}}'
         data='{{data}}'
+        bindtap='reportTapClick'
          />
     </view>
   </view>
