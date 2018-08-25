@@ -193,12 +193,12 @@ Page({
     })
 
 
-    that.setData({
-      showModal: true,
-      modalDialog: {
-        showModal: true
-      }
-    })
+    // that.setData({
+    //   showModal: true,
+    //   modalDialog: {
+    //     showModal: true
+    //   }
+    // })
     baseTool.startTimer(function(total) {
       baseTool.print(total)
       if (that.data.isSelect == true) {

@@ -117,9 +117,9 @@ page {
   display: block;
   position: relative;
 }
-.alert-bg{
+/* .alert-bg{
   margin-top: 10rpx;
-}
+} */
 .reel{
   position: relative;
   margin-top: 20rpx;
