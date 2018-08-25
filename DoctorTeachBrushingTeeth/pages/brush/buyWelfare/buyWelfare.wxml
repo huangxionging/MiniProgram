@@ -1,0 +1,10 @@
+<!--pages/brush/buyWelfare/buyWelfare.wxml-->
+<view class='welfare-container'>
+  <image class='welfare-title-image' src='http://qnimage.hydrodent.cn/dtb_devce_welfare_title.png'></image>
+  <view class='welfare-content'>
+    <view class='welfare-tip'>1.每个用户只能通过公益通道购买一次;</view>
+    <view class='welfare-tip'>2.该通道需要准备一些材料 (低收入证明, 个人身份证以及和该牙医的合影), 准备完整后通过官方客服进行购买;</view>
+    <view class='welfare-tip'>3.该活动由深圳缇铭科技有限公司赞助, 一切解释权归深圳缇铭科技有限公司所有;</view>
+    <view class='welfare-tip'>4.客服微信: teethkefu</view>
+  </view>
+</view>

@@ -1,0 +1,51 @@
+<!--pages/brush/followBrush/followBrush.wxml-->
+<view class='follow-container'>
+  <video id='teach-video' src='{{teachVideoUrl}}' class='look-video' binderror='binderror' bindended='videoPlayEnd'>
+    <cover-view class='cover-view' wx:if='{{showCover}}'>
+      <cover-view>{{title}}</cover-view>
+      <cover-view wx:if='{{showContent}}'>{{content}}</cover-view>
+      <cover-view wx:else>{{secondTime}}</cover-view>
+      <cover-image wx:if='{{showTeachPlay}}' src='../../../resource/paly.png' class='poster-play' bindtap='teachVideoPlay' />
+    </cover-view>
+    <cover-image wx:if='{{showAvatar}}' src='{{avatar}}' class='avatar'></cover-image>
+  </video>
+  <view class='teach-content-bg'>
+    <image src='{{bgUrl}}' class='teach-bg-image'></image>
+    <view class='teach-content-container'>
+      <view class='teach-content'>
+        <view class='teach-tip'>一起来找牙面</view>
+        <swiper class='teach-model-container' current='{{currentIndex}}' bindchange='scrollChange' previous-margin='80rpx' next-margin='30rpx'>
+          <block wx:for='{{brushModels}}' wx:key='id' wx:item='item'>
+            <swiper-item item-id='{{index}}' catchtouchmove=''>
+              <view class='teach-model'>
+                <teachBrushModel data='{{item}}' />
+              </view>
+            </swiper-item>
+          </block>
+        </swiper>
+      </view>
+    </view>
+  </view>
+</view>
+<modalDialog class='modal-view' wx:if='{{showModal}}' data='{{modalDialog}}' bind:hideModal='hideModal' catchtouchmove='preventTouch'>
+  <cover-view class='modal-dialog'>
+    <cover-view class='modal-alert'>
+      <cover-image class='alert-bg' mode='widthFix' src='http://qnimage.hydrodent.cn/dtb_alert_bg.png'></cover-image>
+      <cover-view class='alert-content'>
+        <cover-view class='alert-line1'>
+          <cover-view class='line-message'>{{persons}}</cover-view>
+          <cover-view class='line-tip'>人正在使用装备</cover-view>
+        </cover-view>
+        <cover-view class='alert-line2'>
+          <cover-view class='line-tip'>能刷出</cover-view>
+          <cover-view class='line-message'>小猪佩奇</cover-view>
+          <cover-view class='line-tip'>哦~</cover-view>
+        </cover-view>
+        <cover-view class='alert-line3'>刷得越干净, 奖品越丰厚</cover-view>
+      </cover-view>
+    </cover-view>
+    <cover-image class='reel' src='http://qnimage.hydrodent.cn/dtb_reel.png'></cover-image>
+    <cover-image class='finger' src='http://qnimage.hydrodent.cn/dtb_finger.png'></cover-image>
+    <cover-image class='cancle' src='/resource/cancle_button.png' bindtap='hideModal'></cover-image>
+  </cover-view>
+</modalDialog>

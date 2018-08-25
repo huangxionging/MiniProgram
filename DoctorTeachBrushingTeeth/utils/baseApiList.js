@@ -26,5 +26,21 @@ module.exports = {
   /**
    * 绑定手机号
    */
-  bindPhoneNumber: 'bindPhoneNumber'
+  bindPhoneNumber: 'bindPhoneNumber',
+  /**
+   * 加入训练营
+   */
+  joinTrainingCamp: 'joinTrainingCamp',
+  /**
+   * 获得训练营首页
+   */
+  trainingCampHomeForMember: 'trainingCampHomeForMember',
+  /**
+   * 获得训练营动态信息
+   */
+  getTrainingCampDynamic: 'getTrainingCampDynamic',
+  /**
+   * 签到
+   */
+  signIn: 'signIn'
 }

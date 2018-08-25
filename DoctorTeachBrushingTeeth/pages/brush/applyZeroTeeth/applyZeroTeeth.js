@@ -2,6 +2,7 @@
 const baseTool = require('../../../utils/baseTool.js')
 const brushManager = require('../../../manager/brushManager.js')
 const brushAdapter = require('../../../adapter/brushAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
@@ -41,14 +42,13 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
   },
 
   /**
@@ -156,19 +156,30 @@ Page({
       title: '处理中...',
       mask: true,
     })
-    brushManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
+    wx.showNavigationBarLoading()
+    let joinTrainingCamp = brushManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
       baseTool.print(res)
-      wx.hideLoading()
-      teachAdapter.telphoneAdapter(res.wxUser)
-      that.setData({
-        isSelect: false,
-        isTel: true,
-      })
-      if (that.data.brushModels.length == 0) {
-        that.getBrushingVideoDetails()
-      }
+      brushAdapter.telphoneAdapter(res.wxUser)
+      return brushManager.joinTrainingCamp()
     }).catch(res => {
       wx.hideLoading()
+      wx.hideNavigationBarLoading()
+      baseTool.showInfo(res)
+      // 使得后面的不会执行
+      return baseTool.defaultPromise()
+    })
+
+    joinTrainingCamp.then(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
+      baseTool.setValueForKey(1, 'isJoinTrainingCamp')
+      baseMessageHandler.sendMessage("refresh").then(res => {
+        wx.navigateBack()
+      })
+    }).catch(res => {
+      wx.hideLoading()
+      wx.hideNavigationBarLoading()
       baseTool.showInfo(res)
     })
   },

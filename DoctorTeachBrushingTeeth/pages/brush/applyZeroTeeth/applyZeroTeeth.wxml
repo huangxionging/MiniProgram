@@ -1,7 +1,7 @@
 <!--pages/brush/applyZeroTeeth/applyZeroTeeth.wxml-->
 <view class='apply-container'>
   <view class='apply-content'>
-    <image class='apply-bg' src='/resource/login_bg.png'></image>
+    <image class='apply-bg' src='http://qnimage.hydrodent.cn/login_bg.png'></image>
     <view class='apply-tel'>
       <view class='bind-view'>
         <view class='tel-view'>

@@ -6,7 +6,10 @@
     "pages/home/doctorInfoDetail/doctorInfoDetail",
     "pages/home/brushReportDetail/brushReportDetail",
     "pages/authorization/authorization/authorization",
-    "pages/brush/applyZeroTeeth/applyZeroTeeth"
+    "pages/brush/applyZeroTeeth/applyZeroTeeth",
+    "pages/brush/followBrush/followBrush",
+    "pages/brush/buyDevice/buyDevice",
+    "pages/brush/buyWelfare/buyWelfare"
   ],
   "window": {
     "backgroundTextStyle": "dark",

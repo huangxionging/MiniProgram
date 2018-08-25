@@ -1,0 +1,25 @@
+<!--pages/brush/buyDevice/buyDevice.wxml-->
+<view class='device-container'>
+  <view class='device-content' style='height:{{containerHeight}}rpx;'>
+    <image class='device-bg-image' mode='widthFix' src='http://qnimage.hydrodent.cn/dtb_device_bg.png' bindload='imageLoadDone'></image>
+    <view class='device-content-container'>
+      <swiper class='device-swiper' previous-margin='20rpx' next-margin='270rpx'>
+        <block wx:for='{{buyDeviceList}}' wx:key='id' wx:item='item'>
+          <swiper-item id='{{index}}' bindtap='itemClick'>
+            <image class='device-swiper-item' src='{{item.imageUrl}}'></image>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class='device-buy-view'>
+        <view class='device-buy-welfare' hover-class='device-hover' bindtap='buyWelfareClick'>
+          <image class='device-buy-image' src='/resource/buy.png'></image>
+          <view class='device-buy-button'>去公益通道购买</view>
+        </view>
+        <view class='device-buy-youzan' hover-class='device-hover' bindtap='buyYouZanClick'>
+          <image class='device-buy-image' src='/resource/buy.png'></image>
+          <view class='device-buy-button'>去有赞商城购买</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

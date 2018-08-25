@@ -113,7 +113,6 @@ Page({
       wx.stopPullDownRefresh()
       // 从适配器获得数据
       let data = doctorInfoAdapter.homePageAdapter(res)
-      data.persons = 83
       data.doctorActivityList = doctorInfoAdapter.doctorActivityListAdapter(data)
       
       that.setData(data)

@@ -95,9 +95,17 @@ Page({
             wx.hideLoading()
             if (res && res.wxUser && res.wxUser.openid) {
               baseTool.setValueForKey(res.wxUser.openid, 'openid')
-              if (res.wxUser.telephone) {
+              if (baseTool.isExist(res.wxUser.telephone)) {
                 baseTool.setValueForKey(res.wxUser.telephone, 'telephone')
               }
+
+              if (baseTool.isExist(res.wxUser.memberId)) {
+                baseTool.setValueForKey(res.wxUser.memberId, 'memberId')
+              }
+              if (baseTool.isExist(res.wxUser.isJoinTrainingCamp)) {
+                baseTool.setValueForKey(res.wxUser.isJoinTrainingCamp, 'isJoinTrainingCamp')
+              }
+              
               loginManager.reLauch()
             } else {
               baseTool.showInfo('获取信息失败')

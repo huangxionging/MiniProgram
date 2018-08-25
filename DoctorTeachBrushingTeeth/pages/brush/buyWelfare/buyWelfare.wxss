@@ -1,0 +1,23 @@
+/* pages/brush/buyWelfare/buyWelfare.wxss */
+.welfare-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.welfare-title-image{
+  width: 100%;
+  height: 168rpx;
+}
+
+.welfare-content{
+  margin-top: 40rpx;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  color: #999;
+  font-size: 27rpx;
+  display: flex;
+  flex-direction: column;
+}
+.welfare-tip{
+  margin-top: 40rpx;
+}

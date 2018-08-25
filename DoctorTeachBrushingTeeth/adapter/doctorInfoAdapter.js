@@ -8,16 +8,25 @@ function homePageAdapter(res = {}) {
     department: 'offices',
     jobTitle: 'title',
     hospital: 'company',
-    reportDataList: []
+    reportDataList: [],
+    persons: 'trainingCampMemberCount'
   }
   // 模型适配器转换
-  baseTool.modelAdapter(data, res.doctorInfo)
+  baseTool.modelAdapter(data, res.doctorInfo, res => {
+    if (['loadDone', 'reportDataList'].indexOf(res) == -1) {
+      data[res] = ''
+    }
+  })
 
-  if (res.doctorInfo) {
+  if (baseTool.isExist(res.trainingCampMemberCount)) {
+    data.persons = res.trainingCampMemberCount
+  }
+
+  if (baseTool.isExist(res.doctorInfo)) {
     baseTool.setValueForKey(res.doctorInfo, 'doctorInfo')
   }
 
-  if (res.brushingRecord) {
+  if (baseTool.isExist(res.brushingRecord)) {
     for (let index = 0; index < res.brushingRecord.length; ++index) {
       let reportItem = {
         brushTime: 'brushTeethTime',
@@ -58,7 +67,7 @@ function doctorInfoDetailAdapter(doctorInfo = {}) {
 function doctorActivityListAdapter(doctorData) {
   let data = [{
     title: '干净的牙齿不会病，' + doctorData.persons + '人正跟着' + doctorData.doctorName + '医生一起用正确的方法及牙线把牙齿清洁干净吧!',
-    picUrl: '../../resource/zero.png'
+    picUrl: 'http://qnimage.hydrodent.cn/dtb_zero.png'
   }, {
       title: doctorData.doctorName + '医生今天的刷牙报告',
       picUrl: '',

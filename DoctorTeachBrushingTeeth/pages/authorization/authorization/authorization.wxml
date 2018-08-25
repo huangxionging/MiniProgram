@@ -1,6 +1,6 @@
 <view class='navigation-bar-line'/>
 <view class='lauch-container'>
-  <image src='/resource/lauch.png' class='authorization'></image>
+  <image src='http://qnimage.hydrodent.cn/dtb_lauch.png' class='authorization'></image>
   <text class='lauch-tip1'>拥有好牙齿</text>
   <text class='lauch-tip2'>从正确刷牙开始, 授权后即可学习</text>
   <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>

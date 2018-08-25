@@ -1,0 +1,189 @@
+/* pages/brush/followBrush/followBrush.wxss */
+page {
+  background-color: #eee;
+  height: 100%;
+  width: 100%;
+}
+.follow-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.look-video {
+  position: relative;
+  width: 100%;
+  height: 40%;
+}
+
+.cover-view {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 60rpx;
+  line-height: 100rpx;
+}
+
+.poster-play {
+  position: absolute;
+  left: 20rpx;
+  bottom: 20rpx;
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.avatar {
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+}
+
+.teach-content {
+  width: 100%;
+}
+
+.teach-tip {
+  height: 85rpx;
+  margin-left: 20rpx;
+  display: flex;
+  font-size: 35rpx;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.teach-model-container {
+  height: 460rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.teach-model {
+  height: 460rpx;
+  width: 600rpx;
+}
+
+.teach-content-bg{
+  margin-top: 0rpx;
+  display: block;
+  height: 70%;
+  position: relative;
+}
+.teach-bg-image{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.teach-content-container{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal-view{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.modal-dialog{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modal-alert{
+  display: block;
+  position: relative;
+}
+.alert-bg{
+  margin-top: 10rpx;
+}
+.reel{
+  position: relative;
+  margin-top: 20rpx;
+  width: 198rpx;
+  height: 78rpx;
+}
+
+.finger{
+  position: relative;
+  width: 99rpx;
+  height: 95rpx;
+}
+
+
+.cancle{
+  position: absolute;
+  width: 40rpx;
+  height: 40rpx;
+  right: 220rpx;
+  top: 200rpx;
+}
+
+.alert-content{
+  position: absolute;
+  left: 190rpx;
+  right: 190rpx;
+  top: 500rpx;
+  bottom: 0;
+  /* background-color: yellow; */
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-line1{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.line-message{
+  color: #ff5051;
+  font-size: 25rpx;
+}
+
+.line-tip{
+  color: #98611f;
+  font-size: 20rpx;
+}
+
+.alert-line2{
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-line3{
+  margin-top: 20rpx;
+  color: #98611f;
+  font-size: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

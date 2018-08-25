@@ -2,6 +2,8 @@
 const baseTool = require('../../../utils/baseTool.js')
 const brushManager = require('../../../manager/brushManager.js')
 const brushAdapter = require('../../../adapter/brushAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+
 Page({
 
   /**
@@ -13,8 +15,9 @@ Page({
     isTel: false,
     doctors: '87',
     users: '2667',
-    userName: 'gggg',
-    day: '6'
+    userName: '',
+    day: '',
+    signDisabled: 0
   },
 
   /**
@@ -22,10 +25,11 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    let telphone = brushManager.getTelphone()
-    if (telphone) {
+    let getJoinTrainingCamp = brushManager.getJoinTrainingCamp()
+    baseTool.print(getJoinTrainingCamp)
+    if (getJoinTrainingCamp == 1) {
       that.setData({
-        loadDone: true,
+        loadDone: false,
         isTel: true
       })
       that.loadData()
@@ -42,7 +46,15 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    let that = this
+    baseMessageHandler.addMessageHandler("refresh", that, res => {
+      that.setData({
+        loadDone: false,
+        isTel: true
+      })
+      that.loadData()
+      wx.startPullDownRefresh()
+    })
   },
 
   /**
@@ -90,13 +102,26 @@ Page({
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
-    brushManager.getBrushRecord().then(res => {
+    let getDynamicPromise = brushManager.trainingCampHomeForMember().then(res => {
+      let data = brushAdapter.userInfoAdapter(res)
+      baseTool.print(data)
+      that.setData(data)
+      return brushManager.getTrainingCampDynamic()
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+      return baseTool.defaultPromise()
+    })
+    getDynamicPromise.then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      let data = brushAdapter.brushRecordAdapter(res)
-      baseTool.print(data)
-      that.setData(data)
+      let brushDataList = brushAdapter.brushDynamicAdapter(res)
+      that.setData({
+        brushDataList: brushDataList
+      })
+      
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
@@ -116,6 +141,16 @@ Page({
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
+    })
+  },
+  signClick: function(e){
+    wx.navigateTo({
+      url: '/pages/brush/followBrush/followBrush',
+    })
+  },
+  selectDeviceClick: function(e) {
+    wx.navigateTo({
+      url: '/pages/brush/buyDevice/buyDevice',
     })
   }
 })
