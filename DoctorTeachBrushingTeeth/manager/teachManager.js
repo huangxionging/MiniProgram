@@ -22,9 +22,23 @@ function getTeachVideoInfo() {
   })
 }
 
+function getVideoList() {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    if (openid) {
+
+      let url = baseURL.baseDomain + baseApiList.videoList
+      // 统一处理
+      baseTool.request(url).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
 
 
 
 module.exports = {
   getTeachVideoInfo: getTeachVideoInfo,
+  getVideoList: getVideoList
 }

@@ -1,0 +1,10 @@
+<!--components/videoItem/videoItem.wxml-->
+<view class='video-container'>
+  <view class='video-content' bindtap='videoClick'>
+    <image class='video-poster' src='{{data.pic}}'/>
+    <view class='video-time'>{{data.duration}}</view>
+  </view>
+  <view class='video-title'>
+    <text>{{data.name}}</text>
+  </view>
+</view>

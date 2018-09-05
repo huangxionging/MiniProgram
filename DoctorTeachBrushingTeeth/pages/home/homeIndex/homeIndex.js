@@ -22,12 +22,12 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     let that = this
     // baseTool.print(["带过来的参数",options.q])
     if (options.q) {
       let url = decodeURIComponent(options.q)
-     
+
       let parameter = baseTool.getParameterFromURL(url)
       baseTool.print(["带过来的参数", parameter])
       if (parameter.doctorId) {
@@ -38,7 +38,7 @@ Page({
     } else {
       if (options.doctorId) {
         baseTool.setValueForKey(options.doctorId, "doctorId")
-      } else  {
+      } else {
         let doctorId = baseTool.valueForKey('doctorId')
         if (!doctorId) {
           baseTool.setValueForKey('', "doctorId")
@@ -52,35 +52,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  
+  onReady: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-  
+  onShow: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
-  
+  onHide: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     let that = this
     that.getDoctorInfo()
   },
@@ -88,16 +88,16 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-  
+  onReachBottom: function() {
+
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
-      
+
     }
   },
   onDoctorInfoClick: function(e) {
@@ -114,9 +114,7 @@ Page({
       // 从适配器获得数据
       let data = doctorInfoAdapter.homePageAdapter(res)
       data.doctorActivityList = doctorInfoAdapter.doctorActivityListAdapter(data)
-      
       that.setData(data)
-  
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
@@ -127,18 +125,27 @@ Page({
     baseTool.print(e)
     let info = e.detail
     switch (info.index) {
-      case '0': {
-        wx.switchTab({
-          url: '/pages/brush/brushIndex/brushIndex',
-        })
-        break
-      }
-      case '1': {
-        wx.navigateTo({
-          url: '../brushReportDetail/brushReportDetail?recordId=' + e.detail.data.recordId,
-        })
-        break
-      }
+      case '0':
+        {
+          wx.switchTab({
+            url: '/pages/brush/brushIndex/brushIndex',
+          })
+          break
+        }
+      case '1':
+        {
+          wx.navigateTo({
+            url: '/pages/home/deviceBanner/deviceBanner',
+          })
+          break;
+        }
+      case '2':
+        {
+          wx.navigateTo({
+            url: '/pages/home/brushReportDetail/brushReportDetail?recordId=' + e.detail.data.recordId,
+          })
+          break
+        }
     }
   }
 })

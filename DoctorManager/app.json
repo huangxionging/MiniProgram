@@ -28,7 +28,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/statistics/statistics/statistics",
+        "pagePath": "pages/statistics/withdrawMoney/withdrawMoney",
         "iconPath": "resource/statistics_normal.png",
         "selectedIconPath": "resource/statistics_select.png",
         "text": "统计"

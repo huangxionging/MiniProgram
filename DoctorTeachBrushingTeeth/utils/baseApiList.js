@@ -42,5 +42,13 @@ module.exports = {
   /**
    * 签到
    */
-  signIn: 'signIn'
+  signIn: 'signIn',
+  /**
+   * 视频列表
+   */
+  videoList: "find/videoList",
+  /**
+   * 获得人数计算
+   */
+  getPeopleCounting: 'getPeopleCounting'
 }

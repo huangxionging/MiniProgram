@@ -219,6 +219,26 @@ function signIn() {
   })
 }
 
+/**
+ * 获取训练营报名入口数据
+ */
+function getPeopleCounting() {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    if (openid) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getPeopleCounting
+      let memberId = getUserMemberId()
+      let data = {
+        memberId: memberId
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
 module.exports = {
   getBrushRecord: getBrushRecord,
   getTelphone: getTelphone,
@@ -231,5 +251,6 @@ module.exports = {
   joinTrainingCamp: joinTrainingCamp,
   trainingCampHomeForMember: trainingCampHomeForMember,
   getTrainingCampDynamic: getTrainingCampDynamic,
-  signIn: signIn
+  signIn: signIn,
+  getPeopleCounting: getPeopleCounting
 }

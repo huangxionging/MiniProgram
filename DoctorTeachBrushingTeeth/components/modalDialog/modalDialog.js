@@ -28,6 +28,11 @@ Component({
     hideModal: function(e) {
       let that = this
       baseTool.print(e)
+      that.setData({
+        data: {
+          showModal: false
+        }
+      })
       that.triggerEvent('hideModal', {}, {})
     }
   }

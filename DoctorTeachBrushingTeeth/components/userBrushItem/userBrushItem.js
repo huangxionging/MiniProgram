@@ -27,7 +27,7 @@ Component({
     },
     selectDeviceClick: function(e) {
       let that = this
-      this.triggerEvent('selectDeviceClick', that.data)
+      that.triggerEvent('selectDeviceClick', that.data)
     }
   }
 })

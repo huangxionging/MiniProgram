@@ -13,8 +13,8 @@ Page({
     loadDone:false,
     brushDataList: [],
     isTel: false,
-    doctors: '87',
-    users: '2667',
+    doctors: '',
+    users: '',
     userName: '',
     day: '',
     signDisabled: 0
@@ -26,8 +26,9 @@ Page({
   onLoad: function (options) {
     let that = this
     let getJoinTrainingCamp = brushManager.getJoinTrainingCamp()
+    
     baseTool.print(getJoinTrainingCamp)
-    if (getJoinTrainingCamp == 1) {
+    if (!getJoinTrainingCamp == 1) {
       that.setData({
         loadDone: false,
         isTel: true
@@ -35,10 +36,12 @@ Page({
       that.loadData()
       wx.startPullDownRefresh()
     } else {
+      
       that.setData({
-        loadDone: true,
+        loadDone: false,
         isTel: false
       })
+      that.getPeopleCounting()
     }
   },
 
@@ -83,7 +86,11 @@ Page({
    */
   onPullDownRefresh: function () {
     let that = this
-    that.loadData()
+    if (that.data.isTel) {
+      that.loadData()
+    } else {
+      wx.stopPullDownRefresh()
+    }
   },
 
   /**
@@ -92,12 +99,22 @@ Page({
   onReachBottom: function () {
   
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  getPeopleCounting: function() {
+    let that = this
+    wx.showNavigationBarLoading()
+    brushManager.getPeopleCounting().then(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      that.setData({
+        loadDone: true,
+        doctors: res.doctorCount,
+        users: res.trainingCampMemberCount
+      })
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+    })
   },
   loadData: function() {
     let that = this
@@ -118,6 +135,10 @@ Page({
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       let brushDataList = brushAdapter.brushDynamicAdapter(res)
+      wx.setNavigationBarColor({
+        frontColor: '#000000',
+        backgroundColor: '#3ebaff',
+      })
       that.setData({
         brushDataList: brushDataList
       })
@@ -150,7 +171,7 @@ Page({
   },
   selectDeviceClick: function(e) {
     wx.navigateTo({
-      url: '/pages/brush/buyDevice/buyDevice',
+      url: '/pages/home/deviceBanner/deviceBanner',
     })
   }
 })

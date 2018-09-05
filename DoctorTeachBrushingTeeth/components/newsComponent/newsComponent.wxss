@@ -25,5 +25,6 @@
   margin-top: 20rpx;
 }
 .news-pic{
+  margin-top: 20rpx;
   width: 100%;
 }

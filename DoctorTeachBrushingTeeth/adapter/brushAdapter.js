@@ -23,33 +23,52 @@ function brushDynamicAdapter(dynamics = []) {
       time: 'dynamicTime',
       content: 'dynamicText'
     }
-    baseTool.modelAdapter(dynamicItem, dynamics[index], res => {
-      dynamicItem[res] = 'dd'
+    baseTool.modelAdapter(dynamicItem, dynamics[index].deviceMemberSimplenessRecordVo, res => {
+      // dynamicItem[res] = ''
     })
+    baseTool.modelAdapter(dynamicItem, dynamics[index], res => {
+      // dynamicItem[res] = ''
+    })
+    dynamicItem.avatar = baseTool.urlToHttp(dynamicItem.avatar)
     if (dynamicItem.dynamicType == 3) {
       dynamicItem.showReport = true
     } else {
       dynamicItem.showReport = false
-      dynamicItem.showReport = true
     }
     brushDataList.push(dynamicItem)
   }
   return brushDataList
 }
 
-function burshModelAdpter(brushModels = []) {
-  let data = []
-
+function burshModelAdpter(videoInfo = {}) {
+  let data = {
+    loadDone: true,
+    teachVideoUrl: 'videoUrl',
+    currentIndex: 0,
+    title: '请准备好你的牙刷',
+    content: '实时跟刷就要开始啦',
+    autoplay: false,
+    averageTime: 0
+  }
+  baseTool.modelAdapter(data, videoInfo)
+  data.brushModels = []
+  let brushModels = videoInfo.toothSurfaceDetailsVoList
+  let flagTime = 0.0
   for (let index = 0; index < brushModels.length; ++index) {
     let brushItem = {
       imageUrl: 'pic',
       name: 'name',
       videoPic: 'videoPic',
-      videoUrl: 'videoUrl'
+      duration: 'playDuration',
+      startTime: 0
     }
     baseTool.modelAdapter(brushItem, brushModels[index])
-    data.push(brushItem)
+    brushItem.startTime = flagTime
+    
+    flagTime += brushItem.duration
+    data.brushModels.push(brushItem)
   }
+  data.averageTime = flagTime / data.brushModels.length
   return data
 }
 
@@ -62,7 +81,7 @@ function telphoneAdapter(wxUser = {}) {
   }
 
   if (wxUser.memberId) {
-    baseTool.setValueForKey(wxUser.telephone, 'memberId')
+    baseTool.setValueForKey(wxUser.memberId, 'memberId')
   }
   return {
     telephone: wxUser.telephone

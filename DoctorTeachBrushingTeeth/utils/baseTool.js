@@ -450,6 +450,17 @@ function toPixel(rpx= 0) {
   return rpx * systemInfo.screenWidth / 750
 }
 
+/**
+ * 改成 http 访问
+ */
+function urlToHttp(url = '') {
+  let httpUrl = url
+  if (url.indexOf('://')) {
+     httpUrl = "http://" + url.split('://')[1]
+  }
+  return httpUrl
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -515,5 +526,6 @@ module.exports = {
   showSheetInfo: showSheetInfo,
   uploadLocalFile: uploadLocalFile,
   previewSingleImage: previewSingleImage,
-  isExist: isExist
+  isExist: isExist,
+  urlToHttp: urlToHttp
 }

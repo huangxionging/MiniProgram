@@ -1,26 +1,25 @@
 <!--pages/brush/brushIndex.wxml-->
-<view class='navigation-bar-line' />
+<!-- <view class='navigation-bar-line' /> -->
 <view class='brush-container' wx:if='{{loadDone}}'>
   <view wx:if='{{isTel}}'>
     <view class='brush-header'>
-      <image src='/resource/banner.png' class='brush-banner'></image>
+      <image src='http://qnimage.hydrodent.cn/dtb_zero_info_bg.png' class='brush-banner' mode='widthFix' />
       <view class='brush-content-container'>
         <view class='brush-user'>
-          <image class='avatar' src='{{avatar}}'></image>
-          <view class='user'>
-            <view class='name'>{{userName}}</view>
-            <view class='tip'>{{signText}}</view>
+          <view class='avatar-bg-view'>
+            <image src='http://qnimage.hydrodent.cn/dtb_zero_info_avatar_bg.png' class='avatar-bg'></image>
+            <view class='avatar-view'>
+              <image class='avatar' src='{{avatar}}'></image>
+            </view>
+            <view class='sign-container'>
+              <view wx:if='{{!signDisabled}}' class='sign-view' hover-class='sign-hover' bindtap='signClick'>点击点打卡</view>
+              <view wx:else class='sign-view sign-view-disable'>点击点打卡</view>
+            </view>
           </view>
         </view>
-        <view wx:if='{{signDisabled}}' class='sign-view'>
-          <image class='sign_image' src='../../../resource/signed.png'></image>
-        </view>
-        <view wx:else class='sign-view' bindtap='' hover-class='sign-hover' bindtap='signClick'>
-          <image class='sign_image' src='../../../resource/unsign.png'></image>
-        </view>
+        <view class='tip'>{{signText}}</view>
       </view>
     </view>
-
     <view class='brush-table-view'>
       <block wx:for='{{brushDataList}}' wx:key='id' wx:item='item'>
         <view class="brush-cell {{index==0?'':'others'}}">
@@ -31,23 +30,19 @@
     </view>
   </view>
   <view wx:else class='zero-view'>
-    <view class='zero-tip-view'>
-      <image class='zero-bg-image' src='http://qnimage.hydrodent.cn/dtb_zero_tip_bg.png' />
-      <view class='zero-tip-number'>
-        <image class='zero-tip-number-image' src='http://qnimage.hydrodent.cn/zero_tip.png' />
-        <view class='zero-number-container'>
-          {{doctors}}位医生带领{{users}}人正在参加
+    <image class='zero-bg-image' src='http://qnimage.hydrodent.cn/dtb_zero_bg1.png' />
+    <view class='zero-content'>
+      <view class='zero-apply-view'>
+        <image src='http://qnimage.hydrodent.cn/dtb_zero_tip2.png' mode='widthFix' class='zero_tip1'></image>
+        <image src='http://qnimage.hydrodent.cn/dtb_zero_about1.png' style='margin-top:40rpx;' mode='widthFix' class='zero_tip1'></image>
+        <view class='confirm_button-container'>
+          <view class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
+            <image class='confirm_image' src='/resource/confirm_button.png'></image>
+            <view class='confirm_text'>我要报名</view>
+          </view>
         </view>
       </view>
     </view>
-    <view class='zero-apply-view'>
-      <view class='confirm_button-container'>
-        <view class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
-          <image class='confirm_image' src='/resource/confirm_button.png'></image>
-          <view class='confirm_text'>我要报名</view>
-        </view>
-      </view>
-      <image class='zero-apply-image' src='http://qnimage.hydrodent.cn/dtb_zero_apply_bg.png' />
-    </view>
+
   </view>
 </view>

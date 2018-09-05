@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "装备库",
+  "usingComponents": {
+    "newsComponent": "/components/newsComponent/newsComponent"
+  }
+}

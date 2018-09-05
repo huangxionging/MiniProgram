@@ -1,9 +1,11 @@
 /* pages/brush/followBrush/followBrush.wxss */
+
 page {
   background-color: #eee;
   height: 100%;
   width: 100%;
 }
+
 .follow-container {
   width: 100%;
   height: 100%;
@@ -73,13 +75,14 @@ page {
   width: 600rpx;
 }
 
-.teach-content-bg{
+.teach-content-bg {
   margin-top: 0rpx;
   display: block;
   height: 70%;
   position: relative;
 }
-.teach-bg-image{
+
+.teach-bg-image {
   position: absolute;
   left: 0;
   right: 0;
@@ -88,7 +91,8 @@ page {
   width: 100%;
   height: 100%;
 }
-.teach-content-container{
+
+.teach-content-container {
   position: absolute;
   left: 0;
   right: 0;
@@ -97,7 +101,8 @@ page {
   width: 100%;
   height: 100%;
 }
-.modal-view{
+
+.modal-view {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -106,71 +111,114 @@ page {
   top: 0;
   bottom: 0;
 }
-.modal-dialog{
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.modal-alert{
+
+.modal-dialog {
+  position: fixed;
   display: block;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+
+.modal-alert {
+  display: block;
+  margin-top: 20rpx;
+  position: relative;
+  align-items: center;
+  /* background-color: red; */
+}
+
+.alert-bg {
+  width: 120%;
+  left: -10%;
   position: relative;
 }
-/* .alert-bg{
-  margin-top: 10rpx;
-} */
-.reel{
+
+.reel {
   position: relative;
   margin-top: 20rpx;
   width: 198rpx;
   height: 78rpx;
 }
 
-.finger{
+.finger {
   position: relative;
   width: 99rpx;
   height: 95rpx;
 }
 
-
-.cancle{
+.cancle {
   position: absolute;
   width: 40rpx;
   height: 40rpx;
-  right: 220rpx;
-  top: 200rpx;
+  right: 30%;
+  top: 250rpx;
 }
 
-.alert-content{
+.modal-blur{
   position: absolute;
-  left: 190rpx;
-  right: 190rpx;
-  top: 500rpx;
+  left: 0;
+  right: 0;
   bottom: 0;
-  /* background-color: yellow; */
-  justify-content: center;
-  align-items: center;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.6;
 }
 
-.alert-line1{
+.modal-content{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  left: 0rpx;
+  right: 0rpx;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+.alert-content {
+  position: absolute;
+  left: 0rpx;
+  right: 0rpx;
+  bottom: 5%;
+  width: 100%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: gold; */
+}
+
+.alert-line1 {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-.line-message{
+.line-message {
   color: #ff5051;
-  font-size: 25rpx;
+  font-size: 35rpx;
 }
 
-.line-tip{
+.line-tip {
   color: #98611f;
-  font-size: 20rpx;
+  font-size: 30rpx;
 }
 
-.alert-line2{
+.alert-line2 {
   margin-top: 20rpx;
   display: flex;
   flex-direction: row;
@@ -178,12 +226,12 @@ page {
   align-items: center;
 }
 
-.alert-line3{
-  margin-top: 20rpx;
+.alert-line3 {
+  margin-top: 30rpx;
   color: #98611f;
-  font-size: 20rpx;
+  font-size: 30rpx;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 }

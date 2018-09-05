@@ -1,7 +1,5 @@
 <!--components/modalDialog/modalDialog.wxml-->
 <cover-view class='modal-mask' catchtouchmove='preventTouch' wx:if='{{data.showModal}}'>
 </cover-view>
-<cover-view class='modal-content'>
-    <slot></slot>
-</cover-view>
+<slot></slot>
 

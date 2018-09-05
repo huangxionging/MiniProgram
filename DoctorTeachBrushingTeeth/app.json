@@ -8,8 +8,8 @@
     "pages/authorization/authorization/authorization",
     "pages/brush/applyZeroTeeth/applyZeroTeeth",
     "pages/brush/followBrush/followBrush",
-    "pages/brush/buyDevice/buyDevice",
-    "pages/brush/buyWelfare/buyWelfare"
+    "pages/brush/buyWelfare/buyWelfare",
+    "pages/home/deviceBanner/deviceBanner"
   ],
   "window": {
     "backgroundTextStyle": "dark",

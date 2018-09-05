@@ -1,5 +1,5 @@
 <!--pages/home/homeIndex.wxml-->
-<view class='navigation-bar-line' />
+<view class='navigation-bar-line'/>
 <view class='doctor-container' wx:if='{{loadDone}}'>
   <doctorInfo class='doctorInfo' binddoctorInfoClick='onDoctorInfoClick' avatar='{{avatar}}' name='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' />
   <view class='home-table-view'>

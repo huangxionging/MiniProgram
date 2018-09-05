@@ -3,7 +3,7 @@
   <view wx:if='{{data.title}}' class='news-title'>{{data.title}}</view>
   <view wx:if='{{data.title}}' class='news-line'></view>
   <view wx:if='{{data.content}}' class='news-content'>
-    <text space='ensp'>    {{data.content}}</text>
+    <text space='ensp' style="color:{{data.color?data.color:'black'}};">    {{data.content}}</text>
   </view>
   <image  class='news-pic' style='width:{{data.width}};height:{{data.height}}' mode='widthFix' src='{{data.picUrl}}' lazy-load='true'/>
 </view>

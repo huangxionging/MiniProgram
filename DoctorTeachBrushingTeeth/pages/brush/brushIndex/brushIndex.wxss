@@ -12,7 +12,6 @@ page {
 
 .brush-banner {
   width: 100%;
-  height: 260rpx;
 }
 
 .brush-table-view {
@@ -38,25 +37,22 @@ page {
   margin-top: 10rpx;
 }
 
-.zero-tip-view {
-  width: 100%;
-  height: 40%;
-  display: flex;
+.zero-apply-view {
   position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-.zero-apply-view {
-  display: flex;
+.zero_tip1{
   width: 100%;
-  height: 60%;
-  flex-direction: column;
 }
 
 .confirm_button-container {
   width: 100%;
-  height: 30%;
+  margin-top: 40rpx;
   text-align: center;
   position: relative;
   display: flex;
@@ -99,11 +95,17 @@ page {
 .zero-view {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: block;
 }
 
 .zero-bg-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.zero-content{
+  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -121,8 +123,8 @@ page {
 }
 
 .zero-apply-image {
-  width: 100%;
-  height: 70%;
+  width: 492rpx;
+  height: 442rpx;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -130,41 +132,15 @@ page {
   align-items: center;
 }
 
-.zero-tip-number {
-  width: 538rpx;
-  height: 350rpx;
-  display: block;
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-}
 
-.zero-tip-number-image {
+.brush-header {
   width: 100%;
-  height: 100%;
-}
-
-.zero-number-container {
-  left: 45rpx;
-  right: 45rpx;
-  top: 80rpx;
-  bottom: 90rpx;
-  position: absolute;
-  /* background-color: yellow; */
-  color: white;
-  font-size: 60rpx;
-  font: bold;
-  transform: rotate(-5deg);
-}
-
-.brush-header{
-  width: 100%;
-  height: 260rpx;
+  /* height: 260rpx; */
   display: block;
   position: relative;
 }
 
-.brush-content-container{
+.brush-content-container {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -173,44 +149,99 @@ page {
   top: 0;
   bottom: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1;
+  /* flex: 1; */
 }
-.brush-user{
+
+.brush-user {
   position: relative;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  flex: 1;
+  width: 100%;
+  height: 100%;
 }
-.avatar{
-  margin-left: 20rpx;
-  width: 200rpx;
-  height: 200rpx;
+
+.avatar-bg-view {
+  position:relative;
+  display: block;
+  width: 350rpx;
+  height: 350rpx;
+}
+
+.avatar-bg {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  /* background-color: purple; */
+}
+
+.avatar {
+  position: relative;
+  width: 210rpx;
+  height: 210rpx;
   border-radius: 50%;
 }
-.user{
-  margin-left: 20rpx;
-  color: white;
-}
 
-.user .name{
-  font-size: 35rpx;
-}
-.user .tip{
+.tip {
+  position: absolute;
   font-size: 20rpx;
-  margin-top: 40rpx;
+  color: white;
+  bottom: 20rpx;
 }
 
-.sign-view{
-  margin-right: 0rpx;
+.sign-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  flex-direction: column;
+  align-content: center;
+  /* justify-content: center; */
+  align-items: center;
+  display: flex;
 }
-.sign_image{
+.sign-view{
+  position: relative;
+  margin-top: 250rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #00a0e9;
+  font-size: 25rpx;
+  justify-content: center;
+  align-items: center;
+  height: 60rpx;
+  width: 180rpx;
+  border-radius: 30rpx;
+  border: 2rpx solid black;
+}
+
+.sign_image {
   width: 140rpx;
   height: 50rpx;
 }
-.sign-hover{
+
+.sign-hover {
   opacity: 0.5;
+}
+
+.sign-view-disable{
+  background-color: #f5f5f5;
+  color: #999;
 }

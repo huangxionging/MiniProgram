@@ -8,7 +8,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-
     isSelect: true,
     videoUrl: '',
     videPicUrl: '',
@@ -16,9 +15,9 @@ Page({
     showModal: false,
     isTel: false,
     newsList: [],
-    
     showPoster: true,
-    doctorName: ''
+    doctorName: '',
+    autoplay: false
   },
 
   /**
@@ -26,7 +25,7 @@ Page({
    */
   onLoad: function(options) {
     let that = this
-    
+
     that.loadData()
     wx.startPullDownRefresh()
 
@@ -56,7 +55,6 @@ Page({
   onHide: function(e) {
     let that = this
     that.lookVideoContext.pause()
-
   },
 
   /**
@@ -89,40 +87,42 @@ Page({
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
-    teachManager.getTeachVideoInfo().then(res => {
-      wx.hideNavigationBarLoading()
-      wx.stopPullDownRefresh()
+    let getVideoListPromise = teachManager.getTeachVideoInfo().then(res => {
       let data = teachAdapter.videoAdapter(res)
       baseTool.print(data)
       that.setData(data)
+      return teachManager.getVideoList()
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+      return baseTool.defaultPromise()
+    })
+    getVideoListPromise.then(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.print(res)
+      let videoList = teachAdapter.getVideoListAdapter(res)
+      that.setData({
+        loadDone: true,
+        videoList: videoList
+      })
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       baseTool.showInfo(res)
     })
   },
-  hideModal: function(e) {
-
-  },
-  cancleClick: function(e) {
+  lookVideoPlay: function(e) {
+    baseTool.print([e, '2'])
     let that = this
     that.setData({
-      showModal: false,
-      modalDialog: {
-        showModal: false
-      }
+      showPoster: false
     })
-  },
-
-  lookVideoPlay: function(e) {
-    baseTool.print(e)
-    let that = this
-    if (that.data.showPoster == true) {
-      that.lookVideoContext.pause()
-    }
+    // that.lookVideoContext.play()
   },
   videoPlayClick: function(e) {
-    baseTool.print(e)
+    baseTool.print([e, '3'])
     let that = this
     that.setData({
       showPoster: false
@@ -131,9 +131,24 @@ Page({
   },
   videoPause: function(e) {
     let that = this
+    baseTool.print([e, '0'])
     that.setData({
       showPoster: true
     })
-    baseTool.print(['e', 'dddd'])
+  },
+  videoItemClick: function(e) {
+    let that = this
+    baseTool.print([e, '1'])
+    that.setData({
+      videoUrl: e.detail.data.videoUrl,
+      showPoster: false,
+      autoplay: true,
+    })
+    that.lookVideoContext.play()
+  },
+  bindwaiting: function(e) {
+    baseTool.print([e, '4'])
+    let that = this
+    // that.lookVideoContext.play()
   }
 })

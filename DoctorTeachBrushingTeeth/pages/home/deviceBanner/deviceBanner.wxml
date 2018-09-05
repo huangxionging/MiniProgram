@@ -1,0 +1,21 @@
+<!--pages/home/deviceBanner/deviceBanner.wxml-->
+<view class='device-container'>
+  <view class='video-container'>
+    <video src='{{videoUrl}}' class='video' autoplay='true' bindended='endPlay' id='device-video'></video>
+  </view>
+  <view class='content-container'>
+    <newsComponent data='{{content}}' class='content' />
+  </view>
+  <view class='device-buy-container'>
+    <view class='device-line'/>
+    <view class='device-buy-button'>
+      <view class='device-button' hover-class='hover-button' bindtap='welfareClick'>公益通道</view>
+      <view class='device-button right' hover-class='hover-button'>
+        <navigator target='miniProgram' app-id='wx944289b1fe8657ce' path='pages/index/index' version='develop'>
+        立即挑选
+        </navigator>
+      </view>
+    </view>
+  </view>
+  <view style='height:20rpx;'></view>
+</view>

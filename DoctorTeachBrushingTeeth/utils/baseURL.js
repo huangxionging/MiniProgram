@@ -2,7 +2,7 @@
 // 测试环境
 let baseDomain = 'https://dev-dos.32teeth.cn/'
 let baseBrushDomain = 'https://dev-os.32teeth.cn/'
-let debug = true
+let debug = false
 if (!debug) {
   // 正式环境
   baseDomain = 'https://dos.32teeth.cn/'

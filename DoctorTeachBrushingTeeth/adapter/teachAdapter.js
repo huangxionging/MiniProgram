@@ -5,7 +5,6 @@ const baseTool = require('../utils/baseTool.js')
  */
 function videoAdapter(videoInfo = {}) {
   let data = {
-    loadDone: true,
     videoUrl: 'videoUrl',
     videPicUrl: 'videPicUrl',
     newsList: []
@@ -39,9 +38,25 @@ function videoAdapter(videoInfo = {}) {
 }
 
 
-
+function getVideoListAdapter(e = []) {
+  let videoList = []
+  for (let index0 = 0; index0 < e.length; ++index0) {
+    let burshVideoList = e[index0].brushVideoList
+    for (let index1 = 0; index1 < burshVideoList.length; ++index1) {
+      let videoItem = burshVideoList[index1]
+      if (videoItem.videoUrl == 'http://qnimage.hydrodent.cn/shuipingzhendongfushua.mp4') {
+        videoList.splice(0, 0, videoItem)
+      } else {
+        videoList.push(videoItem)
+      }
+      
+    }
+  }
+  return videoList
+}
 
 
 module.exports = {
   videoAdapter: videoAdapter,
+  getVideoListAdapter: getVideoListAdapter
 }

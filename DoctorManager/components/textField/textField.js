@@ -1,4 +1,5 @@
 // components/textField/textField.js
+const baseTool = require('../../utils/baseTool.js')
 Component({
   /**
    * 组件的属性列表
@@ -35,6 +36,7 @@ Component({
   methods: {
     getInputContent: function(e) {
       let that = this
+      baseTool.print(e)
       that.triggerEvent('getInput', e.detail.value)
     }
   }

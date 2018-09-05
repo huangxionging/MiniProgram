@@ -2,7 +2,7 @@
 <view class='textField'>
   <view class='title' style='background-color:{{bgColor}}'>{{title}}</view>
   <view class='input-view'>
-    <input class='input-content' value='{{value}}' placeholder-class='placeholder' placeholder='{{placeholder}}' bindinput='getInputContent'></input>
+    <input class='input-content' value='{{value}}' placeholder-class='placeholder' placeholder='{{placeholder}}' bindblur='getInputContent'></input>
   </view>
 </view>
 

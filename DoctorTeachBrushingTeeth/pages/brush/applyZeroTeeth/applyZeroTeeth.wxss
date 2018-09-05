@@ -12,6 +12,12 @@ page {
   display: flex;
 }
 
+.apply-view{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 .apply-content {
   height: 100%;
   width: 100%;
@@ -26,17 +32,16 @@ page {
 }
 
 .apply-tel {
-  position: absolute;
+  position: relative;
   height: 100%;
   width: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
-
+.zero_tip1{
+  width: 100%;
+}
 .bind-view {
-  margin-top: 400rpx;
   width: 100%;
   display: flex;
   flex-direction: column;
