@@ -103,9 +103,50 @@ function userInfoAdapter(userInfo = {}) {
   return data
 }
 
+/**
+ * 训练营报名动态数据
+ */
+function brushZeroCampAdapter(campInfo = {}) {
+  let data = {
+    loadDone: true,
+    doctors: 'doctorCount',
+    users: 'trainingCampMemberCount',
+    itemList: []
+  }
+  baseTool.modelAdapter(data, campInfo)
+  if (baseTool.isExist(campInfo.nameList)) {
+    for (let index = 0; index < campInfo.nameList.length; index += 2) {
+      let item = {
+        leftName: '',
+        rightName: ''
+      }
+      let left = campInfo.nameList[index]
+      if (left.length <= 1) {
+        item.leftName = left
+      } else {
+        item.leftName = left.substr(0, 1) + '***' 
+          // + left.substr(left.length - 1, 1)
+      }
+
+      if (index + 1 < campInfo.nameList.length) {
+        let right = campInfo.nameList[index + 1]
+        if (right.length <= 1) {
+          item.rightName = right
+        } else {
+          item.rightName = right.substr(0, 1) + '***' 
+            // + right.substr(right.length - 1, 1)
+        }
+      }
+      data.itemList.push(item)
+    }
+  }
+  return data
+}
+
 module.exports = {
   brushDynamicAdapter: brushDynamicAdapter,
   burshModelAdpter: burshModelAdpter,
   telphoneAdapter: telphoneAdapter,
-  userInfoAdapter: userInfoAdapter
+  userInfoAdapter: userInfoAdapter,
+  brushZeroCampAdapter: brushZeroCampAdapter
 }

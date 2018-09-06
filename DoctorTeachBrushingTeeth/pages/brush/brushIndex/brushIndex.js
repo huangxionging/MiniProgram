@@ -17,7 +17,9 @@ Page({
     users: '',
     userName: '',
     day: '',
-    signDisabled: 0
+    signDisabled: 0,
+    itemList: [],
+    stopTimer: false
   },
 
   /**
@@ -28,10 +30,11 @@ Page({
     let getJoinTrainingCamp = brushManager.getJoinTrainingCamp()
     
     baseTool.print(getJoinTrainingCamp)
-    if (!getJoinTrainingCamp == 1) {
+    if (getJoinTrainingCamp == 1) {
       that.setData({
         loadDone: false,
-        isTel: true
+        isTel: true,
+        stopTimer: true
       })
       that.loadData()
       wx.startPullDownRefresh()
@@ -105,11 +108,9 @@ Page({
     brushManager.getPeopleCounting().then(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      that.setData({
-        loadDone: true,
-        doctors: res.doctorCount,
-        users: res.trainingCampMemberCount
-      })
+      let data = brushAdapter.brushZeroCampAdapter(res)
+      that.setData(data)
+      that.startRefreshPeopleState()
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
@@ -173,5 +174,20 @@ Page({
     wx.navigateTo({
       url: '/pages/home/deviceBanner/deviceBanner',
     })
+  },
+  startRefreshPeopleState: function() {
+    let that = this
+    baseTool.startTimer(function(total) {
+      if (that.data.stopTimer) {
+        return true
+      }
+      let itemList = that.data.itemList
+      let item = itemList[0]
+      itemList.splice(0, 1)
+      itemList.push(item)
+      that.setData({
+        itemList: itemList
+      })
+    }, 2000, 1000)
   }
 })

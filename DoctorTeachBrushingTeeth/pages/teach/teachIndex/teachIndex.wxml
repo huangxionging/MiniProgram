@@ -1,28 +1,28 @@
 <!--pages/teach/teachIndex.wxml-->
 <view class='navigation-bar-line' />
 <view class='teach-container' wx:if='{{loadDone}}'>
-  <view  class='look-video-view'>
+  <view class='look-video-view'>
     <video src='{{videoUrl}}' class='look-video' autoplay='{{autoplay}}' bindpause='videoPause' id='look-video' bindplay='lookVideoPlay' bindwaiting='bindwaiting'>
       <cover-view wx:if='{{showPoster}}' class='poster'>
         <cover-image src='{{videPicUrl}}' class='poster-image' />
         <cover-image src='/resource/paly.png' class='poster-play' bindtap='videoPlayClick' />
       </cover-view>
     </video>
-    <view class='tip-title'>推荐视频</view>
-    <view class='tip-line'/>
-    <swiper class='video-list-container' previous-margin='20rpx' next-margin='410rpx'>
-      <block wx:for='{{videoList}}' wx:key='id' wx:item='item'>
-        <swiper-item item-id='{{index}}'>
-          <videoItem data='{{item}}' bind:videoItemClick='videoItemClick' />
-        </swiper-item>
-      </block>
-    </swiper>
-    <view class='tip-title'>关于牙齿</view>
-    <view class='tip-line'/>
-    <view class='news-table-view'>
-      <block wx:for='{{newsList}}' wx:key='id' wx:item='item'>
-        <newsComponent data='{{item}}' class='news-item' />
-      </block>
+    <view class='segment-container'>
+      <scroll-view class='segment' scroll-x='true'>
+        <block wx:for='{{videoList}}' wx:key='id' wx:item='item' class='block'>
+          <view class='segment-item' bindtap='segmentClick' data-index='{{index}}'>
+            <text class="{{(selectIndex == index)?'segment-color':''}}">{{item.name}}</text>
+            <view wx:if='{{(selectIndex == index)}}' class='segment-item-line' />
+          </view>
+        </block>
+      </scroll-view>
     </view>
+    <view class='tip-line' />
+    <scroll-view class='video-item-table' scroll-y='true' style='height:{{tableHeight}}rpx;'>
+      <block wx:for='{{tagVideoList}}' wx:key='id' wx:item='item'>
+        <videoItem data='{{item}}' bind:videoItemClick='videoItemClick' />
+      </block>
+    </scroll-view>
   </view>
 </view>

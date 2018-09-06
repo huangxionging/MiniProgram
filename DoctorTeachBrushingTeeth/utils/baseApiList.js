@@ -50,5 +50,9 @@ module.exports = {
   /**
    * 获得人数计算
    */
-  getPeopleCounting: 'getPeopleCounting'
+  getPeopleCounting: 'getPeopleCounting',
+  /**
+   * 教学视频
+   */
+  getTeachingVideoDetails: 'getTeachingVideoDetails'
 }

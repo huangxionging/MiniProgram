@@ -34,6 +34,25 @@
     <view class='zero-content'>
       <view class='zero-apply-view'>
         <image src='http://qnimage.hydrodent.cn/dtb_zero_tip2.png' mode='widthFix' class='zero_tip1'></image>
+        <view class='person-dynamic-view'>
+          <view class='person-dynamic-content'>
+            <view class='person-total'>
+              已有<view class='person-number'>{{users}}</view>人报名参加训练营
+            </view>
+            <block wx:for='{{itemList}}' wx:key='id' wx:item='item'>
+              <view class='dynamic-item'>
+                <view class='dynamic-left'>
+                  <image class='speaker' src='/resource/speaker.png'></image>
+                  <view>恭喜{{item.leftName}}加入训练营</view>
+                </view>
+                <view class='dynamic-right'>
+                  <image class='speaker' src='/resource/speaker.png'></image>
+                  <view>恭喜{{item.rightName}}加入训练营</view>
+                </view>
+              </view>
+            </block>
+          </view>
+        </view>
         <image src='http://qnimage.hydrodent.cn/dtb_zero_about1.png' style='margin-top:40rpx;' mode='widthFix' class='zero_tip1'></image>
         <view class='confirm_button-container'>
           <view class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>

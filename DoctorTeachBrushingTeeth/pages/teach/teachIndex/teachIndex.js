@@ -8,16 +8,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isSelect: true,
     videoUrl: '',
     videPicUrl: '',
     teachVideoUrl: '',
-    showModal: false,
-    isTel: false,
-    newsList: [],
     showPoster: true,
     doctorName: '',
-    autoplay: false
+    autoplay: false,
+    selectIndex: 0,
+    videoList: [],
+    tagVideoList: [],
   },
 
   /**
@@ -25,10 +24,13 @@ Page({
    */
   onLoad: function(options) {
     let that = this
-
     that.loadData()
-    wx.startPullDownRefresh()
-
+    baseTool.print(baseTool.systemInfo)
+    baseTool.print(baseTool.toRpx(baseTool.systemInfo.windowHeight))
+    let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
+    that.setData({
+      tableHeight: height - 530
+    })
   },
 
   /**
@@ -87,29 +89,13 @@ Page({
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
-    let getVideoListPromise = teachManager.getTeachVideoInfo().then(res => {
+    teachManager.getTeachVideoInfo().then(res => {
+      wx.hideNavigationBarLoading()
       let data = teachAdapter.videoAdapter(res)
       baseTool.print(data)
       that.setData(data)
-      return teachManager.getVideoList()
     }).catch(res => {
       wx.hideNavigationBarLoading()
-      wx.stopPullDownRefresh()
-      baseTool.showInfo(res)
-      return baseTool.defaultPromise()
-    })
-    getVideoListPromise.then(res => {
-      wx.hideNavigationBarLoading()
-      wx.stopPullDownRefresh()
-      baseTool.print(res)
-      let videoList = teachAdapter.getVideoListAdapter(res)
-      that.setData({
-        loadDone: true,
-        videoList: videoList
-      })
-    }).catch(res => {
-      wx.hideNavigationBarLoading()
-      wx.stopPullDownRefresh()
       baseTool.showInfo(res)
     })
   },
@@ -150,5 +136,14 @@ Page({
     baseTool.print([e, '4'])
     let that = this
     // that.lookVideoContext.play()
+  },
+  segmentClick: function(e) {
+    let that = this
+    let index = e.currentTarget.dataset.index
+    that.setData({
+      selectIndex: index,
+      tagVideoList: that.data.videoList[index].tagVideoList
+    })
+    baseTool.print(e)
   }
 })

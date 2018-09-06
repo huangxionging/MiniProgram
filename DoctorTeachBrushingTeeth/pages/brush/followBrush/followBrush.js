@@ -219,7 +219,7 @@ Page({
   },
   selectDeviceClick: function (e) {
     wx.navigateTo({
-      url: '/pages/brush/buyDevice/buyDevice',
+      url: '/pages/home/deviceBanner/deviceBanner',
     })
   }, 
   updateTime: function(e) {

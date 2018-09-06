@@ -450,6 +450,10 @@ function toPixel(rpx= 0) {
   return rpx * systemInfo.screenWidth / 750
 }
 
+function toRpx(px = 0) {
+  return px * 750 / systemInfo.screenWidth
+}
+
 /**
  * 改成 http 访问
  */
@@ -527,5 +531,6 @@ module.exports = {
   uploadLocalFile: uploadLocalFile,
   previewSingleImage: previewSingleImage,
   isExist: isExist,
-  urlToHttp: urlToHttp
+  urlToHttp: urlToHttp,
+  toRpx: toRpx,
 }

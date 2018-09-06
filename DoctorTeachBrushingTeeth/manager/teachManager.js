@@ -8,7 +8,7 @@ function getTeachVideoInfo() {
     let openid = loginManager.getOpenId()
     if (openid) {
 
-      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getVideoDetails
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getTeachingVideoDetails
       let doctorId = baseTool.valueForKey('doctorId')
       let data = {
         doctorId: doctorId,

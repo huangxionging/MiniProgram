@@ -5,35 +5,62 @@ const baseTool = require('../utils/baseTool.js')
  */
 function videoAdapter(videoInfo = {}) {
   let data = {
+    loadDone: true,
     videoUrl: 'videoUrl',
     videPicUrl: 'videPicUrl',
-    newsList: []
+    name: 'title',
+    picUrl: 'picUrl',
+    intro: 'intro',
+    duration: 'duration',
+    videoList: [],
+    tagVideoList: []
   }
   // 模型适配器转换
-  baseTool.print(videoInfo)
-  baseTool.modelAdapter(data, videoInfo)
-  let newsItem1 = {
-    title: 'title',
-    content: 'intro',
-    picUrl: 'picUrl'
+  
+  if (baseTool.isExist(videoInfo.mainVideo)) {
+    baseTool.modelAdapter(data, videoInfo.mainVideo, function(res) {
+      if (res == 'intro') {
+        data.intro = ''
+      }
+    })
   }
-  baseTool.modelAdapter(newsItem1, videoInfo, res => {
-    newsItem1[res] = ''
-  })
-  newsItem1.width = 760
-  newsItem1.height = 2000
-  data.newsList.push(newsItem1)
-  let newsItem2 = {
-    title: 'titleTwo',
-    content: 'introTwo',
-    picUrl: 'picUrlTwo'
+
+  if (baseTool.isExist(videoInfo.videoList)) {
+    for (let indexSection = 0; indexSection < videoInfo.videoList.length; ++indexSection) {
+      let sectionItem = videoInfo.videoList[indexSection]
+      let item = {
+        name: sectionItem.name,
+        tagVideoList: []
+      }
+
+      if (indexSection == 0) {
+        item.tagVideoList.push({
+          name: data.name,
+          videoPicUrl: data.picUrl,
+          videoIntro: data.intro,
+          videoUrl: data.videoUrl,
+          duration: data.duration
+        })
+      }
+      for (let indexTag = 0; indexTag < sectionItem.tagVideoList.length; ++indexTag) {
+        let tagItem = {
+          name: 'title',
+          videoPicUrl: 'picUrl',
+          videoIntro: 'intro',
+          videoUrl: 'videoUrl',
+          duration: 'duration'
+        }
+        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function(res) {
+          tagItem[res] = ''
+        })
+        item.tagVideoList.push(tagItem)
+
+      }
+      data.videoList.push(item)
+    }
+    data.tagVideoList = data.videoList[0].tagVideoList
   }
-  baseTool.modelAdapter(newsItem2, videoInfo, res => {
-    newsItem2[res] = ''
-  })
-  newsItem2.width = 711
-  newsItem2.height = 2108
-  data.newsList.push(newsItem2)
+
   return data
 }
 
