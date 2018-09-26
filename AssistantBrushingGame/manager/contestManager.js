@@ -252,7 +252,7 @@ function selectContestUser() {
  * 创建比赛
  */
 
-function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 1, type = "create") {
+function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 0, type = "create") {
   return new Promise((resolve, reject) => {
     baseTool.print([gameId, name, time, brushMethod, type])
     if (type == "modify") {

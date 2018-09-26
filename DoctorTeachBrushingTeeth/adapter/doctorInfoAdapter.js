@@ -65,10 +65,12 @@ function doctorInfoDetailAdapter(doctorInfo = {}) {
  * 构造活动列表适配器
  */
 function doctorActivityListAdapter(doctorData) {
-  let data = [{
+  let data = [
+    {
     title: '马上加入"零蛀牙训练营"👇',
     picUrl: 'http://qnimage.hydrodent.cn/dtb_zero0.png'
-  },{
+  },
+  {
       title: '黑科技告诉你, 刷牙干净了没, 不干净? 还会手把手教你怎么刷👇',
       picUrl: 'http://qnimage.hydrodent.cn/dtb_device_banner.png'
   },{
@@ -91,12 +93,17 @@ function doctorActivityListAdapter(doctorData) {
 function deviceBannerAdapter() {
   let data = {
     loadDone: true,
-    videoUrl: 'http://qnimage.32teeth.cn/main200860S.mp4',
+    videoState: 'video-container',
+    videoChanged: false,
+    videoUrl: 'http://qnimage.32teeth.cn/main200860S_360.mp4',
+    videoPicUrl: 'http://qnimage.hydrodent.cn/dtb_device_play.png',
     content: {
       title: '32teeth智能牙刷-爱牙兔系列',
       content: '专为6-12岁换牙期宝贝设计, 正确的刷牙方法, 让孩子少受罪, 父母少花钱, 智能主机与牙刷可拆离, 操作简单, 使用方便',
-      picUrl: 'http://qnimage.hydrodent.cn/dtb_device_intro.png',
-      color: '#999'
+      picUrl: 'http://qnimage.hydrodent.cn/dtb_love_rabit.png',
+      color: '#999',
+      width:710,
+      height: 12325,
     }
   }
   return data

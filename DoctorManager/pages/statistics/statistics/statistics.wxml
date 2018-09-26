@@ -1,5 +1,9 @@
 <!--pages/statistics/statistics/statistics.wxml-->
 <view wx:if='{{loadDone}}' class='statistics-container'>
+  <view class='tip1'>
+    <image class='speaker' src='/resource/speaker.png'></image>
+    <view>知识变现收益模块正在开发中, 敬请期待...</view>
+  </view>
   <view class='money-header'>
     <view class='knowledge-money-rule-view'>
       <view bindtap='knowledgeMoneyRuleClick'>
@@ -13,17 +17,17 @@
       <view class='total-money'>
         <text space='ensp'>总收益 {{totalMoney}} 元</text>
       </view>
-      <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>提现</view>
+      <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>开发中</view>
     </view>
     <view class='traffic-revenue'>
       <view class='revenue'>
         <view class='revenue-money'>{{weekMoney}}</view>
-        <view class='revenue-tip'>近一周流量收益</view>
+        <view class='revenue-tip'>近一周收益</view>
       </view>
       <view class='white-line'/>
       <view class='revenue'>
         <view class='revenue-money'>{{monthMoney}}</view>
-        <view class='revenue-tip'>近一月流量收益</view>
+        <view class='revenue-tip'>近一月收益</view>
       </view>
     </view>
   </view>
@@ -32,7 +36,10 @@
     <view class='money-table-tip'>
       <view class='money-table-title-view'>
         <view class='blue-line'/>
-        <view>今日知识变现明细</view>
+        <view>今日动态</view>
+        <view class='dynamic-container'>
+          (<view class='dynamic-data'>{{trainingCount}}</view>人加入训练营, <view class='dynamic-data'>{{brushingCount}}</view>次亲自示范, 出售<view class='dynamic-data'>{{sellCount}}</view>个课程)
+        </view>
       </view>
       <view class='tip-line'/>
     </view>

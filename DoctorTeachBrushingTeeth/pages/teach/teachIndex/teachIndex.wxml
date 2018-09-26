@@ -12,8 +12,11 @@
       <scroll-view class='segment' scroll-x='true'>
         <block wx:for='{{videoList}}' wx:key='id' wx:item='item' class='block'>
           <view class='segment-item' bindtap='segmentClick' data-index='{{index}}'>
-            <text class="{{(selectIndex == index)?'segment-color':''}}">{{item.name}}</text>
-            <view wx:if='{{(selectIndex == index)}}' class='segment-item-line' />
+            <view class='segment-item-content'>
+              <image src='{{item.icon}}' class='segment-icon'></image>
+              <text class="{{(selectIndex == index)?'segment-color':''}}">{{item.name}}</text>
+            </view>
+            
           </view>
         </block>
       </scroll-view>
@@ -25,4 +28,10 @@
       </block>
     </scroll-view>
   </view>
+  <cover-view class=''>
+    <cover-image></cover-image>
+    <cover-image></cover-image>
+    <cover-image></cover-image>
+    <cover-image></cover-image>
+  </cover-view>
 </view>

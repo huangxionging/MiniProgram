@@ -23,10 +23,26 @@
 }
 .doctor-intro{
   margin-left: 20rpx;
+  width: 470rpx;
   display: flex;
   flex-direction: column;
 }
+.doctor-personal {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+.doctor-job-view{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.doctor-hospital{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .doctor-name{
   font-size: 35rpx;
   color: black;

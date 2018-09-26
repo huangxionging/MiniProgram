@@ -24,12 +24,35 @@ Page({
    */
   onLoad: function(options) {
     let that = this
+    // baseTool.print(["带过来的参数",options.q])
+    if (options.q) {
+      let url = decodeURIComponent(options.q)
+
+      let parameter = baseTool.getParameterFromURL(url)
+      baseTool.print(["带过来的参数", parameter])
+      if (parameter.doctorId) {
+        baseTool.setValueForKey(parameter.doctorId, "doctorId")
+      } else {
+        baseTool.setValueForKey('', "doctorId")
+      }
+    } else {
+      if (options.doctorId) {
+        baseTool.setValueForKey(options.doctorId, "doctorId")
+      } else {
+        let doctorId = baseTool.valueForKey('doctorId')
+        if (!doctorId) {
+          baseTool.setValueForKey('', "doctorId")
+        }
+      }
+    }
+    // that.getDoctorInfo()
+    wx.startPullDownRefresh()
     that.loadData()
     baseTool.print(baseTool.systemInfo)
     baseTool.print(baseTool.toRpx(baseTool.systemInfo.windowHeight))
     let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
     that.setData({
-      tableHeight: height - 530
+      tableHeight: height - 622
     })
   },
 
@@ -38,7 +61,6 @@ Page({
    */
   onReady: function() {
     this.lookVideoContext = wx.createVideoContext('look-video', this)
-
   },
 
   /**
@@ -83,9 +105,9 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  // onShareAppMessage: function() {
 
-  },
+  // },
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
@@ -116,15 +138,10 @@ Page({
     that.lookVideoContext.play()
   },
   videoPause: function(e) {
-    let that = this
-    baseTool.print([e, '0'])
-    that.setData({
-      showPoster: true
-    })
   },
   videoItemClick: function(e) {
     let that = this
-    baseTool.print([e, '1'])
+    baseTool.print([e.detail.data.videoUrl, '1'])
     that.setData({
       videoUrl: e.detail.data.videoUrl,
       showPoster: false,

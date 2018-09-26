@@ -56,10 +56,10 @@ function removeAllObjects() {
 function vibrate() {
   let that = this
   wx.vibrateLong({
-    success: function (res) {
+    success: function(res) {
       that.print(res)
     },
-    fail: function (res) {
+    fail: function(res) {
       that.print(res)
     }
   })
@@ -69,7 +69,7 @@ function vibrate() {
  * 默认的 Promise, 不会 resolve 也不会 reject
  */
 function defaultPromise() {
-  return new Promise((resolve, reject) => { })
+  return new Promise((resolve, reject) => {})
 }
 
 /**
@@ -113,7 +113,7 @@ function setValueForKeyAsync(value, key) {
       data: value,
       success: resolve,
       fail: reject,
-      complete: function (res) { },
+      complete: function(res) {},
     })
   })
 }
@@ -124,7 +124,7 @@ function valueForKeyAsync(key) {
       key: key,
       success: resolve,
       fail: reject,
-      complete: function (res) { },
+      complete: function(res) {},
     })
   })
 }
@@ -144,12 +144,12 @@ function getSystemInfoAsync() {
     wx.getSystemInfo({
       success: resolve,
       fail: reject,
-      complete: function (res) { },
+      complete: function(res) {},
     })
   })
 }
 
-function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
+function startTimer(callback = (total) => {}, inteval = 1000, total = 0) {
   let that = this
   let stop = callback(total)
   if (stop == true) {
@@ -158,14 +158,14 @@ function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
     // 自减1
     total--
     // 定时器
-    setTimeout(function () {
+    setTimeout(function() {
       startTimer(callback, inteval, total)
     }, inteval)
   }
 }
 
 function getCurrentTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -178,7 +178,7 @@ function getCurrentTime() {
 }
 
 function getCurrentTimeWithoutSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -190,7 +190,7 @@ function getCurrentTimeWithoutSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -203,14 +203,14 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  let date = new Date();
+  let date = new Date()
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
 }
 
 function getCurrentDateWithoutTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -222,7 +222,7 @@ function getCurrentDateWithoutTime() {
  * 时分秒
  */
 function getCurrentTimeWithNoDate() {
-  let date = new Date();
+  let date = new Date()
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   let second = zeroFormat(date.getSeconds() + '')
@@ -237,14 +237,13 @@ function zeroFormat(oldString = '') {
 }
 
 function values(obj) {
-  let vals = [],
-    key;
-  for (key in obj) {
+  let vals = []
+  for (let key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      vals.push(obj[key]);
+      vals.push(obj[key])
     }
   }
-  return vals;
+  return vals
 }
 /**
  * showInfo: 只用来展示信息
@@ -266,7 +265,7 @@ function showInfo(info = '') {
  * value 是转换之前的键值对
  */
 function modelAdapter(model = {}, value = {}, func = Function) {
-  
+
   // 遍历模型
   let keys = Object.keys(model)
   for (let index = 0; index < keys.length; ++index) {
@@ -294,7 +293,7 @@ function request(url = '', data = {}) {
     wx.request({
       url: url,
       data: data,
-      success: function (res) {
+      success: function(res) {
         print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data)
@@ -304,7 +303,7 @@ function request(url = '', data = {}) {
           reject('网络有点点问题')
         }
       },
-      fail: function (res) {
+      fail: function(res) {
         reject('网络有点点问题')
       },
     })
@@ -355,10 +354,10 @@ function chooseImageFrom(sourceType = 'camera') {
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: [sourceType],
-      success: function (res) {
+      success: function(res) {
         resolve(res.tempFilePaths[0])
       },
-      fail: function (res) {
+      fail: function(res) {
         reject(res)
       }
     })
@@ -376,7 +375,7 @@ function showSheetInfo(items = '', color = '#000') {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: color,
-      success: function (res) {
+      success: function(res) {
         resolve(res.tapIndex)
       },
       fail: reject,
@@ -401,7 +400,7 @@ function uploadLocalFile(url = '', filePath = '', tips = '上传进度:') {
       url: url,
       filePath: filePath,
       name: 'json',
-      success: function (res) {
+      success: function(res) {
         wx.hideLoading()
         if (res.statusCode == 200) {
           resolve(res.data)
@@ -409,12 +408,12 @@ function uploadLocalFile(url = '', filePath = '', tips = '上传进度:') {
           reject('上传失败')
         }
       },
-      fail: function (res) {
+      fail: function(res) {
         wx.hideLoading()
         reject(res)
       },
     })
-    uploadTask.onProgressUpdate(function (res) {
+    uploadTask.onProgressUpdate(function(res) {
       wx.showLoading({
         title: tips + res.progress + '%',
         mask: true
@@ -431,8 +430,8 @@ function previewSingleImage(url) {
   wx.previewImage({
     current: url,
     urls: [url],
-    success: function (res) { },
-    fail: function (res) { },
+    success: function(res) {},
+    fail: function(res) {},
   })
 }
 
@@ -446,7 +445,7 @@ function isExist(e) {
 /**
  * rpx 转成 px
  */
-function toPixel(rpx= 0) {
+function toPx(rpx = 0) {
   return rpx * systemInfo.screenWidth / 750
 }
 
@@ -460,9 +459,75 @@ function toRpx(px = 0) {
 function urlToHttp(url = '') {
   let httpUrl = url
   if (url.indexOf('://')) {
-     httpUrl = "http://" + url.split('://')[1]
+    httpUrl = "http://" + url.split('://')[1]
   }
   return httpUrl
+}
+
+/**
+ * 通过图片地址下载图片到相册
+ * imageUrl 是图片的地址
+ */
+function downloadImageTohotosAlbum(imageUrl = '') {
+  wx.showLoading({
+    title: '正在保存...',
+    mask: true,
+  })
+  // 获得图片信息
+  wx.getImageInfo({
+    src: imageUrl,
+    success: function(res) {
+      wx.hideLoading()
+      // 保存到相册
+      wx.saveImageToPhotosAlbum({
+        filePath: res.path,
+        success: function(res) {
+          wx.hideLoading()
+          showToast("已保存", "success")
+        },
+        fail: function(res) {
+          wx.hideLoading()
+          showToast("保存失败")
+        }
+      })
+    },
+    fail: function(res) {
+      wx.hideLoading()
+      showToast("保存失败")
+    }
+  })
+}
+
+/**
+ * 简化版提示器, 基本使用默认信息就够用了
+ * icon 是提示器图标, success, fail, 或者 none
+ * message 是要提示的消息
+ * mask 是遮罩
+ * duration 是时长
+ */
+function showToast(message = '', icon = 'none', mask = true, duration = 2000) {
+  wx.hideLoading()
+  wx.showToast({
+    title: message,
+    icon: icon,
+    duration: duration,
+    mask: mask,
+  })
+}
+
+/**
+ * 是否合法
+ */
+function isValid(e) {
+  if (isExist(e)) {
+    if (e == '' || e == null) {
+      return false
+    } else {
+      return true
+    }
+  } else {
+    return false
+  }
 }
 
 // 添加接口
@@ -489,9 +554,9 @@ module.exports = {
   getSystemInfoAsync: getSystemInfoAsync,
   // 震动
   vibrate: vibrate,
-  getNet: function () {
+  getNet: function() {
     let that = this
-    wx.onNetworkStatusChange(function (res) {
+    wx.onNetworkStatusChange(function(res) {
       that.print(res)
       wx.showModal({
         title: '网络改变',
@@ -531,6 +596,10 @@ module.exports = {
   uploadLocalFile: uploadLocalFile,
   previewSingleImage: previewSingleImage,
   isExist: isExist,
+  isValid: isValid,
   urlToHttp: urlToHttp,
   toRpx: toRpx,
+  showToast: showToast,
+  toPx: toPx,
+  downloadImageTohotosAlbum: downloadImageTohotosAlbum
 }

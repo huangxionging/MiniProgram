@@ -1,0 +1,6 @@
+<!--pages/home/doctorIDList/doctorIDList.wxml-->
+<view class='doctorId-list-container' wxLif='{{loadDone}}'>
+  <block wx:for='{{doctorIdList}}' wx:key='id' wx:item='item'>
+    <doctorIdQRCodeItem data='{{item}}' index='{{index+1}}' bind:saveBrushClick='saveBrushClick' bind:previewBrushClick='previewBrushClick' bind:saveManagerClick='saveManagerClick' bind:previewManagerClick='previewManagerClick' />
+  </block>
+</view>

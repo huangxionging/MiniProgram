@@ -1,0 +1,5 @@
+<!--pages/home/checkQRCode/checkQRCode.wxml-->
+<view class='check-container'>
+  <view class='save-button' bindtap='readDoctorListClick' hover-class='save-button-hover'>扫码读取医生ID列表</view>
+  <view class='save-button' bindtap='previewDoctorListClick' hover-class='save-button-hover'>扫码预览医生</view>
+</view>

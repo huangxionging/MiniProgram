@@ -102,6 +102,15 @@ Page({
   onReachBottom: function () {
   
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+    return {
+      title: '训练营',
+      imageUrl: 'http://qnimage.hydrodent.cn/dtb_love_teeth_share.png'
+    }
+  },
   getPeopleCounting: function() {
     let that = this
     wx.showNavigationBarLoading()
@@ -159,7 +168,7 @@ Page({
   },
   confirmClick: function(e) {
     wx.navigateTo({
-      url: '/pages/brush/applyZeroTeeth/applyZeroTeeth',
+      url: '/pages/brush/applyZeroTeeth/applyZeroTeeth?from',
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},

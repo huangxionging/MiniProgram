@@ -1,30 +1,55 @@
 /* pages/home/deviceBanner/deviceBanner.wxss */
 
 .device-container {
-  display: flex;
-  flex-direction: column;
+  display: block;
   width: 100%;
   height: 100%;
 }
 
+.device-content{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
 .video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: 430rpx;
 }
-.video {
+
+.video-container-state{
+  position: fixed;
+  bottom: 100rpx;
+  right: 20rpx;
+  width: 300rpx;
+  height: 172rpx;
+  background-color: red;
+}
+
+.video-content{
   width: 100%;
   height: 100%;
 }
+
 .content-container {
+  position: relative;
+  margin-top: 430rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
 }
 
 .device-buy-container{
-  margin-top: 20rpx;
-  margin-left: 20rpx;
-  margin-right: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
   display: flex;
+  position: fixed;
+  bottom: 20rpx;
   flex-direction: column;
 }
 .device-line {
@@ -57,4 +82,21 @@
 .hover-button {
   background-color: #02557c;
   color: #a6c4d2;
+}
+.poster {
+  width: 100%;
+  height: 100%;
+}
+
+.poster-image {
+  width: 100%;
+  height: 100%;
+}
+
+.poster-play {
+  position: absolute;
+  left: 20rpx;
+  bottom: 20rpx;
+  width: 100rpx;
+  height: 100rpx;
 }

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "信息填写",
+  "usingComponents": {
+    "textField": "/components/textField/textField"
+  }
+}

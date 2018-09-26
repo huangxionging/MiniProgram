@@ -23,4 +23,16 @@ module.exports = {
    * 上传图片
    */
   uploadImageURL: 'qn_upload',
+  /**
+   * 获取医生信息
+   */
+  scanCode: 'scanCode',
+  /**
+   * 医生绑定二维码
+   */
+  bindingQrcode: 'bindingQrcode',
+  /**
+   * 获得今日动态数据
+   */
+  getTodayDynamic: 'getTodayDynamic'
 }

@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    showPoster: true
   },
 
   /**
@@ -66,16 +66,42 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+    return {
+      title: '装备库',
+      imageUrl: 'http://qnimage.hydrodent.cn/dtb_love_teeth_share.png'
+    }
   },
   endPlay: function (e){
     baseTool.print(e)
     let that = this
-    that.videoContext.play()
+    // that.videoContext.play()
   },
   welfareClick: function(e) {
     wx.navigateTo({
       url: '/pages/brush/buyWelfare/buyWelfare'
     })
+  },
+  videoPlayClick: function (e) {
+    let that = this
+    that.setData({
+      showPoster: false
+    })
+    that.videoContext.play()
+  },
+  onPageScroll: function(e) {
+    // let that = this    
+    // let height = baseTool.toPx(430)
+    // if (e.scrollTop > height && (that.data.videoChanged == false)) {
+    //   baseTool.print('隐藏视频')
+    //   that.setData({
+    //     videoChanged: true,
+    //     // videoState: 'video-container-state'
+    //   })
+    // } else if (e.scrollTop <= height && (that.data.videoChanged == true)) {
+    //   that.setData({
+    //     videoChanged: false,
+    //     videoState: 'video-container'
+    //   })
+    // }
   }
 })

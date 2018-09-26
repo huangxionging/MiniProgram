@@ -3,6 +3,7 @@ const baseTool = require('../../../utils/baseTool.js')
 const brushManager = require('../../../manager/brushManager.js')
 const brushAdapter = require('../../../adapter/brushAdapter.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const loginManager = require('../../../manager/loginManager.js')
 Page({
 
   /**
@@ -15,13 +16,20 @@ Page({
     isTimeCountDown: false,
     verifyCodeDisabled: true,
     bindDisabled: true,
+    channel: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
+    let that = this
+    if (baseTool.isExist(options.avatar) && baseTool.isExist(options.nickName)) {
+      that.setData({
+        avatar: options.avatar,
+        nickName: options.nickName
+      })
+    }
   },
 
   /**
@@ -174,9 +182,7 @@ Page({
       wx.hideLoading()
       wx.hideNavigationBarLoading()
       baseTool.setValueForKey(1, 'isJoinTrainingCamp')
-      baseMessageHandler.sendMessage("refresh").then(res => {
-        wx.navigateBack()
-      })
+      loginManager.reLauch()
     }).catch(res => {
       wx.hideLoading()
       wx.hideNavigationBarLoading()

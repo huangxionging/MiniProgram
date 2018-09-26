@@ -12,8 +12,8 @@
               <image class='avatar' src='{{avatar}}'></image>
             </view>
             <view class='sign-container'>
-              <view wx:if='{{!signDisabled}}' class='sign-view' hover-class='sign-hover' bindtap='signClick'>点击点打卡</view>
-              <view wx:else class='sign-view sign-view-disable'>点击点打卡</view>
+              <view wx:if='{{!signDisabled}}' class='sign-view' hover-class='sign-hover' bindtap='signClick'>点击打卡</view>
+              <view wx:else class='sign-view sign-view-disable'>点击打卡</view>
             </view>
           </view>
         </view>

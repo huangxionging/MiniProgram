@@ -30,3 +30,132 @@
 .lauch-space{
   height: 40rpx;
 }
+.zero-view {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.zero-bg-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.zero-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.zero-apply-view {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zero_tip1 {
+  width: 100%;
+}.person-dynamic-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.person-dynamic-content {
+  display: flex;
+  width: 600rpx;
+  margin-top: -124rpx;
+  background-color: #00a0e9;
+  flex-direction: column;
+  padding: 20rpx;
+}
+.person-total {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #f2fa18;
+  font-size: 30rpx;
+}
+
+.person-number {
+  color: #f8080b;
+}
+.dynamic-item {
+  margin-top: 40rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  font-size: 25rpx;
+}
+
+.speaker {
+  margin-left: 20rpx;
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.dynamic-left {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}
+
+.dynamic-right {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}.confirm_button-container {
+  width: 100%;
+  margin-top: 40rpx;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm_button {
+  position: relative;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 390rpx;
+  height: 90rpx;
+  color: white;
+}
+
+.confirm_text {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 30rpx;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.confirm_image {
+  width: 390rpx;
+  height: 90rpx;
+}

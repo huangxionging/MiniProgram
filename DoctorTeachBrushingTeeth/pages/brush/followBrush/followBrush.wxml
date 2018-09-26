@@ -9,6 +9,7 @@
     </cover-view>
     <cover-image wx:if='{{showAvatar}}' src='{{avatar}}' class='avatar'></cover-image>
   </video>
+  
   <view class='teach-content-bg'>
     <image src='{{bgUrl}}' class='teach-bg-image'></image>
     <view class='teach-content-container'>

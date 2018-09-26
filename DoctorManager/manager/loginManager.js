@@ -9,19 +9,26 @@ function getOpenId() {
   return baseTool.valueForKey('openid')
 }
 
-function getMeberId() {
+function getMemberId() {
   return baseTool.valueForKey('memberId')
 }
 
+/**
+ * 扫码进入
+ */
+function getDoctorId() {
+  return baseTool.valueForKey('doctorId')
+}
 
 /**
  * code: 登陆后获取的 code
  * userInfo: 用户授权的用户信息
  * doctorId: 医生 id
  */
-function loginWithUserInfo(code, userInfo) {
+function loginWithUserInfo(code, userInfoData) {
   return new Promise((resolve, reject) => {
     baseTool.print(code)
+    let userInfo = userInfoData.userInfo
     baseTool.print(userInfo)
     let url = baseURL.baseDomain + baseURL.basePath + baseApiList.login
     let data = { 
@@ -55,6 +62,15 @@ function loginWithUserInfo(code, userInfo) {
     // 城市
     if (userInfo.city) {
       data.city = userInfo.city
+    }
+    if (userInfoData.encryptedData) {
+      data.encryptedData = userInfoData.encryptedData
+    }
+
+    if (userInfoData.iv) {
+      data.iv = encodeURI(userInfoData.iv)
+      encodeURI()
+      encodeURIComponent()
     }
     // 参数
     baseTool.print(data)
@@ -118,12 +134,53 @@ function bindingTelphone(telphoneNumber = '', validcode = '') {
   })
 }
 
+function getDoctorInfo(doctorId = '') {
+  return new Promise((resolve, reject) => {
+    let openid = getOpenId()
+    if (openid && doctorId) {
+
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.scanCode
+      let data = {
+        openid: openid,
+        doctorId: doctorId
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
+/**
+ * 绑定二维码
+ */
+function bindingQrcode(doctorId = '') {
+  return new Promise((resolve, reject) => {
+    let openid = getOpenId()
+    if (openid && doctorId) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.bindingQrcode
+      let data = {
+        openid: openid,
+        doctorId: doctorId
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
 module.exports = {
   getOpenId: getOpenId,
-  getMeberId: getMeberId,
+  getMemberId: getMemberId,
+  getDoctorId: getDoctorId,
   reLauch: reLauch,
   startAuthorization: startAuthorization,
   loginWithUserInfo: loginWithUserInfo,
   getVerifyCode: getVerifyCode,
   bindingTelphone: bindingTelphone,
+  getDoctorInfo: getDoctorInfo,
+  bindingQrcode: bindingQrcode
 }

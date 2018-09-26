@@ -1,0 +1,8 @@
+<!--pages/statistics/withdrawMoney/withdrawMoney.wxml-->
+<view class='navigation-bar-line'/>
+<view class='knowledge-rule-container'>
+  <view class='develop-view'>
+    <image class='develop-image' src='../../../resource/develop.png'></image>
+    <view>开发中, 敬请期待</view>
+  </view>
+</view>

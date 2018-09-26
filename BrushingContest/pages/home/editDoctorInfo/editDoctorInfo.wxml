@@ -1,0 +1,54 @@
+<!--pages/home/editDoctorInfo/editDoctorInfo.wxml-->
+<view class='navigation-bar-line' />
+<view wx:if='{{loadDone}}' class='edit-container'>
+  <view class='personal'>
+    <view class='text-tip'>形象展示:<text class='text-must' space='ensp'> (*必填)</text></view>
+    <block wx:if='{{!avatar}}'>
+      <image src='../../../resource/add_image.png' bindtap='imageClick' class='avatar' data-items='拍摄:从相册选择'></image>
+    </block> 
+    <block wx:else>
+      <image src='{{avatar}}' class='avatar' bindtap='imageClick' data-items='拍摄:从相册选择:预览图片'></image>
+    </block>
+    <view class='personal-show-tip'>注: 该照片将会在用户端展示您的形象, 请上传一张执业照片</view>
+  </view>
+  <view class='personal'>
+    <view class='text-tip'>个人信息:
+      <text class='text-must' space='ensp'> (*必填)</text>
+    </view>
+    <view class='textField-container'>
+      <textField title='姓名' value='{{doctorName}}' placeholder='请输入您的姓名' bind:getInput='getNameContent' maxlength='5'></textField>
+    </view>
+    <view class='textField-container'>
+      <textField title='医院名' value='{{hospital}}' placeholder='请输入您所在医院的全称' bind:getInput='getHospitalContent'></textField>
+    </view>
+    <view class='textField-container'>
+      <textField title='科室' value='{{department}}' placeholder='请输入您所在的科室' bind:getInput='getDepartmentContent'></textField>
+    </view>
+    <view class='textField-container'>
+      <textField title='职称' value='{{jobTitle}}' placeholder='请输入您的职位' bind:getInput='getJobContent'></textField>
+    </view>
+
+  </view>
+  <view class='personal'>
+    <view class='text-tip'>执业经历<text class='text-must' space='ensp'> (*必填)</text></view>
+    <view class='textarea-view'>
+      <textarea placeholder-class='placeholder' maxlength='-1' bindconfirm='experienceConfirm' bindinput='experienceInput' placeholder='描述一下您的从医经历, 该模块会在用户端展示, 请仔细填写, 谢谢~' class='textarea' value='{{experience}}'></textarea>
+    </view>
+  </view>
+  <view class='personal'>
+    <view class='text-tip'>擅长<text class='text-must' space='ensp'> (*必填)</text></view>
+    <view class='textarea-view'>
+      <textarea placeholder-class='placeholder' maxlength='-1' placeholder='描述一下您擅长, 该模块会在用户端展示, 请仔细填写, 谢谢~' class='textarea' value='{{goodat}}' bindconfirm='goodatConfirm' bindinput='goodatInput'></textarea>
+    </view>
+  </view>
+  <view class='confirm_button-view'>
+    <view wx:if='{{submitDisabled}}' class='confirm_button'>
+      <image class='confirm_image' src='../../../resource/confirm_button_disabled.png'></image>
+      <view class='confirm_text'>提交信息</view>
+    </view>
+    <view wx:else class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
+      <image class='confirm_image' src='../../../resource/confirm_button.png'></image>
+      <view class='confirm_text'>提交信息</view>
+    </view>
+  </view>
+</view>

@@ -29,6 +29,7 @@ function videoAdapter(videoInfo = {}) {
     for (let indexSection = 0; indexSection < videoInfo.videoList.length; ++indexSection) {
       let sectionItem = videoInfo.videoList[indexSection]
       let item = {
+        icon: sectionItem.icon,
         name: sectionItem.name,
         tagVideoList: []
       }
@@ -53,6 +54,8 @@ function videoAdapter(videoInfo = {}) {
         baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function(res) {
           tagItem[res] = ''
         })
+        tagItem.videoUrl = encodeURI(tagItem.videoUrl)
+        baseTool.print(tagItem.videoUrl)
         item.tagVideoList.push(tagItem)
 
       }

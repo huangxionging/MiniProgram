@@ -1,0 +1,10 @@
+/* pages/statistics/yesterdayMoney/yesterdayMoney.wxss */
+page{
+  background-color: #eee;
+}
+.yesterday-container{
+  background-color: white;
+}
+.money-table-view{
+  padding: 0 20rpx;
+}

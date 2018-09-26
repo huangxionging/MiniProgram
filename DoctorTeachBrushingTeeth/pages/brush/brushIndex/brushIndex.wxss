@@ -201,6 +201,10 @@ page {
   font-size: 20rpx;
   color: white;
   bottom: 20rpx;
+  left: 0;
+  right: 0;
+  text-align: center;
+  /* background-color: red; */
 }
 
 .sign-container {

@@ -7,7 +7,9 @@
     "pages/home/doctorQRCode/doctorQRCode",
     "pages/statistics/yesterdayMoney/yesterdayMoney",
     "pages/statistics/knowledgeMoneyRule/knowledgeMoneyRule",
-    "pages/statistics/withdrawMoney/withdrawMoney"
+    "pages/statistics/withdrawMoney/withdrawMoney",
+    "pages/home/checkQRCode/checkQRCode",
+    "pages/home/doctorIDList/doctorIDList"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -28,7 +30,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/statistics/withdrawMoney/withdrawMoney",
+        "pagePath": "pages/statistics/statistics/statistics",
         "iconPath": "resource/statistics_normal.png",
         "selectedIconPath": "resource/statistics_select.png",
         "text": "统计"

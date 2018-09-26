@@ -1,4 +1,10 @@
 // pages/statistics/statistics/statistics.js
+const baseTool = require('../../../utils/baseTool.js')
+const loginManager = require('../../../manager/loginManager.js')
+const statisticsManager = require("../../../manager/statisticsManager.js")
+const statisticsAdapter = require('../../../adapter/statisticsAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+
 Page({
 
   /**
@@ -6,36 +12,11 @@ Page({
    */
   data: {
     loadDone: true,
-    yesterdayMoney: '0.50',
-    totalMoney: '1024.51',
-    weekMoney: '203.60',
-    monthMoney: ' 421.11 ',
-    dataList: [
-      {
-        title: '加入零蛀牙训练营',
-        time: '2018-08-1 10:21:13',
-        money: '+0.60',
-        id: '0'
-      },
-      {
-        title: '教学示范早上跟刷',
-        time: '2018-08-10 08:21:13',
-        money: '+0.60',
-        id: '1'
-      },
-      {
-        title: '教学示范晚上跟刷',
-        time: '2018-08-10 20:21:13',
-        money: '+0.60',
-        id: '2'
-      },
-      {
-        title: '今日案例分享',
-        time: '2018-08-17 10:21:13',
-        money: '+0.60',
-        id: '3'
-      },
-    ]
+    yesterdayMoney: '*****',
+    totalMoney: '*****',
+    weekMoney: '*****',
+    monthMoney: ' ***** ',
+    dataList: []
   },
 
   /**
@@ -49,7 +30,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    let that = this
+    that.loadData()
   },
 
   /**
@@ -94,18 +76,49 @@ Page({
   
   },
   knowledgeMoneyRuleClick: function(e) {
-    wx.navigateTo({
-      url: '../knowledgeMoneyRule/knowledgeMoneyRule',
+    // wx.navigateTo({
+    //   url: '../knowledgeMoneyRule/knowledgeMoneyRule',
+    // })
+    wx.showToast({
+      title: '开发中, 敬请期待...',
+      icon: 'none',
+      duration: 2000,
+      mask: true,
     })
   },
   withdrawClick: function(e) {
-    wx.navigateTo({
-      url: '../withdrawMoney/withdrawMoney',
+    // wx.navigateTo({
+    //   url: '../withdrawMoney/withdrawMoney',
+    // })
+    wx.showToast({
+      title: '开发中, 敬请期待...',
+      icon: 'none',
+      duration: 2000,
+      mask: true,
     })
   },
   yesterdayClick: function(e) {
-    wx.navigateTo({
-      url: '../yesterdayMoney/yesterdayMoney',
+    // wx.navigateTo({
+    //   url: '../yesterdayMoney/yesterdayMoney',
+    // })
+    wx.showToast({
+      title: '开发中, 敬请期待...',
+      icon: 'none',
+      duration: 2000,
+      mask: true,
+    })
+  },
+  loadData: function(e) {
+    let memberId = loginManager.getMemberId()
+    let that = this
+    statisticsManager.getTodayDynamic(memberId).then(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      let data = statisticsAdapter.getTodayDynamicAdapter(res)
+      that.setData(data)
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      baseTool.showInfo(res)
     })
   }
 })

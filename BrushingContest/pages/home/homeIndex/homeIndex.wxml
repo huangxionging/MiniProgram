@@ -1,0 +1,20 @@
+<!--pages/home/doctorInfoDetail/homeIndex.wxml-->
+<view class='navigation-bar-line'/>
+<view class='doctorInfoDetail-container' wx:if='{{loadDone}}'>
+  <doctorInfo class='doctorInfo' avatar='{{avatar}}' doctorName='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' bind:qrcodeDoctorInfoClick='qrcodeDoctorInfoClick' bind:editDoctorInfoClick='editDoctorInfoClick' />
+  <view class='resume'>
+    <view class='resume-view'>
+      <text class='resume-tip'>个人简历</text>
+      <view class='text-line'></view>
+    </view>
+    
+    <view class='experience'>
+      <text class='experience-tip' space='ensp'>执业经历: </text>
+      {{experience}}
+    </view>
+    <view class='goodat'>
+      <text class='goodat-tip' space='ensp'>擅    长: </text>
+      {{goodat}}
+    </view>
+  </view>
+</view>

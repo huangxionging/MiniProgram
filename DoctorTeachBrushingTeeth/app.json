@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/home/homeIndex/homeIndex",
     "pages/teach/teachIndex/teachIndex",
     "pages/brush/brushIndex/brushIndex",
     "pages/home/doctorInfoDetail/doctorInfoDetail",
@@ -23,12 +22,6 @@
     "color": "#999",
     "selectedColor": "#00a0e9",
     "list": [
-      {
-        "pagePath": "pages/home/homeIndex/homeIndex",
-        "text": "首页",
-        "iconPath": "resource/home_normal.png",
-        "selectedIconPath": "resource/home_select.png"
-      },
       {
         "pagePath": "pages/teach/teachIndex/teachIndex",
         "text": "刷牙教学",

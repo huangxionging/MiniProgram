@@ -23,30 +23,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let that = this
-    // baseTool.print(["带过来的参数",options.q])
-    if (options.q) {
-      let url = decodeURIComponent(options.q)
-
-      let parameter = baseTool.getParameterFromURL(url)
-      baseTool.print(["带过来的参数", parameter])
-      if (parameter.doctorId) {
-        baseTool.setValueForKey(parameter.doctorId, "doctorId")
-      } else {
-        baseTool.setValueForKey('', "doctorId")
-      }
-    } else {
-      if (options.doctorId) {
-        baseTool.setValueForKey(options.doctorId, "doctorId")
-      } else {
-        let doctorId = baseTool.valueForKey('doctorId')
-        if (!doctorId) {
-          baseTool.setValueForKey('', "doctorId")
-        }
-      }
-    }
-    that.getDoctorInfo()
-    wx.startPullDownRefresh()
+    
   },
 
   /**
@@ -97,7 +74,8 @@ Page({
    */
   onShareAppMessage: function() {
     return {
-
+      title: '医生教刷牙',
+      imageUrl: 'http://qnimage.hydrodent.cn/dtb_love_teeth_share.png'
     }
   },
   onDoctorInfoClick: function(e) {
