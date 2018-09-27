@@ -1,4 +1,5 @@
 // components/videoItem/videoItem.js
+const baseTool = require('../../utils/baseTool.js')
 Component({
   /**
    * 组件的属性列表
@@ -23,7 +24,16 @@ Component({
   methods: {
     videoClick: function(e) {
       let that = this 
-      that.triggerEvent('videoItemClick', that.data)
+      baseTool.print(that)
+      that.triggerEvent('videoItemClick', {
+        videoUrl: that.data.data.videoUrl
+      })
+    },
+    videoClick1: function(e) {
+      let that = this
+      that.triggerEvent('videoItemClick', {
+        videoUrl: that.data.data.videoUrl1
+      })
     }
   }
 })

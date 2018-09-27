@@ -44,7 +44,7 @@
 					"id": 0,
 					"name": "logs",
 					"pathName": "pages/teach/teachIndex/teachIndex",
-					"query": ""
+					"query": "doctorId=8a995136589863490158998c66fc0458"
 				}
 			]
 		}

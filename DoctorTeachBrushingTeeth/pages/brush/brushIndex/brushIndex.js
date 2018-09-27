@@ -144,6 +144,10 @@ Page({
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
+      // baseMessageHandler.getMessage("doctorBrushScore", resScore => {
+      //   baseTool.print(resScore)
+        
+      // })
       let brushDataList = brushAdapter.brushDynamicAdapter(res)
       wx.setNavigationBarColor({
         frontColor: '#000000',

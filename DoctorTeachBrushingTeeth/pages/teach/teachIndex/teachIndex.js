@@ -2,6 +2,9 @@
 const baseTool = require('../../../utils/baseTool.js')
 const teachManager = require('../../../manager/teachManager.js')
 const teachAdapter = require('../../../adapter/teachAdapter.js')
+const doctorInfoManager = require("../../../manager/doctorInfoManager.js")
+const doctorInfoAdapter = require('../../../adapter/doctorInfoAdapter.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
@@ -17,6 +20,13 @@ Page({
     selectIndex: 0,
     videoList: [],
     tagVideoList: [],
+    avatar: '',
+    doctorName: '',
+    department: '',
+    jobTitle: '',
+    hospital: '',
+    doctorInfo: '',
+    animationData: ''
   },
 
   /**
@@ -45,15 +55,7 @@ Page({
         }
       }
     }
-    // that.getDoctorInfo()
-    wx.startPullDownRefresh()
-    that.loadData()
-    baseTool.print(baseTool.systemInfo)
-    baseTool.print(baseTool.toRpx(baseTool.systemInfo.windowHeight))
-    let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
-    that.setData({
-      tableHeight: height - 622
-    })
+    that.getDoctorInfo()
   },
 
   /**
@@ -137,13 +139,12 @@ Page({
     })
     that.lookVideoContext.play()
   },
-  videoPause: function(e) {
-  },
+  videoPause: function(e) {},
   videoItemClick: function(e) {
     let that = this
-    baseTool.print([e.detail.data.videoUrl, '1'])
+    baseTool.print([e.detail.videoUrl, '1'])
     that.setData({
-      videoUrl: e.detail.data.videoUrl,
+      videoUrl: e.detail.videoUrl,
       showPoster: false,
       autoplay: true,
     })
@@ -162,5 +163,90 @@ Page({
       tagVideoList: that.data.videoList[index].tagVideoList
     })
     baseTool.print(e)
+  },
+  getDoctorInfo: function() {
+    let that = this
+    wx.showNavigationBarLoading()
+    doctorInfoManager.getDoctorInfo().then(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      // 从适配器获得数据
+      let data = doctorInfoAdapter.homePageAdapter(res)
+      that.setData(data)
+      that.setAnimation()
+      // 加载视频数据
+      that.loadData()
+      // baseMessageHandler.postMessage("doctorBrushScore", res => {
+      //   res(that.data.reportDataList[0])
+      // })
+      // 开启动画
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+    })
+  },
+  doctorInfoClick: function(e) {
+    wx.navigateTo({
+      url: '/pages/home/doctorInfoDetail/doctorInfoDetail',
+    })
+  },
+  cancleClick: function(e) {
+    let that = this
+    that.setData({
+      showModal: false
+    })
+    baseTool.setValueForKey(false, 'showModal')
+  },
+  scrollRange:function(e) {
+    let that = this
+    baseTool.print(e)
+    if (e.detail.scrollTop > 100 && that.data.showDoctor == true) {
+      that.setData({
+        showDoctor: false,
+        brushComplete: 1
+      })
+    } else if (e.detail.scrollTop < 100 && that.data.showDoctor == false) {
+      that.setData({
+        showDoctor: true,
+        brushComplete: 0
+      })
+      that.setAnimation()
+    }
+  },
+  setAnimation: function(e) {
+    let that = this
+    baseTool.startTimer(function (total) {
+      baseTool.print([total, that.animation])
+      if (that.data.brushComplete > 0) {
+        return true
+      }
+      let width = baseTool.systemInfo.windowWidth - baseTool.toPx(110)
+      var animation = wx.createAnimation({
+        duration: 10000,
+        timingFunction: "linear",
+        delay: 0,
+        transformOrigin: "50% 50% 0",
+      })
+
+      that.animation = animation
+      if (total % 10 != 0) {
+        animation.translateX(-width).step()
+      } else {
+
+        animation = wx.createAnimation({
+          duration: 0,
+          timingFunction: "linear",
+          delay: 0,
+          transformOrigin: "50% 50% 0",
+        })
+        animation.translateX(width).step()
+      }
+
+      that.setData({
+        animationData: animation.export()
+      })
+
+    }, 1000, 6000000000)
   }
 })

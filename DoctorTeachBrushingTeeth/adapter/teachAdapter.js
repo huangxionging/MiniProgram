@@ -15,8 +15,8 @@ function videoAdapter(videoInfo = {}) {
     videoList: [],
     tagVideoList: []
   }
-  // 模型适配器转换
-  
+  // 模型适配器转换.l
+
   if (baseTool.isExist(videoInfo.mainVideo)) {
     baseTool.modelAdapter(data, videoInfo.mainVideo, function(res) {
       if (res == 'intro') {
@@ -35,15 +35,15 @@ function videoAdapter(videoInfo = {}) {
       }
 
       if (indexSection == 0) {
-        item.tagVideoList.push({
-          name: data.name,
-          videoPicUrl: data.picUrl,
-          videoIntro: data.intro,
+        sectionItem.tagVideoList.splice(0, 0, {
+          title: data.name,
+          picUrl: data.picUrl,
+          intro: data.intro,
           videoUrl: data.videoUrl,
           duration: data.duration
         })
       }
-      for (let indexTag = 0; indexTag < sectionItem.tagVideoList.length; ++indexTag) {
+      for (let indexTag = 0; indexTag < Math.floor((sectionItem.tagVideoList.length + 1) / 2); ++indexTag) {
         let tagItem = {
           name: 'title',
           videoPicUrl: 'picUrl',
@@ -51,22 +51,36 @@ function videoAdapter(videoInfo = {}) {
           videoUrl: 'videoUrl',
           duration: 'duration'
         }
-        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function(res) {
+
+        let tagItem1 = {
+          name1: 'title',
+          videoPicUrl1: 'picUrl',
+          videoIntro1: 'intro',
+          videoUrl1: 'videoUrl',
+          duration1: 'duration'
+        }
+
+        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag * 2], function(res) {
           tagItem[res] = ''
         })
         tagItem.videoUrl = encodeURI(tagItem.videoUrl)
-        baseTool.print(tagItem.videoUrl)
+        if (indexTag * 2 + 1 < sectionItem.tagVideoList.length) {
+          baseTool.modelAdapter(tagItem1, sectionItem.tagVideoList[indexTag * 2 + 1], function(res) {
+            tagItem1[res] = ''
+          })
+          tagItem1.videoUrl1 = encodeURI(tagItem1.videoUrl1)
+          tagItem = Object.assign(tagItem, tagItem1)
+        }
         item.tagVideoList.push(tagItem)
-
       }
+      baseTool.print(item)
       data.videoList.push(item)
+      data.tagVideoList = data.videoList[0].tagVideoList
     }
-    data.tagVideoList = data.videoList[0].tagVideoList
+    
+    return data
   }
-
-  return data
 }
-
 
 function getVideoListAdapter(e = []) {
   let videoList = []
@@ -79,7 +93,7 @@ function getVideoListAdapter(e = []) {
       } else {
         videoList.push(videoItem)
       }
-      
+
     }
   }
   return videoList

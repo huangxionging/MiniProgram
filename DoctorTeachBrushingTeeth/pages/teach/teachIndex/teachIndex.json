@@ -2,7 +2,8 @@
   "navigationBarTitleText": "刷牙教学",
   "usingComponents": {
     "newsComponent": "/components/newsComponent/newsComponent",
-    "videoItem": "/components/videoItem/videoItem"
+    "videoItem": "/components/videoItem/videoItem",
+    "modalDialog": "/components/modalDialog/modalDialog"
   },
   "enablePullDownRefresh": false
 }

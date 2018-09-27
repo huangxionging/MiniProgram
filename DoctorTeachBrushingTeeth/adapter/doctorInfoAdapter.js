@@ -9,7 +9,8 @@ function homePageAdapter(res = {}) {
     jobTitle: 'title',
     hospital: 'company',
     reportDataList: [],
-    persons: 'trainingCampMemberCount'
+    persons: 'trainingCampMemberCount',
+    showDoctor: true
   }
   // 模型适配器转换
   baseTool.modelAdapter(data, res.doctorInfo, res => {
@@ -17,6 +18,21 @@ function homePageAdapter(res = {}) {
       data[res] = ''
     }
   })
+  // 滚动高度
+  let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
+  data.tableHeight = height - 672
+  // 医生信息
+  data.doctorInfo = data.doctorName + ' ' + data.hospital + ' ' + data.department + data.jobTitle
+  // 展示医生信息
+  data.showDoctor = true
+
+  if (baseTool.valueForKey('showModal') === false) {
+    data.showModal = baseTool.valueForKey('showModal')
+  } else {
+    data.showModal = true
+    baseTool.setValueForKey(true, 'showModal')
+  }
+  
 
   if (baseTool.isExist(res.trainingCampMemberCount)) {
     data.persons = res.trainingCampMemberCount
