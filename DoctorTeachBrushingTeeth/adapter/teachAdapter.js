@@ -13,7 +13,8 @@ function videoAdapter(videoInfo = {}) {
     intro: 'intro',
     duration: 'duration',
     videoList: [],
-    tagVideoList: []
+    tagVideoList: [],
+    selectIndex: 0,
   }
   // 模型适配器转换.l
 
@@ -43,7 +44,7 @@ function videoAdapter(videoInfo = {}) {
           duration: data.duration
         })
       }
-      for (let indexTag = 0; indexTag < Math.floor((sectionItem.tagVideoList.length + 1) / 2); ++indexTag) {
+      for (let indexTag = 0; indexTag < sectionItem.tagVideoList.length; ++indexTag) {
         let tagItem = {
           name: 'title',
           videoPicUrl: 'picUrl',
@@ -52,25 +53,12 @@ function videoAdapter(videoInfo = {}) {
           duration: 'duration'
         }
 
-        let tagItem1 = {
-          name1: 'title',
-          videoPicUrl1: 'picUrl',
-          videoIntro1: 'intro',
-          videoUrl1: 'videoUrl',
-          duration1: 'duration'
-        }
-
-        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag * 2], function(res) {
+      
+        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function(res) {
           tagItem[res] = ''
         })
         tagItem.videoUrl = encodeURI(tagItem.videoUrl)
-        if (indexTag * 2 + 1 < sectionItem.tagVideoList.length) {
-          baseTool.modelAdapter(tagItem1, sectionItem.tagVideoList[indexTag * 2 + 1], function(res) {
-            tagItem1[res] = ''
-          })
-          tagItem1.videoUrl1 = encodeURI(tagItem1.videoUrl1)
-          tagItem = Object.assign(tagItem, tagItem1)
-        }
+       
         item.tagVideoList.push(tagItem)
       }
       baseTool.print(item)

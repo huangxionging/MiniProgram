@@ -5,5 +5,5 @@
     "videoItem": "/components/videoItem/videoItem",
     "modalDialog": "/components/modalDialog/modalDialog"
   },
-  "enablePullDownRefresh": false
+  "enablePullDownRefresh": true
 }

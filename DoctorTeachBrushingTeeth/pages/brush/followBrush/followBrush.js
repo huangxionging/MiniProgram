@@ -134,30 +134,6 @@ Page({
             showModal: true
           }
         })
-        baseTool.startTimer(function (total) {
-          baseTool.print([total, that.animation])
-          if (that.data.brushComplete > 0) {
-            return true
-          }
-          var animation = wx.createAnimation({
-            duration: 500,
-            timingFunction: "linear",
-            delay: 0,
-            transformOrigin: "50% 50% 0",
-          })
-
-          that.animation = animation
-          if (total % 2 == 0) {
-            animation.translateY(-10).step()
-          } else {
-            animation.translateY(10).step()
-          }
-
-          that.setData({
-            animationData: animation.export()
-          })
-
-        }, 500, 6000000000)
         return baseMessageHandler.sendMessage("refresh")
       }).catch(res => {
         baseTool.showInfo(res)

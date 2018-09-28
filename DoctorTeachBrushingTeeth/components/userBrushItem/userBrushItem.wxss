@@ -45,7 +45,7 @@
   margin-top: 10rpx;
   display: flex;
   flex-direction: row;
-  font-size: 20rpx;
+  font-size: 25rpx;
 }
 .bursh-device{
   margin-left: 20rpx;

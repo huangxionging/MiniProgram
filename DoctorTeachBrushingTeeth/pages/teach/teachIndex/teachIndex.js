@@ -94,7 +94,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-
+    let that = this
+    that.getDoctorInfo()
   },
 
   /**
@@ -173,7 +174,6 @@ Page({
       // 从适配器获得数据
       let data = doctorInfoAdapter.homePageAdapter(res)
       that.setData(data)
-      that.setAnimation()
       // 加载视频数据
       that.loadData()
       // baseMessageHandler.postMessage("doctorBrushScore", res => {
@@ -197,56 +197,5 @@ Page({
       showModal: false
     })
     baseTool.setValueForKey(false, 'showModal')
-  },
-  scrollRange:function(e) {
-    let that = this
-    baseTool.print(e)
-    if (e.detail.scrollTop > 100 && that.data.showDoctor == true) {
-      that.setData({
-        showDoctor: false,
-        brushComplete: 1
-      })
-    } else if (e.detail.scrollTop < 100 && that.data.showDoctor == false) {
-      that.setData({
-        showDoctor: true,
-        brushComplete: 0
-      })
-      that.setAnimation()
-    }
-  },
-  setAnimation: function(e) {
-    let that = this
-    baseTool.startTimer(function (total) {
-      baseTool.print([total, that.animation])
-      if (that.data.brushComplete > 0) {
-        return true
-      }
-      let width = baseTool.systemInfo.windowWidth - baseTool.toPx(110)
-      var animation = wx.createAnimation({
-        duration: 10000,
-        timingFunction: "linear",
-        delay: 0,
-        transformOrigin: "50% 50% 0",
-      })
-
-      that.animation = animation
-      if (total % 10 != 0) {
-        animation.translateX(-width).step()
-      } else {
-
-        animation = wx.createAnimation({
-          duration: 0,
-          timingFunction: "linear",
-          delay: 0,
-          transformOrigin: "50% 50% 0",
-        })
-        animation.translateX(width).step()
-      }
-
-      that.setData({
-        animationData: animation.export()
-      })
-
-    }, 1000, 6000000000)
   }
 })

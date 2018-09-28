@@ -1,12 +1,6 @@
 <!--pages/teach/teachIndex.wxml-->
 <view class='navigation-bar-line' />
 <view class='teach-container' wx:if='{{loadDone}}'>
-  <view class='doctor-header' bindtap='doctorInfoClick' wx:if='{{showDoctor}}'>
-    <image class='avatar' src='{{avatar}}'></image>
-    <view class='doctor-content'>
-      <view class='doctor-animation'  animation='{{animationData}}'>{{doctorInfo}}</view>
-    </view>
-  </view>
   <view class='look-video-view'>
     <video src='{{videoUrl}}' class='look-video' autoplay='{{autoplay}}' bindpause='videoPause' id='look-video' bindplay='lookVideoPlay' bindwaiting='bindwaiting'>
       <cover-view wx:if='{{showPoster}}' class='poster'>
@@ -35,9 +29,24 @@
   </view>
 </view>
 <cover-view class='modal-cover-container' wx:if='{{showModal}}'>
-  <cover-image class='cover-arrow' src='http://qnimage.hydrodent.cn/dtb_arrow.png'></cover-image>
-  <cover-view class='cover-button-container'>
-    <cover-image class='cover-button' bindtap='cancleClick' src='http://qnimage.hydrodent.cn/dtb_cover_button.png'></cover-image>
+  <cover-view class='modal-cover-bg' />
+  <cover-view class='modal-cover-content'>
+    <cover-view class='cover-button-container'>
+      <cover-image class='cover-button' bindtap='cancleClick' src='http://qnimage.hydrodent.cn/dtb_know_button.png'></cover-image>
+      <cover-image class='cover-intro' src='http://qnimage.hydrodent.cn/dtb_intro.png'></cover-image>
+    </cover-view>
+    <cover-image class='cover-arrow' src='http://qnimage.hydrodent.cn/dtb_arrow1.png'></cover-image>
+    <cover-image class='cover-hang' src='http://qnimage.hydrodent.cn/dtb_doctor_hang.png'></cover-image>
   </cover-view>
-  
+
 </cover-view>
+
+<view class='doctor-view' bindtap='doctorInfoClick' wx:if='{{showDoctor}}'>
+
+  <view class='doctor-content'>
+    <image class='avatar' src='{{avatar}}'></image>
+    <view class='doctor-tip'>
+      <view>指导老师</view>
+    </view>
+  </view>
+</view>

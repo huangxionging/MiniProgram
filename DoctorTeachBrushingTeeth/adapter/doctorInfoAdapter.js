@@ -20,7 +20,7 @@ function homePageAdapter(res = {}) {
   })
   // 滚动高度
   let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
-  data.tableHeight = height - 672
+  data.tableHeight = height - 572
   // 医生信息
   data.doctorInfo = data.doctorName + ' ' + data.hospital + ' ' + data.department + data.jobTitle
   // 展示医生信息

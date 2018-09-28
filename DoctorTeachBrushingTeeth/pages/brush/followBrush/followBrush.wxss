@@ -145,23 +145,25 @@ page {
 
 .reel {
   position: relative;
-  margin-top: 20rpx;
-  width: 198rpx;
-  height: 78rpx;
-}
-
-.finger {
-  position: relative;
-  width: 99rpx;
-  height: 95rpx;
+  margin-top: 94rpx;
+  width: 230rpx;
+  height: 56rpx;
+  border-radius: 28rpx;
+  background-color: #ff4445;
+  color: white;
+  font-size: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 }
 
 .cancle {
-  position: absolute;
-  width: 40rpx;
-  height: 40rpx;
-  right: 30%;
-  top: 250rpx;
+  position: relative;
+  width: 60rpx;
+  height: 60rpx;
+  margin-top: 66rpx;
 }
 
 .modal-blur{

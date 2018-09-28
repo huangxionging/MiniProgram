@@ -13,14 +13,6 @@ page {
   flex-direction: column;
 }
 
-.doctor-header {
-  width: 100%;
-  height: 100rpx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-}
 
 .segment-container {
   width: 100%;
@@ -29,13 +21,7 @@ page {
   flex-direction: row;
 }
 
-.avatar {
-  position: absolute;
-  left: 10rpx;
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-}
+
 
 .doctor-content {
   position: absolute;
@@ -149,21 +135,34 @@ page {
   position: fixed;
   z-index: 9999;
   display: flex;
-  top: 100rpx;
+  top: 0rpx;
   bottom: 0;
-  flex-direction: column;
-  /* justify-content: center; */
-  /* align-items: center; */
+  flex-direction: column-reverse;
+  overflow: hidden;
+}
+
+.modal-cover-content{
+  z-index: 9999;
+}
+.modal-cover-bg{
+  width: 100%;
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  top: 0rpx;
+  bottom: 0;
+  flex-direction: column-reverse;
   overflow: hidden;
   background-color: black;
   opacity: 0.8;
 }
 
 .cover-arrow{
-  position: relative;
-  margin-left: 40rpx;
-  width: 210rpx;
-  height: 282rpx;
+  position: absolute;
+  bottom: 248rpx;
+  right: 52rpx;
+  width: 150rpx;
+  height: 317rpx;
 }
 
 .cover-button-container{
@@ -171,10 +170,67 @@ page {
   flex-direction: column;
   width: 100%;
   align-items: center;
-  margin-top: -40rpx;
+}
+.cover-intro{
+  width: 443rpx;
+  height:408rpx;
+  margin-bottom: 344rpx;
+}
+.cover-button{
+  width: 240rpx;
+  height: 94rpx;
+  margin-bottom: 60rpx;
 }
 
-.cover-button{
-  width: 382rpx;
-  height: 554rpx;
+.doctor-view{
+  position: fixed;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  bottom: 100rpx;
+  width: 260rpx;
+  height: 120rpx;
+  /* background-color: red; */
+  border-radius: 60rpx 0 0 60rpx;
+}
+
+.cover-hang{
+  position: absolute;
+  bottom: 100rpx;
+  right: 0rpx;
+  width: 260rpx;
+  height: 120rpx;
+}
+
+.doctor-content{
+  position: absolute;
+  left: 10rpx;
+  top: 10rpx;
+  width: 250rpx;
+  height: 100rpx;
+  background-color: #79cfff;
+  border-radius: 50rpx 0 0 50rpx;
+  align-items: center;
+  justify-content: center;
+}
+.avatar {
+  position: absolute;
+  left: 10rpx;
+  top: 10rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+.doctor-tip{
+  height: 100rpx;
+  width: 160rpx;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-left: 90rpx;
+  font-size: 35rpx;
+  color: white;
+  align-items: center;
+  justify-content: center;
 }

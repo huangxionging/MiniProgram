@@ -100,6 +100,7 @@ function userInfoAdapter(userInfo = {}) {
     signDisabled: 'isSign'
   }
   baseTool.modelAdapter(data, userInfo)
+  // data.signDisabled = 0
   return data
 }
 
