@@ -38,7 +38,7 @@
 				{
 					"id": 0,
 					"name": "direct",
-					"pathName": "pages/statistics/statistics/statistics",
+					"pathName": "pages/home/checkQRCode/checkQRCode",
 					"query": "doctorId=8a99513665cc564f0165cc6a7dc70019"
 				}
 			]

@@ -5,6 +5,7 @@ const teachAdapter = require('../../../adapter/teachAdapter.js')
 const doctorInfoManager = require("../../../manager/doctorInfoManager.js")
 const doctorInfoAdapter = require('../../../adapter/doctorInfoAdapter.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const loginManager = require('../../../manager/loginManager.js')
 Page({
 
   /**
@@ -55,14 +56,16 @@ Page({
         }
       }
     }
-    that.getDoctorInfo()
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-    this.lookVideoContext = wx.createVideoContext('look-video', this)
+    let that = this
+    that.lookVideoContext = wx.createVideoContext('look-video', that)
+    that.getDoctorInfo()
   },
 
   /**
@@ -183,7 +186,12 @@ Page({
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseTool.showInfo(res)
+      // baseTool.showInfo(res)
+      if (res == '不存在该openid' || res == '获取医生信息失败') {
+        loginManager.startAuthorization()
+      } else {
+        baseTool.showInfo(res)
+      }
     })
   },
   doctorInfoClick: function(e) {

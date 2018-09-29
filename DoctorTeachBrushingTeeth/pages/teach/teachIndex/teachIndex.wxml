@@ -28,18 +28,20 @@
     </scroll-view>
   </view>
 </view>
-<cover-view class='modal-cover-container' wx:if='{{showModal}}'>
+<!-- <cover-view class='modal-cover-container' wx:if='{{showModal}}'>
   <cover-view class='modal-cover-bg' />
   <cover-view class='modal-cover-content'>
     <cover-view class='cover-button-container'>
-      <cover-image class='cover-button' bindtap='cancleClick' src='http://qnimage.hydrodent.cn/dtb_know_button.png'></cover-image>
-      <cover-image class='cover-intro' src='http://qnimage.hydrodent.cn/dtb_intro.png'></cover-image>
+      <cover-view class='cover-button-bg'>
+        <cover-image class='cover-intro' src='http://qnimage.hydrodent.cn/dtb_intro.png'></cover-image>
+        <cover-image class='cover-button' bindtap='cancleClick' src='http://qnimage.hydrodent.cn/dtb_know_button.png'></cover-image>
+      </cover-view>
     </cover-view>
     <cover-image class='cover-arrow' src='http://qnimage.hydrodent.cn/dtb_arrow1.png'></cover-image>
     <cover-image class='cover-hang' src='http://qnimage.hydrodent.cn/dtb_doctor_hang.png'></cover-image>
   </cover-view>
 
-</cover-view>
+</cover-view> -->
 
 <view class='doctor-view' bindtap='doctorInfoClick' wx:if='{{showDoctor}}'>
 

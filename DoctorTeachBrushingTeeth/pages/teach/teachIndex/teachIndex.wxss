@@ -13,15 +13,12 @@ page {
   flex-direction: column;
 }
 
-
 .segment-container {
   width: 100%;
   height: 140rpx;
   display: flex;
   flex-direction: row;
 }
-
-
 
 .doctor-content {
   position: absolute;
@@ -32,7 +29,7 @@ page {
   white-space: nowrap;
 }
 
-.doctor-animation{
+.doctor-animation {
   width: 100%;
   height: 100%;
   display: flex;
@@ -134,30 +131,36 @@ page {
   width: 100%;
   position: fixed;
   z-index: 9999;
-  display: flex;
+  display: block;
   top: 0rpx;
   bottom: 0;
-  flex-direction: column-reverse;
   overflow: hidden;
 }
 
-.modal-cover-content{
+.modal-cover-content {
   z-index: 9999;
+  position: absolute;
+  width: 100%;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
-.modal-cover-bg{
+
+.modal-cover-bg {
   width: 100%;
   position: fixed;
   z-index: 999;
   display: flex;
   top: 0rpx;
   bottom: 0;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow: hidden;
   background-color: black;
   opacity: 0.8;
 }
 
-.cover-arrow{
+.cover-arrow {
   position: absolute;
   bottom: 248rpx;
   right: 52rpx;
@@ -165,24 +168,44 @@ page {
   height: 317rpx;
 }
 
-.cover-button-container{
+.cover-button-container {
+  z-index: 9999;
+  position: absolute;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* justify-content: center; */
   align-items: center;
 }
-.cover-intro{
+
+.cover-button-bg {
+  z-index: 9999;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.cover-intro {
   width: 443rpx;
-  height:408rpx;
+  height: 408rpx;
   margin-bottom: 344rpx;
 }
-.cover-button{
+
+.cover-button {
   width: 240rpx;
   height: 94rpx;
   margin-bottom: 60rpx;
 }
 
-.doctor-view{
+.doctor-view {
   position: fixed;
   right: 0;
   z-index: 999;
@@ -195,7 +218,7 @@ page {
   border-radius: 60rpx 0 0 60rpx;
 }
 
-.cover-hang{
+.cover-hang {
   position: absolute;
   bottom: 100rpx;
   right: 0rpx;
@@ -203,7 +226,7 @@ page {
   height: 120rpx;
 }
 
-.doctor-content{
+.doctor-content {
   position: absolute;
   left: 10rpx;
   top: 10rpx;
@@ -214,6 +237,7 @@ page {
   align-items: center;
   justify-content: center;
 }
+
 .avatar {
   position: absolute;
   left: 10rpx;
@@ -222,7 +246,8 @@ page {
   height: 80rpx;
   border-radius: 50%;
 }
-.doctor-tip{
+
+.doctor-tip {
   height: 100rpx;
   width: 160rpx;
   display: flex;
