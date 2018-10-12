@@ -16,6 +16,7 @@ Page({
     item: {
       isNext: false,
       name: '',
+      text: '',
       isSave: false,
     }
   },
@@ -129,11 +130,12 @@ Page({
       fail: function(res) {},
       complete: function(res) {},
     })
-    contestManager.addContestUser(item.name).then(res => {
+    contestManager.addContestUser(item.text).then(res => {
       baseTool.print(res)
       wx.hideLoading()
       item.isNext = true
       item.name = ''
+      item.text = ''
       item.isSave = true
       // 终于渲染成功了
       that.setData({
@@ -164,12 +166,9 @@ Page({
     var that = this
     var item = that.data.item
     baseTool.print([item, e])
-    if (item.isSave == true ) {
-      item.name = ""
-      item.isSave = false
-    } else {
-      item.name = e.detail.value
-    }
+    // 
+    item.name = e.detail.value
+    item.text = e.detail.value
     that.setData({
       item: item
     })

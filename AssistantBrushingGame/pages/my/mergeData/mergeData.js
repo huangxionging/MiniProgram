@@ -102,9 +102,10 @@ Page({
         for (var index = 0; index < res.length; ++index) {
           var macAddress = res[index].macAddress.toUpperCase()
           // 待同步的列表项
+         
           var item = {
             name: res[index].name,
-            tail: '(game-' + res[index].macAddress.toLowerCase() + ')',
+            tail: baseTool.getDeviceName(macAddress),
             playerId: res[index].playerId,
             macAddress: macAddress,
             score: res[index].score ? res[index].score : 0,

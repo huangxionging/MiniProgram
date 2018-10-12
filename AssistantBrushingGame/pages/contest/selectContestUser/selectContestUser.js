@@ -33,12 +33,13 @@ Page({
     reNotify: 0,
     lightSuccess: false,
     failTips: false,
+    needUpdateFirmware: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     var that = this
     baseTool.print(options)
 
@@ -71,11 +72,11 @@ Page({
     wx.showLoading({
       title: '正在连接设备...',
       mask: true,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
     })
-    setTimeout(function () {
+    setTimeout(function() {
       that.connectDevice()
       that.deviceConnectionStateChange()
     }, 3000)
@@ -85,37 +86,37 @@ Page({
   /** 
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     wx.setKeepScreenOn({
       keepScreenOn: true,
-      success: function (res) {
+      success: function(res) {
         baseTool.print([res, '保持屏幕常亮成功'])
       },
-      fail: function (res) {
+      fail: function(res) {
         baseTool.print([res, '保持屏幕常亮失败'])
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
     var that = this
     // 删除通知
     baseMessageHandler.removeSpecificInstanceMessageHandler('selectRefresh', this).then(res => {
@@ -133,31 +134,28 @@ Page({
         serviceId: that.data.tailServiceUUID,
         characteristicId: that.data.tailCharacteristicIdWrite,
         value: buffer,
-        success: function (res) {
+        success: function(res) {
           baseTool.print([res, '成功关灯'])
           wx.closeBLEConnection({
             deviceId: that.data.deviceId,
-            complete: function (res) {
+            complete: function(res) {
               that.data = null
               that = null
-             },
+            },
           })
         },
-        fail: function (res) {
+        fail: function(res) {
           that.data = null
           that = null
-         },
-        complete: function (res) { 
         },
+        complete: function(res) {},
       })
     } else {
       wx.closeBLEConnection({
         deviceId: that.data.deviceId,
-        success: function (res) { 
-        },
-        fail: function (res) { 
-        },
-        complete: function (res) { 
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {
           that.data = null
           that = null
         },
@@ -169,7 +167,7 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     var that = this
     that.loadData()
   },
@@ -177,21 +175,21 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
   showConnectFail: function() {
     var that = this
     var failTips = that.data.failTips
     baseTool.print(that)
-    if (failTips == false && this && that.data.deviceId != '') {
+    if (failTips == false && this && that.data.deviceId != '' && that.data.needUpdateFirmware == false) {
       that.data.failTips = true
       wx.showModal({
         title: '提示',
@@ -199,82 +197,96 @@ Page({
         showCancel: false,
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function (res) {
+        success: function(res) {
           baseTool.print(["连接失败", 205])
+          wx.navigateBack()
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+    } else if (that.data.needUpdateFirmware == true) {
+      wx.showModal({
+        title: '提示',
+        content: '请使用App把设备升级到最新固件后才能参加比赛',
+        showCancel: false,
+        confirmText: '确定',
+        confirmColor: '#00a0e9',
+        success: function (res) {
+          baseTool.print(["连接失败", 206])
           wx.navigateBack()
         },
         fail: function (res) { },
         complete: function (res) { },
       })
     }
-    
+
   },
-  getServices: function () {
+  getServices: function() {
     var that = this
     wx.getBLEDeviceServices({
       deviceId: that.data.deviceId,
-      success: function (res) {
+      success: function(res) {
         baseTool.print(['获得服务成功', baseTool.getCurrentTime()])
         // 获得特征值
         that.data.reServiceCount = 4
         that.getCharacteristics()
       },
-      fail: function (res) {
+      fail: function(res) {
         baseTool.print(res)
         var reServiceCount = that.data.reServiceCount
         if (reServiceCount <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reServiceCount++
-          baseTool.print(["重新获得服务", reServiceCount, baseTool.getCurrentTime()])
-          setTimeout(function () {
+            baseTool.print(["重新获得服务", reServiceCount, baseTool.getCurrentTime()])
+          setTimeout(function() {
             that.getServices()
           }, 500)
         } else {
           that.showConnectFail()
         }
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   },
-  getCharacteristics: function () {
+  getCharacteristics: function() {
     var that = this
     wx.getBLEDeviceCharacteristics({
       deviceId: that.data.deviceId,
       serviceId: that.data.tailServiceUUID,
-      success: function (res) {
+      success: function(res) {
         baseTool.print(['获得特征值成功', baseTool.getCurrentTime()])
         that.data.reCharacteristic = 4
         that.deviceCharacteristicValueChange(that.data.deviceId)
         that.notifyCharacteristicValueChange()
       },
-      fail: function (res) { 
+      fail: function(res) {
         baseTool.print(res)
         var reCharacteristic = that.data.reCharacteristic
         if (reCharacteristic <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reCharacteristic++
-          baseTool.print(["重新获得服务", reCharacteristic, baseTool.getCurrentTime()])
-          setTimeout(function () {
+            baseTool.print(["重新获得服务", reCharacteristic, baseTool.getCurrentTime()])
+          setTimeout(function() {
             that.getCharacteristics()
           }, 500)
         } else {
           that.showConnectFail()
         }
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   },
-  notifyCharacteristicValueChange: function () {
+  notifyCharacteristicValueChange: function() {
     var that = this
     wx.notifyBLECharacteristicValueChange({
       deviceId: that.data.deviceId,
       serviceId: that.data.tailServiceUUID,
       characteristicId: that.data.tailCharacteristicIdNotify,
       state: true,
-      success: function (res) {
+      success: function(res) {
         baseTool.print([res, '预订通知成功成功', baseTool.getCurrentTime()])
       },
-      fail: function (res) {
+      fail: function(res) {
         baseTool.print([res, '预订通知成功成功', baseTool.getCurrentTime()])
         reNotify
         baseTool.print(res)
@@ -282,30 +294,30 @@ Page({
         if (reNotify <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reNotify++
-          baseTool.print(["重新获得服务", reNotify, baseTool.getCurrentTime()])
-          setTimeout(function () {
+            baseTool.print(["重新获得服务", reNotify, baseTool.getCurrentTime()])
+          setTimeout(function() {
             that.notifyCharacteristicValueChange()
           }, 500)
         } else {
           that.showConnectFail()
         }
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
 
 
   },
-  connectDevice: function () {
+  connectDevice: function() {
     var that = this
     wx.createBLEConnection({
       deviceId: that.data.deviceId,
-      success: function (res) {
+      success: function(res) {
         baseTool.print(['连接成功', baseTool.getCurrentTime()])
         // 下一步获得服务
         that.data.reconnectCount = 4
         that.getServices()
       },
-      fail: function (res) {
+      fail: function(res) {
         if (res.errCode == -1) {
           return
         }
@@ -314,27 +326,27 @@ Page({
         if (reconnectCount <= 3 && that != null) {
           // 500ms 以后重连
           that.data.reconnectCount++
-          baseTool.print(["发起重连", reconnectCount, baseTool.getCurrentTime()])
-          setTimeout(function () {
+            baseTool.print(["发起重连", reconnectCount, baseTool.getCurrentTime()])
+          setTimeout(function() {
             that.connectDevice()
           }, 500)
         } else {
           that.showConnectFail()
         }
       },
-      complete: function (res) { },
+      complete: function(res) {},
     })
   },
-  addContestUser: function () {
+  addContestUser: function() {
     var that = this
     wx.navigateTo({
       url: '../addOneContestUser/addOneContestUser?gameId=' + that.data.gameId + '&macAddress=' + that.data.macAddress + '&deviceId=' + that.data.deviceId,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
     })
   },
-  selectClick: function (e) {
+  selectClick: function(e) {
     baseTool.print(e)
     var that = this
     var index = e.currentTarget.dataset.id - 1
@@ -355,7 +367,7 @@ Page({
         cancelColor: '#999',
         confirmText: '确定',
         confirmColor: '#00a0e9',
-        success: function (res) {
+        success: function(res) {
           baseTool.print(res)
 
           if (res.cancel) {
@@ -373,17 +385,19 @@ Page({
           }
           // 
         },
-        fail: function (res) {
+        fail: function(res) {
           baseTool.print(res)
         },
-        complete: function (res) { baseTool.print(res) },
+        complete: function(res) {
+          baseTool.print(res)
+        },
       })
 
     }
 
 
   },
-  bindDevice: function (userInfo) {
+  bindDevice: function(userInfo) {
     var that = this
     var name = userInfo.name
     var userId = userInfo.playerId
@@ -405,21 +419,21 @@ Page({
         serviceId: that.data.tailServiceUUID,
         characteristicId: that.data.tailCharacteristicIdWrite,
         value: buffer,
-        success: function (res) {
+        success: function(res) {
           wx.navigateBack()
         },
-        fail: function (res) {
+        fail: function(res) {
           wx.navigateBack()
         },
-        complete: function (res) { },
+        complete: function(res) {},
       })
     }).catch(res => {
       baseTool.print(res)
-      wx.hideNavigationBarLoading() 
+      wx.hideNavigationBarLoading()
       wx.startPullDownRefresh({
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
       })
       wx.showModal({
         title: '提示',
@@ -429,15 +443,15 @@ Page({
       })
     })
   },
-  loadData: function () {
+  loadData: function() {
     var that = this
     wx.showNavigationBarLoading()
     contestManager.selectContestUser().then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseTool.print(typeof (res))
-      if (typeof (res) != 'undefined' && res.length > 0) {
+      baseTool.print(typeof(res))
+      if (typeof(res) != 'undefined' && res.length > 0) {
         var data = that.data
         data.loadingDone = true
         data.hasData = true
@@ -473,38 +487,52 @@ Page({
       })
     })
   },
-  deviceConnectionStateChange: function () {
+  deviceConnectionStateChange: function() {
     var that = this
-    wx.onBLEConnectionStateChange(function (res) {
+    wx.onBLEConnectionStateChange(function(res) {
       baseTool.print([res, '蓝牙状态改变'])
       if (res.connected == false && that.data.lightSuccess == false && res.deviceId == that.data.deviceId && that.data.reconnectCount >= 3) {
         that.showConnectFail()
       }
     })
   },
-  deviceCharacteristicValueChange: function (deviceId = '') {
+  deviceCharacteristicValueChange: function(deviceId = '') {
     var that = this
 
-    wx.onBLECharacteristicValueChange(function (res) {
+    wx.onBLECharacteristicValueChange(function(res) {
       var hex = baseHexConvertTool.arrayBufferToHexString(res.value)
       baseTool.print([hex, '通知信息'])
       // 兼容产品
       if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
         // 查找设备命令
-        var buffer = bleCommandManager.findDeviceCommand()
-        wx.writeBLECharacteristicValue({
-          deviceId: deviceId,
-          serviceId: that.data.tailServiceUUID,
-          characteristicId: that.data.tailCharacteristicIdWrite,
-          value: buffer,
-          success: function (res) {
-            baseTool.print([res, '查找设备命令发送成功'])
-          },
-          fail: function (res) {
-            baseTool.print([res, '设备常亮失败'])
-          },
-          complete: function (res) { },
-        })
+        // 获得版本号
+        let version = baseTool.hexAsciiToString(hex.substr(10, 16))
+        // 判断是不是比赛尾巴
+        let isGameDevice = that.data.deviceName.indexOf('game')
+        if (version >= 'V122.2.7' || isGameDevice != -1) {
+          var buffer = bleCommandManager.findDeviceCommand()
+          wx.writeBLECharacteristicValue({
+            deviceId: deviceId,
+            serviceId: that.data.tailServiceUUID,
+            characteristicId: that.data.tailCharacteristicIdWrite,
+            value: buffer,
+            success: function (res) {
+              baseTool.print([res, '查找设备命令发送成功'])
+            },
+            fail: function (res) {
+              baseTool.print([res, '设备常亮失败'])
+            },
+            complete: function (res) { },
+          })
+        } else {
+          that.data.needUpdateFirmware = true
+          // 断开连接
+          wx.closeBLEConnection({
+            deviceId: deviceId,
+            success: function(res) {},
+          })
+        }
+        
       } else if (hex.indexOf('f30c') == 0) {
         baseTool.print([res, '设备常亮'])
         that.data.lightSuccess = true
@@ -515,9 +543,9 @@ Page({
           image: '',
           duration: 3000,
           mask: true,
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
+          success: function(res) {},
+          fail: function(res) {},
+          complete: function(res) {},
         })
       }
     })

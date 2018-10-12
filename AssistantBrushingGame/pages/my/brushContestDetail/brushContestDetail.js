@@ -196,9 +196,9 @@ Page({
           // 待同步的列表项
           var item = {
             name: res.playersList[index].name,
-            tail: '(game-' + res.playersList[index].macAddress.toLowerCase() + ')',
+            tail: baseTool.getDeviceName(macAddress),
             playerId: res.playersList[index].playerId,
-            macAddress: macAddress,
+            macAddress: baseTool.getDeviceName(macAddress),
             score: res.playersList[index].score,
             accuracy: res.playersList[index].accuracy,
           }
@@ -391,8 +391,16 @@ Page({
     wx.onBluetoothDeviceFound(function (res) {
       var device = res.devices[0]
       baseTool.print(["发现设备", device])
-      if (device.name.indexOf('game') == -1) {
+      if (device.name.indexOf('game') == -1 && device.name.indexOf('32th-dd5414') == -1) {
         return
+      }
+      // 要符合第11位大于等于2
+      if (device.name.indexOf('32th-dd5414') != -1) {
+        baseTool.print()
+        var level = parseInt(device.name.substr(11, 1))
+        if (level < 2) {
+          return
+        }
       }
       // 获得 MAC地址
       var macAddress = device.name.split('-')[1].toUpperCase()

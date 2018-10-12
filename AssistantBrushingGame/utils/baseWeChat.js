@@ -27,7 +27,6 @@ function getUserInfo() {
         resolve(res)
       },
       fail: function(res) {
-        baseTool.print('sdcsdcsdaasdas 是的VVVV发发')
         reject(res)},
       complete: function(res) {},
     })

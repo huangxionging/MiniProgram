@@ -53,13 +53,17 @@ function videoAdapter(videoInfo = {}) {
           duration: 'duration'
         }
 
-      
-        baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function(res) {
-          tagItem[res] = ''
-        })
-        tagItem.videoUrl = encodeURI(tagItem.videoUrl)
-       
-        item.tagVideoList.push(tagItem)
+        // baseTool.print([sectionItem.tagVideoList[indexTag], indexTag])
+
+        if (sectionItem.tagVideoList[indexTag]) {
+          baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function (res) {
+            tagItem[res] = ''
+          })
+          tagItem.videoUrl = encodeURI(tagItem.videoUrl)
+
+          item.tagVideoList.push(tagItem)
+        }
+        
       }
       baseTool.print(item)
       data.videoList.push(item)

@@ -190,12 +190,13 @@ function getCurrentTimeWithoutSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date()
+  let currentDate = new Date()
+  let date = new Date(currentDate.getTime() + 1000 * 60 * 1)
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
   let hour = zeroFormat(date.getHours() + '')
-  let minute = zeroFormat(date.getMinutes() + 1 + '')
+  let minute = zeroFormat(date.getMinutes() + '')
 
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
@@ -203,7 +204,8 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  let date = new Date()
+  let currentDate = new Date()
+  let date = new Date(currentDate.getTime() + 1000 * 60 * 1)
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
@@ -341,7 +343,7 @@ function getParameterFromURL(url = '') {
       return parameterData
     }
   }
-  return null
+  return undefined
 }
 
 /**
@@ -530,6 +532,42 @@ function isValid(e) {
   }
 }
 
+/**
+ * 16进制表示的 ASCII 码转字符串, 去掉 0x
+ */
+function hexAsciiToString(hexStr = '') {
+  let hexLength = hexStr.length
+  // 16 进制字符串都是偶数个
+  if (hexLength % 2 != 0) {
+    return undefined
+  }
+
+  let desStr = ''
+  for (let index = 0; index < hexLength; index += 2) {
+    // 获取16进制数
+    let hex = hexStr.substr(index, 2)
+    // 获得 ASCII 码
+    let hexInt = parseInt(hex, 16)
+    // 拼接 ASCII 码字符
+    desStr += String.fromCharCode(hexInt)
+  }
+  return desStr
+}
+
+/**
+ * 设备命名规则
+ */
+function getDeviceName(macAddress = '') {
+  print(macAddress)
+  let lowerCaseMacAddress = macAddress.toLowerCase()
+  // 设备命名规则, dd54142开头的命名为 32th, 其他的为 game
+  if (lowerCaseMacAddress.indexOf('dd5414') != -1 && lowerCaseMacAddress.substr(0, 7) >= 'dd54142') {
+    return '(32th-' + lowerCaseMacAddress + ')'
+  } else {
+    return '(game-' + lowerCaseMacAddress + ')'
+  }
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -600,5 +638,7 @@ module.exports = {
   urlToHttp: urlToHttp,
   toRpx: toRpx,
   showToast: showToast,
-  downloadImageTohotosAlbum: downloadImageTohotosAlbum
+  downloadImageTohotosAlbum: downloadImageTohotosAlbum,
+  hexAsciiToString: hexAsciiToString,
+  getDeviceName: getDeviceName
 }

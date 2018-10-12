@@ -94,6 +94,9 @@ Page({
         fail: function (res) { },
         complete: function (res) { },
       })
+      that.setData({
+        name: that.data.name
+      })
       return
     }
     that.setData({
@@ -230,6 +233,9 @@ Page({
         fail: function(res) {},
         complete: function(res) {},
       })
+      that.setData({
+        intro: that.data.intro
+      })
       return
     }
     that.setData({
@@ -244,7 +250,7 @@ Page({
     var chooseItem = ['camera', 'album']
     wx.showActionSheet({
       itemList: itemList,
-      itemColor: '#black',
+      itemColor: 'black',
       success: function(res) {
         switch (res.tapIndex) {
           case 0:

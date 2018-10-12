@@ -87,15 +87,15 @@ Page({
     })
   },
   withdrawClick: function(e) {
-    // wx.navigateTo({
-    //   url: '../withdrawMoney/withdrawMoney',
-    // })
-    wx.showToast({
-      title: '开发中, 敬请期待...',
-      icon: 'none',
-      duration: 2000,
-      mask: true,
+    wx.navigateTo({
+      url: '../withdrawMoney/withdrawMoney',
     })
+    // wx.showToast({
+    //   title: '开发中, 敬请期待...',
+    //   icon: 'none',
+    //   duration: 2000,
+    //   mask: true,
+    // })
   },
   yesterdayClick: function(e) {
     // wx.navigateTo({

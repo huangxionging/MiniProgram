@@ -248,6 +248,19 @@ Page({
   },
   saveDevice: function (e) {
     var that = this
+    if (e.name == '') {
+      wx.showModal({
+        title: '提示',
+        content: '比赛名称不能为空哦!',
+        showCancel: false,
+        cancelColor: '确认',
+        confirmColor: '#00a0e9',
+        success: function (res) { },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+      return
+    }
     contestManager.addContest(e.gameId, e.name, e.startTime, e.selectBrushMethod, "modify").then(res => {
       baseTool.print(res)
       wx.showLoading({
@@ -481,8 +494,16 @@ Page({
     wx.onBluetoothDeviceFound(function (res) {
       var device = res.devices[0]
       // baseTool.print(device)
-      if (device.name.indexOf('game') == -1) {
+      if (device.name.indexOf('game') == -1 && device.name.indexOf('32th-dd5414') == -1) {
         return
+      }
+      // 要符合第11位大于等于2
+      if (device.name.indexOf('32th-dd5414') != -1) {
+        baseTool.print()
+        var level = parseInt(device.name.substr(11, 1), 16)
+        if (level < 2) {
+          return
+        }
       }
       // 获得 MAC地址
       var macAddress = device.name.split('-')[1].toUpperCase()
