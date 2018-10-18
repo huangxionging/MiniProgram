@@ -1,0 +1,5 @@
+<!--components/withdrawRecordItemCell/withdrawRecordItemCell.wxml-->
+<view class='withdraw-cell-container'>
+  <view class='withdraw-time'>{{data.time}}</view>
+  <view class='withdraw-money'>{{data.money}}元</view>
+</view>

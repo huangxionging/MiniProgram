@@ -9,7 +9,7 @@ function getDoctorInfoAdapter(doctorInfo = {}) {
     jobTitle: 'title',
     hospital: 'company',
     goodat: 'goodat',
-    experience: 'experience',
+    experience:  'experience',
   }
   // 模型适配器转换
   baseTool.print(doctorInfo)

@@ -140,13 +140,12 @@ page {
   justify-content: center;
 }
 
-
 .withdraw-delete-image {
   width: 40rpx;
   height: 40rpx;
 }
 
-.input-money{
+.input-money {
   margin-top: 30rpx;
   height: 150rpx;
   width: 100%;
@@ -156,7 +155,7 @@ page {
   align-items: center;
 }
 
-.money-tip{
+.money-tip {
   height: 100%;
   margin-left: 48rpx;
   font-weight: bold;
@@ -168,7 +167,7 @@ page {
   flex: 1;
 }
 
-.money-input{
+.money-input {
   height: 100%;
   margin-left: 52rpx;
   font-weight: bold;
@@ -176,7 +175,7 @@ page {
   /* background-color: gold; */
 }
 
-.remaing-tip{
+.remaing-tip {
   margin-top: 2rpx;
   height: 60rpx;
   background-color: white;
@@ -188,14 +187,14 @@ page {
   color: #20afff;
 }
 
-.tip-container{
+.tip-container {
   margin-top: 40rpx;
   padding-left: 30rpx;
   font-size: 28rpx;
   color: #666;
 }
 
-.confirm-button{
+.confirm-button {
   margin-top: 160rpx;
   width: 560rpx;
   height: 70rpx;
@@ -208,14 +207,63 @@ page {
   color: white;
 }
 
-.confirm-button-container{
+.confirm-button-container {
   width: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
+  font-size: 28rpx;
 }
 
-.confirm-hover{
+.confirm-hover {
   background-color: #02557c;
   color: #a6c4d2;
+}
+
+.confirm-button-disalbed {
+  margin-top: 160rpx;
+  width: 560rpx;
+  height: 70rpx;
+  background-color: #999;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.withdraw-detail-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw-header {
+  width: 100%;
+  height: 342rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  margin-bottom: 20rpx;
+}
+
+.withdraw-state-image {
+  margin-top: 58rpx;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.withdraw-title {
+  margin-top: 44rpx;
+  font-size: 30rpx;
+  color: #20afff;
+}
+
+.withdraw-tip {
+  margin-top: 38rpx;
+  font-size: 28rpx;
+  color: #999;
 }

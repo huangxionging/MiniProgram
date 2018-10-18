@@ -17,7 +17,7 @@
       <view class='total-money'>
         <text space='ensp'>总收益 {{totalMoney}} 元</text>
       </view>
-      <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>开发中</view>
+      <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>{{withdrawTitle}}</view>
     </view>
     <view class='traffic-revenue'>
       <view class='revenue'>

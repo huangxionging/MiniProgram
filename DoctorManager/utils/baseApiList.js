@@ -34,5 +34,17 @@ module.exports = {
   /**
    * 获得今日动态数据
    */
-  getTodayDynamic: 'getTodayDynamic'
+  getTodayDynamic: 'getTodayDynamic',
+  /**
+   * 获得提现金额信息
+   */
+  getWithdrawMoneyInfo: 'getWithdrawMoneyInfo',
+  /**
+   * 获得提现记录列表
+   */
+  getWithdrawMoneyList: 'getWithdrawMoneyList',
+  /**
+   * 提现
+   */
+  withdrawMoney: 'withdrawMoney'
 }

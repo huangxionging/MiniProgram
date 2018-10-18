@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "我要提现"
+  "navigationBarTitleText": "我要提现",
+  "usingComponents": {
+    "withdrawRecordItemCell": "/components/withdrawRecordItemCell/withdrawRecordItemCell"
+  }
 }

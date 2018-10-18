@@ -6,9 +6,16 @@ function getTodayDynamicAdapter(res) {
     brushingCount: 'brushingCount',
     trainingCount: 'trainingCount',
     sellCount: 'sellCount',
-    dataList: []
+    dataList: [],
+    isBW: 'isBW'
   }
   baseTool.modelAdapter(data, res)
+
+  if (data.isBW == 1) {
+    data.withdrawTitle = '提现'
+  } else {
+    data.withdrawTitle = '开发中'
+  }
   if (baseTool.isExist(res.daynamicList)) {
     let array = res.daynamicList
     for (let index = 0; index < array.length; ++index) {
@@ -25,6 +32,52 @@ function getTodayDynamicAdapter(res) {
   return data;
 }
 
+
+/**
+ * 获取提现信息
+ */
+function getWithdrawMoneyInfoAdapter(res) {
+  let data = {
+    loadDone: true,
+    segmentIndex: 1,
+    totalMoney: 'canWithdrawMoney',
+    remaingMoney: 'canWithdrawMoney',
+    money: '',
+    status: 'status'
+  }
+  baseTool.modelAdapter(data, res)
+  // 审核中, 只能看到这个
+  // data.status = 1
+  data.totalMoney = parseFloat(data.totalMoney).toFixed(2)
+  data.remaingMoney = data.totalMoney
+  if (data.status == 1) {
+    data.segmentIndex = -1
+  }
+  return data
+}
+
+function getWithdrawMoneyListAdapter(res) {
+  let recordList = []
+
+  if (baseTool.isExist(res)) {
+    for (let index = 0; index < res.length; ++index) {
+      let recordItem = {
+        time: 'createTime',
+        money: 'earnings',
+        types: 'type',
+        status: 'status',
+        recordId: 'logId'
+      }
+      baseTool.modelAdapter(recordItem, res[index])
+      recordList.push(recordItem)
+    }
+  }
+
+  return recordList
+}
+
 module.exports = {
   getTodayDynamicAdapter: getTodayDynamicAdapter,
+  getWithdrawMoneyInfoAdapter: getWithdrawMoneyInfoAdapter,
+  getWithdrawMoneyListAdapter: getWithdrawMoneyListAdapter
 }

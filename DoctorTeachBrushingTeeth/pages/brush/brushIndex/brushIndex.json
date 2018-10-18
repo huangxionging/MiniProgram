@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "零蛀牙训练营",
+  "navigationBarTitleText": "训练营",
   "usingComponents": {
     "userBrushItem": "/components/userBrushItem/userBrushItem",
     "brushReport": "/components/brushReport/brushReport"
