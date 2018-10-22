@@ -12,14 +12,14 @@
       </view>
     </view>
     <view class='money-view'>
-      <view class='money-yesterday'>昨日收益 (元)</view>
-      <view class='yesterday-number' bindtap='yesterdayClick'>{{yesterdayMoney}}</view>
+      <!-- <view class='money-yesterday'>昨日收益 (元)</view>
+      <view class='yesterday-number' bindtap='yesterdayClick'>{{yesterdayMoney}}</view> -->
       <view class='total-money'>
-        <text space='ensp'>总收益 {{totalMoney}} 元</text>
+        <text space='ensp'>总收益 {{totalMoney}} 元 | 合作奖励 {{awardMoney}} 元</text>
       </view>
       <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>{{withdrawTitle}}</view>
     </view>
-    <view class='traffic-revenue'>
+    <!-- <view class='traffic-revenue'>
       <view class='revenue'>
         <view class='revenue-money'>{{weekMoney}}</view>
         <view class='revenue-tip'>近一周收益</view>
@@ -29,7 +29,7 @@
         <view class='revenue-money'>{{monthMoney}}</view>
         <view class='revenue-tip'>近一月收益</view>
       </view>
-    </view>
+    </view> -->
   </view>
   <view class='column-line'/>
   <view class='money-table-view'>

@@ -7,7 +7,9 @@ function getTodayDynamicAdapter(res) {
     trainingCount: 'trainingCount',
     sellCount: 'sellCount',
     dataList: [],
-    isBW: 'isBW'
+    isBW: 'isBW',
+    awardMoney: 'awardEarnings',
+    totalMoney: 'totalEarnings'
   }
   baseTool.modelAdapter(data, res)
 
@@ -15,6 +17,8 @@ function getTodayDynamicAdapter(res) {
     data.withdrawTitle = '提现'
   } else {
     data.withdrawTitle = '开发中'
+    data.awardMoney = '*****'
+    data.totalMoney = '*****'
   }
   if (baseTool.isExist(res.daynamicList)) {
     let array = res.daynamicList

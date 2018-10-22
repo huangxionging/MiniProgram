@@ -209,4 +209,7 @@ Page({
       bindDisabled: bindDisabled
     })
   },
+  doctorInfoClick: function(e) {
+    
+  }
 })

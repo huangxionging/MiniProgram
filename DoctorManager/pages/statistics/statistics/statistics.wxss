@@ -59,6 +59,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 300rpx;
 }
 
 .money-yesterday {
@@ -78,10 +79,10 @@
 }
 
 .withdraw-cash {
-  margin-top: 20rpx;
+  margin-top: 50rpx;
   width: 120rpx;
   height: 44rpx;
-  font-size: 20rpx;
+  font-size: 30rpx;
   color: white;
   border: 2rpx solid white;
   border-radius: 22rpx;

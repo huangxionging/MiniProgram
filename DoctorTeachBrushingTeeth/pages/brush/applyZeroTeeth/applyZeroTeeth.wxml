@@ -1,7 +1,7 @@
 <!--pages/brush/applyZeroTeeth/applyZeroTeeth.wxml-->
 <view class='apply-container'>
    <view class='bind-view'>
-    <image class='bind-image' bindtap='' src='{{avatar}}' />
+    <image class='bind-image' bindtap='doctorInfoClick' src='{{avatar}}' />
     <view>{{nickName}}</view>
     <view class='tel-view'>
       <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>

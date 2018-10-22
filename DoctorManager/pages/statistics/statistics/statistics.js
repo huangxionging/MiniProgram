@@ -13,7 +13,7 @@ Page({
   data: {
     loadDone: true,
     yesterdayMoney: '*****',
-    totalMoney: '*****',
+    totalMoney: '',
     weekMoney: '*****',
     monthMoney: ' ***** ',
     dataList: []

@@ -34,9 +34,9 @@
       <view class='remaing-tip'>剩余可提现金额为{{remaingMoney}}</view>
     </view>
     <view class='tip-container'>
-      <view>注</view>
-      <view>1.每次提现金额必须≥20元以上;</view>
-      <view>2.审核通过后一个工作日到账.</view>
+      <view>注: </view>
+      <view>1、最低提现金额为20元;</view>
+      <view>2、审核通过后, 1个工作日即可到账.</view>
     </view>
     <view class='confirm-button-container'>
       <view wx:if='{{enabled}}' class='confirm-button' hover-class='confirm-hover' bindtap='confirmClick'>确认</view>
