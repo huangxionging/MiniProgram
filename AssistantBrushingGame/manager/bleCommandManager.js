@@ -87,6 +87,7 @@ function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构
   var brushTimeUnionHead = Number(array[3]) + "" + Number(array[4]) + '-' + month + '-' + day
   console.log(brushTimeUnionHead)
   var brushTimeUnion = [Number(array[7]), Number(array[8]), Number(array[9])].map(formatNumber).join(':')
+
   function formatNumber(n) {
     n = n.toString()
     return n[1] ? n : '0' + n
@@ -108,7 +109,7 @@ function dataBoxCommand(array, macAddress, playerName, brushingMethodId) { //构
   } else {
     data.isTrue = 0
   }
-  
+
   if (array.length > 70) {
     data.outLeftUpXBrushCount = array[10];
     data.outLeftUpYBrushCount = array[11];
@@ -276,4 +277,3 @@ module.exports = {
   dataBoxCommand: dataBoxCommand,
   closeLightCommand: closeLightCommand,
 }
-

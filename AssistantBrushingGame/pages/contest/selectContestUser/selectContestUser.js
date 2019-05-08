@@ -508,6 +508,7 @@ Page({
         // 获得版本号
         let version = baseTool.hexAsciiToString(hex.substr(10, 16))
         // 判断是不是比赛尾巴
+        baseTool.print([version, '版本号', hex.substr(10, 16)]);
         let isGameDevice = that.data.deviceName.indexOf('game')
         if (version >= 'V122.2.7' || isGameDevice != -1) {
           var buffer = bleCommandManager.findDeviceCommand()

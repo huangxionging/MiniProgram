@@ -1,0 +1,270 @@
+/* pages/homeIndex/homeIndex.wxss */
+
+page {
+  width: 100%;
+  background-color: #eee;
+}
+
+.home-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: normal;
+  position: relative;
+}
+
+.banner-container {
+  width: 100%;
+  height: 540rpx;
+}
+
+.banner-view {
+  width: 750rpx;
+  height: 340rpx;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 200rpx;
+  background-color: white;
+}
+
+.contact-share-view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25rpx;
+  height: 70rpx;
+  width: 100%;
+}
+
+.contact-share-left {
+  margin-left: 30rpx;
+  height: 70rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.contact-visitor {
+  margin-left: 4rpx;
+  display: flex;
+  height: 70rpx;
+  color: #333;
+  align-items: center;
+  font-size: 24rpx;
+}
+
+.contact-visitor-images{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.visitor-item-image{
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  margin-left: 2rpx;
+}
+.contact-share-right {
+  height: 70rpx;
+  margin-right: 30rpx;
+}
+
+.contact-tel-view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 25rpx;
+  height: 130rpx;
+  width: 100%;
+}
+
+.tel-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 30rpx;
+  flex: 1;
+}
+
+.tel-right {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin-right: 30rpx;
+  flex: 1;
+  font-size: 24rpx;
+  height: 100%;
+} 
+
+.tel-like-image{
+  margin-right: 0;
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.tel-number {
+  margin-left: 30rpx;
+  color: #333;
+  font-size: 24rpx;
+}
+
+.share-button {
+  width: 200rpx;
+  height: 70rpx;
+  background-color: #00a0e9;
+  align-content: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: white;
+}
+
+.contact-tel-view {
+  height: 130rpx;
+  margin-top: 0rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.tel-image {
+  width: 42rpx;
+  height: 36rpx;
+}
+
+.hover-share-button {
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.blue-line {
+  margin-left: 30rpx;
+  margin-right: 20rpx;
+  height: 36rpx;
+  width: 4rpx;
+  background-color: #00a0e9;
+}
+
+.clinic-intro {
+  margin-top: 20rpx;
+  background-color: white;
+}
+
+.clinic-tip {
+  height: 80rpx;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  color: #333;
+  font-size: 30rpx;
+}
+
+.content-unfold {
+  margin-top: 30rpx;
+  position: relative;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  color: #666;
+  font-size: 24rpx;
+  padding-bottom: 30rpx;
+}
+
+.content-fold {
+  margin-top: 30rpx;
+  position: relative;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  height: 141rpx;
+  color: #666;
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* background-color: red; */
+}
+
+.intro-content {
+  height: 109rpx;
+  /* background-color: yellow; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.full-text {
+  position: absolute;
+  bottom: 0rpx;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 70rpx;
+  font-size: 28rpx;
+  color: #00a0e9;
+  background-color: white;
+}
+
+.expert-container {
+  margin-top: 20rpx;
+  width: 100%;
+  height: 530rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.expert-content{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 30rpx;
+  height: 392rpx;
+}
+
+.service-container {
+  margin-top: 20rpx;
+  width: 100%;
+  height: 340rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.service-content{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 30rpx;
+  height: 200rpx;
+}
+
+.big-thing-table-view{
+  margin-top: 20rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.scroll-block{
+  display: inline-block;
+}
+
+.service-item-image{
+  margin-left: 30rpx;
+  width: 300rpx;
+  height: 200rpx;
+  border-radius: 8rpx;
+  
+}

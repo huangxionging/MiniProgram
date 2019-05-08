@@ -85,6 +85,14 @@ Page({
   onUnload: function() {
     let that = this
     that.data.brushComplete = 1
+    baseTool.print(that.data)
+    if (that.data.refresh == true) {
+      baseMessageHandler.sendMessage("refresh").then(res => {
+        baseTool.print(res)
+      }).catch(res => {
+        baseTool.print(res)
+      })
+    }
   },
 
   /**
@@ -130,11 +138,11 @@ Page({
         that.setData({
           persons: res,
           showModal: true,
+          refresh: true,
           modalDialog: {
-            showModal: true
+            showModal: false
           }
         })
-        return baseMessageHandler.sendMessage("refresh")
       }).catch(res => {
         baseTool.showInfo(res)
         return baseTool.defaultPromise()
@@ -156,6 +164,7 @@ Page({
         currentIndex: 0,
         showContent: true,
         content: '',
+        refresh: true,
         showModal: false,
         modalDialog: {
           showModal: false
@@ -247,5 +256,5 @@ Page({
     } else {
       return indexFrame
     }
-  }  
+  }
 })

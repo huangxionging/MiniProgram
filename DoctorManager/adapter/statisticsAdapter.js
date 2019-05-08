@@ -9,7 +9,10 @@ function getTodayDynamicAdapter(res) {
     dataList: [],
     isBW: 'isBW',
     awardMoney: 'awardEarnings',
-    totalMoney: 'totalEarnings'
+    totalMoney: 'totalEarnings',
+    yesterdayMoney: 'yesterdayEarnings',
+    weekMoney: 'latestWeekEarnings',
+    monthMoney: 'latestMonthEarnings'
   }
   baseTool.modelAdapter(data, res)
 
@@ -19,6 +22,9 @@ function getTodayDynamicAdapter(res) {
     data.withdrawTitle = '开发中'
     data.awardMoney = '*****'
     data.totalMoney = '*****'
+    data.weekMoney = '*****'
+    data.yesterdayMoney = '*****'
+    data.monthMoney = '*****'
   }
   if (baseTool.isExist(res.daynamicList)) {
     let array = res.daynamicList

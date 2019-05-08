@@ -1,0 +1,40 @@
+<view wx:if='{{loadDone}}' class='lauch-container'>
+  <view wx:if='{{isAuthorization==0}}' class='lauch-container'>
+    <image src='/resource/lauch.png' class='authorization' lazy-load='true'/>
+    <text class='lauch-tip1'>刷牙挑战赛</text>
+    <text class='lauch-tip2'>授权后即可进入</text>
+    <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>
+    <view class='lauch-space' />
+  </view>
+  <view wx:if='{{isAuthorization==1}}' class='bind-view'>
+    <view class='bind-tip-view'>
+      <image class='bind-bg-image' src='http://qnimage.hydrodent.cn/bcc_phone_background.png'></image>
+      <view class='bind-tip-text'>
+        <text>嗨，欢迎来到刷牙挑战赛! </text>
+        <text>准备迎接新的挑战吧~</text>
+      </view>
+      <image class='bind-image' src='{{avatar}}'  lazy-load='true'/>
+    </view>
+    <view class='tel-view'>
+      <text class='tel-tip'>手机号</text>
+      <input type='number' class='tel-input' placeholder='请输入手机号码' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>
+      <view class='tel-line'></view>
+    </view>
+    <view class='verify-view'>
+      <text class='tel-tip'>验证码</text>
+      <view class='verify-input-view'>
+        <input type='number' class='verify-input' placeholder='请输入手机短信验证码' maxlength='4' bindinput='getInputVerifyCode' placeholder-class='placeholder'></input>
+        <view wx:if='{{verifyCodeDisabled}}' class='get-verify-code' style='background-color:#f5f5f5;color:#999;border-color:#d6d6d6;'>
+          {{verifyTitle}}
+        </view>
+        <view wx:else class='get-verify-code' hover-class='get-verify-code-hover' bindtap='getVerifyCodeClick'>
+          {{verifyTitle}}
+        </view>
+      </view>
+      <view class='tel-line'></view>
+    </view>
+    <view wx:if='{{bindDisabled}}' class='confirm-button'>登录</view>
+    <view wx:else class='confirm-button confirm-normal' bindtap='confirmClick' hover-class='confirm-button-hover'>登录</view>
+    <!-- <view style='width:100%;height:35rpx;' /> -->
+  </view>
+</view>

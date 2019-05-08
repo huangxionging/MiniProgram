@@ -1,0 +1,99 @@
+<!--pages/homeIndex/homeIndex.wxml-->
+<view class='navigation-bar-line' />
+<view class='home-container' wx:if='{{loadDone}}'>
+  <view class='banner-container'>
+    <swiper indicator-dots='true' autoplay='true' interval='5000' circular='true' class='banner-view'>
+      <block wx:for='{{res.carouselList}}' wx:key='id' wx-for:item='item'>
+        <swiper-item>
+          <image src='{{item.picUrl}}' data-link='{{item.linkUrl}}' class='banner-image' mode='widhFix' bindtap='imageClick' />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class='navigation-bar-line' />
+    <view class='contact-container'>
+      <view class='contact-share-view'>
+        <view class='contact-share-left'>
+          <view class='contact-visitor-images'>
+            <block wx:for-items='{{res.visitorList}}' wx:key='id' wx:for-index='visitorIndex' wx:for-item='visitorItem' class='scroll-block'>
+              <image class='visitor-item-image' src='{{visitorItem}}' data-index='{{visitorIndex}}' />
+            </block>
+          </view>
+          <view class='contact-visitor'>访客人数: {{res.visitorCount}}</view>
+        </view>
+        <view class='contact-share-right'>
+          <button open-type='share' hover-class='hover-share-button' class='share-button'>推荐有礼</button>
+        </view>
+      </view>
+      <view class='contact-tel-view'>
+        <view class='tel-left' bindtap='phoneClick'>
+          <image src='/resource/tel.png' class='tel-image'></image>
+          <view class='tel-number'>{{res.phone}}</view>
+        </view>
+        <view class='tel-right'>
+          <image class='tel-like-image' src='/resource/{{"liked"}}.png' />
+          <view>点赞
+            <text>{{res.likeCount}}</text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+    <view class='clinic-intro' wx:if='{{open}}'>
+      <view class='clinic-tip'>
+        <view class='blue-line' />
+        <view>诊所简介</view>
+      </view>
+      <view class='navigation-bar-line' />
+      <view class='content-unfold'>
+        <view class='intro-full-content'>{{res.intro}}</view>
+        <view class='full-text' bindtap='fullClick'>收起</view>
+      </view>
+    </view>
+    <view class='clinic-intro' wx:else>
+      <view class='clinic-tip'>
+        <view class='blue-line' />
+        <view>诊所简介</view>
+      </view>
+      <view class='navigation-bar-line' />
+      <view class='content-fold'>
+        <view class='intro-content'>{{res.intro}}
+        </view>
+        <view class='full-text' bindtap='fullClick'>全文</view>
+      </view>
+    </view>
+    <view class='expert-container'>
+      <view class='clinic-tip'>
+        <view class='blue-line' />
+        <view>推荐专家</view>
+      </view>
+      <view class='navigation-bar-line' />
+      <scroll-view class='expert-content' scroll-x='true'>
+        <block wx:for-items='{{res.expertList}}' wx:key='id' wx:for-item='expertItem' class='block'>
+          <expertItem data='{{expertItem}}' />
+        </block>
+      </scroll-view>
+    </view>
+    <view class='service-container'>
+      <view class='clinic-tip'>
+        <view class='blue-line' />
+        <view>推荐服务</view>
+      </view>
+      <view class='navigation-bar-line' />
+      <scroll-view class='service-content' scroll-x='true'>
+        <block wx:for-items='{{res.serviceList}}' wx:key='id' wx:for-index='serviceIndex' wx:for-item='serviceItem' class='scroll-block'>
+          <image class='service-item-image' src='{{serviceItem.picUrl}}' data-index='{{serviceIndex}}' />
+        </block>
+      </scroll-view>
+    </view>
+    <view class='big-thing-table-view'>
+      <view class='clinic-tip'>
+        <view class='blue-line' />
+        <view>九恒大事件</view>
+      </view>
+      <view class='navigation-bar-line' />
+      <block wx:for-items='{{res.chronicleList}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+        <bigThingCell data='{{rowItem}}' data-row='{{rowIndex}}' data-section='{{sectionIndex}}' bind:didSelect='didSelect' />
+      </block>
+    </view>
+  </view>
+</view>

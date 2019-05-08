@@ -1,0 +1,9 @@
+<!--components/bigThingCell/bigThingCell.wxml-->
+<view class='cell-container'>
+  <view class='cell-time-view'>
+    <image class='cell-time-image' src='/resource/time.png'/>
+    <view class='cell-time-tip'>{{data.createTime}}</view>
+  </view>
+  <view class='cell-title'>{{data.title}}</view>
+  <image class='cell-image' mode='widthFix' src='{{data.picUrl}}'/>
+</view>

@@ -4,7 +4,7 @@
   <view class='brush-bg'>
     <view class='brush-content'>
       <view class='brush-header'>
-        <image class='header-image' src='{{avatar}}'></image>
+        <image class='header-image' src='{{avatar}}' bindtap='showDoctoInfoClick'></image>
         <view class='header-info'>
           <view class='camp-title'>{{campTitle}}</view>
           <view class='camp-number'>{{campNumber}}</view>
@@ -15,28 +15,13 @@
           </view>
         </view>
       </view>
-      <view wx:if='{{campCollapse}}' class='camp-collapse'>
-        <view class='camp-intro'>训练营简介:</view>
-        <view class='camp-content-collapse'>
-          <view class='camp-collapse-view'>
-            <text class='camp-collapse-text' space='ensp'>{{campContent}}</text>
-          </view>
-          <view class='arrow-view' bindtap='campIntroClick'>
-            <image class='arrow' src='/resource/arrow_down.png'></image>
-          </view>
-        </view>
-      </view>
-      <view wx:else class='camp-show'>
-        <view class='camp-intro'>训练营简介:</view>
-        <view class='camp-content-show'>
-          <view class='camp-content'>
-            <text space='ensp'>{{campContent}}</text>
-          </view>
-          <view class='arrow-view' bindtap='campIntroClick'>
-            <image class='arrow' src='/resource/arrow_up.png'></image>
-          </view>
-        </view>
-      </view>
+      <swiper indicator-dots='true' autoplay='true' interval='5000' circular='true' class='banner-view'>
+        <block wx:for='{{bannerList}}' wx:key='id' wx:item='item'>
+          <swiper-item>
+            <image src='{{item.pic}}' class='banner-image' mode='widhFix'></image>
+          </swiper-item>
+        </block>
+      </swiper>
       <view class='brush-table-view'>
         <block wx:for='{{brushDataList}}' wx:key='id' wx:item='item'>
           <view class="brush-cell {{index==0?'':'others'}}">
@@ -46,6 +31,10 @@
         </block>
       </view>
     </view>
+  </view>
+  <view class='device-view'>
+    <image animation='{{animationData}}' class='little-girl' src='/resource/little_girl.png' bindtap='selectDeviceClick' />
+    <image class='smart-device' src='/resource/smart_device.png' bindtap='selectDeviceClick' />
   </view>
 
 </view>

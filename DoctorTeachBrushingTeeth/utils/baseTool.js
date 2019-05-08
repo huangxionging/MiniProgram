@@ -637,6 +637,7 @@ module.exports = {
   isValid: isValid,
   urlToHttp: urlToHttp,
   toRpx: toRpx,
+  toPixel: toPixel,
   showToast: showToast,
   downloadImageTohotosAlbum: downloadImageTohotosAlbum,
   hexAsciiToString: hexAsciiToString,

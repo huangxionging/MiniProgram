@@ -168,7 +168,7 @@ Page({
     let joinTrainingCamp = brushManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
       baseTool.print(res)
       brushAdapter.telphoneAdapter(res.wxUser)
-      return brushManager.joinTrainingCamp()
+      return brushManager.joinDoctorTrainingCamp()
     }).catch(res => {
       wx.hideLoading()
       wx.hideNavigationBarLoading()

@@ -17,7 +17,7 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f5f5"
   },
-  "tabBar": {                                                 
+  "tabBar": {
     "backgroundColor": "#fff",
     "color": "#999",
     "selectedColor": "#00a0e9",
@@ -41,5 +41,9 @@
     "connectSocket": 20000,
     "uploadFile": 20000,
     "downloadFile": 20000
-  }
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wx944289b1fe8657ce"
+  ],
+  "sitemapLocation": "sitemap.json"
 }

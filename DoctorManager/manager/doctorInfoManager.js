@@ -95,9 +95,6 @@ function getDoctorManagerPosterQRCodeURL(doctorId = '') {
   })
 }
 
-
-
-
 function updateDoctorInfo(doctorInfo = {}) {
   return new Promise((resolve, reject) => {
     let openid = loginManager.getOpenId()

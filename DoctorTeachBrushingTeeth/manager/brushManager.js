@@ -136,6 +136,10 @@ function getUserMemberId() {
   return baseTool.valueForKey('memberId')
 }
 
+function getDoctorId() {
+  return baseTool.valueForKey('doctorId')
+}
+
 /**
  * 加入训练营
  */
@@ -239,6 +243,49 @@ function getPeopleCounting() {
   })
 }
 
+/**
+ * 获取训练营首页
+ */
+function getDoctorTrainingCampHome() {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    if (openid) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getDoctorTrainingCampHome
+      let memberId = getUserMemberId()
+      
+      let data = {
+        memberId: memberId
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
+/**
+ * 加入训练营
+ */
+function joinDoctorTrainingCamp() {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    if (openid) {
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList.joinDoctorTrainingCamp
+      let memberId = getUserMemberId()
+      let doctorId = getDoctorId()
+      let data = {
+        memberId: memberId,
+        doctorId: doctorId
+      }
+      // 统一处理
+      baseTool.request(url, data).then(resolve, reject)
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
 module.exports = {
   getBrushRecord: getBrushRecord,
   getTelphone: getTelphone,
@@ -252,5 +299,7 @@ module.exports = {
   trainingCampHomeForMember: trainingCampHomeForMember,
   getTrainingCampDynamic: getTrainingCampDynamic,
   signIn: signIn,
-  getPeopleCounting: getPeopleCounting
+  getPeopleCounting: getPeopleCounting,
+  getDoctorTrainingCampHome: getDoctorTrainingCampHome,
+  joinDoctorTrainingCamp: joinDoctorTrainingCamp
 }

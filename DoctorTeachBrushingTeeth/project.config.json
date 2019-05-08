@@ -20,6 +20,8 @@
 		"beforePreview": "",
 		"beforeUpload": ""
 	},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -44,7 +46,7 @@
 					"id": 0,
 					"name": "logs",
 					"pathName": "pages/brush/brushIndex/brushIndex",
-					"query": "doctorId=8a995136589863490158998c66fc0458"
+					"query": ""
 				}
 			]
 		}

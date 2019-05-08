@@ -1,0 +1,6 @@
+<!--components/expertItem/expertItem.wxml-->
+<view class='expert-container'>
+  <image class='expert-image' src='{{data.picUrl}}' />
+  <view class='expert-name'>{{data.name}}</view>
+  <view class='expert-job-title'>{{data.title}}</view>
+</view>

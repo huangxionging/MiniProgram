@@ -14,15 +14,13 @@ Page({
     brushDataList: [],
     signDisabled: 0,
     campCollapse: true,
-    campTitle: '零蛀牙小分队 跟着张立群医生学刷牙',
+    campTitle: '',
     campNumber: '114人已参加 | 86人已跟刷',
-    campJoinTip: 'P**R已加入训练营',
-    campContent: '    带孩子到医院进行口腔治疗及预防的家长都很棒!除了治疗, 这次医院之行也是让孩子了解牙齿重要性和如何爱护牙齿的最佳时机\n\
-    训练营通过游戏化的方式, 让宝贝完成一个转变: 从家长督促刷牙到自己主动刷牙. 这个转变意义重大, 父母用最少的时间, 花最少的钱, 为孩子漫长的人生储备一口健康的牙齿.\n\
-    这个游戏化的方式需要借助一款智能硬件, 来专门解决孩子不爱刷牙, 不会刷牙的难题.\n\
-    带孩子到医院进行口腔治疗及预防的家长都很棒!除了治疗, 这次医院之行也是让孩子了解牙齿重要性和如何爱护牙齿的最佳时机\n\
-    训练营通过游戏化的方式, 让宝贝完成一个转变: 从家长督促刷牙到自己主动刷牙. 这个转变意义重大, 父母用最少的时间, 花最少的钱, 为孩子漫长的人生储备一口健康的牙齿.\n\
-    这个游戏化的方式需要借助一款智能硬件, 来专门解决孩子不爱刷牙, 不会刷牙的难题来专门解决孩子不爱刷牙'
+    campJoinTip: '',
+    memberList: [],
+    currentIndex: 0,
+    bannerList: [],
+    startRefreshPeopleState: false
   },
 
   /**
@@ -34,7 +32,6 @@ Page({
       loadDone: false,
       isTel: true,
     })
-    that.loadData()
     wx.startPullDownRefresh()
 
   },
@@ -47,25 +44,34 @@ Page({
     baseMessageHandler.addMessageHandler("refresh", that, res => {
       that.setData({
         loadDone: false,
-        isTel: true
       })
       that.loadData()
-      wx.startPullDownRefresh()
     })
+    wx.startPullDownRefresh()
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    let that = this
+    if (that.data.stopTimer == true) {
+      that.data.stopTimer = false
+      if (that.data.startRefreshPeopleState == false) {
+        that.data.startRefreshPeopleState = true
+        that.startRefreshPeopleState()
+        that.animation()
+      }
+    }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
+    let that = this
+    that.data.stopTimer = true
+    that.data.startRefreshPeopleState = false
   },
 
   /**
@@ -80,11 +86,7 @@ Page({
    */
   onPullDownRefresh: function() {
     let that = this
-    if (that.data.isTel) {
-      that.loadData()
-    } else {
-      wx.stopPullDownRefresh()
-    }
+    that.loadData()
   },
 
   /**
@@ -105,7 +107,15 @@ Page({
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
-    let getDynamicPromise = brushManager.trainingCampHomeForMember().then(res => {
+    let getDoctorTrainingCampHomePromise = brushManager.joinDoctorTrainingCamp().then(res => {
+      return brushManager.getDoctorTrainingCampHome()
+    }).catch(res => {
+      wx.hideNavigationBarLoading()
+      wx.stopPullDownRefresh()
+      baseTool.showInfo(res)
+      return baseTool.defaultPromise()
+    })
+    let getDynamicPromise = getDoctorTrainingCampHomePromise.then(res => {
       let data = brushAdapter.userInfoAdapter(res)
       data.avatar = baseTool.valueForKey('doctorInfo').doctorHeadimgurl
       baseTool.print(data)
@@ -118,12 +128,10 @@ Page({
       return baseTool.defaultPromise()
     })
     getDynamicPromise.then(res => {
-      baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
       // baseMessageHandler.getMessage("doctorBrushScore", resScore => {
       //   baseTool.print(resScore)
-
       // })
       let brushDataList = brushAdapter.brushDynamicAdapter(res)
       wx.setNavigationBarColor({
@@ -134,6 +142,13 @@ Page({
       that.setData({
         brushDataList: brushDataList
       })
+
+      if (that.data.startRefreshPeopleState == false) {
+        that.data.startRefreshPeopleState = true
+        that.startRefreshPeopleState()
+        that.animation()
+      }
+      
 
     }).catch(res => {
       wx.hideNavigationBarLoading()
@@ -172,19 +187,54 @@ Page({
       if (that.data.stopTimer) {
         return true
       }
-      let itemList = that.data.itemList
-      let item = itemList[0]
-      itemList.splice(0, 1)
-      itemList.push(item)
+      let campJoinTip = ''
+      if (that.data.currentIndex < that.data.memberList.length) {
+        campJoinTip = that.data.memberList[that.data.currentIndex++]
+      } else {
+        that.data.currentIndex = 0
+        campJoinTip = that.data.memberList[that.data.currentIndex++]
+      }
+      baseTool.print(campJoinTip)
       that.setData({
-        itemList: itemList
+        campJoinTip: campJoinTip
       })
-    }, 2000, 1000)
+    }, 3000, 100000000)
   },
   campIntroClick: function(e) {
     let that = this
     that.setData({
       campCollapse: !that.data.campCollapse
     })
+  },
+  showDoctoInfoClick: function(e) {
+    wx.navigateTo({
+      url: '/pages/home/doctorInfoDetail/doctorInfoDetail',
+    })
+  },
+  animation: function () {
+    let that = this
+    baseTool.startTimer(function (total) {
+      baseTool.print([total, that.animation])
+      if (that.data.stopTimer) {
+        return true
+      }
+      var animation = wx.createAnimation({
+        duration: 2000,
+        timingFunction: "linear",
+        delay: 0,
+        transformOrigin: "50% 50% 0",
+      })
+
+      if (total % 2 == 0) {
+        animation.translateY(0).step()
+      } else {
+        animation.translateY(baseTool.toPixel(134)).step()
+      }
+
+      that.setData({
+        animationData: animation.export()
+      })
+
+    }, 2000, 6000000000)
   }
 })

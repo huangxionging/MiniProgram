@@ -54,5 +54,13 @@ module.exports = {
   /**
    * 教学视频
    */
-  getTeachingVideoDetails: 'getTeachingVideoDetails'
+  getTeachingVideoDetails: 'getTeachingVideoDetails',
+  /**
+   * 获取训练营首页
+   */
+  getDoctorTrainingCampHome: 'getDoctorTrainingCampHome',
+  /**
+   * 加入医生的训练营
+   */
+  joinDoctorTrainingCamp: 'joinDoctorTrainingCamp'
 }

@@ -96,10 +96,24 @@ function userInfoAdapter(userInfo = {}) {
     loadDone: true,
     avatar: 'headimgurl',
     userName: 'name',
-    signText: 'signText',
-    signDisabled: 'isSign'
+    signDisabled: 'isSign',
+    campTitle: 'trainingCampName',
+    campNumber: 'trainingCampMemberCount',
+    memberList: 'joinCampMemberList',
+    bannerList: 'carouselList'
   }
+  baseTool.modelAdapter(data, userInfo.trainingCampInfo)
   baseTool.modelAdapter(data, userInfo)
+  data.campTitle = userInfo.trainingCampInfo.trainingCampTitle
+  data.campNumber = data.campNumber + '人已参加 | ' + userInfo.trainingCampInfo.followingBrushCount + '人已跟刷'
+  for (let index = 0; index < data.memberList.length; ++index) {
+    if (data.memberList[index].length > 2) {
+      data.memberList[index] = data.memberList[index].substr(0, 1) + '**' + data.memberList[index].substr(data.memberList[index].length - 1, 1) + '已加入训练营'
+    } else {
+      data.memberList[index] += '已加入训练营'
+    }
+  }
+  data.campJoinTip = data.memberList[0]
   // data.signDisabled = 0
   return data
 }
