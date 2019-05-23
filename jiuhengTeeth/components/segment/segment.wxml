@@ -1,0 +1,9 @@
+<!--components/segment/segment.wxml-->
+<view class='segment-conatiner'>
+  <block wx:for-items='{{data.items}}' wx:key='id' wx:for-item='segmentItem' wx:for-index='segmentIndex'>
+    <view class='segment-item' style='width:{{data.itemPercent}}' data-index='{{segmentIndex}}' bindtap='segmentClick'>
+      <view class='{{segmentItem.selected?"selected-title":"normarl-title"}}'>{{segmentItem.title}}</view>
+      <view class='segment-line' wx:if='{{segmentItem.selected}}' />
+    </view>
+  </block>
+</view>

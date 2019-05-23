@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "signUpDataCell": "/components/signUpDataCell/signUpDataCell"
+  },
+  "enablePullDownRefresh": true
+}

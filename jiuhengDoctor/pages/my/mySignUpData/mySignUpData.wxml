@@ -1,0 +1,21 @@
+<!--pages/my/mySignUpData/mySignUpData.wxml-->
+<view class='navigation-bar-line' />
+<view class='sign-container'>
+  <view class='segment-conatiner'>
+    <block wx:for-items='{{signUpDataArray}}' wx:key='id' wx:for-item='segmentItem' wx:for-index='segmentIndex'>
+      <view class='segment-item'  data-index='{{segmentIndex}}' style='width:{{segmentItem.width}}%;'>
+        <view class='normarl-title'>{{segmentItem.title}}</view>
+      </view>
+    </block>
+  </view>
+  <view class='navigation-bar-line' />
+  <view class='sign-up-tableview'>
+     <block wx:for-items='{{signUpSectionDataArray}}' wx:key='id' wx:for-item='sectionItem' wx:for-index='sectionIndex'>
+      <view class='device-section'>
+        <block wx:for-items='{{sectionItem.rowDataArray}}' wx:key='id' wx:for-index='rowIndex' wx:for-item='rowItem'>
+          <signUpDataCell signType='{{signType}}' data='{{rowItem}}' data-section="{{sectionIndex}}" data-row='{{rowIndex}}' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>

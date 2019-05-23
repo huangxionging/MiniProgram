@@ -27,6 +27,13 @@ function getIsHaveDevice() {
 }
 
 /**
+ * 是否点过赞
+ */
+function getIsLike() {
+  return baseTool.valueForKey('isLike')
+}
+
+/**
  * 获得诊所名字
  */
 function getClinicName() {
@@ -190,5 +197,6 @@ module.exports = {
   showNetWorkingError: showNetWorkingError,
   uploadImageToRemoteServer: uploadImageToRemoteServer,
   postRemoteBrushTeethRecord: postRemoteBrushTeethRecord,
-  getSocketURLPrefix: getSocketURLPrefix
+  getSocketURLPrefix: getSocketURLPrefix,
+  getIsLike: getIsLike
 }

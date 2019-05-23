@@ -2,6 +2,7 @@
 const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const baseTool = require('../../../utils/baseTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const qrcodeTool = require('../../../utils/qrcode.js')
 
 Page({
 
@@ -28,7 +29,7 @@ Page({
     contestWidth: 0,
     textWidth: 0,
     screenWidth: 0,
-    distance: 0
+    distance: 0,
   },
 
   /**
@@ -48,6 +49,9 @@ Page({
 
     if (options.gameId) {
       that.data.gameId = options.gameId
+    }
+    if (options.applyTime) {
+      that.data.applyTime = options.applyTime.split(' ')[0]
     }
     let clinicName = baseNetLinkTool.getClinicName()
     wx.setNavigationBarTitle({
@@ -158,7 +162,12 @@ Page({
         let papPlayerList = res.papPlayerList
         let arcPlayerList = res.arcPlayerList
         papPlayerList.sort((a, b) => {
-          return b.score - a.score
+          if (b.score != a.score) {
+            return b.score - a.score
+          } else {
+            return b.accuracy - a.accuracy
+
+          }
         })
 
         let nameAray = res.playerList.map((value) => {
@@ -178,15 +187,16 @@ Page({
           return b.score - a.score
         })
         let length = papPlayerList.length
-        if (length > 5) {
-          length = 5
+        if (length > 6) {
+          length = 6
         }
 
         for (let index = 0; index < length; ++index) {
           papSectionDataArray.push({
             id: index,
             score: papPlayerList[index].score,
-            name: papPlayerList[index].name
+            name: papPlayerList[index].name,
+            accuracy: papPlayerList[index].accuracy
           })
         }
 
@@ -216,6 +226,7 @@ Page({
         showText: showText
       })
 
+      that.createQrcode()
 
       if (status == 1 && that.data.playerList.length > 10) {
         that.startScroll()
@@ -288,9 +299,11 @@ Page({
 
     wx.onSocketOpen(function(res) {
       console.info('websocket连接成功');
-      // wx.sendSocketMessage({
+      baseTool.startTimer((res) => {
+// wx.sendSocketMessage({
       //   data: ["ddd"],
       // })
+      }, 30, 10000000)
     });
   },
   socketClose: function() {
@@ -333,7 +346,7 @@ Page({
     baseTool.print("eee")
     let that = this;
     let length = that.data.contestWidth;
-    
+
     let interval = setInterval(function() {
       let marginDistance = that.data.marginDistance;
       if (marginDistance < length) { //判断是否滚动到最大宽度
@@ -349,5 +362,35 @@ Page({
       }
       // baseTool.print(that.data.marginDistance)
     }, that.data.interval);
+  },
+  createQrcode: function() {
+    let that = this
+    let clinicId = baseNetLinkTool.getClinicId()
+    let clinicName = baseNetLinkTool.getClinicName()
+    let applyTime = that.data.applyTime
+    let scale = that.data.scale
+    let width = scale * (that.data.status ? 185 : 325)
+    let canvasId = 'my-scan' + that.data.status + '-qrcode'
+    let qrcodeUrl = 'http://challenge.32teeth.cn/index.html?gameId=' + that.data.gameId + '&clinicId=' + clinicId + '&clinicName=' + clinicName + '&applyTime=' + applyTime
+    qrcodeTool.api.draw(qrcodeUrl, canvasId, width, width, that)
+    baseTool.print(qrcodeUrl)
+    let timer = setTimeout(function(){
+      
+       wx.canvasToTempFilePath({
+        canvasId: 'my-scan-qrcode',
+        success: function(res) {
+          that.data.qrcodeUrl = res.tempFilePath
+          baseTool.print(that.data.qrcodeUrl)
+        }
+      }, that)
+      
+      clearTimeout(timer)
+
+    }, 1000)
+  },
+  previewClick: function() {
+    let that = this
+    
+    baseTool.previewSingleImage(that.data.qrcodeUrl)
   }
 })

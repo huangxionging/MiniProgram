@@ -1,0 +1,37 @@
+/* components/deviceItemCell/deviceItemCell.wxss */
+.cell-container{
+  display: flex;
+  flex-direction: column;
+  height: 100rpx;
+  background-color: white;
+}
+
+.cell-content{
+  display: flex;
+  flex-direction: row;
+  height: 98rpx;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.cell-title{
+  margin-left: 32rpx;
+  display: flex;
+  flex: 1;
+}
+
+.cell-detail{
+  color: #00a0e9;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-right: 30rpx;
+}
+
+.cell-line{
+  /* position: absolute; */
+  margin-left: 0;
+  margin-right: 0;
+  height: 2rpx;
+  background-color: #eee;
+}

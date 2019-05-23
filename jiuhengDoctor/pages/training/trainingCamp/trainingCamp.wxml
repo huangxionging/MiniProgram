@@ -1,0 +1,86 @@
+<!--pages/training/trainingCamp/trainingCamp.wxml-->
+<!-- <view class='navigation-bar-line' /> -->
+<view class='traing-container'>
+  <segment style='position:fixed;width:100%;background-color:white;' data='{{segmentObject}}' bind:segmentItemClick='segmentItemClick' />
+  <view class='navigation-bar-line' style='margin-top:80rpx;' />
+  <view class='contest-content' wx:if='{{selectedIndex==0}}'>
+    <block wx:if='{{!hasData}}'>
+       <view class='contest-content-view' >  <!--// style='height:{{height}}px;background-color:#eee;' -->
+        <image src='/resource/contest_device.png' id='contest-create-image' lazy-load='true' bindtap='deviceManagerClick' />
+        <view id='contest-no-contest-view'>
+          <image src='/resource/contest_no_contest.png' id='contest-no-contest-image' lazy-load='true' />
+          <text id='contest-no-contest-text'>暂无比赛, 快去创建比赛吧</text>
+        </view>
+        <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest' disabled='{{createButtonDisable}}'>创建比赛</button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class='contest-content-view' style='height:{{height}}px;background-color:#eee;'>
+        <view class='video-bg-container'>
+          <!-- <image class='video-bg-image' src='/resource/video_bg.png' lazy-load='true' /> -->
+          <view class='video-container'>
+            <video class='video-view' src='{{videoURL}}'>
+              <cover-image wx:if='{{showShare}}' class='share-contest' src='/resource/share_contest.png' bindtap='shareClick' lazy-load='true' />
+            </video>
+
+            <view class='video-tip'>
+              <view class='video-tip-title'>指导视频</view>
+              <view class='video-tip-detail'>通过视频学习，可以帮您迅速了解如何进行比赛哦~</view>
+            </view>
+          </view>
+        </view>
+        <view class='congratulation-tip' style=' margin-top: 63rpx;'>恭喜您！已成功创建比赛</view>
+        <view class='congratulation-tip'>记得分享新的比赛链接哦~</view>
+        <view class='contest-button-container'>
+          <view class='click-button start-button' hover-class='hover-main-button' bindtap='startClick'>比赛设置</view>
+          <view class='click-button end-button' hover-class='hover-main-button' bindtap='endClick'>结束比赛</view>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view wx:if='{{showIntroPage}}' class='mask-container'>
+    <view class='mask-view' />
+    <view class='mask-content-container'>
+      <view class='mask-content-view'>
+        <image class='intro-tip' src='http://qnimage.hydrodent.cn/bcc_intro_device_tip.png' />
+        <image class='intro-iknow' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_ikonw.png' />
+      </view>
+    </view>
+  </view>
+  <view class='my-content' wx:if='{{selectedIndex==1}}'>
+    <view class='person-info-container'>
+        <image class="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover" bindtap='upload' lazy-load='true' />
+        <text class="my-userinfo-nickname">{{userInfo.nickName}}</text>
+      </view>
+    <view class='my-table-view'>
+      <block wx:for='{{sectionDataArray}}' wx:key='id' wx:item='item'>
+        <view class='section-view' style='margin-top:{{item.headerHeight}}rpx;'>
+          <block wx:for='{{item.rowDataArray}}' wx:key='row' wx:item='item'>
+            <myIndexItemCell data='{{item}}' data-row='{{index}}' data-section='{{item.section}}' bind:didSelectRow='didSelectRow' />
+          </block>
+        </view>
+      </block>
+    </view>
+  </view>
+  <view class='study-content' wx:if='{{selectedIndex==2}}'>
+    <video id='teach-video' src='{{teachVideoUrl}}' autoplay='{{autoplay}}' controls='{{false}}' class='look-video' binderror='binderror' bindended='videoPlayEnd'>
+      <cover-view class='cover-view' wx:if='{{showCover}}'>
+        <cover-view class='cover-title'>{{title}}</cover-view>
+        <cover-view class='cover-time'>{{secondTime}}</cover-view>
+      </cover-view>
+
+    </video>
+    <view class='video-key-point'>
+      <view class='video-key-content'>
+        <view class='video-key-title'>{{title}}</view>
+        <view class='video-key-time'>时长: {{totalTime}}</view>
+      </view>
+      <view class='video-key-line' />
+      <view class='key-point-content'>{{keyPoint}}</view>
+      <view style='height: 52rpx;'></view>
+    </view>
+    <view class='teach-content-bg'>
+      <teachBrushModel data='{{surfaceInfoModel}}' />
+    </view>
+  </view>
+</view>

@@ -1,0 +1,10 @@
+<!--components/signUpDataCell/signUpDataCell.wxml-->
+<view class='sign-up-cell-container'>
+  <view class='item-basic' style='width:15%;'>{{data.name}}</view>
+  <view class='item-basic' style='width:10%;'>{{data.age}}</view>
+  <view wx:if='{{signType==1}}' style='width:12.5%;' class='item-basic'>{{data.sex==1?'男':'女'}}</view>
+  <view class='item-basic' style='width:{{signType==1?31.5:25}}%;'>{{data.telephone}}</view>
+   <view wx:if='{{signType==0}}' class='item-basic' style='width:25%;'>{{data.planAttendanceTime}}</view>
+  <view wx:if='{{signType==1}}' class='item-basic' style='width:{{signType==1?31.5:25}}%;'>{{data.applyTime}}</view>
+  <view wx:if='{{signType==0}}' class='item-basic' style='width:25%;'>{{data.timeQuantum}}</view>
+</view>

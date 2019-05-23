@@ -2,10 +2,10 @@
 <!-- <view class='navigation-bar-line' /> -->
 <view class='contest-container' wx:if='{{loadDone}}'>
   <block wx:if='{{!hasData}}'>
-    <view class='contest-content-view'>
-      <image src='/resource/contest_device.png' id='contest-create-image' lazy-load='true' bindtap='deviceManagerClick' />
-      <view id='contest-no-contest-view'>
-        <image src='/resource/contest_no_contest.png' id='contest-no-contest-image' lazy-load='true' />
+    <view class='contest-content-view'style='height:{{height}}px;background-color:white;'>
+      <image src='/resource/contest_device.png' class='contest-create-image' lazy-load='true' bindtap='deviceManagerClick' />
+      <view class='contest-no-contest-view'>
+        <image src='/resource/contest_no_contest.png' class='contest-no-contest-image' lazy-load='true' />
         <text id='contest-no-contest-text'>暂无比赛, 快去创建比赛吧</text>
       </view>
       <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest' disabled='{{createButtonDisable}}'>创建比赛</button>
@@ -29,7 +29,7 @@
       <view class='congratulation-tip' style=' margin-top: 63rpx;'>恭喜您！已成功创建比赛</view>
       <view class='congratulation-tip'>记得分享新的比赛链接哦~</view>
       <view class='contest-button-container'>
-        <view class='click-button start-button' hover-class='hover-main-button' bindtap='startClick'>开始比赛</view>
+        <view class='click-button start-button' hover-class='hover-main-button' bindtap='startClick'>比赛设置</view>
         <view class='click-button end-button' hover-class='hover-main-button' bindtap='endClick'>结束比赛</view>
       </view>
     </view>

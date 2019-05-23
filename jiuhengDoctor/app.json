@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/homeIndex/homeIndex",
+    "pages/dental/blog/blog",
+    "pages/authorization/authorization",
+    "pages/training/trainingCamp/trainingCamp",
+    "pages/my/deviceManage/deviceManage",
+    "pages/my/myClinic/myClinic",
+    "pages/my/brushContestList/brushContestList",
+    "pages/my/deviceCheck/deviceCheck",
+    "pages/my/mySignUpData/mySignUpData",
+    "pages/contest/addContestDevice/addContestDevice",
+    "pages/showScreen/showContest/showContest",
+    "pages/contest/startContest/startContest",
+    "pages/contest/selectContestDevice/selectContestDevice",
+    "pages/my/brushScoreReport/brushScoreReport",
+    "pages/my/brushContestDetail/brushContestDetail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "九恒管理端",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#bababa",
+    "selectedColor": "#00a0e9",
+    "list": [
+      {
+        "pagePath": "pages/homeIndex/homeIndex",
+        "text": "九恒口腔",
+        "iconPath": "resource/contest_normal.png",
+        "selectedIconPath": "resource/contest_selected.png"
+      },
+      {
+        "pagePath": "pages/training/trainingCamp/trainingCamp",
+        "text": "活动管理",
+        "iconPath": "resource/activity_manage.png",
+        "selectedIconPath": "resource/activity_selected.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

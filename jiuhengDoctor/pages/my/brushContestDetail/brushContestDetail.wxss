@@ -1,0 +1,136 @@
+/* pages/my/brushContestDetail/brushContestDetail.wxss */
+page {
+  background-color: #eee;
+}
+
+.brush-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.content-container {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-device-image {
+  width: 250rpx;
+  height: 250rpx;
+  margin-top: 242rpx;
+}
+
+.no-device-tip {
+  margin-top: 35rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.contest-segement{
+  background-color: white;
+  margin-top: 10rpx;
+  display: flex;
+  flex-direction: row;
+  height: 90rpx;
+}
+
+.segement-item{
+  margin-left: 0rpx;
+  width: 50%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 28rpx;
+}
+
+.segement-item-normal{
+  color: #333;
+  background-color: white;
+}
+
+.segement-item-selected{
+  color: white;
+  background-color: #00a0e9;
+}
+
+.add-device-button {
+  margin-top: 130rpx;
+  width: 400rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  background-color: #00a0e9;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 30rpx;
+}
+
+.hover-button {
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.device-count-tip-container {
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.device-count-tip1 {
+  margin-left: 28rpx;
+}
+
+.device-count-tip2 {
+  color: red;
+}
+
+.item-table-view {
+  margin-top: 1rpx;
+  margin-bottom: 100rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-bottom-device {
+  width: 100%;
+  height: 100rpx;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #00a0e9;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 30rpx;
+}
+
+.hover-bottom-button {
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.share-view{
+  height: 100rpx;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  color: white;
+  background-color: #00a0e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

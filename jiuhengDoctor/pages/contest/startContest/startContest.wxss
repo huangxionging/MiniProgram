@@ -1,0 +1,278 @@
+/* pages/contest/startContest/startContest.wxss */
+page{
+  background-color: #eee;
+}
+.start-container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+.count-tip-view {
+  height: 60rpx;
+  width: 100%;
+  background-color: #b1e7ff;
+  color: #666;
+  font-size: 24rpx;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.add-member-view{
+  background-color: white;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-member-input{
+  height: 100%;
+  font-size: 26rpx;
+  margin-left: 30rpx;
+  flex: 1;
+}
+
+.add-member-button{
+  margin-right: 30rpx;
+  width: 100rpx;
+  height: 50rpx;
+  background-color: #00a0e9;
+  color: white;
+  border-radius: 25rpx;
+  font-size: 25rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hover-member-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.contest-segement{
+  background-color: white;
+  margin-top: 10rpx;
+  display: flex;
+  flex-direction: row;
+  height: 90rpx;
+}
+
+.segement-item{
+  margin-left: 0rpx;
+  width: 50%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 28rpx;
+}
+
+.segement-item-normal{
+  color: #333;
+  background-color: white;
+}
+
+.segement-item-selected{
+  color: white;
+  background-color: #00a0e9;
+}
+
+.item-cell{
+  width: 937.5rpx;
+}
+
+.item-column-line{
+  margin-left: -1rpx;
+  width: 2rpx;
+  height: 40rpx;
+  background-color: #eee;
+}
+
+.item-tip-container{
+  width: 100%;
+  height: 60rpx;
+  margin-top: 2rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  font-size: 26rpx;
+  color: #999;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-content{
+  width:25%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-table-view{
+  margin-top: 1rpx;
+  margin-bottom: 100rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.start-syn-button{
+  position: fixed;
+  height: 100rpx;
+  bottom: 0rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #00a0e9;
+  color: white;
+  font-size: 30rpx;
+}
+
+.hover-syn-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.mask-view1{
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: black;
+  opacity: 0.8;
+  height: 60rpx;
+  width: 100%;
+}
+
+.mask-view2{
+  position: absolute;
+  left: 0;
+  top: 60rpx;
+  background-color: black;
+  opacity: 0.0;
+  height: 100rpx;
+  width: 100%;
+}
+
+.mask-view3{
+  position: absolute;
+  left: 0;
+  top: 160rpx;
+  background-color: black;
+  opacity: 0.8;
+  bottom: 0;
+  width: 100%;
+}
+
+.mask-content-container{
+  position: absolute;
+  left: 0;
+  top: 160rpx;
+  bottom: 0;
+  width: 100%;
+}
+.mask-content-container4{
+  position: absolute;
+  left: 0;
+  top: 0rpx;
+  bottom: 0;
+  width: 100%;
+}
+
+.mask-content-view{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mask-container{
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.intro-tip{
+  position: relative;
+  margin-top: 10rpx;
+  width: 456rpx;
+  height: 268rpx;
+  /* background-color: red; */
+}
+
+.intro-next1{
+  position: relative;
+  margin-top: 60rpx;
+  width: 220rpx;
+  height: 78rpx;
+}
+.mask-step-view1{
+  position: absolute;
+  left: 0;
+  top: 0rpx;
+  background-color: black;
+  opacity: 0.8;
+  height: 100%;
+  width: 100%;
+}
+.intro-tip2{
+  position: relative;
+  margin-top: 330rpx;
+  width: 398rpx;
+  height: 417rpx;
+}
+
+.intro-next2{
+  position: relative;
+  margin-top: 30rpx;
+  width: 220rpx;
+  height: 78rpx;
+}
+
+.intro-tip3{
+  position: absolute;
+  top: 330rpx;
+  right: 10rpx;
+  width: 569rpx;
+  height: 360rpx;
+}
+
+.intro-next3{
+  position: relative;
+  margin-top: 730rpx;
+  width: 220rpx;
+  height: 78rpx;
+}
+
+.intro-tip4{
+  position: relative;
+  margin-bottom: 0rpx;
+  width: 100%;
+}
+
+
+.mask-content-view4{
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  height: 100%;
+}
+
+.intro-next4{
+  position: absolute;
+  width: 247rpx;
+  height: 109rpx;
+  bottom: 400rpx;
+}

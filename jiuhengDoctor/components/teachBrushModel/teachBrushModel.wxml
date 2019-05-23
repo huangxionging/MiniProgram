@@ -1,0 +1,7 @@
+<!--components/teachBrushModel/teachBrushModel.wxml-->
+<view class='teach-brush-container'>
+  <image src='{{data.imageUrl}}' mode='widthFix' class='brush-model-image'></image>
+  <image src='http://qnimage.hydrodent.cn/dtb_grid.png' class='brush-grid-image'></image>
+  <view class='brush-name-view'>{{data.name}}</view>
+  <!-- <view class='brush-mode-mirror'>当前为镜像模式</view> -->
+</view>

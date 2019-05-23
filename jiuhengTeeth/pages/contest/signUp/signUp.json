@@ -1,4 +1,5 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "爱牙挑战赛"
+  "navigationBarTitleText": "爱牙挑战赛",
+  "enablePullDownRefresh": true
 }

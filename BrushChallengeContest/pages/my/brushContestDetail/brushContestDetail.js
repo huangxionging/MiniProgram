@@ -128,7 +128,11 @@ Page({
         }
 
         rowDataArray.sort((a, b) => {
-          return b.score - a.score
+          if (b.score != a.score) {
+            return b.score - a.score
+          } else {
+            return b.accuracy - a.accuracy
+          }
         })
       }
       let arcPlayerList = res.arcPlayerList

@@ -80,6 +80,7 @@ Page({
     //   fail: function(res) {},
     //   complete: function(res) {},
     // })
+    that.startSocketHeartbeatPackage()
   },
 
   /**
@@ -263,6 +264,13 @@ Page({
             // that.data.synDeviceArray.push(itemObject)
           }
         }
+        rowDataArray.sort((a, b) => {
+          if (b.score != a.score) {
+            return b.score - a.score
+          } else {
+            return b.accuracy - a.accuracy
+          }
+        })
       }
       let arcPlayerList = res.arcPlayerList
       let arcSectionDataArray = that.data.arcSectionDataArray
@@ -706,5 +714,20 @@ Page({
       })
     }
     
+  },
+  startSocketHeartbeatPackage: function() {
+    console.info('websocket连接成功');
+    baseTool.startTimer((total) => {
+      wx.sendSocketMessage({
+        data: ["ddd"],
+        success: function (res) {
+          baseTool.print("ddd")
+        },
+        fail: function (res) {
+          baseTool.print(res)
+        },
+        complete: function (res) { },
+      })
+    }, 30000, 999999999)
   }
 })

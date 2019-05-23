@@ -1,0 +1,8 @@
+<!--components/deviceItemCell/deviceItemCell.wxml-->
+<view class='cell-container'>
+  <view class='cell-content'>
+    <view class='cell-title'>{{data.deviceName}}</view>
+    <view class='cell-detail' bindtap='lightDeviceClick'>{{data.detail}}</view>
+  </view>
+  <view class='cell-line'/>
+</view>

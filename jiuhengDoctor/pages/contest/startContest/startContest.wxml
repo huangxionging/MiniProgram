@@ -1,0 +1,91 @@
+<!--pages/contest/startContest/startContest.wxml-->
+<view class='start-container' wx:if='{{loadDone}}'>
+  <block wx:if='{{isSyncNow}}'>
+    <view class='start-syn-button' style='background-color:#ccc;'>同步中</view>
+  </block>
+  <block wx:else>
+    <view class='start-syn-button' hover-class='hover-syn-button' bindtap='synClick'>开始同步</view>
+  </block>
+  <view class='count-tip-view'>
+    <text>共有</text>
+    <text style='color:red;'>{{playerCount}}</text>
+    <text>个人在比赛中</text>
+  </view>
+  <view class='add-member-view'>
+    <input class='add-member-input' value='{{addPlayerName}}' placeholder='请输入参赛者名称' bindinput='getInputContent'></input>
+    <view class='add-member-button' hover-class='hover-member-button' bindtap='addMemberClick'>添加</view>
+  </view>
+  <!-- <view class='contest-segement'> -->
+    <!-- <view class="segement-item {{isArcBrushingMethod==1?'segement-item-normal':'segement-item-selected'}}" bindtap='segmentChange' id='pap'>巴氏刷牙组</view> -->
+    <!-- <view class="segement-item {{isArcBrushingMethod==1?'segement-item-selected':'segement-item-normal'}}" bindtap='segmentChange' id='arc'>圆弧刷牙组</view> -->
+  <!-- </view> -->
+
+  <view class='item-tip-container'>
+    <view class='item-content'>姓名</view>
+    <view class='item-column-line' />
+    <view class='item-content'>设备</view>
+    <view class='item-column-line' />
+    <view class='item-content'>分数</view>
+    <view class='item-column-line' />
+    <view class='item-content'>状态</view>
+  </view>
+
+  <view wx:if='{{!isArcBrushingMethod}}' class='item-table-view'>
+    <block wx:for='{{papSectionDataArray}}' wx:key='id' wx:item='item'>
+      <view class='device-section'>
+        <block wx:for='{{item.rowDataArray}}' wx:key='id' wx:item='item'>
+          <contestItemCell data='{{item}}' data-section="{{0}}" data-row='{{index}}' data-syn='{{isSyncNow}}' bind:delClick='delClick' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view wx:else class='item-table-view'>
+    <block wx:for='{{arcSectionDataArray}}' wx:key='id' wx:item='item'>
+      <view class='device-section'>
+        <block wx:for='{{item.rowDataArray}}' wx:key='id' wx:item='item'>
+          <contestItemCell data='{{item}}' data-section="{{0}}" data-row='{{index}}' data-syn='{{isSyncNow}}' bind:delClick='delClick' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>
+<view wx:if='{{showIntroPage}}' class='mask-container'>
+  <view class='mask-container' wx:if='{{showIntroStep==1}}'>
+    <view class='mask-view1' />
+    <view class='mask-view2' />
+    <view class='mask-view3' />
+    <view class='mask-content-container'>
+      <view class='mask-content-view'>
+        <image class='intro-tip' src='http://qnimage.hydrodent.cn/bcc_intro_add11.png' />
+        <image class='intro-next1' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_next1.png' />
+      </view>
+    </view>
+  </view>
+  <view view class='mask-container' wx:if='{{showIntroStep==2}}'>
+    <view class='mask-step-view1' />
+    <view class='mask-content-container4'>
+      <view class='mask-content-view'>
+        <image class='intro-tip2' src='http://qnimage.hydrodent.cn/bcc_intro_add22.png' />
+        <image class='intro-next2' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_next2.png' />
+      </view>
+    </view>
+  </view>
+  <view view class='mask-container' wx:if='{{showIntroStep==3}}'>
+    <view class='mask-step-view1' />
+    <view class='mask-content-container4'>
+      <view class='mask-content-view'>
+        <image class='intro-tip3' src='http://qnimage.hydrodent.cn/bcc_intro_add34.png' />
+        <image class='intro-next3' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_next3.png' />
+      </view>
+    </view>
+  </view>
+  <view view class='mask-container' wx:if='{{showIntroStep==4}}'>
+    <view class='mask-step-view1' />
+    <view class='mask-content-container4'>
+      <view class='mask-content-view4'>
+      <image class='intro-tip4' mode='widthFix' src='http://qnimage.hydrodent.cn/bcc_intro_add44.png' />
+      <image class='intro-next4' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_next4.png' />
+      </view>
+    </view>
+  </view>
+</view>

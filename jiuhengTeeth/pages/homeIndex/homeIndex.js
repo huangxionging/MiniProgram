@@ -11,7 +11,8 @@ Page({
    */
   data: {
     res: {},
-    open: false
+    open: false,
+    isLiked: false
   },
 
   /**
@@ -27,6 +28,7 @@ Page({
   onReady: function () {
     let that = this
     that.getHomePage()
+    that.visitorClinic()
   },
 
   /**
@@ -81,13 +83,11 @@ Page({
       baseTool.print(res)
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      if (res !=undefined && res.carouselList != undefined) {
-        
-      }
-
+      let isLiked = baseNetLinkTool.getIsLike()
       that.setData({
         loadDone: true,
-        res: res
+        res: res,
+        isLiked: isLiked
       })
      
     }).catch(res => {
@@ -97,7 +97,20 @@ Page({
     })
   },
   imageClick: function(e) {
+    let that = this
     baseTool.print(e)
+    if (!e.currentTarget.dataset.link) {
+      return;
+    }
+    baseMessageHandler.postMessage("showBlogArticle", res => {
+      res(e.currentTarget.dataset.link)
+    }).then(res => {
+      wx.navigateTo({
+        url: '/pages/dental/blog/blog',
+      })
+    }).catch(res => {
+      baseTool.print(res)
+    })
   },
   fullClick: function() {
     let that = this
@@ -109,6 +122,50 @@ Page({
     let that = this
     wx.makePhoneCall({
       phoneNumber: that.data.res.phone,
+    })
+  },
+  visitorClinic: function() {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("visitorClinic", "访客接口").then(res => {
+      baseTool.print(res)
+      let dataRes = that.data.res
+      dataRes.visitorCount++
+      that.setData({
+        res: dataRes
+      })
+    }).catch(res => {
+      baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  likeClick: function() {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("likeClinic", "点赞").then(res => {
+      baseTool.print(res)
+      let dataRes = that.data.res
+      dataRes.likeCount++
+      that.setData({
+        res: dataRes,
+        liked: true
+      })
+      baseTool.setValueForKey(true, 'isLike')
+    }).catch(res => {
+      baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  expertListClick: function(e) {
+    let that = this
+    baseTool.print(e)
+    if (!e.detail.link) {
+      return;
+    }
+    baseMessageHandler.postMessage("showBlogArticle", res => {
+      res(e.detail.link)
+    }).then(res => {
+      wx.navigateTo({
+        url: '/pages/dental/blog/blog',
+      })
+    }).catch(res => {
+      baseTool.print(res)
     })
   }
 })

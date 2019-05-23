@@ -132,6 +132,11 @@ Page({
               if (wxUser.isHaveDevice != undefined) {
                 baseTool.setValueForKey(wxUser.isHaveDevice?true:false, 'isHaveDevice')
               }
+
+              if (wxUser.isLike != undefined) {
+                baseTool.setValueForKey(wxUser.isLike ? true : false, 'isLike')
+              }
+
               if (wxUser.openid != undefined) {
                 loginManager.reLauch()
               }

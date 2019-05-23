@@ -14,8 +14,8 @@ Page({
     hasData: false,
     gameName: '',
     gameId: '',
-    showIntroPage: false
-    // videoURL: 'http://qnimage.hydrodent.cn/shuipingzhendongfushua.mp4'
+    showIntroPage: false,
+    videoURL: 'http://qnimage.hydrodent.cn/match1.mp4'
   },
 
   /**
@@ -89,6 +89,14 @@ Page({
       let contentHeight = 0
       let gameId = ''
       let gameName = ''
+      // 设计稿上需要 1038rpx 的内容高度, 转成像素点
+      windowHeight = baseTool.toPixel(1038)
+      // 实际除去导航栏和底部 tabBar 的高度
+      contentHeight = wx.getSystemInfoSync().windowHeight
+      // 如果 内容区高度比设计需要的大
+      if (contentHeight > windowHeight) {
+        windowHeight = contentHeight;
+      }
       if (res == undefined) {
         wx.setNavigationBarTitle({
           title: "刷牙挑战",
@@ -97,17 +105,11 @@ Page({
         hasData = true
         gameId = res.gameId
         gameName = res.name
-        // 设计稿上需要 1038rpx 的内容高度, 转成像素点
-        windowHeight = baseTool.toPixel(1038)
-        // 实际除去导航栏和底部 tabBar 的高度
-        contentHeight = wx.getSystemInfoSync().windowHeight
-        // 如果 内容区高度比设计需要的大
-        if (contentHeight > windowHeight) {
-          windowHeight = contentHeight;
-        }
+        
         wx.setNavigationBarTitle({
           title: gameName ? gameName : "刷牙挑战"
         })
+        that.data.createTime = res.createTime
       }
       that.setData({
         loadDone: true,
@@ -116,6 +118,7 @@ Page({
       })
       that.data.gameId = gameId
       that.data.gameName = gameName
+      
       that.showIntroPage()
       setTimeout(() => {
         that.setData({
@@ -159,7 +162,7 @@ Page({
   shareClick: function(e) {
     let that = this
     wx.navigateTo({
-      url: '/pages/showScreen/showContest/showContest?gameId=' + that.data.gameId
+      url: '/pages/showScreen/showContest/showContest?gameId=' + that.data.gameId + '&applyTime=' + that.data.createTime
     })
   },
   createContest: function() {

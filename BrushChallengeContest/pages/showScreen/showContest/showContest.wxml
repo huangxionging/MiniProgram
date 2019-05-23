@@ -5,12 +5,16 @@
     <view class='sign-up-container' wx:if='{{status==0}}'>
       <view class='sign-up-tip' style='font-size:{{scale * 28}}px;height:{{scale * 60}}px;'>扫描二维码，体验黑科技智能牙刷。 猜猜宝贝刷牙能得多少分？快来和其他小朋友PK吧！</view>
       <image class='scan-image' style='width:{{scale * 274}}px;height:{{scale * 99}}px;' src='http://qnimage.hydrodent.cn/bcc_scan_sign_up.png' />
-      <image class='scan-qrcode' style='width:{{scale * 325}}px;height:{{scale * 325}}px;' src='{{qrcodeUrl}}' />
+      <view class='scan-qrcode' style='width:{{scale * 325}}px;height:{{scale * 325}}px;'>
+        <canvas style='width:100%;height:100%;' canvas-id='my-scan0-qrcode'></canvas>
+      </view>
     </view>
     <view class='join-contest-container' wx:if='{{status==1}}'>
       <view class='scan-view' style='margin-left:{{scale * 185}}px;margin-top:{{scale * 133}}px;'>
         <image class='scan-second-image' style='width:{{scale * 156}}px;height:{{scale * 56}}px;' src='http://qnimage.hydrodent.cn/bcc_scan_sign_up.png' />
-        <image class='scan-second-qrcode' style='width:{{scale * 185}}px;height:{{scale * 185}}px;' src='{{qrcodeUrl}}' />
+        <view class='scan-second-qrcode' style='width:{{scale * 185}}px;height:{{scale * 185}}px;' bindtap='previewClick'>
+          <canvas style='width:100%;height:100%;' canvas-id='my-scan1-qrcode'></canvas>
+        </view>
       </view>
       <view class='contest-broadcast-container' style='margin-right:{{scale * 186}}px;margin-top:{{scale * 72}}px;'>
         <image class='sign-up-name-image' src='http://qnimage.hydrodent.cn/bcc_sign_up_name.png' />
@@ -37,9 +41,11 @@
       <view class='join-contest-container'>
         <view class='scan-view' style='margin-left:{{scale * 185}}px;margin-top:{{scale * 133}}px;'>
           <image class='scan-second-image' style='width:{{scale * 156}}px;height:{{scale * 56}}px;' src='http://qnimage.hydrodent.cn/bcc_scan_sign_up.png' />
-          <image class='scan-second-qrcode' style='width:{{scale * 185}}px;height:{{scale * 185}}px;' src='{{qrcodeUrl}}' />
+          <view class='scan-second-qrcode' style='width:{{scale * 185}}px;height:{{scale * 185}}px;' bindtap='previewClick'>
+            <canvas style='width:100%;height:100%;' canvas-id='my-scan2-qrcode'></canvas>
+          </view>
         </view>
-        <view class='contest-broadcast-container' style='margin-right:{{scale * 186}}px;margin-top:{{scale * 72}}px;'>
+        <view class='contest-broadcast-container' style='margin-right:{{scale * 186}}px;margin-top:{{scale * 62}}px;'>
           <image class='sign-up-name-image' src='http://qnimage.hydrodent.cn/bcc_show_screen_rank.png' />
           <view class='show-join-name-container'>
             <block wx:for-items='{{showMethod==0?papSectionDataArray:arcSectionDataArray}}' wx:key='id' wx:for-item='objectItem' wx:for-index='objectIndex'>
@@ -51,7 +57,7 @@
                   <view class='cell-title'>{{objectIndex + 1}}</view>
                 </block>
                 <view class='cell-name'>{{objectItem.name}}</view>
-                <view class='cell-score'>{{objectItem.score}}</view>
+                <view class='cell-score'>{{objectItem.score}}.{{objectItem.accuracy}}</view>
               </view>
             </block>
           </view>

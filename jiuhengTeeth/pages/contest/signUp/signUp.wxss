@@ -45,7 +45,7 @@
   flex: 1;
   font-size: 28rpx;
   color: #333;
-  height: 60rpx;
+  height: 100%;
   width: 143rpx;
   align-items: center;
 }
@@ -57,6 +57,9 @@
   font-size: 32rpx;
   margin-left: 68rpx;
   margin-right: 5rpx;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 .sign-date-tip{
   height: 100%;

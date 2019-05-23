@@ -20,19 +20,20 @@ Page({
     ageList: [],
     genderList: ['男', '女'],
     canSignUp: false,
+    timeQuantum: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     let that = this
     that.getStartDate()
     that.getAgeList()
@@ -41,42 +42,42 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
   inputName: function(e) {
@@ -101,7 +102,9 @@ Page({
     that.setData({
       selectDate: e.detail.value
     })
+    delete that.data["timeList"]
     that.refreshState()
+    that.getTimeList(e.detail.value)
   },
   getStartDate: function() {
     let that = this
@@ -120,7 +123,7 @@ Page({
       ageList: ageList
     })
   },
-  selectAgeClick:function(e) {
+  selectAgeClick: function(e) {
     baseTool.print(e)
     let that = this
     that.setData({
@@ -128,16 +131,17 @@ Page({
     })
     that.refreshState()
   },
-  refreshState: function () {
+  refreshState: function() {
     let that = this
     let name = that.data.name
     let tel = that.data.tel
     let age = that.data.age
     let gender = that.data.gender
     let selectDate = that.data.selectDate
+    let timeQuantum = that.data.timeQuantum
     let canSignUp = false
     // 手机号长度要为 11
-    if (name && tel.length == 11 && gender && age && selectDate){
+    if (name && tel.length == 11 && gender && age && selectDate && timeQuantum) {
       canSignUp = true
     }
     that.setData({
@@ -146,14 +150,15 @@ Page({
   },
   sinUpClick: function() {
     let that = this
-    
-    baseNetLinkTool.getRemoteDataFromServer("apply", "报名", {
+
+    baseNetLinkTool.getRemoteDataFromServer("apply", "报名挑战赛", {
       name: that.data.name,
       sex: that.data.gender,
       age: that.data.age,
       telephone: that.data.tel,
       type: '0',
-      planAttendanceTime: that.data.selectDate
+      planAttendanceTime: that.data.selectDate,
+      timeQuantum: that.data.timeQuantum
     }).then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
@@ -172,6 +177,43 @@ Page({
     let that = this
     that.setData({
       gender: e.detail.value + 1
+    })
+    that.refreshState()
+  },
+  getTimeList: function(date = '') {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("appointmentTime", "获取可预约时间", {
+      date: date
+    }).then(res => {
+      baseTool.print(res)
+      let timeList = [
+        '9:00~10:00',
+        '10:00~11:00',
+        '11:00~12:00',
+        '14:00~15:00',
+        '15:00~16:00',
+        '16:00~17:00',
+        '17:00~18:00',
+      ]
+
+      for (let index = timeList.length - 1; index >= 0; --index) {
+        if (res[timeList[index]] != 0) {
+          timeList.splice(index, 1)
+        }
+      }
+      that.setData({
+        timeList: timeList
+      })
+    }).catch(res => {
+
+    })
+    
+  },
+  selectTimeClick: function(e) {
+    baseTool.print(e)
+    let that = this
+    that.setData({
+      timeQuantum: that.data.timeList[e.detail.value]
     })
     that.refreshState()
   }
