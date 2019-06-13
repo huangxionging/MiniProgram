@@ -3,7 +3,7 @@
 let baseDomain = 'https://dev-dos.32teeth.cn/'
 let baseBrushDomain = 'https://dev-os.32teeth.cn/'
 let socketDomain = 'wss://dev-dos.32teeth.cn/'
-let debug = false
+let debug = true
 if (!debug) {
   // 正式环境
   baseDomain = 'https://dos.32teeth.cn/'

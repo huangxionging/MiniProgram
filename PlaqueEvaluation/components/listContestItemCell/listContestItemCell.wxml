@@ -1,0 +1,17 @@
+<!--components/listContestItemCell/listContestItemCell.wxml-->
+<view class='cell-container'>
+  <view class='cell-content'>
+    <block wx:if='{{data.isSelect}}'>
+      <image src='/resource/box-selected.png' class='select-component-image' bindtap='selectClick' />
+    </block>
+    <block wx:else>
+      <image src='/resource/box-normal.png' class='select-component-image' bindtap='selectClick' />
+    </block>
+    <view class='cell-title' bindtap='selectClick'>{{data.name}}</view>
+    <navigator class='cell-navigator' url='/pages/my/brushContestDetail/brushContestDetail?gameId={{data.gameId}}'>
+      <image src='/resource/right_arrow.png' class='cell-arrow' lazy-load='true' />
+    </navigator>
+
+  </view>
+  <view class='cell-line' />
+</view>

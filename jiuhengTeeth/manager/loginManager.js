@@ -176,7 +176,18 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
     }
   })
 }
- 
+
+/**
+ * 版本检查
+ */
+function getCheckVersion(version = '') {
+  return new Promise((resolve, reject) => {
+    let data = {
+      version: version
+    }
+    baseTool.getRemoteDataFromServer("versionAudit", "版本审查", data).then(resolve, reject)
+  })
+}
 
 module.exports = {
   getOpenId: getOpenId,
@@ -187,5 +198,6 @@ module.exports = {
   getVerifyCode: getVerifyCode,
   bindingTelphone: bindingTelphone,
   completeClinicInfo: completeClinicInfo,
-  getRemoteDataFromServer: getRemoteDataFromServer
+  getRemoteDataFromServer: getRemoteDataFromServer,
+  getCheckVersion: getCheckVersion
 }

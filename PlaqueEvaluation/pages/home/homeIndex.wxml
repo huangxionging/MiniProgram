@@ -1,0 +1,47 @@
+<!--pages/home/homeIndex.wxml-->
+<!-- <view class='navigation-bar-line' /> -->
+<view class='contest-container' wx:if='{{loadDone}}'>
+  <block wx:if='{{!hasData}}'>
+    <view class='contest-content-view'style='height:{{height}}px;background-color:white;'>
+      <image src='/resource/contest_device.png' class='contest-create-image' lazy-load='true' bindtap='deviceManagerClick' />
+      <view class='contest-no-contest-view'>
+        <image src='/resource/contest_no_contest.png' class='contest-no-contest-image' lazy-load='true' />
+        <text id='contest-no-contest-text'>暂无评测, 快去创建评测吧</text>
+      </view>
+      <button class='main-button' hover-class='hover-main-button' id='contest-create-contest-button' bindtap='createContest' disabled='{{createButtonDisable}}'>创建评测</button>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='contest-content-view' style='height:{{height}}px;background-color:#eee;'>
+      <view class='video-bg-container'>
+        <image class='video-bg-image' src='/resource/video_bg.png' lazy-load='true' />
+        <view class='video-container'>
+          <video class='video-view' src='{{videoURL}}'>
+            <!-- <cover-image wx:if='{{showShare}}' class='share-contest' src='/resource/share_contest.png' bindtap='shareClick' lazy-load='true' /> -->
+          </video>
+
+          <view class='video-tip'>
+            <view class='video-tip-title'>指导视频</view>
+            <view class='video-tip-detail'>通过视频学习，可以帮您迅速了解如何进行评测哦~</view>
+          </view>
+        </view>
+      </view>
+      <view class='congratulation-tip' style=' margin-top: 63rpx;'>恭喜您！已成功创建评测</view>
+      <view class='congratulation-tip'>记得分享新的评测链接哦~</view>
+      <view class='contest-button-container'>
+        <view class='click-button start-button' hover-class='hover-main-button' bindtap='startClick'>评测设置</view>
+        <view class='click-button end-button' hover-class='hover-main-button' bindtap='endClick'>结束评测</view>
+      </view>
+    </view>
+  </block>
+</view>
+<view wx:if='{{showIntroPage}}' class='mask-container'>
+  <view class='mask-view' />
+  <view class='mask-content-container'>
+    <view class='mask-content-view'>
+      <image class='intro-tip' src='http://qnimage.hydrodent.cn/pe_intro_device.png' />
+      <view class='intro-text'>创建评测前要先添加智能设备哦~</view>
+      <image class='intro-iknow' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_ikonw.png' />
+    </view>
+  </view>
+</view>

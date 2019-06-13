@@ -1,0 +1,199 @@
+/* pages/showScreen/showContest/showContest.wxss */
+
+.show-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.show-bg-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.show-sign-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sign-up-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-up-tip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: #fe9824;
+  opacity: 0.4;
+}
+
+.scan-image {
+  margin-top: 13rpx;
+}
+
+.scan-qrcode {
+  border: 2px solid #0dc5ff;
+  border-radius: 10px;
+}
+
+.join-contest-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.scan-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.scan-second-qrcode{
+  border: 2px solid #0dc5ff;
+  border-radius: 4px;
+}
+
+.contest-broadcast-container {
+  width: 340px;
+  height: 230px;
+  background-color: white;
+  border: 4px solid #78ddfd;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-up-name-image {
+  margin-top: 20px;
+  height: 22px;
+  width: 212px;
+}
+
+.cell-item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 13px;
+  align-items: flex-start;
+}
+
+.show-join-name-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  font-size: 14px;
+}
+
+.cell-left {
+  margin-left: 30px;
+  flex: 1;
+}
+
+.cell-right {
+  margin-right: 30px;
+}
+
+.cell-medal {
+  width: 15px;
+  height: 20px;
+  margin-left: 15px;
+}
+
+.cell-title {
+  margin-left: 17px;
+  color: #333;
+  font-size: 14px;
+}
+
+.cell-name {
+  position: absolute;
+  left: 45px;
+  color: #333;
+  font-size: 14px;
+  flex: 1;
+}
+
+.cell-score {
+  position: absolute;
+  right: 15px;
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+.rank-cell-content {
+  margin-top: 8px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  /* background-color: red; */
+}
+
+.scroll-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.broadcast-tip-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 60rpx;
+  background-color: black;
+  opacity: 0.4;
+  align-items: center;
+}
+
+.contest-tip-view {
+  color: #eee;
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.contest-name-view {
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 30px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.name-container {
+  white-space: nowrap;
+  position: absolute;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  flex-direction: row;
+  color: #eee;
+}

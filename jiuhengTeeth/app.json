@@ -9,7 +9,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "九恒儿童口腔",
+    "navigationBarTitleText": "佛山九恒",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -18,7 +18,7 @@
     "list": [
       {
         "pagePath": "pages/homeIndex/homeIndex",
-        "text": "九恒口腔",
+        "text": "佛山九恒",
         "iconPath": "resource/home_normal.png",
         "selectedIconPath": "resource/home_selected.png"
       },

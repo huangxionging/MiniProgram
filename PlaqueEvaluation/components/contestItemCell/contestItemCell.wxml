@@ -1,0 +1,12 @@
+<!--components/contestItemCell/contestItemCell.wxml-->
+<view class='contest-container {{data.state == 2?"contest-finished":""}}'  bindtouchstart='touchStart' bindtouchend='touchEnd' bindtouchmove='touchMove' style='{{data.state!=2? data.style:""}}' >
+  <view class='item-container'>
+    <view class='item-basic' style='color:#00a0e9' bindtap='modifyNameClick'>{{data.name}}</view>
+    <view wx:if='{{data.state==0}}' class='item-basic' style='color:#00a0e9' bindtap='selectDevceClick'>选择</view>
+    <view wx:else class='item-basic'>{{data.deviceName}}</view>
+    <view class='item-basic' bindtap='previewReportClick'>{{data.plaqueLevel}}级</view>
+    <view class='item-basic'>{{data.stateText}}</view>
+    <view class='item-basic' style='background-color:red;color:white;' bindtap='delClick'>删除</view>
+  </view>
+  <view class='item-row-line'/>
+</view>

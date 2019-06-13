@@ -237,46 +237,7 @@ Page({
     })
   },
   confirmClick: function(e) {
-    let that = this
-    let telphoneNumber = that.data.telphoneNumber
-    let verifyCode = that.data.verifyCode
-    wx.showLoading({
-      title: '处理中...',
-      mask: true,
-    })
-
-    loginManager.bindingTelphone(telphoneNumber, verifyCode).then(res => {
-      wx.hideLoading()
-      baseTool.print(res)
-      let wxUser = res.wxUser
-      if (wxUser.telephone) {
-        baseTool.setValueForKey(wxUser.telephone, 'telephone')
-      }
-
-      if (wxUser.memberId) {
-        baseTool.setValueForKey(wxUser.memberId, 'memberId')
-      }
-
-      if (wxUser.clinicId != undefined) {
-        baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
-      }
-      if (wxUser.clinicName != undefined) {
-        baseTool.setValueForKey(wxUser.clinicName, 'clinicName')
-      }
-      if (wxUser.clinicPic != undefined) {
-        baseTool.setValueForKey(wxUser.clinicPic, 'clinicPic')
-      }
-      if (wxUser.clinicIntro != undefined) {
-        baseTool.setValueForKey(wxUser.clinicIntro, 'clinicIntro')
-      }
-      if (wxUser.isHaveDevice != undefined) {
-        baseTool.setValueForKey(wxUser.isHaveDevice ? true : false, 'isHaveDevice')
-      }
-      baseNetLinkTool.reLauch()
-    }).catch(res => {
-      wx.hideLoading()
-      baseNetLinkTool.showNetWorkingError(res)
-    })
+    baseTool.showToast("账号或密码不正确")
   },
   refreshState: function() {
     let that = this

@@ -40,10 +40,20 @@ function getClinicName() {
   return baseTool.valueForKey('clinicName')
 }
 
+/**
+ * 是否有设备
+ */
 function setIsHaveDevice(isHaveDevice) {
   if (isHaveDevice != undefined) {
     baseTool.setValueForKey(isHaveDevice, 'isHaveDevice')
   }
+}
+
+/**
+ * 是否有版本号
+ */
+function getNeedLogin() {
+  return baseTool.valueForKey('needLogin')
 }
 
 /**
@@ -74,11 +84,9 @@ function startAuthorization() {
 function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) {
   return new Promise((resolve, reject) => {
     let openid = getOpenId()
-    // let memberId = getMemberId()
     if (openid) {
       // 统一处理, 拼接额外数据
       let data = Object.assign({
-        // memberId: memberId,
         openid: openid,
         clinicId: baseURL.clinicId,
         appletCode: baseURL.appletCode,

@@ -1,0 +1,115 @@
+/* pages/contest/selectContestDevice/selectContestDevice.wxss */
+page{
+  background-color: #eee;
+}
+.device-container{
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tip-container{
+  width: 100%;
+  height: 200rpx;
+  background-color: white;
+}
+
+.user-name{
+  margin-left: 30rpx;
+  margin-top: 30rpx;
+  font-size: 34rpx;
+  color: #333;
+}
+
+.game-name{
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.column-line{
+  margin-top: 10rpx;
+  height: 2rpx;
+  background-color: #e1e1e1;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+}
+
+.tip-text-view{
+  display: flex;
+  flex-direction: row;
+  height: 70rpx;
+  align-items: center;
+  font-size: 22rpx;
+  color: #333;
+}
+
+.device-icon{
+  margin-left: 30rpx;
+  margin-right: 10rpx;
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.device-collection-view{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10rpx;
+  margin-bottom: 200rpx;
+  overflow: hidden;
+}
+
+.device-collection-footer{
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  height: 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.indicator-view{
+  position: relative;
+  display: flex;
+  height: 100rpx;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item-view{
+  background-color: white;
+  width: 90rpx;
+  height: 60rpx;
+  margin-left: 57rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #ddd;
+  border-radius: 4rpx;
+  font-size: 24rpx;
+}
+
+.confirm-button{
+  height: 100rpx;
+  width: 100%;
+  background-color: #00a0e9;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 30rpx;
+}
+
+.hover-confirm-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}

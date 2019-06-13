@@ -42,5 +42,9 @@ module.exports = {
   /**
    * 小程序标识
    */
-  appletCode: 'jiuhengDentalClinicClient'
+  appletCode: 'jiuhengDentalClinicClient',
+  /**
+   * 版本号
+   */
+  appVersion: '1.0.3'
 }

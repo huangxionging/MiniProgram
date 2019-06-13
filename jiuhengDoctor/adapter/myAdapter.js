@@ -136,7 +136,12 @@ function signUpSectionDataArray(res) {
   }
   for (let index = 0; index < res.length; ++index) {
     let applyTime = res[index].applyTime
-    res[index].applyTime = applyTime.split(' ')[0]
+    if (applyTime == undefined) {
+      res[index].applyTime = '--'
+    } else {
+      res[index].applyTime = applyTime.split(' ')[0]
+    }
+   
     signUpSectionDataArray[0].rowDataArray.push(res[index])
   }
   return signUpSectionDataArray

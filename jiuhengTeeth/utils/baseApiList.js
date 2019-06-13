@@ -26,5 +26,9 @@ module.exports = {
   /**
    * 预约时间
    */
-  appointmentTime: 'appointmentTime'
+  appointmentTime: 'appointmentTime',
+  /**
+   * 版本号
+   */
+  versionAudit: 'versionAudit'
 }

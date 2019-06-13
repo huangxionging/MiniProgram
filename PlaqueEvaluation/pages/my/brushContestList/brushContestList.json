@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "listContestItemCell": "/components/listContestItemCell/listContestItemCell"
+  },
+  "navigationBarTitleText": "历史评测"
+}
