@@ -10,14 +10,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    linkUrl: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let that = this
+    if (options.linkUrl) {
+      // 需要两次解码
+      let linkUrl = decodeURIComponent(options.linkUrl)
+      that.setData({
+        linkUrl: baseTool.urlToHttps(decodeURIComponent(linkUrl))
+      })
+    }
   },
 
   /**
@@ -68,10 +75,18 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    let that = this
+    // 需要两次编码
+    let linkUrl = that.data.linkUrl
+    let url = encodeURIComponent(linkUrl)
+    return {
+      path: "pages/showScreen/signUp/signUp?linkUrl=" + encodeURIComponent(url),
+      title: "菌斑评测报告",
+    }
   },
   registerCallBack: function () {
     let that = this
+    
     baseMessageHandler.getMessage("previewReport", res => {
       baseTool.print(res)
       let linkUrl = res.url + "name=" + res.name + "&clicin=" + baseNetLinkTool.getClinicName() + '&recordId=' + res.recordId

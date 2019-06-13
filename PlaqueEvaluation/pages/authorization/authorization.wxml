@@ -17,7 +17,7 @@
     </view>
     <view class='tel-view'>
       <text class='tel-tip'>账号</text>
-      <input type='number' class='tel-input' placeholder='请输入您的账号'  bindinput='getInputContent' placeholder-class='placeholder'></input>
+      <input  class='tel-input' placeholder='请输入您的账号'  bindinput='getInputContent' placeholder-class='placeholder'></input>
       <view class='tel-line'></view>
     </view>
     <view class='verify-view'>
