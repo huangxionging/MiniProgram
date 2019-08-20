@@ -1,12 +1,53 @@
 <!--components/contestItemCell/contestItemCell.wxml-->
-<view class='contest-container {{data.state == 2?"contest-finished":""}}'  bindtouchstart='touchStart' bindtouchend='touchEnd' bindtouchmove='touchMove' style='{{data.state!=2? data.style:""}}' >
+<view class='contest-container {{data.state == 2?"contest-finished":""}}' bindtouchstart='touchStart' bindtouchend='touchEnd' bindtouchmove='touchMove' style='{{data.state!=2? data.style:""}}'>
   <view class='item-container'>
-    <view class='item-basic' style='color:#00a0e9' bindtap='modifyNameClick'>{{data.name}}</view>
-    <view wx:if='{{data.state==0}}' class='item-basic' style='color:#00a0e9' bindtap='selectDevceClick'>选择</view>
-    <view wx:else class='item-basic'>{{data.deviceName}}</view>
-    <view class='item-basic' bindtap='previewReportClick'>{{data.plaqueLevel}}级</view>
-    <view class='item-basic'>{{data.stateText}}</view>
-    <view class='item-basic' style='background-color:red;color:white;' bindtap='delClick'>删除</view>
+    <view class="item-state">
+      <view class="state-left">
+        <view style="margin-right:15rpx;color:#888">编号: </view>
+        <view style="color:#333;">{{data.id}}</view>
+      </view>
+      <view class="state-right">
+        <view style="margin-right:15rpx;color:#888">状态:</view>
+        <view wx:if='{{data.state==0}}' style="color:#FF9352;">等待分配设备</view>
+        <view wx:if='{{data.state==1}}' style="color:#00a0e9">已分配设备</view>
+        <view wx:if='{{data.state==2}}' style="color:#78C20E">患者已刷牙</view>
+      </view>
+    </view>
+    <view class="item-people">
+      <view class="people-left">
+        <view style="margin-right:15rpx;color:#888">姓名: </view>
+        <view style="color:#333;">{{data.name}}</view>
+        <image class="people-star" src="/resource/star.png "></image>
+      </view>
+      <view class="people-right">
+        <view style="margin-right:15rpx;">测评时间:</view>
+        <view style="color:#333; ">{{data.evaluationTime}}</view>
+      </view>
+    </view>
+    <view class="item-device">
+      <view class="device-left">
+        <view style="margin-right:15rpx;">设备号: </view>
+        <view style="color:#333;">{{data.deviceName}}</view>
+      </view>
+      <view class="device-right">
+        <view style="margin-right:15rpx;color:#888 ">测评结果:</view>
+        <view style="color:#333 ">{{data.overallScore}}分 {{data.gumCleaningValue}}分 {{data.plaqueLevel}}级</view>
+      </view>
+    </view>
+    <view class="item-action">
+      <view wx:if='{{data.state==0}}' hover-class="hover-action" class="action1" catchtap="selectDevceClick">分配设备</view>
+      <view wx:if='{{data.state==1}}' hover-class="hover-action" class="action1" catchtap="synDeviceClick">同步数据</view>
+      <view wx:if='{{data.state==2}}' hover-class="hover-action" class="action1" catchtap="sendDeviceReportClick">发送报告</view>
+      <view wx:if='{{data.state==2}}' hover-class="hover-action" class="action2" catchtap="previewReportClick">查看报告</view>
+      <view wx:if='{{data.state==2 && data.isMark == 0}}' hover-class="hover-action" class="action2" catchtap="teethModelFlagClick">
+        标记重点
+        <view class=""/>
+      </view>
+      <view wx:if='{{data.state==2 && data.isMark==1}}' hover-class="hover-action" class="action2" catchtap="teethModelFlagClick">
+        修改标记
+        <view />
+      </view>
+    </view>
   </view>
-  <view class='item-row-line'/>
+  <view class='item-delete' style='background-color:red;color:white;' bindtap='delClick'>删除</view>
 </view>

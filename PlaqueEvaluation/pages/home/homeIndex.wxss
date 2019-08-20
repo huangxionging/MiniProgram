@@ -2,6 +2,7 @@
 
 page {
   width: 100%;
+  background-color: #eee;
 }
 
 .contest-container {
@@ -20,195 +21,216 @@ page {
   flex-direction: column;
 }
 
-.contest-no-contest-image {
-  width: 240rpx;
-  height: 240rpx;
-  border-radius: 50%;
-}
-
-.contest-create-image {
-  position: absolute;
-  width: 70rpx;
-  height: 70rpx;
-  border-radius: 50%;
-  right: 30rpx;
-  top: 60rpx;
-}
-
-#contest-no-contest-text {
-  margin-top: 50rpx;
-  font-size: 26rpx;
-  color: #9c9da3;
-}
-
-.contest-no-contest-view {
-  margin-top: 238rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#contest-create-contest-button {
-  margin-top: 120rpx;
-}
-
-.video-bg-container{
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 800rpx;
-}
-
-.video-bg-image{
-  width: 100%;
-  height: 246rpx;
-}
-
-.video-container{
-  position: absolute;
-  top: 30rpx;
-  left: 30rpx;
-  right: 30rpx;
-  height: 770rpx;
-  border-radius: 30rpx;
-  display: flex;
-  flex-direction: column;
+.contest-data-view{
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  margin-top: 10rpx;
+  height: 265rpx;
   background-color: white;
+  border-radius: 16rpx;
 }
 
-.video-view{
-  position: relative;
+.menu-bar-view{
+  display: flex;
+  flex-direction: row;
+}
+.basic-data-view{
+  margin-top: 30rpx;
   width: 100%;
-  height: 600rpx;
-  border-top-left-radius: 30rpx;
-  border-top-right-radius: 30rpx;
-  z-index: 0;
-}
-
-.share-contest{
-  position: absolute;
-  right: 0rpx;
-  top: 71rpx;
-  width: 156rpx;
-  height: 55rpx;
-  z-index: 10001;
-}
-
-.video-tip{
-  position: relative;
-  width: 100%;
-  height: 140rpx;
-}
-
-.video-tip-title{
-  font-size: 30rpx;
-  margin-top: 35rpx;
-  margin-left: 30rpx;
-  color: #333;
-}
-
-.video-tip-detail{
-  font-size: 26rpx;
-  margin-top: 20rpx;
-  margin-left: 30rpx;
-  color: #999;
-}
-
-.congratulation-tip{
-  color: #00a0e9;
-  font-size: 26rpx;
-  width: 300rpx;
-  margin-left: 225rpx;
-  /* height: 72rpx; */
-}
-
-.contest-button-container{
-  margin-top: 53rpx;
-  margin-left: 45rpx;
-  margin-right: 45rpx;
-  height: 80rpx;
   display: flex;
   flex-direction: row;
 }
 
-.click-button{
-  width: 300rpx;
-  height: 100%;
-  border-radius: 40rpx;
-  justify-content: center;
+.basic-item{
+  width: 25%;
   align-items: center;
   display: flex;
-  font-size: 30rpx;
+  flex-direction: column;
 }
 
-.start-button{
-  background-color: #00a0e9;
-  color: white;
-  /* flex: 1; */
+.basic-title{
+  font-size: 24rpx;
+  color: #888888;
 }
 
-.end-button {
-  background-color:#eee;
+.basic-data{
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: #4E4E4E;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.basic-people{
+  font-size: 38rpx;
+}
+.menu-item-button{
+  margin-top: 28rpx;
+  width: 182rpx;
+  height: 76rpx;
+  border-radius: 8rpx;
+  border: 1rpx solid #00a0e9;
+  margin-left: 22rpx;
   color: #00a0e9;
-  border: #00a0e9 solid 2rpx;
-  margin-left: 60rpx;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 28rpx;
 }
-.hover-main-button{
+
+.menu-item-syn{
+  margin-top: 29rpx;
+  width: 180rpx;
+  height: 74rpx;
+  border-radius: 8rpx;
+  margin-left: 22rpx;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 28rpx;
+  background-color: #00a0e9;
+}
+
+.menu-hover-item{
   background-color: #02557c;
-  color: #a6c4d2;
+  color: white;
+}
+.menu-item-image{
+  margin-left: 30rpx;
+  margin-top: 47rpx;
+  width: 42rpx;
+  height: 36rpx;
 }
 
-.mask-view{
+.menu-list{
   position: absolute;
   left: 0;
   top: 0;
-  background-color: black;
-  opacity: 0.8;
-  height: 100%;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  /* background-color: yellow; */
 }
 
-.mask-content-container{
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
-
-.mask-content-view{
+.menu-item-list2{
   position: relative;
+  margin-right: 90rpx;
+  margin-top: 90rpx;
+  width: 280rpx;
+  height: 403rpx;
+  background-color: #4c4c4c;
+  border-radius: 12rpx;
+  color: white;
+  font-size: 28rpx;
+}
+
+.menu-list-row{
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-white-line{
+  width: 100%;
+  height: 1rpx;
+  background-color: white;
+}
+
+.menu-bar-image{
+  margin-left: 668rpx;
+  margin-top: 24rpx;
+  width: 42rpx;
+  height: 36rpx;
+}
+
+.menu-item-list1{
+  position: relative;
+  margin-right: 85rpx;
+  margin-top: 60rpx;
+  width: 280rpx;
+  height: 302rpx;
+  background-color: #4c4c4c;
+  border-radius: 12rpx;
+  color: white;
+  font-size: 28rpx;
+}
+
+.menu-item-list3{
+  position: relative;
+  margin-right: 85rpx;
+  margin-top: 60rpx;
+  width: 280rpx;
+  height: 201rpx;
+  background-color: #4c4c4c;
+  border-radius: 12rpx;
+  color: white;
+  font-size: 28rpx;
+  opacity: 0.8;
+}
+
+.video-content{
+  margin-top: 109rpx;
+  margin-left: 65rpx;
+  width: 620rpx;
+  height: 400rpx;
+  border-radius: 12rpx;
+}
+.contest-action-view{
+  width: 100%;
+  margin-top: 123rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.action-view{
+  width: 400rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  display: flex;
+}
 
-.mask-container{
+
+.create-contest{
+  background-color: #00a0e9;
+  color: white;
+}
+
+.add-device{
+  margin-top: 74rpx;
+  border: 1rpx solid #00a0e9;
+  color: #00a0e9;
+}
+
+.contet-table-view{
+  overflow: hidden;
+}
+
+.syn-view{
   position: absolute;
-  display: block;
   left: 0;
   top: 0;
-  height: 100%;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: black;
+  opacity: 0.8;
 }
 
-.intro-tip{
-  position: absolute;
-  top: 40rpx;
-  right: 0;
-  width: 337rpx;
-  height: 253rpx;
-}
-
-.intro-text{
-  color: white;
-  font-size: 28rpx;
-  margin-top: 326rpx;
-}
-
-.intro-iknow{
-  position: relative;
-  margin-top: 244rpx;
-  width: 231rpx;
-  height: 103rpx;
+.device-tool-container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* display: block; */
+  height: 2000rpx;
+  background-color: yellow;
 }

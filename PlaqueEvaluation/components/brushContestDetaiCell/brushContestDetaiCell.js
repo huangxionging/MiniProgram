@@ -30,13 +30,13 @@ Component({
   methods: {
     brushReportClick: function() {
       let that = this
-
       if (that.data.data.recordId) {
         baseMessageHandler.postMessage("previewReport", res => {
           res({
-            url: baseNetLinkTool.getWebDomain() + '/report/index.html?',
+            url: baseNetLinkTool.getWebDomain() + 'web/plaqueEvaluating/report/index.html?',
             name: that.data.data.name,
-            recordId: that.data.data.recordId
+            recordId: that.data.data.recordId,
+            playerId: that.data.data.playerId
           })
         }).then(res => {
           wx.navigateTo({

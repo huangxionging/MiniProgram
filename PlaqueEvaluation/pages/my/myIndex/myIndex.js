@@ -56,7 +56,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
   },
 
   /**
@@ -111,24 +110,22 @@ Page({
           url: url,
         })
         return
-      }
-      loginManager.completeClinicInfo("查看" + tip).then(res => {
-        wx.navigateTo({
-          url: url,
-        })
-      })
-    } else if (section == 1) {
-      switch (row) {
-        case 0:{
-          wx.makePhoneCall({
-            phoneNumber: '4009003032',
-            success: function (res) { },
-            fail: function (res) { },
-            complete: function (res) { },
+      } else if (row != that.data.sectionDataArray[section].rowDataArray.length - 1) {
+        loginManager.completeClinicInfo("查看" + tip).then(res => {
+          wx.navigateTo({
+            url: url,
           })
-          break
-        }
+        })
+      } else if (row == that.data.sectionDataArray[section].rowDataArray.length - 1) {
+        wx.makePhoneCall({
+          phoneNumber: '400-1618-023',
+          success: function (res) { },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
       }
+      
+
     }
   },
 

@@ -53,9 +53,27 @@ Page({
     if (options.applyTime) {
       that.data.applyTime = options.applyTime.split(' ')[0]
     }
-    let clinicName = baseNetLinkTool.getClinicName()
+
+    if (options.memberId) {
+      that.data.memberId = options.memberId
+    } else {
+      that.data.memberId = baseNetLinkTool.getMemberId()
+    }
+
+    if (options.openid) {
+      that.data.openid = options.openid
+    } else {
+      that.data.openid = baseNetLinkTool.getOpenId()
+    }
+    
+
+    if (options.clinicName) {
+      that.data.clinicName = options.clinicName
+    } else {
+      that.data.clinicName = baseNetLinkTool.getClinicName()
+    }
     wx.setNavigationBarTitle({
-      title: clinicName,
+      title: that.data.clinicName,
     })
   },
 
@@ -108,14 +126,23 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    let that = this
+    let paramString = '?gameId=' + that.data.gameId + '&applyTime=' + that.data.applyTime + '&memberId=' + that.data.memberId + '&clinicName=' + that.data.clinicName + '&openid=' + that.data.openid
+    baseTool.print(paramString)
+    return {
+      title : baseNetLinkTool.getClinicName(),
+      path: 'pages/showScreen/showContest/showContest' + paramString,
+    }
   },
   loadData: function() {
     let that = this
     wx.showNavigationBarLoading()
     baseTool.clearSingleTimer()
+    let memberId = that.data.memberId
     baseNetLinkTool.getRemoteDataFromServer("forScreenInformation", "投屏数据", {
-      gameId: that.data.gameId
+      gameId: that.data.gameId,
+      memberId: memberId ? memberId : undefined,
+      openid: that.data.openid ? that.data.openid : undefined
     }).then(res => {
       baseTool.print(res)
       wx.hideNavigationBarLoading()
@@ -280,6 +307,9 @@ Page({
   openSocket: function() {
     let that = this
     let memberId = baseNetLinkTool.getMemberId()
+    if (!memberId) {
+      memberId = that.data.memberId
+    }
     let gameId = that.data.gameId
     let url = baseNetLinkTool.getSocketURLPrefix() + memberId + "/" + gameId + "_show/2"
     baseTool.print(url)
@@ -373,24 +403,22 @@ Page({
     let canvasId = 'my-scan' + that.data.status + '-qrcode'
     let qrcodeUrl = 'http://challenge.32teeth.cn/index.html?gameId=' + that.data.gameId + '&clinicId=' + clinicId + '&clinicName=' + clinicName + '&applyTime=' + applyTime
     qrcodeTool.api.draw(qrcodeUrl, canvasId, width, width, that)
-    baseTool.print(qrcodeUrl)
     let timer = setTimeout(function(){
-      
        wx.canvasToTempFilePath({
-        canvasId: 'my-scan-qrcode',
+        canvasId: canvasId,
         success: function(res) {
           that.data.qrcodeUrl = res.tempFilePath
-          baseTool.print(that.data.qrcodeUrl)
+        },
+        fail: function(res) {
+          baseTool.print(res)
         }
       }, that)
-      
       clearTimeout(timer)
 
     }, 1000)
   },
   previewClick: function() {
     let that = this
-    
     baseTool.previewSingleImage(that.data.qrcodeUrl)
   }
 })

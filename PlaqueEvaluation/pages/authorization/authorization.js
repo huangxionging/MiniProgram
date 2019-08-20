@@ -102,7 +102,7 @@ Page({
         baseTool.print(res)
         if (res.code) {
           loginManager.loginWithUserInfo(res.code, e).then(res => {
-            baseTool.print([res.clinicId, "结果"])
+            baseTool.print([res, "结果"])
             wx.hideLoading()
             var wxUser = res.wxUser
             if (res && wxUser && wxUser.openid) {

@@ -4,22 +4,25 @@
     "pages/authorization/authorization",
     "pages/my/myIndex/myIndex",
     "pages/contest/addContestDevice/addContestDevice",
-    "pages/contest/startContest/startContest",
     "pages/contest/selectContestDevice/selectContestDevice",
     "pages/my/brushContestList/brushContestList",
     "pages/my/deviceManage/deviceManage",
     "pages/my/deviceCheck/deviceCheck",
-    "pages/contest/contestResult/contestResult",
     "pages/showScreen/signUp/signUp",
     "pages/showScreen/showContest/showContest",
     "pages/my/myClinic/myClinic",
     "pages/my/brushContestDetail/brushContestDetail",
-    "pages/my/brushScoreReport/brushScoreReport"
+    "pages/my/brushScoreReport/brushScoreReport",
+    "pages/contest/contestVideoPlay/contestVideoPlay",
+    "pages/my/doctorManage/doctorManage",
+    "pages/patientManage/patientManage/patientManage",
+    "pages/contest/publicNumberQRCode/publicNumberQRCode",
+    "pages/contest/teethModelFlag/teethModelPage"
   ],
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "菌斑评测",
+    "navigationBarTitleText": "菌斑测评",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -29,9 +32,15 @@
     "list": [
       {
         "pagePath": "pages/home/homeIndex",
-        "text": "评测",
+        "text": "测评",
         "iconPath": "resource/contest_normal.png",
         "selectedIconPath": "resource/contest_select.png"
+      },
+      {
+        "pagePath": "pages/patientManage/patientManage/patientManage",
+        "text": "患者",
+        "iconPath": "resource/patient_normal.png",
+        "selectedIconPath": "resource/patient_selected.png"
       },
       {
         "pagePath": "pages/my/myIndex/myIndex",
@@ -41,5 +50,10 @@
       }
     ]
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  }
 }

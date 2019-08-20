@@ -16,8 +16,8 @@
       <image class='bind-image' src='{{avatar}}'  lazy-load='true'/>
     </view>
     <view class='tel-view'>
-      <text class='tel-tip'>手机号</text>
-      <input type='number' class='tel-input' placeholder='请输入手机号码' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>
+      <text class='tel-tip'>管理员的手机号</text>
+      <input type='number' class='tel-input' placeholder='请输入管理员的手机号码' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>
       <view class='tel-line'></view>
     </view>
     <view class='verify-view'>

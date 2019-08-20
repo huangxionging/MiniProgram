@@ -1,7 +1,7 @@
 <view wx:if='{{loadDone}}' class='lauch-container'>
   <view wx:if='{{isAuthorization==0}}' class='lauch-container'>
     <image src='/resource/lauch.png' class='authorization' lazy-load='true'/>
-    <text class='lauch-tip1'>菌斑评测</text>
+    <text class='lauch-tip1'>菌斑测评</text>
     <text class='lauch-tip2'>授权后即可进入</text>
     <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>
     <view class='lauch-space' />
@@ -10,8 +10,8 @@
     <view class='bind-tip-view'>
       <image class='bind-bg-image' src='http://qnimage.hydrodent.cn/bcc_phone_background.png'></image>
       <view class='bind-tip-text'>
-        <text>嗨，欢迎来到菌斑控制评测!</text>
-        <text>准备迎接新的挑战吧~</text>
+        <text>欢迎使用数字化菌斑指数测评</text>
+        <!-- <text>准备迎接新的挑战吧~</text> -->
       </view>
       <image class='bind-image' src='{{avatar}}'  lazy-load='true'/>
     </view>

@@ -81,7 +81,7 @@ Page({
     let url = encodeURIComponent(linkUrl)
     return {
       path: "pages/showScreen/signUp/signUp?linkUrl=" + encodeURIComponent(url),
-      title: "菌斑评测报告",
+      title: "菌斑测评报告",
     }
   },
   registerCallBack: function () {
@@ -89,7 +89,8 @@ Page({
     
     baseMessageHandler.getMessage("previewReport", res => {
       baseTool.print(res)
-      let linkUrl = res.url + "name=" + res.name + "&clicin=" + baseNetLinkTool.getClinicName() + '&recordId=' + res.recordId
+      let linkUrl = res.url + "name=" + encodeURIComponent(res.name) + "&clicin=" + encodeURIComponent(baseNetLinkTool.getClinicName()) + '&recordId=' + res.recordId + '&playerId=' + res.playerId
+
       baseTool.print(linkUrl)
       
       that.setData({
@@ -99,5 +100,8 @@ Page({
   },
   removeCallBack: function () {
     baseMessageHandler.removeMessage("previewReport")
+  },
+  getMessage: function(e) {
+    baseTool.print(e)
   }
 })

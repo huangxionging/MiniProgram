@@ -2,6 +2,7 @@
 const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const baseTool = require('../../../utils/baseTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const baseURL = require('../../../utils/baseURL.js')
 const qrcodeTool = require('../../../utils/qrcode.js')
 
 Page({
@@ -10,7 +11,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loadDone: false,
+    loadDone: true,
     status: 0,
     scale: 2,
     gameId: '',
@@ -64,8 +65,9 @@ Page({
    */
   onReady: function() {
     let that = this
-    that.loadData()
+    // that.loadData()
     // that.registerCallBack()
+    that.createQrcode()
     that.openSocket()
     that.socketClose()
     that.onSocketMessage()
@@ -146,8 +148,8 @@ Page({
           let leftIndex = (sectionIndex * 2) % playerList.length
           let rightIndex = (leftIndex + 1) % playerList.length
           baseTool.print([leftIndex, rightIndex, sectionIndex, length])
-          let leftName = that.getName(playerList[leftIndex].name) + '参加了评测'
-          let rightName = that.getName(playerList[rightIndex].name) + '参加了评测'
+          let leftName = that.getName(playerList[leftIndex].name) + '参加了测评'
+          let rightName = that.getName(playerList[rightIndex].name) + '参加了测评'
           if (rightIndex == leftIndex || rightIndex == 0) {
             rightName = ''
           }
@@ -171,7 +173,7 @@ Page({
         })
 
         let nameAray = res.playerList.map((value) => {
-          return value.name + '参加了评测'
+          return value.name + '参加了测评'
         })
 
         text = nameAray.join('\xa0\xa0\xa0\xa0\xa0\xa0\xa0')
@@ -253,8 +255,8 @@ Page({
       sectionDataArray.splice(0, 1)
       let leftIndex = (selectIndex * 2) % playerList.length
       let rightIndex = (leftIndex + 1) % playerList.length
-      let leftName = that.getName(playerList[leftIndex].name) + '参加了评测'
-      let rightName = that.getName(playerList[rightIndex].name) + '参加了评测'
+      let leftName = that.getName(playerList[leftIndex].name) + '参加了测评'
+      let rightName = that.getName(playerList[rightIndex].name) + '参加了测评'
       if (rightIndex == leftIndex) {
         rightName = ''
       }
@@ -371,7 +373,7 @@ Page({
     let scale = that.data.scale
     let width = scale * (that.data.status ? 185 : 325)
     let canvasId = 'my-scan' + that.data.status + '-qrcode'
-    let qrcodeUrl = 'http://challenge.32teeth.cn/index.html?gameId=' + that.data.gameId + '&clinicId=' + clinicId + '&clinicName=' + clinicName + '&applyTime=' + applyTime
+    let qrcodeUrl = baseURL.baseDomain + '/pe/webchat/apply/' + clinicId + '/selfOralRiskManagement/' + that.data.gameId
     qrcodeTool.api.draw(qrcodeUrl, canvasId, width, width, that)
     baseTool.print(qrcodeUrl)
     let timer = setTimeout(function(){

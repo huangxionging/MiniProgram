@@ -3,7 +3,7 @@
   <image class='show-bg-image' src='http://qnimage.hydrodent.cn/bcc_show_screen_background.png' />
   <view class='show-sign-container'>
     <view class='sign-up-container' wx:if='{{status==0}}'>
-      <view class='sign-up-tip' style='font-size:{{scale * 28}}px;height:{{scale * 60}}px;'>扫描二维码，体验黑科技智能牙刷。 猜猜宝贝刷牙能得多少分？快来和其他小朋友PK吧！</view>
+      <view class='sign-up-tip' style='font-size:{{scale * 28}}px;height:{{scale * 60}}px;'>扫描二维码，参加“菌斑测评”，实现医患共同控制菌斑</view>
       <image class='scan-image' style='width:{{scale * 274}}px;height:{{scale * 99}}px;' src='http://qnimage.hydrodent.cn/bcc_scan_sign_up.png' />
       <view class='scan-qrcode' style='width:{{scale * 325}}px;height:{{scale * 325}}px;'>
         <canvas style='width:100%;height:100%;' canvas-id='my-scan0-qrcode'></canvas>
@@ -30,7 +30,7 @@
     </view>
     <view class='sign-up-container' wx:if='{{status==2}}'>
       <view class='broadcast-tip-container' style='font-size:{{scale * 28}}px;height:{{scale * 60}}px;'>
-        <view class='contest-tip-view' style='margin-left:{{scale * 20}}px;width:{{scale * 225}}px'>报名评测名单: </view>
+        <view class='contest-tip-view' style='margin-left:{{scale * 20}}px;width:{{scale * 225}}px'>报名测评名单: </view>
         <view class="contest-name-view" style='left:{{scale * 225}}px;width:{{textWidth}}px;'>
           <view class='name-container' style='left:{{-marginDistance}}px'>
             <view>{{text}}</view>

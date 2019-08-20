@@ -3,12 +3,14 @@
 let baseDomain = 'https://dev-dos.32teeth.cn/'
 let baseBrushDomain = 'https://dev-os.32teeth.cn/'
 let socketDomain = 'wss://dev-dos.32teeth.cn/'
+let baseWebDomain = 'https://api.32.ink'
 let debug = false
 if (!debug) {
   // 正式环境
   baseDomain = 'https://dos.32teeth.cn/'
   baseBrushDomain = 'https://os.32teeth.cn/'
   socketDomain = 'wss://dos.32teeth.cn/'
+  // baseWebDomain = 'https://32teeth.cn'
 }
 module.exports = {
   /**
@@ -34,5 +36,7 @@ module.exports = {
   /**
    * 现在处于正式环境还是测试状态
    */
-  baseState: debug
+  baseState: debug,
+  baseWebDomain: baseWebDomain,
+
 }

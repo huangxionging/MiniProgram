@@ -11,6 +11,8 @@
 	"libVersion": "game",
 	"appid": "wx79ba25bdadbd2467",
 	"projectname": "LoveBaby",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

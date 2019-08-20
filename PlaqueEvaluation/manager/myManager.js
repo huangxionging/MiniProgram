@@ -292,7 +292,7 @@ function uploadHistoryBrushRecord() {
         success: function (res) {
           let gameObject = wx.getStorageSync("gameObject")
           let gameNewItem = gameObject.gameNewItem
-          // 如果是同一场评测
+          // 如果是同一场测评
           if (historyGameObject.gameId == gameNewItem.gameId) {
             wx.removeStorageSync("gameObject")
           }
@@ -312,7 +312,7 @@ function uploadHistoryBrushRecord() {
 }
 
 /**
- * 创建历史评测缓存对象
+ * 创建历史测评缓存对象
  */
 function createHistoryGameObject(gameId = '', gameName = '', deviceList = []) {
   return new Promise((resolve, reject) => {

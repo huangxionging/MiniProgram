@@ -21,11 +21,11 @@ module.exports = {
    */
   uploadImageURL: 'qn_upload',
   /**
-   * 结束评测
+   * 结束测评
    */
   finishedGame: 'finishedGame',
   /**
-   * 添加评测
+   * 添加测评
    */
   addGame: 'addGame',
   /**
@@ -73,19 +73,19 @@ module.exports = {
    */
   getClinicInfo: 'getClinicInfo',
   /**
-   * 上传评测刷牙数据
+   * 上传测评刷牙数据
    */
   gameUploadBrushTeethRecord: 'gameUploadBrushTeethRecord',
   /**
-   * 查询历史评测
+   * 查询历史测评
    */
   pageQueryGames: 'pageQueryGames',
   /**
-   * 删除评测
+   * 删除测评
    */
   delGames: 'delGames',
   /**
-   * 合并评测
+   * 合并测评
    */
   combinedData: 'combinedData',
   /**
@@ -95,5 +95,37 @@ module.exports = {
   /**
    * 更新参赛者姓名
    */
-  updatePlayerName: 'updatePlayerName'
+  updatePlayerName: 'updatePlayerName',
+  /**
+   * 发送报告
+   */
+  sendTemplateMsg: 'sendTemplateMsg',
+  /**
+   * 获得医列表
+   */
+  doctorList: 'doctorList',
+  /**
+   * 添加医生
+   */
+  addDoctor: 'addDoctor',
+  /**
+   * 删除医生
+   */
+  delDoctor: 'delDoctor',
+  /**
+   * 患者列表
+   */
+  playerList: 'playerList',
+  /**
+   * 获得牙齿标识
+   */
+  getTeethMarks: 'getTeethMarks',
+  /**
+   * 标记牙齿
+   */
+  markingTeeth: 'markingTeeth',
+  /**
+   * 获取绑定医生
+   */
+  getBindingDoctor: 'getBindingDoctor'
 }

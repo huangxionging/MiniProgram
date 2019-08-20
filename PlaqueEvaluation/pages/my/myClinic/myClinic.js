@@ -151,21 +151,12 @@ Page({
       wx.navigateBack({
         delta: 1,
       })
-      baseTool.showToast("保存评测单位信息成功~")
+      baseTool.showToast("保存测评单位信息成功~")
     }).catch(res => {
       baseTool.print(res)
       wx.hideLoading()
       wx.hideNavigationBarLoading()
-      wx.showModal({
-        title: '提示',
-        content: res,
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
-      })
+      baseNetLinkTool.showNetWorkingError(res)
     })
   },
   getClinicInfo: function() {
@@ -220,13 +211,7 @@ Page({
       }
     }).catch(res => {
       baseTool.print(res)
-      wx.showModal({
-        title: '提示',
-        content: res,
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#00a0e9',
-      })
+      baseNetLinkTool.showNetWorkingError(res)
     })
   },
   getIntro: function(e) {

@@ -94,7 +94,6 @@ function dataBoxCommand(array, itemObject) { //构造函数模式
     data.brushTeethTime = ''
   }
 
-
   //此两项数据通过接口获得
   data.macAddress = itemObject.macAddress;
   data.brushingMethodId = itemObject.brushingMethodId

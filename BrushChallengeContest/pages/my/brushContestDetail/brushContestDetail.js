@@ -128,7 +128,13 @@ Page({
         }
 
         rowDataArray.sort((a, b) => {
-          if (b.score != a.score) {
+          if (a.score == '--' && b != '--') {
+            return -1
+          } else if (a.score != '--' && b == '--') {
+            return 1
+          } else if (a == '--' && b == '--') {
+            return 0
+          } else if (b.score != a.score) {
             return b.score - a.score
           } else {
             return b.accuracy - a.accuracy

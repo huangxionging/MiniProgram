@@ -1,7 +1,10 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "contestItemCell": "/components/contestItemCell/contestItemCell",
+    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView"
+  },
   "navigationBarTitleText": "",
   "enablePullDownRefresh": true,
-  "navigationBarBackgroundColor": "#00a0e9",
-  "navigationBarTextStyle": "white"
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#eee"
 }

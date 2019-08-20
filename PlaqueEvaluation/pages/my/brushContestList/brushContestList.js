@@ -86,7 +86,7 @@ Page({
     let that = this
     let pageNo = that.data.pageNo
     wx.showNavigationBarLoading()
-    baseNetLinkTool.getRemoteDataFromServer("pageQueryGames", "查询历史评测", {
+    baseNetLinkTool.getRemoteDataFromServer("pageQueryGames", "查询历史测评", {
       clinicId: baseNetLinkTool.getClinicId(),
       pageNo: pageNo
     }).then(res => {
@@ -97,7 +97,7 @@ Page({
       if (dataList == undefined) {
 
         if (that.data.sectionDataArray.length == 0) {
-          baseTool.showToast("暂无评测记录～")
+          baseTool.showToast("暂无测评记录～")
         }
         return
       }
@@ -238,7 +238,7 @@ Page({
     let that = this
     let gameIds = that.getSelectGameIds()
     if (gameIds == undefined) {
-      baseTool.showToast("您未选中任何评测!")
+      baseTool.showToast("您未选中任何测评!")
       return
     }
     baseTool.showAlertInfoWithCallBack({
@@ -260,7 +260,7 @@ Page({
       title: '删除中...',
       mask: true
     })
-    baseNetLinkTool.getRemoteDataFromServer("delGames", "删除评测", {
+    baseNetLinkTool.getRemoteDataFromServer("delGames", "删除测评", {
       gameIds: gameIds
     }).then(res => {
       baseTool.print(res)
@@ -277,7 +277,7 @@ Page({
     let that = this
     let gameIds = that.getSelectGameIds()
     if (gameIds == undefined) {
-      baseTool.showToast("您未选中任何评测!")
+      baseTool.showToast("您未选中任何测评!")
       return
     }
     // 提交设备编号跟已保存数据

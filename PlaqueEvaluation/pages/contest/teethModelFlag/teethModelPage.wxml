@@ -1,0 +1,63 @@
+<!-- 页面的 WXML -->
+<view class='box' wx:if='{{loadDone}}'>
+  <view class='t_box'>
+    问题类型：{{askList[nowIndex].title}}
+    <view class='r_box'>
+      <view wx:if="{{nowIndex!=2}}" class='btn_01' bindtap='next'>跳过</view>
+      <view wx:if="{{nowIndex!=0}}" class='btn_01' bindtap='pre'>上一步</view>
+    </view>
+  </view>
+  <teethModel yamo-data="{{ nowData }}" yamo-title="{{askList[nowIndex].title}}" bind:tapYamo='yamoTap' />
+  <view class='title_01'>已选择：</view>
+  <view class='checked_box'>
+    <view class='t'>右上区</view>
+    <view class='m'>
+      <block wx:for="{{nowData.rightUp}}" wx:key="{{index}}">
+        <view wx:if="{{item[0]}}" class='item'>{{index+1}}牙外侧面</view>
+        <view wx:if="{{item[1]}}" class='item'>{{index+1}}牙内侧面</view>
+      </block>
+    </view>
+  </view>
+  <view class='checked_box'>
+    <view class='t'>右下区</view>
+    <view class='m'>
+      <block wx:for="{{nowData.rightDown}}" wx:key="{{index}}">
+        <view wx:if="{{item[0]}}" class='item'>{{index+1}}牙外侧面</view>
+        <view wx:if="{{item[1]}}" class='item'>{{index+1}}牙内侧面</view>
+      </block>
+    </view>
+  </view>
+  <view class='checked_box'>
+    <view class='t'>左上区</view>
+    <view class='m'>
+      <block wx:for="{{nowData.leftUp}}" wx:key="{{index}}">
+        <view wx:if="{{item[0]}}" class='item'>{{index+1}}牙外侧面</view>
+        <view wx:if="{{item[1]}}" class='item'>{{index+1}}牙内侧面</view>
+      </block>
+    </view>
+  </view>
+  <view class='checked_box'>
+    <view class='t'>左下区</view>
+    <view class='m'>
+      <block wx:for="{{nowData.leftDown}}" wx:key="{{index}}">
+        <view wx:if="{{item[0]}}" class='item'>{{index+1}}牙外侧面</view>
+        <view wx:if="{{item[1]}}" class='item'>{{index+1}}牙内侧面</view>
+      </block>
+    </view>
+  </view>
+  <view wx:if="{{nowIndex!=2}}" class='b_btn' bindtap='next'>下一步</view>
+  <view wx:else class='b_btn' bindtap='checkDocker'>提交</view>
+</view>
+<view wx:if="{{dockerMark}}" class='mark'>
+  <view class='m_box'>
+    <view class='t'>请选择医生</view>
+    <view class='m'>
+      <picker-view indicator-style="height: 100rpx;" style="width: 100%; height: 450rpx;" bindchange="dockerChange">
+        <picker-view-column>
+          <view wx:for="{{dockerData}}" style="line-height: 50px">{{item}}</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+    <view class='true_btn' bindtap='tData'>确定</view>
+  </view>
+</view>

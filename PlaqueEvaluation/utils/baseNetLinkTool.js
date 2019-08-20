@@ -74,8 +74,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
       let data = Object.assign({
         memberId: memberId,
         openid: openid,
-        clinicId: memberId,
-        appletCode: baseURL.appletCode,
+        clinicId: memberId
       }, parameter)
       baseTool.print(data)
       baseTool.getRemoteDataFromServer(urlApi, description, data).then(resolve, reject)
@@ -181,7 +180,7 @@ function getSocketURLPrefix() {
 
 
 function getWebDomain () {
-  return baseURL.baseWebDomain
+  return baseURL.baseDomain
 }
 
 module.exports = {

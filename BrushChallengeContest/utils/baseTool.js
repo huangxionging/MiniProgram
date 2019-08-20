@@ -18,7 +18,7 @@ let singleTimer = -1
  */
 function print(e) {
   // 测试环境下或者模拟器状态下, 才输入内容到控制台
-  console.log(e)
+  // console.log(e)
   if (baseState || isSimulator) {
     // 打印内容
     console.log(e)
@@ -61,10 +61,10 @@ function removeAllObjects() {
 function vibrate() {
   let that = this
   wx.vibrateLong({
-    success: function(res) {
+    success: function (res) {
       that.print(res)
     },
-    fail: function(res) {
+    fail: function (res) {
       that.print(res)
     }
   })
@@ -74,7 +74,7 @@ function vibrate() {
  * 默认的 Promise, 不会 resolve 也不会 reject
  */
 function defaultPromise() {
-  return new Promise((resolve, reject) => {})
+  return new Promise((resolve, reject) => { })
 }
 
 /**
@@ -118,7 +118,7 @@ function setValueForKeyAsync(value, key) {
       data: value,
       success: resolve,
       fail: reject,
-      complete: function(res) {},
+      complete: function (res) { },
     })
   })
 }
@@ -129,7 +129,7 @@ function valueForKeyAsync(key) {
       key: key,
       success: resolve,
       fail: reject,
-      complete: function(res) {},
+      complete: function (res) { },
     })
   })
 }
@@ -149,12 +149,12 @@ function getSystemInfoAsync() {
     wx.getSystemInfo({
       success: resolve,
       fail: reject,
-      complete: function(res) {},
+      complete: function (res) { },
     })
   })
 }
 
-function startTimer(callback = (total) => {}, inteval = 1000, total = 0) {
+function startTimer(callback = (total) => { }, inteval = 1000, total = 0) {
   let that = this
   let stop = callback(total)
   if (stop == true) {
@@ -163,7 +163,7 @@ function startTimer(callback = (total) => {}, inteval = 1000, total = 0) {
     // 自减1
     total--
     // 定时器
-    singleTimer = setTimeout(function() {
+    singleTimer = setTimeout(function () {
       clearTimeout(singleTimer)
       startTimer(callback, inteval, total)
     }, inteval)
@@ -281,7 +281,7 @@ function showInfoWithCallBack(info = '', func = Function) {
     showCancel: false,
     confirmText: '好的',
     confirmColor: '#00a0e9',
-    success: function(res) {
+    success: function (res) {
       if (res.confirm) {
         func({
           type: 1
@@ -300,7 +300,7 @@ function showAlertInfoWithCallBack(info = {}, func = Function) {
     cancelColor: info.cancelColor ? info.cancelColor : "#999",
     confirmText: info.confirmText ? info.confirmText : "确定",
     confirmColor: info.confirmColor ? info.confirmColor : "#00a0e9",
-    success: function(res) {
+    success: function (res) {
       if (res.confirm) {
         func({
           type: 1
@@ -350,7 +350,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', data = {}) {
         'content-type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      success: function(res) {
+      success: function (res) {
         print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data)
@@ -366,7 +366,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', data = {}) {
           })
         }
       },
-      fail: function(res) {
+      fail: function (res) {
         reject({
           type: 0,
           msg: "网络不给力"
@@ -388,7 +388,7 @@ function request(url = '', data = {}) {
     wx.request({
       url: url,
       data: data,
-      success: function(res) {
+      success: function (res) {
         print(res)
         if (res.data.code == 'success') {
           resolve(res.data.data)
@@ -398,7 +398,7 @@ function request(url = '', data = {}) {
           reject('网络有点点问题')
         }
       },
-      fail: function(res) {
+      fail: function (res) {
         reject('网络有点点问题')
       },
     })
@@ -449,10 +449,10 @@ function chooseImageFrom(sourceType = 'camera') {
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: [sourceType],
-      success: function(res) {
+      success: function (res) {
         resolve(res.tempFilePaths[0])
       },
-      fail: function(res) {
+      fail: function (res) {
         reject(res)
       }
     })
@@ -470,7 +470,7 @@ function showSheetInfo(items = '', color = '#000') {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: color,
-      success: function(res) {
+      success: function (res) {
         resolve(res.tapIndex)
       },
       fail: reject,
@@ -497,7 +497,7 @@ function uploadLocalFile(url = '', filePath = '', tips = '上传进度:') {
       url: url,
       filePath: filePath,
       name: 'json',
-      success: function(res) {
+      success: function (res) {
         wx.hideLoading()
         print(res)
         if (res.statusCode == 200) {
@@ -518,12 +518,12 @@ function uploadLocalFile(url = '', filePath = '', tips = '上传进度:') {
           })
         }
       },
-      fail: function(res) {
+      fail: function (res) {
         wx.hideLoading()
         reject(res)
       },
     })
-    uploadTask.onProgressUpdate(function(res) {
+    uploadTask.onProgressUpdate(function (res) {
       wx.showLoading({
         title: tips + res.progress + '%',
         mask: true
@@ -540,8 +540,8 @@ function previewSingleImage(url) {
   wx.previewImage({
     current: url,
     urls: [url],
-    success: function(res) {},
-    fail: function(res) {},
+    success: function (res) { },
+    fail: function (res) { },
   })
 }
 
@@ -576,6 +576,14 @@ function urlToHttp(url = '') {
   return httpUrl
 }
 
+function urlToHttps(url = '') {
+  let httpUrl = url
+  if (url.indexOf('://')) {
+    httpUrl = "https://" + url.split('://')[1]
+  }
+  return httpUrl
+}
+
 /**
  * 通过图片地址下载图片到相册
  * imageUrl 是图片的地址
@@ -588,22 +596,22 @@ function downloadImageTohotosAlbum(imageUrl = '') {
   // 获得图片信息
   wx.getImageInfo({
     src: imageUrl,
-    success: function(res) {
+    success: function (res) {
       wx.hideLoading()
       // 保存到相册
       wx.saveImageToPhotosAlbum({
         filePath: res.path,
-        success: function(res) {
+        success: function (res) {
           wx.hideLoading()
           showToast("已保存", "success")
         },
-        fail: function(res) {
+        fail: function (res) {
           wx.hideLoading()
           showToast("保存失败")
         }
       })
     },
-    fail: function(res) {
+    fail: function (res) {
       wx.hideLoading()
       showToast("保存失败")
     }
@@ -702,9 +710,9 @@ module.exports = {
   getSystemInfoAsync: getSystemInfoAsync,
   // 震动
   vibrate: vibrate,
-  getNet: function() {
+  getNet: function () {
     let that = this
-    wx.onNetworkStatusChange(function(res) {
+    wx.onNetworkStatusChange(function (res) {
       that.print(res)
       wx.showModal({
         title: '网络改变',
@@ -754,6 +762,7 @@ module.exports = {
   isExist: isExist,
   isValid: isValid,
   urlToHttp: urlToHttp,
+  urlToHttps: urlToHttps,
   toPixel: toPixel,
   toRpx: toRpx,
   showToast: showToast,

@@ -1,1 +1,5 @@
 /* pages/showScreen/signUp/signUp.wxss */
+.web-container{
+  width: 100%;
+  height: 100%;
+}

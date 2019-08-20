@@ -45,7 +45,7 @@
 					"id": 0,
 					"name": "指定页面",
 					"pathName": "pages/showScreen/showContest/showContest",
-					"query": "gameId=402880826a1f937e016a1fd93924000e",
+					"query": "gameId=8a9951366af7d3b1016b49a9e0a509ff&applyTime=2019-06-12&memberId=8a995136589863490158998c66fc0458&clinicName=福永人民医院",
 					"scene": null
 				},
 				{

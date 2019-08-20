@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "patientManageCell": "/components/patientManageCell/patientManageCell"
+  },
+  "navigationBarBackgroundColor": "#00a0e9",
+  "navigationBarTitleText": "患者管理",
+  "enablePullDownRefresh": true
+}

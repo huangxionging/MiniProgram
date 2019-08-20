@@ -5,7 +5,7 @@
     <view class='sign-up-container' wx:if='{{status==0}}'>
       <view class='sign-up-tip' style='font-size:{{scale * 28}}px;height:{{scale * 60}}px;'>扫描二维码，体验黑科技智能牙刷。 猜猜宝贝刷牙能得多少分？快来和其他小朋友PK吧！</view>
       <image class='scan-image' style='width:{{scale * 274}}px;height:{{scale * 99}}px;' src='http://qnimage.hydrodent.cn/bcc_scan_sign_up.png' />
-      <view class='scan-qrcode' style='width:{{scale * 325}}px;height:{{scale * 325}}px;'>
+      <view class='scan-qrcode' style='width:{{scale * 325}}px;height:{{scale * 325}}px;' bindtap='previewClick'>
         <canvas style='width:100%;height:100%;' canvas-id='my-scan0-qrcode'></canvas>
       </view>
     </view>

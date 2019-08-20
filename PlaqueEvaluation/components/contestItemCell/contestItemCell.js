@@ -9,7 +9,7 @@ Component({
     data: {
       type: Object,
       value: {}
-    },
+    }
   },
 
   /**
@@ -25,7 +25,7 @@ Component({
   methods: {
     touchStart: function(e) {
       let that = this
-      // baseTool.print(e)
+      baseTool.print(e)
       let startX = baseTool.toRpx(e.touches[0].clientX)
       if (e.touches.length == 1 && (that.data.data.style != "margin-left:-187.5rpx" || (that.data.data.style === "margin-left:-187.5rpx" && startX < 562.5))) {
         that.setData({
@@ -51,7 +51,7 @@ Component({
         } else if (disX > 0) {
           style = "margin-left:-" + disX + "rpx"
           if (disX >= delButtonWidth) {
-            style = "margin-left:-" + delButtonWidth + "rpx"
+            style = "margin-left:-" + (delButtonWidth + 23) + "rpx"
           }
         }
         let data = that.data.data
@@ -63,7 +63,7 @@ Component({
       }
     },
     touchEnd: function(e) {
-      // baseTool.print(e)
+      baseTool.print(e)
       let that = this
       let endX = baseTool.toRpx(e.changedTouches[0].clientX)
       if (e.changedTouches.length == 1 && (that.data.data.style != "margin-left:-187.5rpx" || (that.data.data.style === "margin-left:-187.5rpx" && endX < 562.5))) {
@@ -85,14 +85,14 @@ Component({
         section: that.dataset.section,
         row: that.dataset.row
       }
-      that.triggerEvent('delClick', {
+      that.triggerEvent('deleteRowClick', {
         indexPath: indexPath,
         playerId: that.data.data.playerId
       })
     },
     selectDevceClick: function(e) {
       let that = this
-      if (that.dataset.syn){
+      if (that.dataset.syn) {
         baseTool.showToast("设备正在同步中!")
         return
       }
@@ -105,20 +105,9 @@ Component({
         })
       }).catch(res => {
         baseTool.print(res)
-      }) 
-    },
-    modifyNameClick: function () {
-      let that = this
-      let indexPath = {
-        section: that.dataset.section,
-        row: that.dataset.row
-      }
-      that.triggerEvent('modifyNameClick', {
-        indexPath: indexPath,
-        playerId: that.data.data.playerId
       })
     },
-    previewReportClick: function (e) {
+    previewReportClick: function(e) {
       let that = this
       baseTool.print(that.data.data.plaqueLevel)
 
@@ -132,6 +121,35 @@ Component({
       that.triggerEvent('previewReportClick', {
         indexPath: indexPath,
         playerId: that.data.data.playerId
+      })
+    },
+    sendDeviceReportClick: function(e) {
+      let that = this
+      let indexPath = {
+        section: that.dataset.section,
+        row: that.dataset.row
+      }
+      that.triggerEvent('sendDeviceReportClick', {
+        indexPath: indexPath,
+        dataObject: that.data.data
+      })
+    },
+    synDeviceClick: function() {
+      let that = this
+      let indexPath = {
+        section: that.dataset.section,
+        row: that.dataset.row
+      }
+      that.triggerEvent('synSingleDeviceClick', {
+        indexPath: indexPath,
+        dataObject: that.data.data
+      })
+    },
+    teethModelFlagClick: function() {
+      let that = this
+      let url = '/pages/contest/teethModelFlag/teethModelPage?playerId=' + that.data.data.playerId
+      wx.navigateTo({
+        url: url
       })
     }
   }

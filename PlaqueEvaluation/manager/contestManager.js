@@ -15,7 +15,7 @@ function getHomePage() {
         memberId: loginManager.getMemberId(),
         openid: openid
       }
-      baseTool.getRemoteDataFromServer("homePage", "评测信息", data).then(resolve, reject)
+      baseTool.getRemoteDataFromServer("homePage", "测评信息", data).then(resolve, reject)
     } else {
       loginManager.startAuthorization()
     }
@@ -34,7 +34,7 @@ function finishedGame(gameId = '') {
         openid: openid,
         gameId: gameId,
       }
-      baseTool.getRemoteDataFromServer("finishedGame", "结束评测", data).then(resolve, reject)
+      baseTool.getRemoteDataFromServer("finishedGame", "结束测评", data).then(resolve, reject)
     } else {
       loginManager.startAuthorization()
     }

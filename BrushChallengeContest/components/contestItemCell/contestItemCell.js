@@ -92,7 +92,7 @@ Component({
     },
     selectDevceClick: function(e) {
       let that = this
-      if (that.dataset.syn){
+      if (that.dataset.syn) {
         baseTool.showToast("设备正在同步中!")
         return
       }
@@ -106,7 +106,22 @@ Component({
       }).catch(res => {
         baseTool.print(res)
       })
-      
+    },
+    previewReportClick: function(e) {
+      let that = this
+      baseTool.print(that.data.data.plaqueLevel)
+
+      if (that.data.data.plaqueLevel == '--') {
+        return;
+      }
+      let indexPath = {
+        section: that.dataset.section,
+        row: that.dataset.row
+      }
+      that.triggerEvent('previewReportClick', {
+        indexPath: indexPath,
+        playerId: that.data.data.playerId
+      })
     }
   }
 })

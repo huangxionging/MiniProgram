@@ -265,7 +265,14 @@ Page({
           }
         }
         rowDataArray.sort((a, b) => {
-          if (b.score != a.score) {
+
+          if (a.score == '--' && b != '--') {
+            return -1
+          } else if (a.score != '--' && b == '--') {
+            return 1
+          } else if (a == '--' && b == '--') {
+            return 0 
+          } else if (b.score != a.score) {
             return b.score - a.score
           } else {
             return b.accuracy - a.accuracy
@@ -729,5 +736,24 @@ Page({
         complete: function (res) { },
       })
     }, 30000, 999999999)
+  },
+  previewReportClick: function (e) {
+    baseTool.print(e)
+    let that = this
+    let indexPath = e.detail.indexPath
+    let currentItem = that.data.papSectionDataArray[indexPath.section].rowDataArray[indexPath.row]
+    baseMessageHandler.postMessage("previewReport", res => {
+      res({
+        url: baseNetLinkTool.getWebDomain() + '/report/index.html?',
+        name: currentItem.name,
+        recordId: currentItem.recordId
+      })
+    }).then(res => {
+      wx.navigateTo({
+        url: '/pages/showScreen/signUp/signUp?',
+      })
+    }).catch(res => {
+      baseTool.print(res)
+    })
   }
 })

@@ -121,7 +121,7 @@ Page({
       switch (row) {
         case 0:{
           wx.makePhoneCall({
-            phoneNumber: '4009003032',
+            phoneNumber: '4001618023',
             success: function (res) { },
             fail: function (res) { },
             complete: function (res) { },

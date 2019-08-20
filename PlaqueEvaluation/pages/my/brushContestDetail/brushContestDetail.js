@@ -54,7 +54,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    
   },
 
   /**
@@ -120,41 +120,29 @@ Page({
         for (let index = 0; index < papPlayerList.length; ++index) {
           let itemObject = papPlayerList[index]
           rowDataArray.push({
-            plaqueLevel: itemObject.plaqueLevel ? itemObject.plaqueLevel : '--',
+            plaqueLevel: itemObject.plaqueLevel != undefined ? itemObject.plaqueLevel : '--',
             name: itemObject.name ? itemObject.name : '--',
             recordId: itemObject.recordId ? itemObject.recordId : "",
             // accuracy: itemObject.accuracy ? itemObject.accuracy : '--'
+            telephone: itemObject.telephone ? itemObject.telephone : '',
+            overallScore: itemObject.overallScore != undefined ? itemObject.overallScore : '--',
+            gumCleaningValue: itemObject.gumCleaningValue != undefined ? itemObject.gumCleaningValue : '--'
           })
         }
 
         rowDataArray.sort((a, b) => {
-          if (b.score != a.score) {
-            return b.score - a.score
+          if (a.overallScore == '--' && b.overallScore != '--') {
+            return 1
+          } else if (a.overallScore != '--' && b.overallScore == '--') {
+            return -1
+          } else if (a.overallScore == '--' && b.overallScore == '--') {
+            return 0
           } else {
-            return b.accuracy - a.accuracy
+            return b.overallScore - a.overallScore
           }
         })
       }
-      let arcPlayerList = res.arcPlayerList
-      let arcSectionDataArray = that.data.arcSectionDataArray
-      baseTool.print(arcPlayerList)
-      if (arcPlayerList) {
-        let rowDataArray = arcSectionDataArray[0].rowDataArray
-        rowDataArray.length = 0;
-        for (let index = 0; index < arcPlayerList.length; ++index) {
-          let itemObject = papPlayerList[index]
-          baseTool.print(scoreFloat)
-          rowDataArray.push({
-            score: itemObject.score ? itemObject.score : '--',
-            name: itemObject.name ? itemObject.name : '--',
-            recordId: itemObject.recordId ? itemObject.recordId : "",
-            accuracy: itemObject.accuracy ? itemObject.accuracy : '--'
-          })
-        }
-        rowDataArray.sort((a, b) => {
-          return b.score - a.score
-        })
-      }
+      
       baseTool.print(that.data)
 
       let playerCount = res.playerCount ? res.playerCount : 0
@@ -162,8 +150,7 @@ Page({
         loadDone: true,
         hasData: true,
         playerCount: playerCount,
-        papSectionDataArray: papSectionDataArray,
-        arcSectionDataArray: arcSectionDataArray
+        papSectionDataArray: papSectionDataArray
       })
     }).catch(res => {
       wx.hideNavigationBarLoading()

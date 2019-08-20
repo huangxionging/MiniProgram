@@ -22,7 +22,7 @@ Page({
     }],
     isStopDiscovery: false,
     currentDevice: {},
-    videoUrl: "http://qnimage.hydrodent.cn/match_bind_device.mp4"
+    videoUrl: "http://qnimage.hydrodent.cn/tianjiashebeiyanshi.mp4"
   },
 
   /**
@@ -307,7 +307,7 @@ Page({
         // 查找设备命令
         // 获得版本号
         let version = baseTool.hexAsciiToString(hex.substr(10, 16))
-        // 判断是不是评测尾巴
+        // 判断是不是测评尾巴
         baseTool.print([version, '版本号', hex.substr(10, 16)]);
       
         if (version >= 'V122.2.7') {

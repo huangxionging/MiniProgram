@@ -22,7 +22,7 @@ Page({
     }],
     isStopDiscovery: false,
     currentDevice: {},
-    videoUrl: "http://qnimage.hydrodent.cn/match_bind_device.mp4"
+    videoUrl: "http://qnimage.32teeth.cn/match3_bind.mp4"
   },
 
   /**

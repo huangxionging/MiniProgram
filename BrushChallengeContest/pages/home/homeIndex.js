@@ -15,7 +15,7 @@ Page({
     gameName: '',
     gameId: '',
     showIntroPage: false,
-    videoURL: 'http://qnimage.hydrodent.cn/match1.mp4'
+    videoURL: 'http://qnimage.hydrodent.cn/match3.mp4'
   },
 
   /**

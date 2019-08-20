@@ -1,11 +1,12 @@
-// pages/authorization/authorization/authorization.js
+// pages/contest/publicNumberQRCode/publicNumberQRCode.js
+const baseTool = require('../../../utils/baseTool.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    qrcodeURL: 'https://32teeth.oss-cn-beijing.aliyuncs.com/qrcode_for_gh_4569ce0a8cbd_1280%402x.png'
   },
 
   /**
@@ -61,6 +62,25 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    let that = this
+    let qrcodeURL = that.data.qrcodeURL
+    return {
+      path: "pages/contest/publicNumberQRCode/publicNumberQRCode",
+      title: "查看公众号二维码",
+      imageUrl: qrcodeURL
+    }
+  },
+  previewClick: function() {
+    let that = this
+    let qrcodeURL = that.data.qrcodeURL
+    wx.previewImage({
+      current: qrcodeURL,
+      urls: [qrcodeURL]
+    })
+  },
+  saveImageClick: function() {
+    let that = this
+    let qrcodeURL = that.data.qrcodeURL
+    baseTool.downloadImageTohotosAlbum(qrcodeURL)
   }
 })

@@ -12,7 +12,7 @@ function getOpenId() {
  * 获取 memberID
  */
 function getMemberId() {
-  return baseTool.valueForKey('memberId')
+  return baseTool.valueForKey('clinicId')
 }
 
 /**
@@ -67,12 +67,14 @@ function startAuthorization() {
 function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) {
   return new Promise((resolve, reject) => {
     let openid = getOpenId()
-    let memberId = getMemberId()
+    // memberId = clinicId
+    let memberId = getClinicId()
     if (openid && memberId) {
       // 统一处理, 拼接额外数据
       let data = Object.assign({
         memberId: memberId,
         openid: openid,
+        clinicId: memberId
       }, parameter)
       baseTool.print(data)
       baseTool.getRemoteDataFromServer(urlApi, description, data).then(resolve, reject)
@@ -83,7 +85,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
 }
 
 function showNetWorkingError(res) {
-  let type = res
+  let type = res.type
   baseTool.print(res)
   if (type && type == 1) {
     baseTool.showToast(res.msg)
@@ -175,6 +177,12 @@ function postRemoteBrushTeethRecord(parameter = {}) {
 function getSocketURLPrefix() {
   return baseURL.socketDomain + baseURL.socketPath
 }
+
+
+function getWebDomain () {
+  return baseURL.baseWebDomain
+}
+
 module.exports = {
   getOpenId: getOpenId,
   getMemberId: getMemberId,
@@ -188,5 +196,6 @@ module.exports = {
   showNetWorkingError: showNetWorkingError,
   uploadImageToRemoteServer: uploadImageToRemoteServer,
   postRemoteBrushTeethRecord: postRemoteBrushTeethRecord,
-  getSocketURLPrefix: getSocketURLPrefix
+  getSocketURLPrefix: getSocketURLPrefix,
+  getWebDomain: getWebDomain
 }

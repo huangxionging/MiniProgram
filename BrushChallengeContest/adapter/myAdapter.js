@@ -43,7 +43,7 @@ function myIndexSectionDataArray() {
           section: 1,
           icon: 'my_customer_service.png',
           title: '联系客服',
-          detail: '400-900-3032',
+          detail: '400-1618-023',
           styleCalss: 'my-detail',
           url: '../brushContest/brushContest',
         }

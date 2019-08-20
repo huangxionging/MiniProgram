@@ -1,0 +1,18 @@
+<!--pages/my/doctorManage/doctorManage.wxml-->
+<view class='navigation-bar-line' />
+<view class="doctor-container">
+  <view class='add-member-view'>
+    <input class='add-member-input' value='{{addDoctorName}}' placeholder='请输入医护人员姓名' placeholder-class="placeholder-doctor" bindinput='getInputContent'></input>
+    <view class='add-member-button' hover-class='hover-member-button' bindtap='addMemberClick'>添加</view>
+  </view>
+  <view style="width:100%;height:10rpx;background-color:#eee"/>
+  <view class='doctor-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+          <dotorManageCell data='{{rowItem}}' data-row='{{rowIndex}}' data-section='{{sectionIndex}}' bind:didDeleteRow='didDeleteRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>

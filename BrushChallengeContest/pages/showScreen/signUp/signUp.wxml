@@ -1,2 +1,2 @@
 <!--pages/showScreen/signUp/signUp.wxml-->
-<text>pages/showScreen/signUp/signUp.wxml</text>
+<web-view class='web-container' src='{{linkUrl}}'></web-view>
