@@ -1,4 +1,5 @@
 <!-- 页面的 WXML -->
+<view class='navigation-bar-line' />
 <view class='box' wx:if='{{loadDone}}'>
   <view class='t_box'>
     问题类型：{{askList[nowIndex].title}}
@@ -50,14 +51,15 @@
 </view>
 <view wx:if="{{dockerMark}}" class='mark'>
   <view class='m_box'>
-    <view class='t'>请选择医生</view>
+    <view class='t'>请选医护人员</view>
     <view class='m'>
-      <picker-view indicator-style="height: 100rpx;" style="width: 100%; height: 450rpx;" bindchange="dockerChange">
+      <picker-view value="{{doctorValues}}" indicator-style="height: 100rpx;" style="width: 100%; height: 450rpx;" bindchange="dockerChange" bindpickstart="doctorSelectStart" bindpickend="doctorSelectEnd">
         <picker-view-column>
-          <view wx:for="{{dockerData}}" style="line-height: 50px">{{item}}</view>
+          <view class="piker-item" wx:for-items="{{dockerData}}" data-index="1" wx:key='{{item.doctorId}}' wx:for-item="item" style="line-height:50px;">{{item.name}}</view>
         </picker-view-column>
       </picker-view>
     </view>
-    <view class='true_btn' bindtap='tData'>确定</view>
+    <view wx:if='{{doctorIsSelectEnd}}' class='true_btn' bindtap='tData'>确定</view>
+    <view wx:if='{{!doctorIsSelectEnd}}' class='true_btn'>确定</view>
   </view>
 </view>

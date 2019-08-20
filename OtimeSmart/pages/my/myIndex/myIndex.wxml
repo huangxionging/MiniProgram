@@ -1,0 +1,20 @@
+<!--pages/my/myIndex/myIndex.wxml-->
+<view class='navigation-bar-line' />
+<view class='my-container' wx:if='{{loadDone}}'>
+  <view class='my-info-view'>
+    <image class='my-bg-image' src='http://qnimage.hydrodent.cn/bcc_my_index_background.png' lazy-load='true'/>
+    <view class='person-info-container'>
+      <image class="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover" bindtap='upload' lazy-load='true'/>
+      <text class="my-userinfo-nickname">{{userInfo.nickName}}</text>
+    </view>
+  </view>
+  <view class='my-table-view'>
+    <block wx:for='{{sectionDataArray}}' wx:key='id' wx:item='item'>
+      <view class='section-view' style='margin-top:{{item.headerHeight}}rpx;'>
+        <block wx:for='{{item.rowDataArray}}' wx:key='row' wx:item='item'>
+          <myIndexItemCell data='{{item}}' data-row='{{index}}' data-section='{{item.section}}' bind:didSelectRow='didSelectRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>

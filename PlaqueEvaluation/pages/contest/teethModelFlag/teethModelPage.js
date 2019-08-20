@@ -6,7 +6,8 @@ const app = getApp()
 Page({
   temporaryData: {
     playerId: '',
-    teethAreaArray: ['leftUp', 'rightUp', 'leftDown', 'rightDown'] // 区域
+    teethAreaArray: ['leftUp', 'rightUp', 'leftDown', 'rightDown'], // 区域,
+    doctorId: ''
   },
   data: {
     loadDone: false,
@@ -48,7 +49,9 @@ Page({
     },
     dockerMark: false,
     dockerData: ["张三",'李四','王二'],
-    dockerIndex: 0
+    dockerIndex: 0,
+    doctorValues: [0],
+    doctorIsSelectEnd: true
   },
   yamoTap(e){
     let that = this
@@ -115,15 +118,43 @@ Page({
     this.setData({dockerMark:true})
   },
   dockerChange(e){
-    this.data.dockerIndex = e.detail.value[0]
+    let that = this
+    that.data.dockerIndex = e.detail.value[0]
+    baseTool.print([e, that.data.dockerIndex])
   },
-  tData(){
+  tData(e){
+    let that = this
     console.log('选择的医生', this.data.dockerData[this.data.dockerIndex])
     console.log('标注的数据', this.data.askList)
+    let dockerData = that.data.dockerData
+    let doctorId = dockerData[that.data.dockerIndex].doctorId;
+    baseNetLinkTool.getRemoteDataFromServer("bindingDoctor", "绑定医生", {
+      playerId: that.temporaryData.playerId,
+      doctorId: doctorId
+    }).then(res => {
+      baseTool.print(res)
+      let doctorValues = that.data.doctorValues
+      doctorValues[0] = that.data.dockerIndex
+      that.setData({
+        dockerMark: false,
+        doctorValues: doctorValues
+      })
+      baseTool.showToast("标记成功")
+      let timer = setTimeout((res) => {
+        clearTimeout(timer)
+        wx.navigateBack()
+      }, 2000)
+    }).catch(res => {
+      baseNetLinkTool.showNetWorkingError(res)
+      that.setData({
+        dockerMark: false
+      })
+    })
   },
   onReady: function() {
     let that = this
     that.getTeethMarks()
+    that.getBindDoctor()
   },
   onLoad: function(options) {
     let that = this
@@ -164,12 +195,48 @@ Page({
     })
   },
   getBindDoctor: function() {
-    baseNetLinkTool.getRemoteDataFromServer("", "", {
-
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("getBindingDoctor", "获取医生", {
+      playerId: that.temporaryData.playerId,
+      clinicId: baseNetLinkTool.getClinicId()
     }).then(res => {
-
+      baseTool.print(res)
+      let doctorList = res.doctorList
+      let doctorId = res.doctorId
+      let dockerData = that.data.dockerData
+      let doctorValues = that.data.doctorValues
+      if (doctorList != undefined) {
+        dockerData = doctorList
+        if (doctorId != undefined) {
+          for (let index = 0; index < doctorList.length; ++index){
+            let object = doctorList[index]
+            if (object.doctorId == doctorId) {
+              doctorValues[0] = index
+              break
+            }
+          }
+        }
+        
+      }
+      that.setData({
+        dockerData: dockerData,
+        doctorValues: doctorValues
+      })
     }).catch(res => {
-
+      baseNetLinkTool.showNetWorkingError(res)
     })
+  },
+  doctorSelectStart: function() {
+    let that = this
+    that.setData({
+      doctorIsSelectEnd: false
+    })
+  },
+  doctorSelectEnd: function(e) {
+    let that = this
+    that.setData({
+      doctorIsSelectEnd: true
+    })
+    baseTool.print(e)
   }
 })

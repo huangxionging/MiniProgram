@@ -1,5 +1,6 @@
 .box {
   padding-bottom: 100rpx;
+  margin-top: 20rpx;
 }
 
 .box .t_box {
@@ -104,4 +105,11 @@
   width: 80%;
   margin: 30rpx auto;
   border-radius: 8rpx;
+}
+
+
+.piker-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

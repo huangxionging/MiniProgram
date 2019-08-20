@@ -126,7 +126,8 @@ Page({
             // accuracy: itemObject.accuracy ? itemObject.accuracy : '--'
             telephone: itemObject.telephone ? itemObject.telephone : '',
             overallScore: itemObject.overallScore != undefined ? itemObject.overallScore : '--',
-            gumCleaningValue: itemObject.gumCleaningValue != undefined ? itemObject.gumCleaningValue : '--'
+            gumCleaningValue: itemObject.gumCleaningValue != undefined ? itemObject.gumCleaningValue : '--',
+            playerId: itemObject.playerId ? itemObject.playerId : ''
           })
         }
 

@@ -3,5 +3,5 @@
   "usingComponents": {
     "listContestItemCell": "/components/listContestItemCell/listContestItemCell"
   },
-  "navigationBarTitleText": "历史测"
+  "navigationBarTitleText": "历史测评"
 }

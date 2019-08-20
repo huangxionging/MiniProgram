@@ -1,0 +1,4 @@
+<!--pages/home/homeIndex.wxml-->
+<!-- <view class='navigation-bar-line' /> -->
+<view class='contest-container' wx:if='{{loadDone}}'>
+</view>
