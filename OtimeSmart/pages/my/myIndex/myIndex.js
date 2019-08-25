@@ -1,18 +1,16 @@
 // pages/my/myIndex/myIndex.js
 const app = getApp()
-const loginManager = require('../../../manager/loginManager.js')
-const myAdapter = require('../../../adapter/myAdapter.js')
-const baseWechat = require('../../../utils/baseWeChat.js')
-const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
-const myManager = require('../../../manager/myManager.js')
+const myAdapter = require('../../../adapter/myAdapter.js')
+// const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
+const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
+    userInfo: baseNetLinkTool.getUserInfo(),
     loadDone: true,
   },
 
@@ -20,53 +18,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let that = this
-    if (app.globalData.userInfo) {
-      that.setData({
-        userInfo: app.globalData.userInfo
-      })
-    } else {
-      baseWechat.getUserInfo().then(res => {
-        app.globalData.userInfo = res.userInfo
-        that.setData({
-          userInfo: app.globalData.userInfo
-        })
-      })
-    }
 
-    that.loadData()
-    app.userInfoReadyCallback = res => {
-      that.loadData()
-      if (app.globalData.userInfo) {
-        that.setData({
-          userInfo: app.globalData.userInfo
-        })
-      } else {
-        baseWechat.getUserInfo().then(res => {
-          app.globalData.userInfo = res.userInfo
-          that.setData({
-            userInfo: app.globalData.userInfo
-          })
-        })
-      }
-    }
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+    let that = this
+    baseTool.print(that.data)
+    that.loadData()
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // wx.startPullDownRefresh({
-    //   success: function (res) { },
-    //   fail: function (res) { },
-    //   complete: function (res) { },
-    // })
+    
   },
 
   /**
@@ -87,8 +55,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    let that = this
-    this.loadData()
+    
   },
 
   /**
@@ -97,37 +64,6 @@ Page({
   onReachBottom: function () {
   
   },
-  didSelectRow: function(e) {
-
-    let that = this
-    let row = e.detail.row
-    let section = e.detail.section
-    let url = that.data.sectionDataArray[section].rowDataArray[row].url
-    let tip = that.data.sectionDataArray[section].rowDataArray[row].title
-    if (section == 0) {
-      if (row == 3) {
-        wx.navigateTo({
-          url: url,
-        })
-        return
-      } else if (row != that.data.sectionDataArray[section].rowDataArray.length - 1) {
-        loginManager.completeClinicInfo("查看" + tip).then(res => {
-          wx.navigateTo({
-            url: url,
-          })
-        })
-      } else if (row == that.data.sectionDataArray[section].rowDataArray.length - 1) {
-        wx.makePhoneCall({
-          phoneNumber: '400-1618-023',
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
-        })
-      }
-      
-
-    }
-  },
 
   /**
    * 用户点击右上角分享
@@ -135,10 +71,59 @@ Page({
   onShareAppMessage: function () {
   
   },
+  editUserInfoClick: function() {
+    wx.navigateTo({
+      url: '/pages/my/editMyInfo/editMyInfo'
+    })
+  },
   loadData: function () {
     let that = this
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    let sectionDataArray = myAdapter.myIndexSectionDataArray()
     that.setData({
-      sectionDataArray: myAdapter.myIndexSectionDataArray()
+      sectionDataArray: sectionDataArray
     })
+  },
+  didSelectRow: function (e) {
+    let that = this
+    let row = e.detail.row
+    let section = e.detail.section
+    let url = that.data.sectionDataArray[section].rowDataArray[row].url
+    let tip = that.data.sectionDataArray[section].rowDataArray[row].title
+    switch (section) {
+      case 0:
+      case 1: {
+        wx.navigateTo({
+          url: url
+        })
+        break
+      }
+      case 2: {
+        switch (row) {
+          case 0: {
+            break
+          }
+          case 1: {
+            break
+          }
+          case 2: {
+            break
+          }
+        } 
+      }
+      case 3: {
+        switch (row) {
+          case 0: {
+            break
+          }
+          case 1: {
+            break
+          }
+          case 2: {
+            break
+          }
+        } 
+      }
+    }
   },
 })

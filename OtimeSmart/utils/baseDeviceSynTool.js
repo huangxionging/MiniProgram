@@ -105,6 +105,11 @@ let deviceSynMessageType = {
     name: "DeviceSynTypeWriteSuccess",
     text: "写成功"
   },
+  DeviceSynTypeFoundDeviceSuccess: {
+    code: 1011,
+    name: "DeviceSynTypeFoundDeviceSuccess",
+    text: "发现设备"
+  },
   DeviceSynTypeSynFail: {
     code: 2000,
     name: "DeviceSynTypeSynFail",
@@ -170,7 +175,7 @@ let deviceSynMessageType = {
     name: "DeviceSynTypeMacAddressError",
     text: "mac 地址错误"
   },
-  BleTypeReceiveSuccess: 3,
+  
 }
 
 
@@ -210,7 +215,7 @@ function reLaunchBluetoothFlow() {
           clearTimeout(timer)
           wx.openBluetoothAdapter({
             success: function(res) {
-              baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeOpenAdapterSuccess)
+              // baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeOpenAdapterSuccess)
               resolve(res)
             },
             fail: function(res) {
@@ -246,12 +251,12 @@ function synDeviceWithDeviceObject(deviceObject = {}) {
       wx.startBluetoothDevicesDiscovery({
         services: [],
         allowDuplicatesKey: false,
-        success: function(res) {
+        success: function (res) {
           baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoverySuccess)
           foundDevice()
           deviceCharacteristicValueChange()
         },
-        fail: function(res) {
+        fail: function (res) {
           clearDeviceObject()
           baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoveryFail)
         },
@@ -262,6 +267,38 @@ function synDeviceWithDeviceObject(deviceObject = {}) {
     })
   }
 }
+
+/**
+ * 开始发现设备
+ */
+function openBluetoothFlow() {
+  let serviceUUIDs = ["00001812-0000-1000-8000-00805F9B34FB", "0000180F-0000-1000-8000-00805F9B34FB", "0000180A-0000-1000-8000-00805F9B34FB", "00000001-0000-1000-8000-00805F9B34FB", "00001530-0000-1000-8000-00805F9B34FB"]
+  wx.startBluetoothDevicesDiscovery({
+    services: serviceUUIDs,
+    allowDuplicatesKey: false,
+    success: function (res) {
+      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoverySuccess)
+      wx.onBluetoothDeviceFound(function (res) {
+        let device = res.devices[0]
+        let advertisData = baseHexConvertTool.arrayBufferToHexString(device.advertisData)
+        let object = Object.assign({
+          deviceName: device.name,
+          rssi: device.RSSI,
+          deviceId: device.deviceId,
+          localName: device.localName,
+          advertisData: advertisData,
+          advertisServiceUUIDs: device.advertisServiceUUIDs,
+          serviceData: device.serviceData
+        }, deviceSynMessageType.DeviceSynTypeFoundDeviceSuccess)
+        baseMessageHandler.sendMessage('deviceSynMessage', object)
+      })
+    },
+    fail: function (res) {
+      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoveryFail)
+    },
+  })
+}
+
 
 /**
  * 发现设备
@@ -529,7 +566,9 @@ function getDataItemList() {
 }
 
 module.exports = {
+  deviceSynMessageType: deviceSynMessageType,
   reLaunchBluetoothFlow: reLaunchBluetoothFlow,
+  openBluetoothFlow: openBluetoothFlow,
   connectDeviceFlow: connectDeviceFlow,
   writeValue: writeValue,
   synDeviceWithDeviceObject: synDeviceWithDeviceObject,

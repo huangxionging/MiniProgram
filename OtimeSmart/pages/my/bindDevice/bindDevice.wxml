@@ -1,0 +1,15 @@
+<!--pages/my/bindDevice/bindDevice.wxml-->
+<view class="view-container">
+  <view class="bluetooth-view">
+    <image src="{{bluetoothIconUrl}}" class="device-icon"></image>
+  </view>
+  <view class='add-device-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+          <addDeviceItemCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>

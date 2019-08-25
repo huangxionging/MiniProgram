@@ -3,51 +3,81 @@ const baseTool = require('../utils/baseTool.js')
 function myIndexSectionDataArray() {
   return [
     {
-      headerHeight: 0,
+      headerHeight: 20,
       rowDataArray: [
         {
           id: 0,
           section: 0,
-          icon: 'my_history_contest.png',
-          title: '历史测评数据',
+          icon: 'my_device.png',
+          title: '请绑定设备',
+          url: '/pages/my/deviceManage/deviceManage',
+        }
+      ]
+    },
+    {
+      headerHeight: 20,
+      rowDataArray: [
+        {
+          id: 0,
+          section: 0,
+          icon: 'my_moment.png',
+          title: '家庭圈管理',
+          url: '../brushContestList/brushContestList',
+        }
+      ]
+    },
+    {
+      headerHeight: 20,
+      rowDataArray: [
+        {
+          id: 0,
+          section: 0,
+          icon: 'my_sedentary_reminder.png',
+          title: '久坐提醒',
+          detail: '3小时',
           url: '../brushContestList/brushContestList',
         },
         {
           id: 1,
           section: 0,
-          icon: 'my_device_manage.png',
-          title: '设备管理',
-          url: '../deviceManage/deviceManage',
+          icon: 'my_heart_blood.png',
+          title: '心率与血压设置',
+          detail: '120次/分',
+          url: '../brushContestList/brushContestList',
         },
         {
           id: 2,
           section: 0,
-          icon: 'my_device_check.png',
-          title: '设备检测',
-          url: '../deviceCheck/deviceCheck',
-        },
-        {
-          id: 3,
-          section: 0,
-          icon: 'my_clinic_Info.png',
-          title: '测评单位信息',
-          url: '../myClinic/myClinic',
-        },
+          icon: 'my_find_device.png',
+          title: '查找设备',
+          url: '../brushContestList/brushContestList',
+        }
+      ]
+    },
+    {
+      headerHeight: 20,
+      rowDataArray: [
         {
           id: 0,
           section: 0,
-          icon: 'my_doctor_manage.png',
-          title: '医护人员管理',
-          url: '../doctorManage/doctorManage',
+          icon: 'my_message.png',
+          title: '信息',
+          url: '../brushContestList/brushContestList',
         },
         {
-          id: 0,
+          id: 1,
           section: 0,
-          icon: 'my_customer_service.png',
-          title: '联系客服',
-          detail: '400-1618-023',
-          styleCalss: 'my-detail',
-          url: '../brushContest/brushContest',
+          icon: 'my_unit.png',
+          title: '计量单位',
+          detail: '英寸',
+          url: '../brushContestList/brushContestList',
+        },
+        {
+          id: 2,
+          section: 0,
+          icon: 'my_about.png',
+          title: '关于',
+          url: '../brushContestList/brushContestList',
         }
       ]
     }

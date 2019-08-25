@@ -1,0 +1,59 @@
+/* component/myIndexItemCell/myIndexItemCell.wxss */
+.cell-container{
+  margin-top: 0;
+  width: 100%;
+  height: 120rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.cell-content{
+  width: 100%;
+  height: 119rpx;
+  margin-left: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.cell-left{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 100%;
+  align-items: center;
+}
+
+.cell-icon{
+  margin-left: 20rpx;
+  width: 48rpx;
+  height: 48rpx;
+}
+.cell-title{
+  margin-left: 20rpx;
+  color: #333;
+}
+.cell-line{
+  margin-left: 0;
+  width: 100%;
+  height: 1rpx;
+  font-size: 30rpx;
+  background-color: #f8f8f8;
+}
+
+.cell-arrow{
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 20rpx;
+}
+.cell-right{
+  display: flex;
+  flex-direction: row-reverse;
+  height: 100%;
+  align-items: center;
+}
+
+.cell-detail{
+  color: #999;
+  font-size: 28rpx;
+}

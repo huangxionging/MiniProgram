@@ -1,0 +1,14 @@
+<!--component/myIndexItemCell/myIndexItemCell.wxml-->
+<view class="cell-container">
+  <view class="cell-content" bindtap='didSelectRow'>
+    <view class="cell-left">
+      <image class="cell-icon" src="/resource/{{data.icon}}"></image>
+      <view class="cell-title">{{data.title}}</view>
+    </view>
+    <view class="cell-right">
+      <image class="cell-arrow" src="/resource/arrow_right.png"></image>
+      <view class="cell-detail">{{data.detail}}</view>
+    </view>
+  </view>
+  <view class="cell-line"/>
+</view>

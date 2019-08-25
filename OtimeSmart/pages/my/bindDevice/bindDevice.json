@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "addDeviceItemCell": "/components/addDeviceItemCell/addDeviceItemCell"
+  },
+  "navigationBarTitleText": "扫描设备"
+}
