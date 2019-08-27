@@ -4,13 +4,14 @@ const baseTool = require('../../../utils/baseTool.js')
 const myAdapter = require('../../../adapter/myAdapter.js')
 // const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    userInfo: baseNetLinkTool.getUserInfo(),
+    userInfo: {},
     loadDone: true,
   },
 
@@ -27,7 +28,11 @@ Page({
   onReady: function () {
     let that = this
     baseTool.print(that.data)
-    that.loadData()
+    that.setData({
+      userInfo: baseNetLinkTool.getUserInfo()
+    })
+    that.registerCallBack()
+    // that.loadData()
   },
 
   /**
@@ -48,7 +53,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    let that = this
+    that.removeCallBack()
   },
 
   /**
@@ -80,6 +86,10 @@ Page({
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let sectionDataArray = myAdapter.myIndexSectionDataArray()
+    baseTool.print(deviceInfo)
+    if (deviceInfo.deviceName != undefined) {
+      sectionDataArray[0].rowDataArray[0].title = deviceInfo.deviceName
+    }
     that.setData({
       sectionDataArray: sectionDataArray
     })
@@ -125,5 +135,18 @@ Page({
         } 
       }
     }
+  },
+  registerCallBack: function () {
+    let that = this
+    baseMessageHandler.addMessageHandler("refresh", this, res => {
+      that.loadData()
+    }).then(res => {
+      baseTool.print(res)
+      that.loadData()
+    })
+
+  },
+  removeCallBack: function () {
+    baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
   },
 })

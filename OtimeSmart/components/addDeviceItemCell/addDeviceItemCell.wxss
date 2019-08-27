@@ -1,1 +1,8 @@
 /* components/addDeviceItemCell/addDeviceItemCell.wxss */
+@import "../../template/cell.wxss";
+
+.cell-mac{
+  margin-left: 15rpx;
+  font-size: 30rpx;
+  color: gray;
+}

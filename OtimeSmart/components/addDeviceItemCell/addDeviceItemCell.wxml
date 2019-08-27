@@ -1,2 +1,13 @@
 <!--components/addDeviceItemCell/addDeviceItemCell.wxml-->
-<text>components/addDeviceItemCell/addDeviceItemCell.wxml</text>
+<view class="cell-container" >
+  <view class="cell-content" bindtap="bindDeviceClick">
+    <view class="cell-left">
+      <view class="cell-title">设备: {{data.deviceName}}</view>
+      <view class="cell-mac">({{data.macAddress}})</view>
+    </view>
+    <view class="cell-right">
+      <image class="cell-arrow" src="/resource/arrow_right.png"></image>
+    </view>
+  </view>
+  <view class="cell-line"></view>
+</view>

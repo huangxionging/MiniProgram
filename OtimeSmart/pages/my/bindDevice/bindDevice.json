@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "addDeviceItemCell": "/components/addDeviceItemCell/addDeviceItemCell"
+    "addDeviceItemCell": "/components/addDeviceItemCell/addDeviceItemCell",
+    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView"
   },
-  "navigationBarTitleText": "扫描设备"
+  "navigationBarTitleText": "扫描设备",
+  "enablePullDownRefresh": true
 }

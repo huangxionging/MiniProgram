@@ -6,6 +6,7 @@ const loginManager = require('../../manager/loginManager.js')
 const baseMessageHandler = require('../../utils/baseMessageHandler.js')
 const baseDeviceSynTool = require('../../utils/baseDeviceSynTool.js')
 const baseURL = require('../../utils/baseURL.js')
+const baseHexConvertTool = require('../../utils/baseHexConvertTool.js')
 
 Page({
 
@@ -13,7 +14,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loadDone: false,
+    loadDone: true,
+    deviceInfo: {},
+    isConnectNow: false
   },
 
   /**
@@ -27,8 +30,11 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    wx.startPullDownRefresh()
     let that = this
+    that.setData({
+      deviceInfo: baseNetLinkTool.getDeviceInfo()
+    })
+    wx.startPullDownRefresh()
     that.registerCallBack()
   },
 
@@ -57,6 +63,32 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
+    let that = this
+    that.setData({
+      isConnectNow: true
+    })
+    //{"_id":"90b4093b5d6542070b2bcbf507b1a132","androidDeviceId":"31:31:39:80:62:08","date":"2019-08-27T16:15:37.001Z","deviceName":"Lefun","iosDeviceId":"E77D440A-44E6-243B-2C7E-AA4BB4896269","localName":"Lefun","macAddress":"31:31:39:80:62:08","openid":"oM8UK45eeDVw9mVtUCNSA2OiccDY"}
+   
+
+    baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
+      // 开始
+      let systemInfo = wx.getSystemInfoSync()
+      let deviceId = ""
+      if (systemInfo.brand == "iPhone") {
+        deviceId = that.data.deviceInfo.iosDeviceId
+      } else {
+        deviceId = that.data.deviceInfo.androidDeviceId
+      }
+      baseDeviceSynTool.connectDeviceFlow(deviceId)
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideNavigationBarLoading()
+      wx.setNavigationBarTitle({
+        title: '扫描设备',
+      })
+      // clearTimeout(searchTimer)
+      baseMessageHandler.sendMessage('deviceSynMessage', baseDeviceSynTool.deviceSynMessageType.DeviceSynTypeReLaunchBluetoothFail)
+    })
     
   },
 
@@ -83,42 +115,27 @@ Page({
 
     baseMessageHandler.addMessageHandler("deviceSynMessage", that, res => {
 
-      if (res.code < 2000) {
-        baseTool.print(res.text)
-        let codeArray = [1000, 1004]
-        let index = codeArray.indexOf(res.code)
-        if (index == -1) {
-          return
-        }
-        // baseURL.baseState == false
-        let currentDeviceObject = that.data.currentDeviceObject
-        currentDeviceObject.stateText = res.text
-        that.setData({
-          currentDeviceObject: currentDeviceObject
-        })
-        if (res.code == 1000) {
-          baseDeviceSynTool.clearDeviceSyn()
-          let timer = setTimeout(function () {
-            // 如果 5s 没搜索到, 则超时
-            clearTimeout(timer)
-            that.temporaryData.synDeviceIndex++
-            that.synDeviceObject()
-          }, 1000)
-        }
-      } else {
-        baseTool.showToast(res.text)
-        let currentDeviceObject = that.data.currentDeviceObject
-        currentDeviceObject.stateText = res.text
-        that.setData({
-          currentDeviceObject: currentDeviceObject
-        })
-        baseDeviceSynTool.clearDeviceSyn()
-        let timer = setTimeout(function () {
-          // 如果 5s 没搜索到, 则超时
-          clearTimeout(timer)
-          that.temporaryData.synDeviceIndex++
-          that.synDeviceObject()
-        }, 1000)
+      let section = parseInt(res.code / 1000)
+      let row = parseInt(res.code - section * 1000)
+      baseTool.print([section, row])
+      baseTool.showToast(res.text)
+      let deviceObject = that.data.deviceInfo
+      deviceObject.stateText = res.text
+      that.setData({
+        isConnectNow: true,
+        deviceInfo: deviceObject
+      })
+      switch (section) {
+        case 1:
+          {
+            that.processDeviceSynSuccessMessage(res)
+            break;
+          }
+        case 2:
+          {
+            that.processDeviceSynFailMessage(res)
+            break;
+          }
       }
     })
   },
@@ -132,5 +149,53 @@ Page({
     }).catch(res => {
 
     })
+  },
+  processDeviceSynSuccessMessage: function (res) {
+    let that = this
+    let section = parseInt(res.code / 1000)
+    let row = parseInt(res.code - section * 1000)
+    switch (row) {
+      case 9:
+        {
+          // 获得特征值成功
+          // that.formBindDevice()
+          // 开始
+          let systemInfo = wx.getSystemInfoSync()
+          let deviceId = ""
+          if (systemInfo.brand == "iPhone") {
+            deviceId = that.data.deviceInfo.iosDeviceId
+          } else {
+            deviceId = that.data.deviceInfo.androidDeviceId
+          }
+          let valueString = "CB0429"
+          let buffer = baseHexConvertTool.hexStringToArrayBuffer(valueString)
+          baseTool.print(buffer)
+          baseDeviceSynTool.writeValue(deviceId, buffer)
+          break;
+        }
+      case 11:
+        {
+         
+          break
+        }
+    }
+  },
+  processDeviceSynFailMessage: function (res) {
+    let that = this
+    let section = parseInt(res.code / 1000)
+    let row = parseInt(res.code - section * 1000)
+    switch (row) {
+      case 6:
+        {
+          // 超时
+          let timer = setTimeout(() => {
+            that.setData({
+              isConnectNow: false,
+              // deviceObject: {}
+            })
+          }, 2000)
+          break
+        }
+    }
   }
 })
