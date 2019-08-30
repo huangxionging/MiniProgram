@@ -2,7 +2,8 @@
 const baseTool = require('../../utils/baseTool.js')
 const loginManager = require('../../manager/loginManager.js')
 const baseMessageHandler = require('../../utils/baseMessageHandler.js')
-const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
+const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
 
 Page({
 
@@ -16,6 +17,7 @@ Page({
     account: '',
     password: '',
     avatar: '',
+    launchImageUrl: baseNetLinkTool.getImagePath("launch.png")
   },
 
   /**
@@ -93,66 +95,27 @@ Page({
     }
   },
   loginFlow: function(e) {
+    baseTool.print([e, "登录信息"])
     let that = this
     wx.showLoading({
       title: '处理中',
     })
     wx.login({
       success: function(res) {
-        baseTool.print(res)
         if (res.code) {
-          loginManager.loginWithUserInfo(res.code, e).then(res => {
-            baseTool.print([res, "结果"])
+          baseNetLinkTool.loginAuthorization(e.userInfo).then(res => {
+            baseTool.print(res)
             wx.hideLoading()
-            var wxUser = res.wxUser
-            if (res && wxUser && wxUser.openid) {
-
-              baseTool.setValueForKey(wxUser.openid, 'openid')
-              that.setData({
-                avatar: wxUser.headimgurl,
-                nickname: wxUser.nickname
-              })
-
-              
-              if (wxUser.clinicId != undefined) {
-                baseTool.setValueForKey(wxUser.clinicId, 'clinicId')
-              }
-              if (wxUser.clinicName != undefined) {
-                baseTool.setValueForKey(wxUser.clinicName, 'clinicName')
-              }
-              if (wxUser.clinicPic != undefined) {
-                baseTool.setValueForKey(wxUser.clinicPic, 'clinicPic')
-              }
-              if (wxUser.clinicIntro != undefined) {
-                baseTool.setValueForKey(wxUser.clinicIntro, 'clinicIntro')
-              }
-              if (wxUser.isHaveDevice != undefined) {
-                baseTool.setValueForKey(wxUser.isHaveDevice?true:false, 'isHaveDevice')
-              }
-              if (wxUser.memberId != undefined) {
-                if (wxUser.telephone != undefined) {
-                  baseTool.setValueForKey(wxUser.telephone, 'telephone')
-                }
-                baseTool.setValueForKey(wxUser.memberId, 'memberId')
-                loginManager.reLauch()
-              } else {
-                wx.setNavigationBarTitle({
-                  title: '',
-                })
-                wx.setNavigationBarColor({
-                  frontColor: '#000000',
-                  backgroundColor: '#00A0E8',
-                })
-                that.setData({
-                  isAuthorization: 1
-                })
-              }
-            } else {
-              baseTool.showInfo('获取信息失败')
+            if (res.userInfo != undefined) {
+              baseTool.setValueForKey(res.userInfo, "userInfo")
+              baseTool.setValueForKey(res.userInfo.openid, "openid")
             }
+            if (res.deviceInfo != undefined) {
+              baseTool.setValueForKey(res.deviceInfo, "deviceInfo")
+            }
+            baseNetLinkTool.reLauch()
           }).catch(res => {
-            wx.hideLoading()
-            baseTool.showInfo(res)
+
           })
         }
       },

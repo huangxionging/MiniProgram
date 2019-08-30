@@ -1,0 +1,11 @@
+<!--pages/my/deviceManage/deviceManage.wxml-->
+<view class="view-container">
+  <block wx:if='{{hasDevice}}'>
+
+  </block>
+  <block wx:else>
+    <image class="no-device-image" src="/resource/no_device.png"></image>
+    <view class="no-device-tip">没有设备, 请添加绑定设备</view>
+    <view class="add-device" hover-class="hover-button" bindtap="addDeviceClick">添加设备</view>
+  </block>
+</view>

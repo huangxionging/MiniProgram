@@ -2,7 +2,11 @@
   "pages": [
     "pages/home/homeIndex",
     "pages/authorization/authorization",
-    "pages/my/myIndex/myIndex"
+    "pages/my/myIndex/myIndex",
+    "pages/moment/momentIndex/momentIndex",
+    "pages/my/editMyInfo/editMyInfo",
+    "pages/my/bindDevice/bindDevice",
+    "pages/my/deviceManage/deviceManage"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -10,26 +14,29 @@
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
   },
+  "cloud": true,
   "sitemapLocation": "sitemap.json",
   "tabBar": {
+    "selectedColor": "#6B92FB",
+    "color": "#ccc",
     "list": [
       {
         "pagePath": "pages/home/homeIndex",
         "text": "首页",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/resource/normal_home.png",
+        "selectedIconPath": "/resource/selected_home.png"
       },
       {
-        "pagePath": "pages/my/myIndex/myIndex",
+        "pagePath": "pages/moment/momentIndex/momentIndex",
         "text": "朋友圈",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/resource/normal_moment.png",
+        "selectedIconPath": "/resource/selected_moment.png"
       },
       {
         "pagePath": "pages/my/myIndex/myIndex",
         "text": "我的",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/resource/normal_my.png",
+        "selectedIconPath": "/resource/selected_my.png"
       }
     ]
   }

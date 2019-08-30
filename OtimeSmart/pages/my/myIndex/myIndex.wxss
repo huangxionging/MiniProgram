@@ -13,22 +13,18 @@ page {
 }
 .my-info-view{
   width: 100%;
-  height: 300rpx;
-  position: relative;
+  height: 124rpx;
   margin-top: 0rpx;
-  display: block;
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
+  background-color: #6B92FB;
 }
 
 .person-info-container{
-  position: absolute;
   display: flex;
   flex-direction: column;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  align-items: center;
+  margin-left: 38rpx;
+  margin-top: 20rpx;
 }
 
 .my-bg-image{
@@ -41,34 +37,31 @@ page {
 }
 
 .my-userinfo-nickname{
-  position: relative;
-  margin-top: 30rpx;
-  font-size: 30rpx;
-  color: #fff;
+  font-size: 34rpx;
+  color: white;
+}
+page{
+  background-color: #f8f8f8;
+}
+.my-userinfo-edit{
+  color: white;
+  font-size: 24rpx;
 }
 .my-userinfo-avatar{
   position: relative;
-  margin-top: 20rpx;
-  width: 140rpx;
-  height: 140rpx;
+  margin-top: 12rpx;
+  margin-left: 34rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
-  border: 10rpx solid #99d9f6;
 }
 
 .my-table-view{
   width: 100%;
-  position: absolute;
   display: flex;
   flex-direction: column;
-  margin-top: 300rpx;
 }
 
 .section-view{
   width: 100%;
-}
-
-.map-css{
-  margin-top: 10rpx;
-  width: 100%;
-  height: 400rpx;
 }

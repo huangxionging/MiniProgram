@@ -2,3 +2,4 @@
 <!-- <view class='navigation-bar-line' /> -->
 <view class='contest-container' wx:if='{{loadDone}}'>
 </view>
+<deviceSyncToolView wx:if='{{isConnectNow}}' data='{{deviceInfo}}' />

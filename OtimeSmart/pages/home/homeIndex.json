@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView"
   },
   "navigationBarTitleText": "",
   "enablePullDownRefresh": true,
