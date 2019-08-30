@@ -3,7 +3,7 @@ module.exports = {
   /**
    * 登陆
    */
-  login: 'login',
+  login: 'api/user/login',
   /**
    * 首页接口
    */
