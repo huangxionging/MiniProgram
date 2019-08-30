@@ -177,7 +177,7 @@ page {
   margin-top: 109rpx;
   margin-left: 65rpx;
   width: 620rpx;
-  height: 400rpx;
+  height: 475rpx;
   border-radius: 12rpx;
 }
 .contest-action-view{

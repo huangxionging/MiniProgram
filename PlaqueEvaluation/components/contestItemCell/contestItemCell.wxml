@@ -41,7 +41,7 @@
       <view wx:if='{{data.state==2}}' hover-class="hover-action" class="action2" catchtap="previewReportClick">查看报告</view>
       <view wx:if='{{data.state==2 && data.isMark == 0}}' hover-class="hover-action" class="action2" catchtap="teethModelFlagClick">
         标记重点
-        <view class=""/>
+        <view class="red-dot"/>
       </view>
       <view wx:if='{{data.state==2 && data.isMark==1}}' hover-class="hover-action" class="action2" catchtap="teethModelFlagClick">
         修改标记

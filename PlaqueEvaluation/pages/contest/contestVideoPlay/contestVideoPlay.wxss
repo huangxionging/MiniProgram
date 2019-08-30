@@ -10,6 +10,6 @@
 .video-content{
   margin-top: 300rpx;
   width: 620rpx;
-  height: 400rpx;
+  height: 475rpx;
   border-radius: 12rpx;
 }

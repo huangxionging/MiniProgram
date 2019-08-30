@@ -1,7 +1,7 @@
 <view wx:if='{{loadDone}}' class='lauch-container'>
   <view wx:if='{{isAuthorization==0}}' class='lauch-container'>
     <image src='/resource/lauch.png' class='authorization' lazy-load='true'/>
-    <text class='lauch-tip1'>菌斑测评</text>
+    <text class='lauch-tip1'>零度时刻</text>
     <text class='lauch-tip2'>授权后即可进入</text>
     <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>
     <view class='lauch-space' />

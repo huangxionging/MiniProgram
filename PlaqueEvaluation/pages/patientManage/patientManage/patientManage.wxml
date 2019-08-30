@@ -1,10 +1,5 @@
 <!--pages/patientManage/patientManage/patientManage.wxml-->
 <view class="patient-container">
-  <!-- <view class="head-view">
-    <view>
-      <input></input>
-    </view>
-  </view> -->
   <view class='patient-table-view'>
     <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
       <view class='section-view'>
@@ -13,6 +8,10 @@
         </block>
       </view>
     </block>
+  </view>
+  <view class="head-view">
+    <view>
+    </view>
   </view>
   <view class="patient-item-header">
     <view class="item-serial">编号</view>

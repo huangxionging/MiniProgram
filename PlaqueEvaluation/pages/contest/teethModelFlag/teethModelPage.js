@@ -140,6 +140,7 @@ Page({
         doctorValues: doctorValues
       })
       baseTool.showToast("标记成功")
+      baseMessageHandler.sendMessage("refresh", "刷新")
       let timer = setTimeout((res) => {
         clearTimeout(timer)
         wx.navigateBack()

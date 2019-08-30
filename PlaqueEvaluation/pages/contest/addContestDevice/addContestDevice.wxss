@@ -10,7 +10,7 @@ page{
 }
 
 .video-container{
-  height: 400rpx;
+  height: 594rpx;
   width: 100%;
 }
 

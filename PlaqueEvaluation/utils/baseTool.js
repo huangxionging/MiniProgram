@@ -18,7 +18,7 @@ let singleTimer = -1
  */
 function print(e) {
   // 测试环境下或者模拟器状态下, 才输入内容到控制台
-  console.log(e)
+  // console.log(e)
   if (baseState || isSimulator) {
     // 打印内容
     console.log(e)

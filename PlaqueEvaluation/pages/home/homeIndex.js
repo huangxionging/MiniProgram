@@ -389,18 +389,17 @@ Page({
           }
         }
 
-        rowDataArray.sort((a, b) => {
-          baseTool.print([a, b])
-          if (a == '--' && b != '--') {
-            return 1
-          } else if (b == '--' && a != '--') {
-            return -1
-          } else if (a == '--' && b == '--') {
-            return 0
-          } else {
-            return a.overallScore - b.overallScore
-          }
-        })
+        // rowDataArray.sort((a, b) => {
+        //   if (a.overallScore == '--' && b.overallScore != '--') {
+        //     return 1
+        //   } else if (b.overallScore == '--' && a.overallScore != '--') {
+        //     return -1
+        //   } else if (a.overallScore == '--' && b.overallScore == '--') {
+        //     return 0
+        //   } else {
+        //     return b.overallScore - a.overallScore
+        //   }
+        // })
       }
 
       that.setData({

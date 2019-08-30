@@ -51,8 +51,8 @@
 				},
 				{
 					"id": 1,
-					"name": "pages/contest/publicNumberQRCode/publicNumberQRCode",
-					"pathName": "pages/contest/publicNumberQRCode/publicNumberQRCode",
+					"name": "pages/patientManage/patientManage/patientManage",
+					"pathName": "pages/patientManage/patientManage/patientManage",
 					"query": "",
 					"scene": null
 				}
