@@ -13,6 +13,40 @@ page {
   position: relative;
 }
 
+.date-change-view{
+  margin-top: 44rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-img{
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.date-view{
+  margin-left: 40rpx;
+  margin-right: 40rpx;
+  width: 200rpx;
+  height: 50rpx;
+  font-size: 34rpx;
+  color: white
+}
+
+.device-info{
+  width: 100%;
+  margin-top: 32rpx;
+  color: white;
+}
+
+.device-power{
+  margin-left: 20rpx;
+  color: white;
+  font-size: 24rpx;
+}
+
 .device-step{
   margin-top: 18rpx;
   margin-left: 20rpx;
@@ -21,6 +55,8 @@ page {
   height: 400rpx;
   background-color: white;
   border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
 }
 
 .device-heart{

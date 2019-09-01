@@ -215,10 +215,10 @@ Page({
     let deviceObject = that.data.currentDeviceObject
     baseTool.print(deviceObject)
     baseNetLinkTool.getRemoteDataFromServer("bind", "绑定设备", {
-      active_device: deviceObject.macAddress,
-      active_name: deviceObject.deviceName ? deviceObject.deviceName : "",
-      active_id: deviceObject.deviceId,
-      active_alias: deviceObject.deviceAlias ? deviceObject.deviceAlias : "",
+      device: deviceObject.macAddress,
+      name: deviceObject.deviceName ? deviceObject.deviceName : "",
+      id: deviceObject.deviceId,
+      alias: deviceObject.deviceAlias ? deviceObject.deviceAlias : "",
     }).then(res => {
       baseTool.print(res)
       baseTool.setValueForKey({

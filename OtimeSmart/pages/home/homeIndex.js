@@ -16,7 +16,8 @@ Page({
   data: {
     loadDone: true,
     deviceInfo: {},
-    isConnectNow: false
+    isConnectNow: false,
+    date: "2019-09-22"
   },
 
   /**
