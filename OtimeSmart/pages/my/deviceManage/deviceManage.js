@@ -1,11 +1,20 @@
 // pages/my/deviceManage/deviceManage.js
+const baseTool = require('../../../utils/baseTool.js')
+const baseDeviceSynTool = require('../../../utils/baseDeviceSynTool.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
+const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
+const myAdapter = require('../../../adapter/myAdapter.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    hasDevice: false,
+    deviceInfo: {},
+    launchImageUrl: baseNetLinkTool.getImagePath("launch.png"),
+    itemList: []
   },
 
   /**
@@ -19,7 +28,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    let that = this
+    that.registerCallBack()
   },
 
   /**
@@ -40,7 +50,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    let that = this
+    that.removeCallBack()
   },
 
   /**
@@ -67,5 +78,41 @@ Page({
     wx.navigateTo({
       url: '/pages/my/bindDevice/bindDevice'
     })
+  },
+  unbindDeviceClick: function() {
+    baseNetLinkTool.getRemoteDataFromServer("unBindDevice", "解绑设备", {
+      
+    })
+  },
+  registerCallBack: function () {
+    let that = this
+    baseMessageHandler.addMessageHandler("refresh", this, res => {
+      baseTool.print(res)
+      that.loadData()
+    }).then(res => {
+      baseTool.print(res)
+      that.loadData()
+    })
+  },
+  removeCallBack: function () {
+    baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
+  },
+  loadData: function() {
+    let that = this
+    let deviceInfo = baseTool.valueForKey("deviceInfo")
+    if (deviceInfo.macAddress != undefined) {
+      baseTool.print(deviceInfo)
+      let itemList = myAdapter.deviceManageItemList()
+      baseTool.print(itemList)
+      itemList[0].detail = deviceInfo.deviceName
+      itemList[1].detail = deviceInfo.macAddress
+      itemList[2].detail = 1.0
+      that.setData({
+        deviceInfo: deviceInfo,
+        hasDevice: true,
+        launchImageUrl: baseNetLinkTool.getImagePath("launch.png"),
+        itemList: itemList
+      })
+    }
   }
 })

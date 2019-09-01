@@ -1,7 +1,7 @@
 // pages/home/homeIndex.js
 const baseTool = require('../../utils/baseTool.js')
-// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
-const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
+const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
 const loginManager = require('../../manager/loginManager.js')
 const baseMessageHandler = require('../../utils/baseMessageHandler.js')
 const baseDeviceSynTool = require('../../utils/baseDeviceSynTool.js')
@@ -23,7 +23,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    let crc8 = baseHexConvertTool.encodeCrc8("0102")
+    baseTool.print(crc8)
   },
 
   /**
@@ -34,7 +35,7 @@ Page({
     that.setData({
       deviceInfo: baseNetLinkTool.getDeviceInfo()
     })
-    wx.startPullDownRefresh()
+    // wx.startPullDownRefresh()
     that.registerCallBack()
   },
 
@@ -42,19 +43,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.registerDeviceSynMessageBlock()
   },
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    baseDeviceSynTool.clearDeviceSyn()
+    let that = this
+    that.removeCallBack()
   },
   onPageScroll: function(e) {
     
@@ -105,16 +108,9 @@ Page({
   onShareAppMessage: function () {
 
   },
-  registerCallBack: function () {
+  registerDeviceSynMessageBlock: function() {
     let that = this
-    baseMessageHandler.addMessageHandler("refresh", this, res => {
-      that.getHomePage()
-    }).then(res => {
-      that.getHomePage()
-    })
-
     baseMessageHandler.addMessageHandler("deviceSynMessage", that, res => {
-
       let section = parseInt(res.code / 1000)
       let row = parseInt(res.code - section * 1000)
       baseTool.print([section, row])
@@ -139,13 +135,34 @@ Page({
       }
     })
   },
+  registerCallBack: function () {
+    let that = this
+    baseMessageHandler.addMessageHandler("refresh", this, res => {
+      that.getHomePage()
+    }).then(res => {
+      that.getHomePage()
+    })
+    baseMessageHandler.addMessageHandler("deviceConnectedState", that, res => {
+      
+    }).then(res => {
+      baseTool.print(res)
+    })
+  },
   removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
-    baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
+    baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
   },
   getHomePage: function(){
     let that = this
     baseNetLinkTool.getRemoteDataFromServer("getHomePage", "获取首页数据").then(res => {
+    }).catch(res => {
+
+    })
+    baseNetLinkTool.getRemoteDataFromServer("getDeviceinfo", "获取首页数据").then(res => {
+      baseTool.print(res)
+      if (res.deviceInfo) {
+        // baseTool.setValueForKey(res.deviceInfo, "deviceInfo")
+      }
     }).catch(res => {
 
     })
@@ -167,15 +184,16 @@ Page({
           } else {
             deviceId = that.data.deviceInfo.androidDeviceId
           }
-          let valueString = "CB0429"
+          let valueString = "0xCB0429"
+          valueString += baseHexConvertTool.encodeCrc8("CB0429")
           let buffer = baseHexConvertTool.hexStringToArrayBuffer(valueString)
-          baseTool.print(buffer)
+          baseTool.print(baseHexConvertTool.arrayBufferToHexString(buffer))
+
           baseDeviceSynTool.writeValue(deviceId, buffer)
           break;
         }
       case 11:
         {
-         
           break
         }
     }

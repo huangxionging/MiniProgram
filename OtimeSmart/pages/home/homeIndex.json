@@ -2,8 +2,9 @@
   "usingComponents": {
     "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView"
   },
-  "navigationBarTitleText": "",
+  "navigationBarTitleText": "设备首页",
   "enablePullDownRefresh": true,
   "navigationBarTextStyle": "black",
-  "backgroundColor": "#eee"
+  "backgroundColor": "#6B92FB",
+  "navigationBarBackgroundColor": "#6B92FB"
 }

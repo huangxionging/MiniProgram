@@ -2,20 +2,7 @@ const baseTool = require('./baseTool.js')
 const baseMessageHandler = require('./baseMessageHandler.js')
 const baseHexConvertTool = require('./baseHexConvertTool.js')
 const bleCommandManager = require('../manager/bleCommandManager.js')
-/**
- * Mac 地址
- */
-let desDeviceObject = {}
 
-/**
- * 存储一条数据部分
- */
-let dataObject = {}
-
-/**
- * 数据集合列表
- */
-let dataItemtList = []
 
 /**
  * 服务 UUID
@@ -28,23 +15,48 @@ let characteristicIdNotify = "00002D00-0000-1000-8000-00805F9B34FB"
 /**
  * 特征值写
  */
-let characteristicIdWrite = "00002F01-0000-1000-8000-00805F9B34FB"
+let characteristicIdWrite = "00002D01-0000-1000-8000-00805F9B34FB"
+
+let DeviceConnectedState = {
+  DeviceNoDevice: {
+    code: 1001,
+    name: "DeviceNoDevice",
+    text: "无设备"
+  },
+  DeviceConnected: {
+    code: 1002,
+    name: "DeviceConnected",
+    text: "设备已连接"
+  },
+  DeviceDisconnected: {
+    code: 1003,
+    name: "DeviceDisconnected",
+    text: "断开连接"
+  },
+  DeviceConnecting: {
+    code: 1004,
+    name: "DeviceConnecting",
+    text: "设备正在连接"
+  },
+  DeviceDisconnecting: {
+    code: 1005,
+    name: "DeviceDisconnecting",
+    text: "正在断开连接"
+  }
+}
 
 /**
- * 数据定时器
+ * Mac 地址
  */
-let dataTimer = -1
+let deviceObject = {
+  macAddress: '',
+  deviceId: '',
+  deviceName: '',
+  deviceAlias: '',
+  connectedState: DeviceConnectedState.DeviceNoDevice
+}
 
-/**
- * 结束定时器
- */
-let endSynTimer = -2
-
-/**
- * 结束标志
- */
-let endSynFlag = false
-
+let callBackObject = {}
 
 /**
  * 消息类型
@@ -175,33 +187,16 @@ let deviceSynMessageType = {
     name: "DeviceSynTypeMacAddressError",
     text: "mac 地址错误"
   },
-
 }
-
 
 function clearDeviceObject() {
-  desDeviceObject = {}
-  dataObject = {}
-  endSynFlag = false
+  deviceObject = {
+    macAddress: '',
+    deviceId: '',
+    deviceName: '',
+    connectedState: DeviceConnectedState.DeviceNoDevice
+  }
 }
-
-function clearDeviceSyn() {
-  clearDeviceObject()
-  // 停止发现设备, 然后关闭适配器
-  wx.stopBluetoothDevicesDiscovery({
-    success: function(res) {
-      wx.closeBluetoothAdapter()
-    },
-    fail: function(res) {
-      wx.closeBluetoothAdapter()
-    }
-  })
-}
-
-function clearDeviceData() {
-  dataItemtList = []
-}
-
 
 /**
  * 重启蓝牙流程
@@ -215,57 +210,19 @@ function reLaunchBluetoothFlow() {
           clearTimeout(timer)
           wx.openBluetoothAdapter({
             success: function(res) {
-              // baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeOpenAdapterSuccess)
               resolve(res)
             },
             fail: function(res) {
-              // clearDeviceObject()
-              // baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeOpenAdapterFail)
               reject(res)
             }
           })
         }, 500)
       },
       fail: function(res) {
-        // baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeCloseAdapterFail)
         reject(res)
       }
     })
   })
-}
-
-// function open
-
-function synDeviceWithDeviceObject(deviceObject = {}) {
-  if (desDeviceObject && desDeviceObject.macAddress != undefined) {
-    baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSyning)
-  } else {
-    // mac 地址不能为空
-    if (!baseTool.isValid(deviceObject.macAddress)) {
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeMacAddressError)
-      return
-    }
-    desDeviceObject = deviceObject
-    reLaunchBluetoothFlow().then(res => {
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeReLaunchBluetoothSuccess)
-      wx.startBluetoothDevicesDiscovery({
-        services: [],
-        allowDuplicatesKey: false,
-        success: function(res) {
-          baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoverySuccess)
-          foundDevice()
-          deviceCharacteristicValueChange()
-        },
-        fail: function(res) {
-          clearDeviceObject()
-          baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoveryFail)
-        },
-      })
-    }).catch(res => {
-      clearDeviceObject()
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeReLaunchBluetoothFail)
-    })
-  }
 }
 
 /**
@@ -280,8 +237,9 @@ function openBluetoothFlow() {
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoverySuccess)
       wx.onBluetoothDeviceFound(function(res) {
         let device = res.devices[0]
-        let advertisData = baseHexConvertTool.arrayBufferToHexString(device.advertisData)
-        if (advertisData.length < 12) {
+        baseTool.print(res)
+        let advertisData = baseHexConvertTool.arrayBufferToHexString(device.advertisData).toUpperCase()
+        if (advertisData.length < 10) {
           return;
         }
         let macAddress = advertisData.substr(0, 2) + ':' + advertisData.substr(2, 2) + ':' + advertisData.substr(4, 2) + ':' + advertisData.substr(6, 2) + ':' + advertisData.substr(8, 2) + ':' + advertisData.substr(10, 2)
@@ -293,8 +251,12 @@ function openBluetoothFlow() {
           advertisData: advertisData,
           advertisServiceUUIDs: device.advertisServiceUUIDs,
           serviceData: device.serviceData,
-          macAddress: macAddress
-        }, deviceSynMessageType.DeviceSynTypeFoundDeviceSuccess)
+          macAddress: macAddress.toUpperCase(),
+          code: deviceSynMessageType.DeviceSynTypeFoundDeviceSuccess.code,
+          text: deviceSynMessageType.DeviceSynTypeFoundDeviceSuccess.text,
+          name: deviceSynMessageType.DeviceSynTypeFoundDeviceSuccess.name
+        })
+        baseTool.print(object)
         baseMessageHandler.sendMessage('deviceSynMessage', object)
       })
     },
@@ -304,82 +266,18 @@ function openBluetoothFlow() {
   })
 }
 
-function getConnectedBluetoothDevices() {
-  baseTool.print(123)
-  // ["00001812-0000-1000-8000-00805F9B34FB", "0000180F-0000-1000-8000-00805F9B34FB"]
-  wx.getConnectedBluetoothDevices({
-    services: [],
-    success: function(res) {
-      baseTool.print(res)
-    },
-    fail: function(res) {
-      baseTool.print(res)
-    },
-    complete: function(res) {},
-  })
-}
-
-
-/**
- * 发现设备
- */
-function foundDevice() {
-  let stopTimer = false
-  let timer = setTimeout(function() {
-    // 如果 5s 没搜索到, 则超时
-    clearTimeout(timer)
-    if (stopTimer == true) {
-      return
-    }
-    wx.stopBluetoothDevicesDiscovery({
-      success: function(res) {
-        baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
-      },
-      fail: function(res) {
-        baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
-      }
-    })
-  }, 5000)
-  wx.onBluetoothDeviceFound(function(res) {
-    let device = res.devices[0]
-    if (device.name.indexOf('game') == -1 && device.name.indexOf('32th') == -1) {
-      return
-    }
-    // 要符合第11位大于等于2
-    if (device.name.indexOf('32th-dd5414') != -1) {
-      let level = parseInt(device.name.substr(11, 1), 16)
-      if (level < 2) {
-        return
-      }
-    }
-    // 获得 MAC 地址
-    let macAddress = device.name.split('-')[1].toUpperCase()
-    let desMacAddress = desDeviceObject.macAddress.toUpperCase()
-    baseTool.print([macAddress, desMacAddress])
-    // 搜索到目标 Mac 地址
-    if (macAddress === desMacAddress) {
-      // 清除定时器
-      stopTimer = true
-      clearTimeout(timer)
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchSuccess)
-      wx.stopBluetoothDevicesDiscovery({
-        success: function(res) {
-          connectDeviceFlow(device.deviceId)
-        },
-        fail: function(res) {
-          connectDeviceFlow(device.deviceId)
-        },
-      })
-    }
-  })
-}
-
-
 /**
  * 连接流程
  */
-function connectDeviceFlow(deviceId = '') {
+function connectDeviceFlow(deviceInfo = {}) {
+  deviceObject.macAddress = deviceInfo.macAddress
+  deviceObject.deviceAlias = deviceInfo.deviceAlias
+  deviceObject.deviceId = deviceInfo.deviceId
+  deviceObject.deviceName = deviceInfo.deviceName
+  let deviceId = deviceObject.deviceId
   baseTool.print(["连接设备", deviceId])
+  // 正在连接
+  deviceObject.connectedState = DeviceConnectedState.DeviceConnecting
   let stopTimer = false
   let timer = setTimeout(function () {
     // 如果 5s 没搜索到, 则超时
@@ -387,6 +285,8 @@ function connectDeviceFlow(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
   wx.createBLEConnection({
@@ -407,8 +307,11 @@ function connectDeviceFlow(deviceId = '') {
       clearTimeout(timer)
       stopTimer = true
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedFail)
+      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     }
   })
+  deviceConnectionStateChange()
 }
 
 function getBLEDeviceServices(deviceId = '') {
@@ -420,6 +323,8 @@ function getBLEDeviceServices(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
   wx.getBLEDeviceServices({
@@ -440,6 +345,8 @@ function getBLEDeviceServices(deviceId = '') {
       baseTool.print("获得服务失败")
       clearTimeout(timer)
       stopTimer = true
+      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceServicesFail)
     }
   })
@@ -454,6 +361,8 @@ function getBLEDeviceCharacteristics(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
   wx.getBLEDeviceCharacteristics({
@@ -474,6 +383,8 @@ function getBLEDeviceCharacteristics(deviceId = '') {
       baseTool.print("获取特征值失败")
       clearTimeout(timer)
       stopTimer = true
+      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceCharacteristicsFail)
     }
   })
@@ -487,6 +398,8 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
   wx.notifyBLECharacteristicValueChange({
@@ -497,11 +410,14 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
     success: function(res) {
       clearTimeout(timer)
       stopTimer = true
+      deviceCharacteristicValueChange()
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifySuccess)
     },
     fail: function(res) {
       clearTimeout(timer)
       stopTimer = true
+      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifyFail)
     }
   })
@@ -513,37 +429,25 @@ function deviceCharacteristicValueChange() {
     let values = new Uint8Array(res.value)
     let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
     baseTool.print([hex, '通知信息'])
-    // 回复数据
-    if (hex.indexOf('f20f') == 0 || hex.indexOf('f30f') == 0) {
-      // 再次回复设备
-      // 写数据
-      writeValue(res.deviceId, bleCommandManager.connectReplyDeviceCommand())
-    } else if (hex.indexOf('f30cf5') == 0) {
-      baseTool.print([res, '设备常亮'])
-    } else if (hex.indexOf('f802') == 0) {
+    baseTool.showToast(hex)
+  })
+  
+}
 
-      if (endSynFlag == true) {
-        return
-      }
-      endSynFlag = true
-      // 一次数据交互结束
-      baseTool.print([res, '交互结束'])
-      let buffer = bleCommandManager.onceDataEndReplyDeviceCommand()
-      writeValue(res.deviceId, buffer)
-      // 同步成功
-      // 500 ms 后同步下一个
-      clearTimeout(dataTimer)
-      let endSynTimer = setTimeout(() => {
-        clearTimeout(endSynTimer)
-        baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSynSuccess)
-      }, 500)
-    } else if (hex.indexOf('f4') == 0 || hex.indexOf('f6') == 0) {
-      clearTimeout(dataTimer)
-      processOnceData(hex, values, res.deviceId)
-    } else if (hex.indexOf('f7') == 0 || hex.indexOf('f9') == 0) {
-      clearTimeout(dataTimer)
-      newProcessOnceData(hex, values, res.deviceId)
+function deviceConnectionStateChange (){
+  wx.onBLEConnectionStateChange(function(res){
+    if (res.connected == true) {
+      deviceObject.connectedState = DeviceConnectedState.DeviceConnected
+    } else {
+      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
     }
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
+  })
+}
+
+function bluetoothAdapterStateChange() {
+  wx.onBluetoothAdapterStateChange(function (res) {
+
   })
 }
 
@@ -565,90 +469,6 @@ function writeValue(deviceId = '', value = []) {
   })
 }
 
-function processOnceData(hex, values, deviceId = '') {
-  // 刷牙数据
-  dataObject.dataHead = hex.substring(0, 2)
-  //数据处理逻辑
-  if (values[2] == 0) {
-    dataObject.data01 = hex
-    baseTool.print(['data01:', dataObject.data01])
-  } else if (values[2] == 1) {
-    dataObject.data02 = hex
-    baseTool.print(['data02:', dataObject.data02])
-  } else if (values[2] == 2) {
-    dataObject.data03 = hex
-    baseTool.print(['data03:', dataObject.data03])
-    //一条完整数据拼接
-    let oneCompleteData = dataObject.data01 + dataObject.data02 + dataObject.data03;
-    baseTool.print(['oneCompleteData:', oneCompleteData])
-
-    let typedArrayOneDate = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneCompleteData))
-    baseTool.print([typedArrayOneDate, '一天的数据'])
-    let dataItem = bleCommandManager.dataBoxCommand(typedArrayOneDate, desDeviceObject);
-    //放入数据集合
-    dataItemtList.push(dataItem);
-    //一条完整数据回复
-    let oneDataWrite = "f103" + dataObject.dataHead;
-    let typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-    baseTool.print(['reply', typedArray])
-    let oneDataWriteBuffer = typedArray.buffer
-    writeValue(deviceId, oneDataWriteBuffer)
-    dataObject = {}
-  }
-}
-
-/**
- * 新处理办法
- */
-function newProcessOnceData(hex, values, deviceId = '') {
-  //初始化头部信息 回复要带
-  dataObject.dataHead = hex.substring(0, 2)
-  //数据处理逻辑
-  if (values[2] == 0) {
-    dataObject.data01 = hex
-    baseTool.print(['data01:', dataObject.data01])
-  } else if (values[2] == 1) {
-    dataObject.data02 = hex
-    baseTool.print(['data02:', dataObject.data02])
-
-  } else if (values[2] == 2) {
-    dataObject.data03 = hex
-    baseTool.print(['data03:', dataObject.data03])
-
-  } else if (values[2] == 3) {
-    dataObject.data04 = hex
-    baseTool.print(['data04:', dataObject.data04])
-    //一条完整数据拼接
-    let oneCompleteData = dataObject.data01 + dataObject.data02 + dataObject.data03 + dataObject.data04;
-    baseTool.print(['oneCompleteData:', oneCompleteData])
-
-    let typedArrayOneDate = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneCompleteData))
-    baseTool.print([typedArrayOneDate, '一天的数据'])
-    let dataItem = bleCommandManager.dataBoxCommand(typedArrayOneDate, desDeviceObject);
-    //放入数据集合
-    dataItemtList.push(dataItem);
-    //一条完整数据回复
-    let oneDataWrite = "f103" + dataObject.dataHead;
-    // 回复数据
-    let typedArray = new Uint8Array(baseHexConvertTool.hexStringToArrayBuffer(oneDataWrite))
-    let oneDataWriteBuffer = typedArray.buffer
-    writeValue(deviceId, oneDataWriteBuffer)
-    // 清空 dataObject
-    dataObject = {}
-
-    dataTimer = setTimeout(() => {
-      // 关闭两个定时器
-      clearTimeout(dataTimer)
-      clearTimeout(endSynTimer)
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSynSuccess)
-    }, 1000)
-  }
-}
-
-function getDataItemList() {
-  return dataItemtList
-}
-
 function stopBluetoothDiscoveryFlow() {
   wx.stopBluetoothDevicesDiscovery({
     success: function(res) {},
@@ -657,16 +477,39 @@ function stopBluetoothDiscoveryFlow() {
   })
 }
 
+function getDeviceConnectedState() {
+  return deviceObject.connectedState
+}
+
+function registerCallBackForKey(callBack = Function, key = '') {
+  if (key == '') {
+    return
+  }
+  callBackObject[key] = callBack
+}
+
+function removeCallBackForKey(key = '') {
+  if (key == '') {
+    return
+  }
+  delete callBackObject[key]
+}
+
+function findDevice() {
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB0429")
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "29"
+}
+
 module.exports = {
   deviceSynMessageType: deviceSynMessageType,
   reLaunchBluetoothFlow: reLaunchBluetoothFlow,
   openBluetoothFlow: openBluetoothFlow,
   connectDeviceFlow: connectDeviceFlow,
   writeValue: writeValue,
-  synDeviceWithDeviceObject: synDeviceWithDeviceObject,
-  clearDeviceSyn: clearDeviceSyn,
-  getDataItemList: getDataItemList,
-  clearDeviceData: clearDeviceData,
-  getConnectedBluetoothDevices: getConnectedBluetoothDevices,
-  stopBluetoothDiscoveryFlow: stopBluetoothDiscoveryFlow
+  stopBluetoothDiscoveryFlow: stopBluetoothDiscoveryFlow,
+  getDeviceConnectedState: getDeviceConnectedState,
+  registerCallBackForKey: registerCallBackForKey,
+  removeCallBackForKey: removeCallBackForKey,
+  findDevice: findDevice
 }

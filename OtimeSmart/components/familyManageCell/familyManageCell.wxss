@@ -1,0 +1,2 @@
+/* components/familyManageCell/familyManageCell.wxss */
+@import "../../template/cell.wxss";

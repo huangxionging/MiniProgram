@@ -46,8 +46,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/my/bindDevice/bindDevice",
-					"pathName": "pages/my/bindDevice/bindDevice",
+					"name": "pages/moment/momentIndex/momentIndex",
+					"pathName": "pages/moment/momentIndex/momentIndex",
 					"query": "",
 					"scene": null
 				}

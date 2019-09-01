@@ -1,11 +1,15 @@
 // pages/moment/momentIndex/momentIndex.js
+const baseTool = require('../../../utils/baseTool.js')
+
+const baseWeChat = require("../../../utils/baseWeChat.js")
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    latitude: "",
+    longitude: ""
   },
 
   /**
@@ -19,7 +23,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    let that = this
+    that.startLocation()
   },
 
   /**
@@ -62,5 +67,45 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  startLocation: function() {
+    let that = this
+    baseWeChat.startLocationFlow().then(res => {
+      wx.getLocation({
+        type: "gcj02",
+        altitude: true,
+        success: function(res) {
+          baseTool.print(res)
+          that.setData({
+            longitude: res.longitude,
+            latitude: res.latitude
+          })
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+    }).catch(res=> {
+
+    })
+
+    wx.onLocationChange(res => {
+      baseTool.print(res)
+    })
+  },
+  getCurrentLocationClick: function() {
+    let that = this
+    wx.getLocation({
+      type: "gcj02",
+      altitude: true,
+      success: function (res) {
+        baseTool.print(res)
+        that.setData({
+          longitude: res.longitude,
+          latitude: res.latitude
+        })
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
   }
 })

@@ -6,7 +6,8 @@
     "pages/moment/momentIndex/momentIndex",
     "pages/my/editMyInfo/editMyInfo",
     "pages/my/bindDevice/bindDevice",
-    "pages/my/deviceManage/deviceManage"
+    "pages/my/deviceManage/deviceManage",
+    "pages/my/familyCircleManage/familyCircleManage"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,7 +29,7 @@
       },
       {
         "pagePath": "pages/moment/momentIndex/momentIndex",
-        "text": "朋友圈",
+        "text": "家庭圈",
         "iconPath": "/resource/normal_moment.png",
         "selectedIconPath": "/resource/selected_moment.png"
       },
@@ -39,5 +40,11 @@
         "selectedIconPath": "/resource/selected_my.png"
       }
     ]
-  }
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于展示在家庭圈中"
+    }
+  },
+  "requireBackgroundModes":["location"]
 }

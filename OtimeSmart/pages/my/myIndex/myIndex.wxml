@@ -1,9 +1,9 @@
 <!--pages/my/myIndex/myIndex.wxml-->
 <view class='my-container' wx:if='{{loadDone}}'>
   <view class='my-info-view'>
-    <image class="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover" lazy-load='true'/>
+    <image class="my-userinfo-avatar" src="{{userInfo.avatar}}" background-size="cover" lazy-load='true'/>
     <view class='person-info-container'>
-      <view class="my-userinfo-nickname">{{userInfo.nickName}}</view>
+      <view class="my-userinfo-nickname">{{userInfo.alias}}</view>
       <view class="my-userinfo-edit" bindtap="editUserInfoClick">编辑资料</view>
     </view>
   </view>

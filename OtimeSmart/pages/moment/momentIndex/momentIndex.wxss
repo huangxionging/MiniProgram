@@ -1,1 +1,39 @@
 /* pages/moment/momentIndex/momentIndex.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+}
+.momment-container{
+  width: 100%;
+  height: 100%;
+}
+.map-momment{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.current-location{
+  position: absolute;
+  left: 30rpx;
+  bottom: 300rpx;
+  width: 60rpx;
+  height: 60rpx;
+  background-color: white;
+  font-size: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  justify-items: center;
+  align-self: center;
+  border-radius: 8rpx;
+}
+
+.location-img{
+  width: 30rpx;
+  height: 30rpx;
+}

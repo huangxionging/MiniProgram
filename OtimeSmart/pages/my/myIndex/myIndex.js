@@ -2,6 +2,7 @@
 const app = getApp()
 const baseTool = require('../../../utils/baseTool.js')
 const myAdapter = require('../../../adapter/myAdapter.js')
+const bluetoothManager = require('../../../manager/bluetoothManager.js')
 // const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
@@ -130,6 +131,7 @@ Page({
             break
           }
           case 2: {
+            bluetoothManager.f
             break
           }
         } 
@@ -143,6 +145,11 @@ Page({
     }).then(res => {
       baseTool.print(res)
       that.loadData()
+    })
+    baseMessageHandler.addMessageHandler("deviceConnectedState", that, res => {
+
+    }).then(res => {
+      baseTool.print(res)
     })
 
   },

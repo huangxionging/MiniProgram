@@ -1,0 +1,42 @@
+<!--pages/my/familyCircleManage/familyCircleManage.wxml-->
+<view class="family-container">
+  <view class='family-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view'>
+        <view class="section-header">
+          <view class="family-info">
+            <view class="family-content">
+              <view class="cell-title" style="margin-left:36rpx;">{{sectionObject.familyName}}</view>
+              <image class="cell-img" src="/resource/edit.png" data-section='{{sectionIndex}}' bindtap="editFamilyClick"></image>
+            </view>
+            <view class="cell-line" />
+          </view>
+          <view class="family-manager">
+            <view class="manager">
+              <view class="cell-left">
+                <image class="manager-img" src="/resource/my_moment.png"></image>
+                <view class="manager-name">{{sectionObject.manager.name}}</view>
+              </view>
+              <view class="cell-right manager-tip">(管理员)</view>
+            </view>
+          </view>
+          <view class="manager-action">
+            <view class="action left" data-action="0" hover-class="hover-button" bindtap="actionClick">邀请家人</view>
+            <view class="action mid" data-action="1" hover-class="hover-button" bindtap="actionClick">移交管理</view>
+            <view class="action right" data-action="2" hover-class="hover-button" bindtap="actionClick">解散</view>
+          </view>
+          <view class="manager-line" />
+        </view>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+          <familyManageCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:deleteRow='deleteRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="family-action">
+    <view class="family-action-content">
+      <view class="family-action-item" style="margin-bottom:28rpx;margin-top:28rpx;">家庭圈邀请码</view>
+      <view class="family-action-item" style="margin-bottom:54rpx;">创建新的家庭圈</view>
+    </view>
+  </view>
+</view>

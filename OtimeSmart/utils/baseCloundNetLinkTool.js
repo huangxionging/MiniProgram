@@ -6,7 +6,7 @@ const baseApiList = require('/baseApiList.js')
  * 获取 openId
  */
 function getOpenId() {
-  return baseTool.valueForKey('openid')
+  return baseTool.valueForKey('token')
 }
 
 /**

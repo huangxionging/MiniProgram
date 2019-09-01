@@ -2,8 +2,8 @@
 const baseTool = require('../../utils/baseTool.js')
 const loginManager = require('../../manager/loginManager.js')
 const baseMessageHandler = require('../../utils/baseMessageHandler.js')
-// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
-const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
+const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
 
 Page({
 
@@ -103,19 +103,66 @@ Page({
     wx.login({
       success: function(res) {
         if (res.code) {
-          baseNetLinkTool.loginAuthorization(e.userInfo).then(res => {
+          let parameter = Object.assign({
+            code: res.code
+          })
+          baseNetLinkTool.loginAuthorization("login", "登录", parameter).then(res => {
             baseTool.print(res)
-            wx.hideLoading()
-            if (res.userInfo != undefined) {
-              baseTool.setValueForKey(res.userInfo, "userInfo")
-              baseTool.setValueForKey(res.userInfo.openid, "openid")
+            if (res.token != null) {
+              baseTool.setValueForKey(res.token, "token")
             }
-            if (res.deviceInfo != undefined) {
-              baseTool.setValueForKey(res.deviceInfo, "deviceInfo")
-            }
-            baseNetLinkTool.reLauch()
-          }).catch(res => {
 
+            if (res.id != null) {
+              baseTool.setValueForKey(res.id, "id")
+            }
+
+            if (res.active_device != null) {
+              baseTool.setValueForKey({
+                macAddress: res.active_device,
+                deviceId: res.active_id ? res.active_id : "",
+                deviceName: res.active_name ? res.active_name : "",
+                deviceAlias: res.active_alias ? res.active_alias: ""
+              }, "deviceInfo")
+            }
+
+            if (res.avatar != null || res.alias != null) {
+              baseTool.setValueForKey({
+                avatar: res.avatar ? res.avatar : "",
+                alias: res.alias ? res.alias: "",
+                birthday: res.birthday ? res.birthday : "",
+                height: res.height ? res.height : "",
+                weight: res.weight ? res.weight : "",
+                sex: res.sex ? res.sex : "",
+                phone: res.phone ? res.phone : ""
+              }, "userInfo")
+              wx.hideLoading()
+              baseNetLinkTool.reLauch()
+            } else {
+              baseNetLinkTool.getRemoteDataFromServer("info", "用户信息", {
+              avatar: e.userInfo.avatarUrl,
+              alias: e.userInfo.nickName,
+              sex: e.userInfo.gender
+            }).then(res => {
+              baseTool.print(res)
+              baseTool.setValueForKey({
+                avatar: res.avatar ? res.avatar : "",
+                alias: res.alias ? res.alias : "",
+                birthday: res.birthday ? res.birthday : "",
+                height: res.height ? res.height : "",
+                weight: res.weight ? res.weight : "",
+                sex: res.sex ? res.sex : "",
+                phone: res.phone ? res.phone : ""
+              }, "userInfo")
+              wx.hideLoading()
+              baseNetLinkTool.reLauch()
+            }).catch(res => {
+              baseTool.print(res)
+              baseNetLinkTool.showNetWorkingError(res)
+            })
+            }            
+          }).catch(res => {
+            baseTool.print(res)
+            baseNetLinkTool.showNetWorkingError(res)
           })
         }
       },
@@ -213,5 +260,5 @@ Page({
       bindDisabled: bindDisabled
     })
   }
-  
+
 })

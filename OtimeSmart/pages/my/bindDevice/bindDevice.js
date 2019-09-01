@@ -2,8 +2,8 @@
 const baseTool = require('../../../utils/baseTool.js')
 const baseDeviceSynTool = require('../../../utils/baseDeviceSynTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
-const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
 Page({
 
   /**
@@ -17,6 +17,7 @@ Page({
     isConnectNow: false,
     currentDeviceObject: {}
   },
+  isSearchNow: false,
 
   /**
    * 生命周期函数--监听页面加载
@@ -61,7 +62,7 @@ Page({
    */
   onPullDownRefresh: function() {
     let that = this
-    if (that.data.isConnectNow == false) {
+    if (that.isSearchNow == false) {
       that.foundDevice()
     }
   },
@@ -81,6 +82,7 @@ Page({
   },
   foundDevice: function() {
     let that = this
+    that.isSearchNow = true
     wx.showNavigationBarLoading()
     wx.setNavigationBarTitle({
       title: '搜索中...',
@@ -100,10 +102,7 @@ Page({
       wx.setNavigationBarTitle({
         title: '扫描设备',
       })
-      that.setData({
-        isConnectNow: false,
-        currentDeviceObject: {}
-      })
+      that.isSearchNow = false
     }, 10000)
     baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
       // 开始
@@ -130,14 +129,8 @@ Page({
     baseMessageHandler.addMessageHandler("deviceSynMessage", that, res => {
       let section = parseInt(res.code / 1000)
       let row = parseInt(res.code - section * 1000)
-      baseTool.print([section, row])
-      baseTool.showToast(res.text)
-      let deviceObject = that.data.currentDeviceObject
-      deviceObject.stateText = res.text
-      that.setData({
-        isConnectNow: false,
-        currentDeviceObject: deviceObject
-      })
+      baseTool.print(res)
+      // baseTool.showToast(res.text)
       switch (section) {
         case 1:
           {
@@ -166,7 +159,12 @@ Page({
       isConnectNow: true,
       currentDeviceObject: deviceObject
     })
-    baseDeviceSynTool.connectDeviceFlow(deviceObject.deviceId)
+    baseDeviceSynTool.connectDeviceFlow({
+      macAddress: deviceObject.macAddress,
+      deviceId: deviceObject.deviceId,
+      deviceName: deviceObject.deviceName,
+      deviceAlias: deviceObject.deviceAlias ? deviceObject.deviceAlias : ""
+    })
   },
   processDeviceSynSuccessMessage: function (res) {
     let that = this
@@ -183,6 +181,7 @@ Page({
         {
           baseTool.print(res)
           baseTool.showToast(res.deviceName)
+          baseTool.print(res.deviceName)
           let sectionDataArray = that.data.sectionDataArray
           let rowDataArray = sectionDataArray[0].rowDataArray
           rowDataArray.push(res)
@@ -214,31 +213,20 @@ Page({
   formBindDevice: function() {
     let that = this
     let deviceObject = that.data.currentDeviceObject
-    let systemInfo = wx.getSystemInfoSync()
-    // 苹果设备
-    let iosDeviceId = ""
-    let androidDeviceId = ""
-    if (systemInfo.brand == "iPhone") {
-      iosDeviceId = deviceObject.deviceId
-      androidDeviceId = deviceObject.macAddress
-    } else if (systemInfo.brand == "devtools") {
-      // 模拟器
-      return
-    } else {
-      androidDeviceId = deviceObject.deviceId
-      // deviceObject.macAddress = deviceObject.deviceId
-    }
-
-    baseNetLinkTool.getRemoteDataFromServer("bindDevice", "绑定设备", {
-      macAddress: deviceObject.macAddress ? deviceObject.macAddress : "",
-      deviceName: deviceObject.deviceName ? deviceObject.deviceName : "",
-      iosDeviceId: iosDeviceId,
-      androidDeviceId: androidDeviceId,
-      localName: deviceObject.localName ? deviceObject.localName : "",
-      // openid: baseNetLinkTool.getOpenId()
+    baseTool.print(deviceObject)
+    baseNetLinkTool.getRemoteDataFromServer("bind", "绑定设备", {
+      active_device: deviceObject.macAddress,
+      active_name: deviceObject.deviceName ? deviceObject.deviceName : "",
+      active_id: deviceObject.deviceId,
+      active_alias: deviceObject.deviceAlias ? deviceObject.deviceAlias : "",
     }).then(res => {
       baseTool.print(res)
-      baseTool.setValueForKey(res.deviceInfo, "deviceInfo")
+      baseTool.setValueForKey({
+        macAddress: res.active_device,
+        deviceId: res.active_id ? res.active_id : "",
+        deviceName: res.active_name ? res.active_name : "",
+        deviceAlias: res.active_alias ? res.active_alias : ""
+      }, "deviceInfo")
       baseMessageHandler.sendMessage("refresh", "刷新")
       let timer = setTimeout(() => {
         clearTimeout(timer)

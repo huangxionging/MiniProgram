@@ -1,4 +1,6 @@
 /* pages/my/deviceManage/deviceManage.wxss */
+@import "../../../template/cell.wxss";
+
 page {
   width: 100%;
   height: 100%;
@@ -41,4 +43,34 @@ page {
 
 .hover-button{
   background-color: #b1c0f1;
+}
+
+.device-image-container{
+  margin-top: 14rpx;
+  width: 100%;
+  height: 730rpx;
+  background-color: white;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-image{
+  margin-top: 114rpx;
+  border: 2rpx solid black;
+  width: 572rpx;
+  height: 432rpx;
+}
+
+.device-tip{
+  margin-top: 66rpx;
+  color: #333;
+  font-size: 34rpx;
+}
+
+.device-info-view{
+  margin-top: 16rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }

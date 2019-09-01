@@ -5,8 +5,8 @@ const baseApiList = require('/baseApiList.js')
 /**
  * 获取 openId
  */
-function getOpenId() {
-  return baseTool.valueForKey('openid')
+function getToken() {
+  return baseTool.valueForKey('token')
 }
 /**
  * 获取 memberID
@@ -24,6 +24,20 @@ function getClinicId() {
 
 function getIsHaveDevice() {
   return baseTool.valueForKey('isHaveDevice')
+}
+
+/**
+ * 获取用户信息
+ */
+function getUserInfo() {
+  return baseTool.valueForKey("userInfo")
+}
+
+/**
+ * 获得设备信息
+ */
+function getDeviceInfo() {
+  return baseTool.valueForKey("deviceInfo")
 }
 
 /**
@@ -64,20 +78,34 @@ function startAuthorization() {
  * @param description 该接口的描述信息
  * @param parameter 该接口需要的额外的参数
  */
-function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) {
+function getRemoteDataFromServer(urlApi = '', description = '', parameter = {})  {
   return new Promise((resolve, reject) => {
-    let openid = getOpenId()
-    // memberId = clinicId
-    let memberId = getClinicId()
-    if (openid && memberId) {
+    let token = getToken()
+    if (token) {
       // 统一处理, 拼接额外数据
       let data = Object.assign({
-        memberId: memberId,
-        openid: openid,
-        clinicId: memberId
+        token: token,
       }, parameter)
-      baseTool.print(data)
-      baseTool.getRemoteDataFromServer(urlApi, description, data).then(resolve, reject)
+      let url = baseURL.baseDomain + baseURL.basePath + baseApiList[urlApi] + '.php'
+      baseTool.print(["URL 地址:" + url, "参数:", data])
+      wx.request({
+        url: url,
+        data: data,
+        success: function (res) {
+          baseTool.print(res)
+          if (res.statusCode == 200) {
+            let data = res.data
+            if (data.error == "Success.") {
+              resolve(data)
+            } else {
+              reject(data)
+            }
+          }
+        },
+        fail: function (res) {
+          reject(res)
+        },
+      })
     } else {
       startAuthorization()
     }
@@ -183,8 +211,41 @@ function getWebDomain () {
   return baseURL.baseDomain
 }
 
+function loginAuthorization(urlApi = '', description = '', parameter = {}) {
+  return new Promise((resolve, reject) => {
+    let url = baseURL.baseDomain + baseURL.basePath + baseApiList[urlApi] + '.php'
+    baseTool.print(["URL 地址:" + url, "参数:", parameter])
+    wx.request({
+      url: url,
+      data: parameter,
+      success: function(res) {
+        baseTool.print(res)
+        if (res.statusCode == 200) {
+          let data = res.data
+          if (data.error == "Success.") {
+            resolve(data)
+          } else {
+            reject(data)
+          }
+        }
+      },
+      fail: function(res) {
+        reject(res)
+      },
+    })
+   
+  })
+}
+
+/**
+ * 云文图片件路径
+ */
+function getImagePath(imageName = "") {
+  return "cloud://otime-smart-y6yn7.6f74-otime-smart-y6yn7/" + imageName
+}
+
 module.exports = {
-  getOpenId: getOpenId,
+  getToken: getToken,
   getMemberId: getMemberId,
   getClinicId: getClinicId,
   getIsHaveDevice: getIsHaveDevice,
@@ -197,5 +258,9 @@ module.exports = {
   uploadImageToRemoteServer: uploadImageToRemoteServer,
   postRemoteBrushTeethRecord: postRemoteBrushTeethRecord,
   getSocketURLPrefix: getSocketURLPrefix,
-  getWebDomain: getWebDomain
+  getWebDomain: getWebDomain,
+  loginAuthorization: loginAuthorization,
+  getImagePath: getImagePath,
+  getUserInfo: getUserInfo,
+  getDeviceInfo: getDeviceInfo
 }

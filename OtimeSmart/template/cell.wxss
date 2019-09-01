@@ -35,14 +35,14 @@
 }
 
 .cell-detail{
-  margin-left: 15rpx;
+  margin-right: 15rpx;
   color: #999;
   font-size: 28rpx;
 }
 
 .cell-title{
   margin-left: 15rpx;
-  font-size: 34rpx;
+  font-size: 30rpx;
   color: #333;
 }
 
@@ -59,4 +59,8 @@
   flex-direction: row;
   height: 100%;
   align-items: center;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
 }

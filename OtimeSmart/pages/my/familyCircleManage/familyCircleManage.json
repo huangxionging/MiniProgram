@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "familyManageCell": "/components/familyManageCell/familyManageCell"
+  }
+}
