@@ -17,15 +17,13 @@ Page({
     loadDone: true,
     deviceInfo: {},
     isConnectNow: false,
-    date: "2019-09-22"
+    date: "2019-09-22",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let crc8 = baseHexConvertTool.encodeCrc8("0102")
-    baseTool.print(crc8)
   },
 
   /**
@@ -33,11 +31,14 @@ Page({
    */
   onReady: function () {
     let that = this
+    let scale = baseTool.toPixel(1)
     that.setData({
-      deviceInfo: baseNetLinkTool.getDeviceInfo()
+      deviceInfo: baseNetLinkTool.getDeviceInfo(),
+      scale: scale
     })
     // wx.startPullDownRefresh()
     that.registerCallBack()
+    that.redrawCircle(0.50)
   },
 
   /**
@@ -216,5 +217,26 @@ Page({
           break
         }
     }
+  },
+  redrawCircle: function(percent = 0) {
+    let that = this
+    let degree = that.degreeForPercent(percent)
+    let width = baseTool.toPixel(160)
+    let ctx = wx.createCanvasContext("circle-percent", that)
+    baseTool.print(ctx)
+    ctx.beginPath()
+    ctx.setLineWidth(8)
+    ctx.arc(width / 2, width / 2, width / 2 - 4, 1.5 * Math.PI, degree, true)
+    ctx.setStrokeStyle('#6B92FB')
+    ctx.stroke()
+    ctx.closePath()
+    ctx.beginPath()
+    ctx.arc(width / 2, width / 2, width / 2 - 4, 1.5 * Math.PI, degree, false)
+    ctx.setStrokeStyle('#D8E2FB')
+    ctx.stroke()
+    ctx.draw()
+  },
+  degreeForPercent: function(percent = 0) {
+    return Math.PI * (1.5 - 2 * percent)
   }
 })

@@ -222,10 +222,10 @@ Page({
     }).then(res => {
       baseTool.print(res)
       baseTool.setValueForKey({
-        macAddress: res.active_device,
-        deviceId: res.active_id ? res.active_id : "",
-        deviceName: res.active_name ? res.active_name : "",
-        deviceAlias: res.active_alias ? res.active_alias : ""
+        macAddress: deviceObject.macAddress,
+        deviceId: deviceObject.deviceId,
+        deviceName: deviceObject.deviceName ? deviceObject.deviceName : "",
+        deviceAlias: deviceObject.deviceAlias ? deviceObject.deviceAlias : ""
       }, "deviceInfo")
       baseMessageHandler.sendMessage("refresh", "刷新")
       let timer = setTimeout(() => {

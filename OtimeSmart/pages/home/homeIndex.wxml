@@ -11,15 +11,16 @@
   </view>
   <view class="device-step">
     <view class="step-info-container">
-      <view>
-        <view>
-          <view>2395</view>
-          <view>步</view>
+      <view class="step-left">
+        <view class="step-number">
+          <view class="step-value">2395</view>
+          <view class="step-tip">步</view>
         </view>
-        <view>目标10000步</view>
+        <view class="step-target">目标10000步</view>
       </view>
-      <view>
-        <canvas></canvas>
+      <view class="step-percent" style='width:160rpx;height:160rpx;'>
+        <canvas class="circle-canvas" canvas-id="circle-percent"></canvas>
+        <image class="circle-step" src="/resource/step_icon.png"></image>
       </view>
     </view>
     <view class="step-line"></view>

@@ -87,7 +87,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
         token: token,
       }, parameter)
       let url = baseURL.baseDomain + baseURL.basePath + baseApiList[urlApi] + '.php'
-      baseTool.print(["URL 地址:" + url, "参数:", data])
+      baseTool.print(["接口名:" + description + "/URL 地址:" + url, "参数:", data])
       wx.request({
         url: url,
         data: data,
@@ -214,7 +214,7 @@ function getWebDomain () {
 function loginAuthorization(urlApi = '', description = '', parameter = {}) {
   return new Promise((resolve, reject) => {
     let url = baseURL.baseDomain + baseURL.basePath + baseApiList[urlApi] + '.php'
-    baseTool.print(["URL 地址:" + url, "参数:", parameter])
+    baseTool.print(["接口名:" + description + "/URL 地址:" + url, "参数:", parameter])
     wx.request({
       url: url,
       data: parameter,
