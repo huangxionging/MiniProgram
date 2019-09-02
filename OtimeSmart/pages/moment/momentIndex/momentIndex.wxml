@@ -2,7 +2,7 @@
 <view class="momment-container">
   <map class="map-momment" longitude="{{longitude}}" latitude="{{latitude}}" markers="{{markers}}" show-location="true" show-compass="true" show-scale="true" enable-overlooking="true" include-points="true" enable-zoom >
     <cover-view class="current-location" bindtap="getCurrentLocationClick">
-      <cover-image class="location-img" src="/resource/location.png" ></cover-image>
+      <cover-image class="location-img" src="/resource/distance.png" ></cover-image>
     </cover-view>
   </map>
 </view>

@@ -128,7 +128,8 @@ function encodeCrc8(hex) {
 
 function hexStringToCommandBuffer(hexString = '') {
   let commandString = hexString + encodeCrc8(hexString)
-  hexStringToArrayBuffer(commandString)
+  baseTool.print(commandString)
+  return hexStringToArrayBuffer(commandString)
 }
 
 module.exports = {

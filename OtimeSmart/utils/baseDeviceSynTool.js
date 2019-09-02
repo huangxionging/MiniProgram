@@ -429,7 +429,9 @@ function deviceCharacteristicValueChange() {
     let values = new Uint8Array(res.value)
     let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
     baseTool.print([hex, '通知信息'])
-    baseTool.showToast(hex)
+    let key = hex.substr(4, 2)
+    let callBack = callBackObject[key]
+    callBack(hex)
   })
   
 }
@@ -482,7 +484,7 @@ function getDeviceConnectedState() {
 }
 
 function registerCallBackForKey(callBack = Function, key = '') {
-  if (key == '') {
+  if (key == '' || callBackObject[key] != undefined) {
     return
   }
   callBackObject[key] = callBack

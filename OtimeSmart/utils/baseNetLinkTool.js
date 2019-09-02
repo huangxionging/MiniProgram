@@ -218,6 +218,12 @@ function loginAuthorization(urlApi = '', description = '', parameter = {}) {
     wx.request({
       url: url,
       data: parameter,
+      dataType: 'json',
+      header: {
+        "sourceType": "wx",
+        'content-type': 'application/x-www-form-urlencoded', // 默认值
+      },
+      method: 'GET',
       success: function(res) {
         baseTool.print(res)
         if (res.statusCode == 200) {
