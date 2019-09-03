@@ -26,7 +26,7 @@ function arrayToHexString(array = []) {
     // 解析成16进制
     let hex = valueToHexString(value)
     // 长度为 1, 在前面添加 0 
-    if (hex.length == 1) {
+    if (hex.length % 2 == 1) {
       hex = '0' + hex
     }
     hexString +=  hex

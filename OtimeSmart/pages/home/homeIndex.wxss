@@ -13,6 +13,10 @@ page {
   position: relative;
 }
 
+.deviceConnectStateToolBar{
+  width: 100%;
+}
+
 .date-change-view {
   margin-top: 44rpx;
   display: flex;

@@ -1,9 +1,10 @@
 <!--pages/home/homeIndex.wxml-->
 <!-- <view class='navigation-bar-line' /> -->
 <view class='home-container' wx:if='{{loadDone}}'>
+  <deviceConnectStateToolBar wx:if="{{showDeviceToolBar}}" data='{{deviceConnectObject}}' bind:actionClick="actionClick" bind:closeToolBarClick="closeToolBarClick"/>
   <view class="date-change-view">
     <image data-type="0" bindtap="selecDateClick" class="select-img" src="/resource/select_left.png"/>
-    <view class="date-view">{{date}}</view>
+    <view class="date-view">{{currentDate}}</view>
     <image data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png"/>
   </view>
   <view class="device-info">
@@ -13,7 +14,7 @@
     <view class="step-info-container">
       <view class="step-left">
         <view class="step-number">
-          <view class="step-value">2395</view>
+          <view class="step-value">{{currentStep}}</view>
           <view class="step-tip">步</view>
         </view>
         <view class="step-target">目标10000步</view>
@@ -27,16 +28,16 @@
     <view class="step-kal-view">
       <view class="kal-view">
         <image class="kal-icon" src="/resource/cal.png"></image>
-        <view class="kal-number">75</view>
+        <view class="kal-number">{{currentCal}}</view>
         <view class="unit">cal</view>
       </view>
       <view class="time-view">
         <image class="kal-icon" src="/resource/time.png"></image>
-        <view class="kal-number">12:12</view>
+        <view class="kal-number">{{currentTime}}</view>
       </view>
       <view class="distance-view">
         <image class="kal-icon" src="/resource/distance.png"></image>
-        <view class="kal-number">5000</view>
+        <view class="kal-number">{{currentDistance}}</view>
         <view class="unit">m</view>
       </view>
     </view>

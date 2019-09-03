@@ -17,206 +17,150 @@ Page({
     loadDone: true,
     deviceInfo: {},
     isConnectNow: false,
-    date: "2019-09-22",
+    currentDate: "",
+    currentTime: "00:00",
+    currentStep: 0,
+    currentDistance: 0,
+    showDeviceToolBar: false,
+    deviceConnectObject: {
+      stateText: "暂无设备",
+      bindTitle: "绑定设备",
+      stateColor: "red",
+      action: 0
+    }
+  },
+  temporaryData: {
+    pullDown: false,
+    isSynDataNow: false,
+    synIndexIndicator: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-  },
+  onLoad: function(options) {},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     let that = this
-    let scale = baseTool.toPixel(1)
-    that.setData({
-      deviceInfo: baseNetLinkTool.getDeviceInfo(),
-      scale: scale
-    })
-    // wx.startPullDownRefresh()
+    // 当前日期
+    let currentDate = baseTool.getCurrentDateWithoutTime()
+    // 设备信息
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    // 设备连接状态
+    let deviceConnectObject = that.data.deviceConnectObject
     that.registerCallBack()
-    that.redrawCircle(0.50)
+    if (deviceInfo == "") {
+      deviceConnectObject.stateText = "暂无设备"
+      deviceConnectObject.stateColor = "red"
+      deviceConnectObject.bindTitle = "绑定设备"
+      that.setData({
+        currentDate: currentDate,
+        showDeviceToolBar: true,
+        deviceConnectObject: deviceConnectObject
+      })
+    } else {
+      that.setData({
+        deviceInfo: deviceInfo,
+        currentDate: currentDate
+      })
+      that.connectDevice()
+    }
+
+    
+    let percent = that.data.currentStep / 10000
+    that.redrawCircle(percent)
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.registerDeviceSynMessageBlock()
+  onShow: function() {
+    let that = this
+    that.registerDeviceSynMessageBlock()
   },
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
     baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
     let that = this
     that.removeCallBack()
   },
   onPageScroll: function(e) {
-    
+
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     let that = this
-    that.setData({
-      isConnectNow: true
-    })
-    //{"_id":"90b4093b5d6542070b2bcbf507b1a132","androidDeviceId":"31:31:39:80:62:08","date":"2019-08-27T16:15:37.001Z","deviceName":"Lefun","iosDeviceId":"E77D440A-44E6-243B-2C7E-AA4BB4896269","localName":"Lefun","macAddress":"31:31:39:80:62:08","openid":"oM8UK45eeDVw9mVtUCNSA2OiccDY"}
-   
-
-    baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
-      // 开始
-      let systemInfo = wx.getSystemInfoSync()
-      let deviceId = ""
-      if (systemInfo.brand == "iPhone") {
-        deviceId = that.data.deviceInfo.iosDeviceId
-      } else {
-        deviceId = that.data.deviceInfo.androidDeviceId
-      }
-      baseDeviceSynTool.connectDeviceFlow(deviceId)
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideNavigationBarLoading()
-      wx.setNavigationBarTitle({
-        title: '扫描设备',
-      })
-      // clearTimeout(searchTimer)
-      baseMessageHandler.sendMessage('deviceSynMessage', baseDeviceSynTool.deviceSynMessageType.DeviceSynTypeReLaunchBluetoothFail)
-    })
-    
+    if (that.temporaryData.isSynDataNow == true) {
+      wx.stopPullDownRefresh()
+      baseTool.showToast("设备正在同步中...")
+      return
+    }
+    that.temporaryData.pullDown = true
+    let connectedState = baseDeviceSynTool.getDeviceConnectedState()
+    if (connectedState.code != 1002) {
+      that.connectDevice()
+    } else {
+      that.temporaryData.isSynDataNow = true
+      that.startSynData()
+    }
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
   registerDeviceSynMessageBlock: function() {
     let that = this
     baseMessageHandler.addMessageHandler("deviceSynMessage", that, res => {
-      let section = parseInt(res.code / 1000)
-      let row = parseInt(res.code - section * 1000)
-      baseTool.print([section, row])
-      baseTool.showToast(res.text)
-      let deviceObject = that.data.deviceInfo
-      deviceObject.stateText = res.text
-      that.setData({
-        isConnectNow: true,
-        deviceInfo: deviceObject
-      })
-      switch (section) {
-        case 1:
-          {
-            that.processDeviceSynSuccessMessage(res)
-            break;
-          }
-        case 2:
-          {
-            that.processDeviceSynFailMessage(res)
-            break;
-          }
-      }
+
+    }).then(res => {
+      baseTool.print(res)
     })
   },
-  registerCallBack: function () {
+  registerCallBack: function() {
     let that = this
     baseMessageHandler.addMessageHandler("refresh", this, res => {
       that.getHomePage()
     }).then(res => {
       that.getHomePage()
     })
-    baseMessageHandler.addMessageHandler("deviceConnectedState", that, res => {
-      
-    }).then(res => {
+    baseMessageHandler.addMessageHandler("deviceConnectedState", that, that.showDeviceConnectState).then(res => {
       baseTool.print(res)
     })
   },
-  removeCallBack: function () {
+  removeCallBack: function() {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
   },
-  getHomePage: function(){
+  getHomePage: function() {
     let that = this
-    baseNetLinkTool.getRemoteDataFromServer("getHomePage", "获取首页数据").then(res => {
-    }).catch(res => {
+    baseNetLinkTool.getRemoteDataFromServer("step_get", "获取计步数据", {
+      date: that.data.date,
+    }).then(res => {}).catch(res => {
 
     })
-    baseNetLinkTool.getRemoteDataFromServer("getDeviceinfo", "获取首页数据").then(res => {
-      baseTool.print(res)
-      if (res.deviceInfo) {
-        // baseTool.setValueForKey(res.deviceInfo, "deviceInfo")
-      }
-    }).catch(res => {
-
-    })
-  },
-  processDeviceSynSuccessMessage: function (res) {
-    let that = this
-    let section = parseInt(res.code / 1000)
-    let row = parseInt(res.code - section * 1000)
-    switch (row) {
-      case 9:
-        {
-          // 获得特征值成功
-          // that.formBindDevice()
-          // 开始
-          let systemInfo = wx.getSystemInfoSync()
-          let deviceId = ""
-          if (systemInfo.brand == "iPhone") {
-            deviceId = that.data.deviceInfo.iosDeviceId
-          } else {
-            deviceId = that.data.deviceInfo.androidDeviceId
-          }
-          let valueString = "0xCB0429"
-          valueString += baseHexConvertTool.encodeCrc8("CB0429")
-          let buffer = baseHexConvertTool.hexStringToArrayBuffer(valueString)
-          baseTool.print(baseHexConvertTool.arrayBufferToHexString(buffer))
-
-          baseDeviceSynTool.writeValue(deviceId, buffer)
-          break;
-        }
-      case 11:
-        {
-          break
-        }
-    }
-  },
-  processDeviceSynFailMessage: function (res) {
-    let that = this
-    let section = parseInt(res.code / 1000)
-    let row = parseInt(res.code - section * 1000)
-    switch (row) {
-      case 6:
-        {
-          // 超时
-          let timer = setTimeout(() => {
-            that.setData({
-              isConnectNow: false,
-              // deviceObject: {}
-            })
-          }, 2000)
-          break
-        }
-    }
   },
   redrawCircle: function(percent = 0) {
     let that = this
@@ -226,17 +170,130 @@ Page({
     baseTool.print(ctx)
     ctx.beginPath()
     ctx.setLineWidth(8)
-    ctx.arc(width / 2, width / 2, width / 2 - 4, 1.5 * Math.PI, degree, true)
+    ctx.arc(width / 2, width / 2, width / 2 - 4, -0.5 * Math.PI, degree, true)
     ctx.setStrokeStyle('#6B92FB')
     ctx.stroke()
     ctx.closePath()
     ctx.beginPath()
-    ctx.arc(width / 2, width / 2, width / 2 - 4, 1.5 * Math.PI, degree, false)
+    ctx.arc(width / 2, width / 2, width / 2 - 4, -0.5 * Math.PI, degree, false)
     ctx.setStrokeStyle('#D8E2FB')
     ctx.stroke()
     ctx.draw()
   },
   degreeForPercent: function(percent = 0) {
     return Math.PI * (1.5 - 2 * percent)
+  },
+  connectDevice: function() {
+    let that = this
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
+      baseDeviceSynTool.connectDeviceFlow(deviceInfo)
+    }).catch(res => {
+      baseTool.print(that.temporaryData.pullDown)
+      if (that.temporaryData.pullDown == true) {
+        wx.stopPullDownRefresh()
+        that.temporaryData.pullDown = false
+      }
+      let deviceConnectObject = that.data.deviceConnectObject
+      deviceConnectObject.stateText = "蓝牙不可用"
+      deviceConnectObject.stateColor = "red"
+      deviceConnectObject.bindTitle = "重新连接"
+      deviceConnectObject.action = 1
+      that.setData({
+        showDeviceToolBar: true,
+        deviceConnectObject: deviceConnectObject
+      })
+    })
+  },
+  actionClick: function(e) {
+    let that = this
+    let action = parseInt(e.detail.action)
+    baseTool.print(action)
+    switch (action) {
+      case 0: {
+        wx.navigateTo({
+          url: '/pages/my/bindDevice/bindDevice'
+        })
+        break
+      }
+      case 1: {
+        that.connectDevice()
+        break
+      }
+      case 2: {
+        break
+      }
+    }
+  },
+  closeToolBarClick: function() {
+    let that = this
+    that.setData({
+      showDeviceToolBar: false
+    })
+  },
+  showDeviceConnectState: function(res) {
+    let that = this
+    let deviceConnectObject = that.data.deviceConnectObject
+    let showDeviceToolBar = true
+    baseTool.print(res)
+    let code = parseInt(res.connectedState.code)
+    switch (code) {
+      case 1001: {
+        deviceConnectObject.stateText = "暂无设备"
+        deviceConnectObject.stateColor = "red"
+        deviceConnectObject.bindTitle = "绑定设备"
+        deviceConnectObject.action = 0
+        break;
+      }
+      case 1002: {
+        deviceConnectObject.stateText = "设备已连接"
+        deviceConnectObject.stateColor = "green"
+        deviceConnectObject.bindTitle = "同步数据"
+        deviceConnectObject.action = 2
+        if (that.temporaryData.pullDown == true) {
+          that.startSynData()
+        }
+        break;
+      }
+      case 1003: {
+        deviceConnectObject.stateText = "设备断开连接"
+        deviceConnectObject.stateColor = "red"
+        deviceConnectObject.bindTitle = "重新连接"
+        deviceConnectObject.action = 1
+        break;
+      }
+      case 1004: {
+        break;
+      }
+      case 1005: {
+        break;
+      }
+      case 1006: {
+        deviceConnectObject.stateText = "设备连接失败"
+        deviceConnectObject.stateColor = "red"
+        deviceConnectObject.bindTitle = "重新绑定设备"
+        deviceConnectObject.action = 0
+        break
+      }
+    }
+
+    if (that.temporaryData.pullDown == true) {
+      wx.stopPullDownRefresh()
+      that.temporaryData.pullDown = false
+    }
+    that.setData({
+      showDeviceToolBar: showDeviceToolBar,
+      deviceConnectObject: deviceConnectObject
+    })
+  },
+  startSynData: function() {
+    let that = this
+    switch (that.temporaryData.synIndexIndicator) {
+      // 同步设备计步
+      case 0: that.synDeviceStep()
+    }
+  },
+  synDeviceStep: function() {
+    // baseDeviceSynTool.
   }
 })

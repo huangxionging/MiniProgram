@@ -42,6 +42,11 @@ let DeviceConnectedState = {
     code: 1005,
     name: "DeviceDisconnecting",
     text: "正在断开连接"
+  },
+  DeviceNeverConnected: {
+    code: 1006,
+    name: "DeviceNeverConnected",
+    text: "设备未连接"
   }
 }
 
@@ -285,7 +290,7 @@ function connectDeviceFlow(deviceInfo = {}) {
     if (stopTimer == true) {
       return
     }
-    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
@@ -307,7 +312,7 @@ function connectDeviceFlow(deviceInfo = {}) {
       clearTimeout(timer)
       stopTimer = true
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedFail)
-      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     }
   })
@@ -323,7 +328,7 @@ function getBLEDeviceServices(deviceId = '') {
     if (stopTimer == true) {
       return
     }
-    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
@@ -345,7 +350,7 @@ function getBLEDeviceServices(deviceId = '') {
       baseTool.print("获得服务失败")
       clearTimeout(timer)
       stopTimer = true
-      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceServicesFail)
     }
@@ -361,7 +366,7 @@ function getBLEDeviceCharacteristics(deviceId = '') {
     if (stopTimer == true) {
       return
     }
-    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
@@ -383,7 +388,7 @@ function getBLEDeviceCharacteristics(deviceId = '') {
       baseTool.print("获取特征值失败")
       clearTimeout(timer)
       stopTimer = true
-      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceCharacteristicsFail)
     }
@@ -398,7 +403,7 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
     if (stopTimer == true) {
       return
     }
-    deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+    deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
@@ -411,12 +416,14 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
       clearTimeout(timer)
       stopTimer = true
       deviceCharacteristicValueChange()
+      deviceObject.connectedState = DeviceConnectedState.DeviceConnected
+      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifySuccess)
     },
     fail: function(res) {
       clearTimeout(timer)
       stopTimer = true
-      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifyFail)
     }
@@ -497,10 +504,32 @@ function removeCallBackForKey(key = '') {
   delete callBackObject[key]
 }
 
-function findDevice() {
+/**
+ * 查找设备
+ */
+function commandDindDevice() {
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB0429")
   writeValue(deviceObject.deviceId, commandBuffer)
   return "29"
+}
+
+function commandSettingTime() {
+  let date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+  baseTool.print([year, month, day, hour, minute, second])
+  let hex = baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
+  baseTool.print(hex)
+}
+
+
+function synDeviceStepData() {
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB0429")
+  writeValue(deviceObject.deviceId, commandBuffer)
 }
 
 module.exports = {
@@ -513,5 +542,6 @@ module.exports = {
   getDeviceConnectedState: getDeviceConnectedState,
   registerCallBackForKey: registerCallBackForKey,
   removeCallBackForKey: removeCallBackForKey,
-  findDevice: findDevice
+  commandDindDevice: commandDindDevice,
+  commandSettingTime: commandSettingTime
 }

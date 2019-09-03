@@ -45,8 +45,12 @@ function myIndexSectionDataArray() {
           section: 0,
           icon: 'my_find_device.png',
           title: '查找设备',
-          action: "CB0429",
-          url: '../brushContestList/brushContestList',
+        },
+        {
+          id: 2,
+          section: 0,
+          icon: 'my_find_device.png',
+          title: "同步时间",
         }
       ]
     },

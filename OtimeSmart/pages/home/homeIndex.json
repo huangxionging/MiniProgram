@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView"
+    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView",
+    "deviceConnectStateToolBar": "/components/deviceConnectStateToolBar/deviceConnectStateToolBar"
   },
   "navigationBarTitleText": "设备首页",
   "enablePullDownRefresh": true,

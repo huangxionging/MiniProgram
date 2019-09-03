@@ -122,7 +122,7 @@ Page({
             if(state.code != 1002) {
               baseTool.showToast("蓝牙打开失败")
             } else {
-              let key = baseDeviceSynTool.findDevice()
+              let key = baseDeviceSynTool.commandDindDevice()
               baseDeviceSynTool.registerCallBackForKey((res => {
                 baseTool.print(["通知信息", res])
                 if (res.length < 10) {
@@ -142,6 +142,7 @@ Page({
             break
           }
           case 1: {
+            baseDeviceSynTool.commandSettingTime()
             break
           }
           case 2: {

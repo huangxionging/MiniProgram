@@ -12,6 +12,23 @@ module.exports = {
    */
   bind: "device/bind",
   /**
+   * 步数获取
+   */
+  step_get: "data/step_get",
+
+  /**
+   * 步数保存
+   */
+  step_save: "data/step_save",
+  /**
+   * 心率保存
+   */
+  heart_rate_save: "data/heart_rate_save",
+  /**
+   * 获得心率数据
+   */
+  heart_rate_get: "data/heart_rate_get",
+  /**
    * 首页接口
    */
   homePage: 'homePage',
