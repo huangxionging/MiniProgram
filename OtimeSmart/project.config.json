@@ -46,8 +46,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/moment/momentIndex/momentIndex",
-					"pathName": "pages/moment/momentIndex/momentIndex",
+					"name": "pages/my/editMyInfo/editMyInfo",
+					"pathName": "pages/my/editMyInfo/editMyInfo",
 					"query": "",
 					"scene": null
 				}

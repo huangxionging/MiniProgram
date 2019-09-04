@@ -3,8 +3,8 @@ const app = getApp()
 const baseTool = require('../../../utils/baseTool.js')
 const myAdapter = require('../../../adapter/myAdapter.js')
 const baseDeviceSynTool = require('../../../utils/baseDeviceSynTool.js')
-// const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
-const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 

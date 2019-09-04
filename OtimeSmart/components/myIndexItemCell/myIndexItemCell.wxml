@@ -2,7 +2,7 @@
 <view class="cell-container" style="height:120rpx;">
   <view class="cell-content" bindtap='didSelectRow'>
     <view class="cell-left">
-      <image class="cell-icon" src="/resource/{{data.icon}}"></image>
+      <image wx:if="{{data.icon}}" class="cell-icon" src="/resource/{{data.icon}}"></image>
       <view class="cell-title">{{data.title}}</view>
     </view>
     <view class="cell-right" style="flex-direction:row-reverse;">

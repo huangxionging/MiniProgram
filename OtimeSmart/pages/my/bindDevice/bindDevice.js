@@ -174,6 +174,11 @@ Page({
       case 9:
         {
           // 获得特征值成功
+          // 同步时间
+          let key = baseDeviceSynTool.commandSettingTime()
+          baseDeviceSynTool.registerCallBackForKey(res => {
+            baseDeviceSynTool.removeCallBackForKey(key)
+          }, key)
           that.formBindDevice()
           break;
         }
@@ -182,9 +187,17 @@ Page({
           baseTool.print(res)
           baseTool.showToast(res.deviceName)
           baseTool.print(res.deviceName)
+          let deviceInfo = baseNetLinkTool.getDeviceInfo()
+          
           let sectionDataArray = that.data.sectionDataArray
           let rowDataArray = sectionDataArray[0].rowDataArray
-          rowDataArray.push(res)
+          if (deviceInfo == "") {
+            rowDataArray.push(res)
+          } else {
+            if (res.macAddress == deviceInfo.macAddress) {
+              rowDataArray.push(res)
+            }
+          }
           that.setData({
             sectionDataArray: sectionDataArray
           })
@@ -215,9 +228,9 @@ Page({
     let deviceObject = that.data.currentDeviceObject
     baseTool.print(deviceObject)
     baseNetLinkTool.getRemoteDataFromServer("bind", "绑定设备", {
-      device: deviceObject.macAddress,
+      device: deviceObject.deviceId,
       name: deviceObject.deviceName ? deviceObject.deviceName : "",
-      id: deviceObject.deviceId,
+      id: deviceObject.macAddress,
       alias: deviceObject.deviceAlias ? deviceObject.deviceAlias : "",
     }).then(res => {
       baseTool.print(res)

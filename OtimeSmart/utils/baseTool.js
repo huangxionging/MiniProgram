@@ -234,6 +234,31 @@ function getCurrentDateWithoutTime() {
 }
 
 /**
+ * 获得当前偏移量的日期
+ */
+function getCurrentOffsetDateWithoutTime(offset = 0) {
+  let date = new Date()
+  let time = date.getTime()
+  // 添加偏移毫秒数
+  date.setTime(time + offset * 86400000)
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day
+}
+
+/**
+ * 获得第二个日期相对于第一个日期差值的天数
+ */
+function getOffsetDays(firstDate = "", secondDate = "") {
+  let date1 = new Date(firstDate)
+  let date2 = new Date(secondDate)
+  // 计算两个日期直接的毫秒数差值并除以 1 的毫秒数 86400000
+  return (date2.getTime() - date1.getTime()) / 86400000
+}
+
+/**
  * 时分秒
  */
 function getCurrentTimeWithNoDate() {
@@ -243,6 +268,8 @@ function getCurrentTimeWithNoDate() {
   let second = zeroFormat(date.getSeconds() + '')
   return hour + ':' + minute + ':' + second
 }
+
+
 
 /**
  * 加 0 格式化字符串
@@ -741,6 +768,8 @@ module.exports = {
   // 获取从下一分钟从0秒钟开始的时间
   getNextMinuteTimeWithZeroSecond: getNextMinuteTimeWithZeroSecond,
   getCurrentDateWithoutTime: getCurrentDateWithoutTime,
+  getCurrentOffsetDateWithoutTime: getCurrentOffsetDateWithoutTime,
+  getOffsetDays: getOffsetDays,
   getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond,
   getCurrentTimeWithNoDate: getCurrentTimeWithNoDate,
   // 仿写 Object.values, 兼容

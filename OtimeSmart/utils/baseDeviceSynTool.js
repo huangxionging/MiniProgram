@@ -435,10 +435,12 @@ function deviceCharacteristicValueChange() {
   wx.onBLECharacteristicValueChange(function(res) {
     let values = new Uint8Array(res.value)
     let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
-    baseTool.print([hex, '通知信息'])
     let key = hex.substr(4, 2)
+    baseTool.print([hex, key, '通知信息'])
     let callBack = callBackObject[key]
-    callBack(hex)
+    if (callBack != undefined) {
+      callBack(hex)
+    }
   })
   
 }
@@ -513,23 +515,38 @@ function commandDindDevice() {
   return "29"
 }
 
+/**
+ * 同步时间
+ */
 function commandSettingTime() {
   let date = new Date()
-  const year = date.getFullYear()
+  const year = date.getFullYear() - 2000
   const month = date.getMonth() + 1
   const day = date.getDate()
   const hour = date.getHours()
   const minute = date.getMinutes()
   const second = date.getSeconds()
-  baseTool.print([year, month, day, hour, minute, second])
-  let hex = baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
+  let hex = "0xCB052401" + baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hex)
+  writeValue(deviceObject.deviceId, commandBuffer)
   baseTool.print(hex)
+  return "24"
 }
 
-
-function synDeviceStepData() {
-  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB0429")
+/**
+ * 同步总步数
+ */
+function commandSynDeviceTotalStepData(dayNumber = 0) {
+  let key = "0xCB05320" + dayNumber
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(key)
   writeValue(deviceObject.deviceId, commandBuffer)
+  return "32"
+}
+
+function commandSynDeviceDetailStepData(dayNumber = 0){
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB053300")
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "33"
 }
 
 module.exports = {
@@ -543,5 +560,7 @@ module.exports = {
   registerCallBackForKey: registerCallBackForKey,
   removeCallBackForKey: removeCallBackForKey,
   commandDindDevice: commandDindDevice,
-  commandSettingTime: commandSettingTime
+  commandSettingTime: commandSettingTime,
+  commandSynDeviceTotalStepData: commandSynDeviceTotalStepData,
+  commandSynDeviceDetailStepData: commandSynDeviceDetailStepData
 }

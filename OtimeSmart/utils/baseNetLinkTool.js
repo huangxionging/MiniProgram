@@ -8,23 +8,7 @@ const baseApiList = require('/baseApiList.js')
 function getToken() {
   return baseTool.valueForKey('token')
 }
-/**
- * 获取 memberID
- */
-function getMemberId() {
-  return baseTool.valueForKey('clinicId')
-}
 
-/**
- * 获得诊所 id
- */
-function getClinicId() {
-  return baseTool.valueForKey('clinicId')
-}
-
-function getIsHaveDevice() {
-  return baseTool.valueForKey('isHaveDevice')
-}
 
 /**
  * 获取用户信息
@@ -40,18 +24,6 @@ function getDeviceInfo() {
   return baseTool.valueForKey("deviceInfo")
 }
 
-/**
- * 获得诊所名字
- */
-function getClinicName() {
-  return baseTool.valueForKey('clinicName')
-}
-
-function setIsHaveDevice(isHaveDevice) {
-  if (isHaveDevice != undefined) {
-    baseTool.setValueForKey(isHaveDevice, 'isHaveDevice')
-  }
-}
 
 /**
  * 重启页面
@@ -252,12 +224,7 @@ function getImagePath(imageName = "") {
 
 module.exports = {
   getToken: getToken,
-  getMemberId: getMemberId,
-  getClinicId: getClinicId,
-  getIsHaveDevice: getIsHaveDevice,
-  setIsHaveDevice: setIsHaveDevice,
   reLauch: reLauch,
-  getClinicName: getClinicName,
   startAuthorization: startAuthorization,
   getRemoteDataFromServer: getRemoteDataFromServer,
   showNetWorkingError: showNetWorkingError,

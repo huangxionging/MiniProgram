@@ -1,2 +1,20 @@
 <!--pages/my/editMyInfo/editMyInfo.wxml-->
-<text>pages/my/editMyInfo/editMyInfo.wxml</text>
+<view class='navigation-bar-line' />
+<view class="edit-container">
+  <view class="edit-avatar">
+    <image class="avatar" src="{{(userInfo.avatar!='')?userInfo.avatar:'/resource/no_avatar.jpg'}}"></image>
+  </view>
+  <view class='edit-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+          <myIndexItemCell wx:if="{{rowndex==0 && sectionIndex == 0}}" data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
+          <picker wx:else mode="{{rowObject.type}}"  range="{{rowObject.itemList}}" value='{{rowObject.value}}' bindchange='editSelectClick' end="{{rowObject.endDate}}" start="{{rowObject.startDate}}" data-row='{{rowndex}}' data-section='{{sectionIndex}}'>
+            <myIndexItemCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
+          </picker>
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="save-user" hover-class="hover-button" bindtap="saveUseInfoClick">保存个人信息</view>
+</view>

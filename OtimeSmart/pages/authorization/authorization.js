@@ -118,49 +118,51 @@ Page({
 
             if (res.active_device != null) {
               baseTool.setValueForKey({
-                macAddress: res.active_device,
-                deviceId: res.active_id ? res.active_id : "",
+                macAddress: res.active_id,
+                deviceId: res.active_device,
                 deviceName: res.active_name ? res.active_name : "",
-                deviceAlias: res.active_alias ? res.active_alias: ""
+                deviceAlias: res.active_alias ? res.active_alias : ""
               }, "deviceInfo")
             }
 
             if (res.avatar != null || res.alias != null) {
               baseTool.setValueForKey({
                 avatar: res.avatar ? res.avatar : "",
-                alias: res.alias ? res.alias: "",
+                alias: res.alias ? res.alias : "",
                 birthday: res.birthday ? res.birthday : "",
-                height: res.height ? res.height : "",
-                weight: res.weight ? res.weight : "",
-                sex: res.sex ? res.sex : "",
+                height: res.height ? res.height : "170",
+                weight: res.weight ? res.weight : "60",
+                sex: res.sex,
                 phone: res.phone ? res.phone : ""
               }, "userInfo")
               wx.hideLoading()
               baseNetLinkTool.reLauch()
             } else {
               baseNetLinkTool.getRemoteDataFromServer("info", "用户信息", {
-              avatar: e.userInfo.avatarUrl,
-              alias: e.userInfo.nickName,
-              sex: e.userInfo.gender
-            }).then(res => {
-              baseTool.print(res)
-              baseTool.setValueForKey({
-                avatar: res.avatar ? res.avatar : "",
-                alias: res.alias ? res.alias : "",
-                birthday: res.birthday ? res.birthday : "",
-                height: res.height ? res.height : "",
-                weight: res.weight ? res.weight : "",
-                sex: res.sex ? res.sex : "",
-                phone: res.phone ? res.phone : ""
-              }, "userInfo")
-              wx.hideLoading()
-              baseNetLinkTool.reLauch()
-            }).catch(res => {
-              baseTool.print(res)
-              baseNetLinkTool.showNetWorkingError(res)
-            })
-            }            
+                avatar: e.userInfo.avatarUrl,
+                alias: e.userInfo.nickName,
+                sex: e.userInfo.gender
+              }).then(res => {
+                baseTool.print(res)
+                baseTool.setValueForKey({
+                  avatar: res.avatar ? res.avatar : "",
+                  alias: res.alias ? res.alias : "",
+                  birthday: res.birthday ? res.birthday : "",
+                  height: res.height ? res.height : "170",
+                  weight: res.weight ? res.weight : "60",
+                  sex: res.sex,
+                  phone: res.phone ? res.phone : ""
+                }, "userInfo")
+                wx.hideLoading()
+                baseNetLinkTool.reLauch()
+              }).catch(res => {
+                wx.hideLoading()
+                baseTool.print(res)
+                baseNetLinkTool.showNetWorkingError(res)
+              })
+            }
           }).catch(res => {
+            wx.hideLoading()
             baseTool.print(res)
             baseNetLinkTool.showNetWorkingError(res)
           })

@@ -32,7 +32,8 @@ Page({
   temporaryData: {
     pullDown: false,
     isSynDataNow: false,
-    synIndexIndicator: 0
+    synActionIndicator: 0, // 同步操作指令
+    needSynDayIndicator: 7 // 需要同步的历史数据天数
   },
 
   /**
@@ -69,7 +70,7 @@ Page({
       that.connectDevice()
     }
 
-    
+
     let percent = that.data.currentStep / 10000
     that.redrawCircle(percent)
   },
@@ -79,13 +80,13 @@ Page({
    */
   onShow: function() {
     let that = this
-    that.registerDeviceSynMessageBlock()
+    // that.registerDeviceSynMessageBlock()
   },
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-    baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
+    // baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
   },
 
   /**
@@ -156,11 +157,52 @@ Page({
   },
   getHomePage: function() {
     let that = this
-    baseNetLinkTool.getRemoteDataFromServer("step_get", "获取计步数据", {
-      date: that.data.date,
-    }).then(res => {}).catch(res => {
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    let token = baseNetLinkTool.getToken()
+    if (deviceInfo == "" && token != "") {
+      return
+    } else {
+      let last6Date = baseTool.getCurrentOffsetDateWithoutTime(-6)
+      let last5Date = baseTool.getCurrentOffsetDateWithoutTime(-5)
+      let last4Date = baseTool.getCurrentOffsetDateWithoutTime(-4)
+      let last3Date = baseTool.getCurrentOffsetDateWithoutTime(-3)
+      let last2Date = baseTool.getCurrentOffsetDateWithoutTime(-2)
+      let last1Date = baseTool.getCurrentOffsetDateWithoutTime(-1)
+      let last0Date = baseTool.getCurrentOffsetDateWithoutTime(0)
+      baseTool.print(baseTool.getOffsetDays(last0Date, last4Date))
+      baseNetLinkTool.getRemoteDataFromServer("step_get", "获取计步数据", {
+        date: [last0Date, last1Date, last2Date, last3Date, last4Date, last5Date,last6Date],
+        id: deviceInfo.macAddress
+      }).then(res => {
+        baseTool.print(res)
+        let dataArray = res.data
+        let maxDate = last6Date
+        let currentDateIndex = -1
+        for (let index = 0; index < dataArray.length; ++index){
+          let dataObject = dataArray[index]
+          // 如果日期大于 maxDate
+          if (dataObject.date > maxDate) {
+            maxDate = dataObject.date
+          }
 
-    })
+          if (dataObject.date == last0Date) {
+            currentDateIndex = index
+          }
+        }
+
+        // 表示今天上传过数据
+        if (currentDateIndex != -1) {
+          that.temporaryData.needSynDayIndicator = 0
+        } else {
+          baseTool.print(baseTool.getOffsetDays(last0Date, maxDate))
+          that.temporaryData.needSynDayIndicator = 0
+        }
+
+      }).catch(res => {
+
+      })
+    }
+
   },
   redrawCircle: function(percent = 0) {
     let that = this
@@ -210,19 +252,23 @@ Page({
     let action = parseInt(e.detail.action)
     baseTool.print(action)
     switch (action) {
-      case 0: {
-        wx.navigateTo({
-          url: '/pages/my/bindDevice/bindDevice'
-        })
-        break
-      }
-      case 1: {
-        that.connectDevice()
-        break
-      }
-      case 2: {
-        break
-      }
+      case 0:
+        {
+          wx.navigateTo({
+            url: '/pages/my/bindDevice/bindDevice'
+          })
+          break
+        }
+      case 1:
+        {
+          that.connectDevice()
+          break
+        }
+      case 2:
+        {
+          that.startSynData()
+          break
+        }
     }
   },
   closeToolBarClick: function() {
@@ -238,43 +284,49 @@ Page({
     baseTool.print(res)
     let code = parseInt(res.connectedState.code)
     switch (code) {
-      case 1001: {
-        deviceConnectObject.stateText = "暂无设备"
-        deviceConnectObject.stateColor = "red"
-        deviceConnectObject.bindTitle = "绑定设备"
-        deviceConnectObject.action = 0
-        break;
-      }
-      case 1002: {
-        deviceConnectObject.stateText = "设备已连接"
-        deviceConnectObject.stateColor = "green"
-        deviceConnectObject.bindTitle = "同步数据"
-        deviceConnectObject.action = 2
-        if (that.temporaryData.pullDown == true) {
-          that.startSynData()
+      case 1001:
+        {
+          deviceConnectObject.stateText = "暂无设备"
+          deviceConnectObject.stateColor = "red"
+          deviceConnectObject.bindTitle = "绑定设备"
+          deviceConnectObject.action = 0
+          break;
         }
-        break;
-      }
-      case 1003: {
-        deviceConnectObject.stateText = "设备断开连接"
-        deviceConnectObject.stateColor = "red"
-        deviceConnectObject.bindTitle = "重新连接"
-        deviceConnectObject.action = 1
-        break;
-      }
-      case 1004: {
-        break;
-      }
-      case 1005: {
-        break;
-      }
-      case 1006: {
-        deviceConnectObject.stateText = "设备连接失败"
-        deviceConnectObject.stateColor = "red"
-        deviceConnectObject.bindTitle = "重新绑定设备"
-        deviceConnectObject.action = 0
-        break
-      }
+      case 1002:
+        {
+          deviceConnectObject.stateText = "设备已连接"
+          deviceConnectObject.stateColor = "green"
+          deviceConnectObject.bindTitle = "同步数据"
+          deviceConnectObject.action = 2
+          if (that.temporaryData.pullDown == true) {
+            that.startSynData()
+          }
+          break;
+        }
+      case 1003:
+        {
+          deviceConnectObject.stateText = "设备断开连接"
+          deviceConnectObject.stateColor = "red"
+          deviceConnectObject.bindTitle = "重新连接"
+          deviceConnectObject.action = 1
+          break;
+        }
+      case 1004:
+        {
+          break;
+        }
+      case 1005:
+        {
+          break;
+        }
+      case 1006:
+        {
+          deviceConnectObject.stateText = "设备连接失败"
+          deviceConnectObject.stateColor = "red"
+          deviceConnectObject.bindTitle = "重新绑定设备"
+          deviceConnectObject.action = 0
+          break
+        }
     }
 
     if (that.temporaryData.pullDown == true) {
@@ -288,12 +340,20 @@ Page({
   },
   startSynData: function() {
     let that = this
-    switch (that.temporaryData.synIndexIndicator) {
+    switch (that.temporaryData.synActionIndicator) {
       // 同步设备计步
-      case 0: that.synDeviceStep()
+      case 0: {
+        that.synDeviceStep()
+        break
+      }
     }
   },
   synDeviceStep: function() {
-    // baseDeviceSynTool.
+    let lastUploadDate = baseTool.valueForKey("lastUploadDate")
+    // if (lastUploadDate == "")
+    let key = baseDeviceSynTool.commandSynDeviceDetailStepData()
+    baseDeviceSynTool.registerCallBackForKey(res => {
+      baseTool.print(res)
+    }, key)
   }
 })
