@@ -121,7 +121,7 @@ function editIndexSectionArray(userInfo = {}) {
       detail: sexText,
       type: "selector",
       itemList: ["保密", "男", "女"],
-      value: !userInfo.sex
+      value: userInfo.sex
     }, {
       id: 0,
       section: 0,
