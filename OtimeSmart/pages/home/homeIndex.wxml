@@ -3,9 +3,9 @@
 <view class='home-container' wx:if='{{loadDone}}'>
   <deviceConnectStateToolBar wx:if="{{showDeviceToolBar}}" data='{{deviceConnectObject}}' bind:actionClick="actionClick" bind:closeToolBarClick="closeToolBarClick"/>
   <view class="date-change-view">
-    <image data-type="0" bindtap="selecDateClick" class="select-img" src="/resource/select_left.png"/>
+    <image data-type="0" bindtap="selecDateClick" class="select-img" src="/resource/select_left.png" />
     <view class="date-view">{{currentDate}}</view>
-    <image data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png"/>
+    <image wx:if="{{showSelectDate}}" data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png"/>
   </view>
   <view class="device-info">
     <!-- <view class="device-power">电量 | 同步时间: 09: 23</view> -->
@@ -29,7 +29,7 @@
       <view class="kal-view">
         <image class="kal-icon" src="/resource/cal.png"></image>
         <view class="kal-number">{{currentCal}}</view>
-        <view class="unit">cal</view>
+        <view class="unit">kcal</view>
       </view>
       <view class="time-view">
         <image class="kal-icon" src="/resource/time.png"></image>
@@ -63,4 +63,4 @@
     </view>
   </view>
 </view>
-<deviceSyncToolView wx:if='{{isConnectNow}}' data='{{deviceInfo}}' />
+<deviceSyncToolView wx:if='{{isSynNow}}' data='{{deviceInfo}}' />

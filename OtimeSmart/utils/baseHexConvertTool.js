@@ -132,6 +132,13 @@ function hexStringToCommandBuffer(hexString = '') {
   return hexStringToArrayBuffer(commandString)
 }
 
+function hexStringToValue(hexString = '') {
+  if (hexString.length % 2 == 1) {
+    hexString = "0" + hexString
+  }
+  return parseInt(hexString, 16)
+}
+
 module.exports = {
   // 16进制字符串转 ArrayBuffer
   hexStringToArrayBuffer: hexStringToArrayBuffer,
@@ -144,5 +151,6 @@ module.exports = {
   // crc8校验
   encodeCrc8: encodeCrc8,
   // 生成命令 buffer
-  hexStringToCommandBuffer: hexStringToCommandBuffer
+  hexStringToCommandBuffer: hexStringToCommandBuffer,
+  hexStringToValue: hexStringToValue
 }

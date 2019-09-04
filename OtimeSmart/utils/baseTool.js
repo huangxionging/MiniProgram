@@ -258,6 +258,18 @@ function getOffsetDays(firstDate = "", secondDate = "") {
   return (date2.getTime() - date1.getTime()) / 86400000
 }
 
+function getDateOffsetDate(firstDate, offset = 0) {
+  let date = new Date(firstDate)
+  let time = date.getTime()
+  // 添加偏移毫秒数
+  date.setTime(time + offset * 86400000)
+  let year = date.getFullYear() + ''
+  let month = zeroFormat(date.getMonth() + 1 + '')
+  let day = zeroFormat(date.getDate() + '')
+  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
+  return year + '-' + month + '-' + day
+}
+
 /**
  * 时分秒
  */
@@ -275,7 +287,7 @@ function getCurrentTimeWithNoDate() {
  * 加 0 格式化字符串
  */
 function zeroFormat(oldString = '') {
-  return oldString.length == 1 ? '0' + oldString : oldString
+  return (oldString.length % 2) == 1 ? '0' + oldString : oldString
 }
 
 function values(obj) {
@@ -761,6 +773,8 @@ module.exports = {
   startTimer: startTimer,
   // 清除定时器
   clearSingleTimer: clearSingleTimer,
+  // 格式化
+  zeroFormat: zeroFormat,
   // 获取当前时间
   getCurrentTime: getCurrentTime,
   // 获取当前时间, 时分, 无秒
@@ -772,6 +786,7 @@ module.exports = {
   getOffsetDays: getOffsetDays,
   getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond,
   getCurrentTimeWithNoDate: getCurrentTimeWithNoDate,
+  getDateOffsetDate: getDateOffsetDate,
   // 仿写 Object.values, 兼容
   values: values,
   showInfo: showInfo,

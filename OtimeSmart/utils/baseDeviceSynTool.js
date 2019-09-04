@@ -537,14 +537,15 @@ function commandSettingTime() {
  * 同步总步数
  */
 function commandSynDeviceTotalStepData(dayNumber = 0) {
-  let key = "0xCB05320" + dayNumber
-  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(key)
+  let hexString = "0xCB05320" + dayNumber
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "32"
 }
 
 function commandSynDeviceDetailStepData(dayNumber = 0){
-  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB053300")
+  let hexString = "0xCB05330" + dayNumber
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "33"
 }
