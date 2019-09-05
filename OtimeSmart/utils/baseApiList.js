@@ -12,6 +12,10 @@ module.exports = {
    */
   bind: "device/bind",
   /**
+   * 解绑设备
+   */
+  unbind: "device/unbind",
+  /**
    * 步数获取
    */
   step_get: "data/step_get",

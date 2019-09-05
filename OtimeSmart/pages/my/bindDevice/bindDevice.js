@@ -65,6 +65,7 @@ Page({
     if (that.isSearchNow == false) {
       that.foundDevice()
     }
+    wx.stopPullDownRefresh()
   },
 
   /**
@@ -166,7 +167,7 @@ Page({
       deviceAlias: deviceObject.deviceAlias ? deviceObject.deviceAlias : ""
     })
   },
-  processDeviceSynSuccessMessage: function (res) {
+  processDeviceSynSuccessMessage: function(res) {
     let that = this
     let section = parseInt(res.code / 1000)
     let row = parseInt(res.code - section * 1000)
@@ -178,8 +179,8 @@ Page({
           let key = baseDeviceSynTool.commandSettingTime()
           baseDeviceSynTool.registerCallBackForKey(res => {
             baseDeviceSynTool.removeCallBackForKey(key)
+            that.formBindDevice()
           }, key)
-          that.formBindDevice()
           break;
         }
       case 11:
@@ -188,7 +189,7 @@ Page({
           baseTool.showToast(res.deviceName)
           baseTool.print(res.deviceName)
           let deviceInfo = baseNetLinkTool.getDeviceInfo()
-          
+
           let sectionDataArray = that.data.sectionDataArray
           let rowDataArray = sectionDataArray[0].rowDataArray
           if (deviceInfo == "") {
@@ -205,7 +206,7 @@ Page({
         }
     }
   },
-  processDeviceSynFailMessage: function (res) {
+  processDeviceSynFailMessage: function(res) {
     let that = this
     let section = parseInt(res.code / 1000)
     let row = parseInt(res.code - section * 1000)
@@ -218,7 +219,7 @@ Page({
               isConnectNow: false,
               currentDeviceObject: {}
             })
-          }, 2000)
+          }, 500)
           break
         }
     }
@@ -240,11 +241,11 @@ Page({
         deviceName: deviceObject.deviceName ? deviceObject.deviceName : "",
         deviceAlias: deviceObject.deviceAlias ? deviceObject.deviceAlias : ""
       }, "deviceInfo")
-      baseMessageHandler.sendMessage("refresh", "刷新")
       let timer = setTimeout(() => {
         clearTimeout(timer)
+        baseMessageHandler.sendMessage("refresh", "刷新")
         wx.navigateBack()
-      }, 2000)
+      }, 1000)
     }).catch(res => {
       // 超时
       baseTool.showToast("绑定失败")

@@ -190,7 +190,9 @@ Page({
     if (state.code != 1002) {
       baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
         let deviceInfo = baseNetLinkTool.getDeviceInfo()
-        baseDeviceSynTool.connectDeviceFlow(deviceInfo)
+        if (deviceInfo.macAddress) {
+          baseDeviceSynTool.connectDeviceFlow(deviceInfo)
+        }
       }).catch(res => {
         baseTool.print(res)
         baseTool.showToast("蓝牙打开失败")

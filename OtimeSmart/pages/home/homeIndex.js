@@ -14,7 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loadDone: true,
+    loadDone: false,
     deviceInfo: {},
     isSynNow: false,
     currentDate: "",
@@ -48,7 +48,17 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      baseNetLinkTool.startAuthorization()
+    } else {
+      let that = this
+      that.setData({
+        loadDone: true
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -56,6 +66,10 @@ Page({
   onReady: function() {
     let that = this
     // 当前日期
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      return
+    } 
     let currentDate = baseTool.getCurrentDateWithoutTime()
     // 设备信息
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -82,6 +96,11 @@ Page({
         currentDate: currentDate
       })
       that.connectDevice()
+      let lastUploadStepDate = baseTool.valueForKey("lastUploadStepDate")
+      if (!lastUploadStepDate) {
+        lastUploadStepDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+        baseTool.setValueForKey(lastUploadStepDate, "lastUploadStepDate")
+      }
     }
 
 
@@ -167,9 +186,13 @@ Page({
   },
   getHomePage: function() {
     let that = this
-    let deviceInfo = that.data.deviceInfo
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
-    if (deviceInfo == "" && token != "") {
+    baseTool.print([deviceInfo, token])
+    if (!deviceInfo.macAddress && token) {
+      that.setData({
+        deviceInfo: deviceInfo
+      })
       return
     } else {
       let last6Date = baseTool.getCurrentOffsetDateWithoutTime(-6)
@@ -232,6 +255,9 @@ Page({
       }).catch(res => {
         baseTool.print(res)
         baseNetLinkTool.showNetWorkingError(res)
+        that.setData({
+          isSynNow: false
+        })
       })
     }
 
@@ -259,6 +285,7 @@ Page({
   connectDevice: function() {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
+
     baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
       baseDeviceSynTool.connectDeviceFlow(deviceInfo)
     }).catch(res => {
@@ -428,7 +455,7 @@ Page({
     }
     let key = baseDeviceSynTool.commandSynDeviceTotalStepData(that.temporaryData.needSynDayIndicator)
     let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
-    let deviceInfo = that.data.deviceInfo
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
     deviceInfo.stateText = date + "的计步数据"
     that.setData({
       isSynNow: true,
@@ -473,7 +500,7 @@ Page({
     let that = this
     let key = baseDeviceSynTool.commandSynDeviceDetailStepData(that.temporaryData.needSynDayIndicator)
     let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
-    let deviceInfo = that.data.deviceInfo
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
     that.temporaryData.detailStepData = new Array(24)
     for (let index = 0; index < 24; ++index) {
       that.temporaryData.detailStepData[index] = {
@@ -507,7 +534,11 @@ Page({
       let distance = baseHexConvertTool.hexStringToValue(res.substr(26, 4))
       let calorie = baseHexConvertTool.hexStringToValue(res.substr(30, 4))
       let text = "总数:" + totlalNumber + " 序号:" + serialNumber + " 时间:" + date + " 步数:" + step + " 距离:" + distance + " 卡路里:" + calorie
-      baseTool.print(["一条完整的数据", text])
+      baseTool.print(["一条完整的数据1", text])
+      if (hour >= that.temporaryData.detailStepData.length) {
+        hour = 0
+      }
+      baseTool.print([that.temporaryData.detailStepData, hour])
       let dataObject = that.temporaryData.detailStepData[hour]
       dataObject.step += step
       if (serialNumber == 0) {
@@ -516,6 +547,7 @@ Page({
         let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
         dataDateObject.time = baseTool.zeroFormat(hour + "") + ":00:00"
       } 
+      baseTool.print(["一条完整的数据2", text])
       if (serialNumber == totlalNumber - 1) {
         // 结束标志
         // 删除 key
@@ -537,10 +569,13 @@ Page({
   uploadStepData: function() {
     let that = this
     if (that.temporaryData.dataDateObjectList.length == 0) {
+      that.setData({
+        isSynNow: false,
+      })
       baseTool.showToast("本次同步, 无数据")
       return
     }
-    let deviceInfo = that.data.deviceInfo
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
     deviceInfo.stateText = "上传数据..."
     that.setData({
       isSynNow: true,
@@ -564,6 +599,10 @@ Page({
       }, 2000)
     }).catch(res => {
       baseTool.print(res)
+      baseNetLinkTool.showNetWorkingError(res)
+      that.setData({
+        isSynNow: false
+      })
     })
   },
   selecDateClick:function(e) {
@@ -590,7 +629,7 @@ Page({
   },
   getDateDetail: function(currentDate) {
     let that = this
-    let deviceInfo = that.data.deviceInfo
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
     baseNetLinkTool.getRemoteDataFromServer("step_get", "获取指定日期计步数据", {
       date: [currentDate],
       id: deviceInfo.macAddress

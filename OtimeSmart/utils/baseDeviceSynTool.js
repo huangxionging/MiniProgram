@@ -195,12 +195,16 @@ let deviceSynMessageType = {
 }
 
 function clearDeviceObject() {
+  wx.closeBLEConnection({
+    deviceId: deviceObject.deviceId,
+  })
   deviceObject = {
     macAddress: '',
     deviceId: '',
     deviceName: '',
     connectedState: DeviceConnectedState.DeviceNoDevice
   }
+  baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
 }
 
 /**
@@ -275,6 +279,12 @@ function openBluetoothFlow() {
  * 连接流程
  */
 function connectDeviceFlow(deviceInfo = {}) {
+
+  if (!deviceInfo.macAddress || !deviceInfo.deviceId)  {
+    deviceObject.connectedState = DeviceConnectedState.DeviceNoDevice
+    baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
+    return
+  }
   deviceObject.macAddress = deviceInfo.macAddress
   deviceObject.deviceAlias = deviceInfo.deviceAlias
   deviceObject.deviceId = deviceInfo.deviceId
@@ -450,7 +460,11 @@ function deviceConnectionStateChange (){
     if (res.connected == true) {
       deviceObject.connectedState = DeviceConnectedState.DeviceConnected
     } else {
-      deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
+      if (deviceObject.connectedState.code == DeviceConnectedState.DeviceNoDevice.code) {
+        return
+      } else {
+        deviceObject.connectedState.code = DeviceConnectedState.DeviceDisconnected
+      }
     }
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
   })
@@ -533,7 +547,8 @@ function commandSettingTime() {
   const hour = date.getHours()
   const minute = date.getMinutes()
   const second = date.getSeconds()
-  let hex = "0xCB052401" + baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
+  let hex = "0xCB0B2401" + baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
+
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hex)
   writeValue(deviceObject.deviceId, commandBuffer)
   baseTool.print(hex)
@@ -600,4 +615,5 @@ module.exports = {
   commandSynDeviceDetailStepData: commandSynDeviceDetailStepData,
   commandUserInfo: commandUserInfo,
   removeAllCallBack: removeAllCallBack,
+  clearDeviceObject: clearDeviceObject
 }

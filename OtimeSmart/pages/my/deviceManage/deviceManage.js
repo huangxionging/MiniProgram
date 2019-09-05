@@ -2,8 +2,8 @@
 const baseTool = require('../../../utils/baseTool.js')
 const baseDeviceSynTool = require('../../../utils/baseDeviceSynTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-// const baseNetLinkTool = require('../../utils/baseNetLinkTool.js')
-const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
+// const baseNetLinkTool = require('../../../utils/baseCloundNetLinkTool.js')
 const myAdapter = require('../../../adapter/myAdapter.js')
 Page({
 
@@ -80,8 +80,26 @@ Page({
     })
   },
   unbindDeviceClick: function() {
-    baseNetLinkTool.getRemoteDataFromServer("unBindDevice", "解绑设备", {
-      
+    wx.showLoading({
+      title: '设备解绑中...',
+      mask: true,
+    })
+    let deviceInfo = baseTool.valueForKey("deviceInfo")
+    baseNetLinkTool.getRemoteDataFromServer("unbind", "解绑设备", {
+      device: deviceInfo.deviceId,
+      name: deviceInfo.deviceName ? deviceInfo.deviceName : "",
+      id: deviceInfo.macAddress,
+      alias: deviceInfo.deviceAlias ? deviceInfo.deviceAlias : "",
+    }).then(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      baseDeviceSynTool.clearDeviceObject()
+      baseTool.removeObjectForKey("deviceInfo")
+      baseMessageHandler.sendMessage("refresh", "刷新")
+      wx.navigateBack()
+    }).catch(res => {
+      wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
     })
   },
   registerCallBack: function () {
@@ -112,6 +130,11 @@ Page({
         hasDevice: true,
         launchImageUrl: baseNetLinkTool.getImagePath("launch.png"),
         itemList: itemList
+      })
+    } else {
+      that.setData({
+        deviceInfo: deviceInfo,
+        hasDevice: false
       })
     }
   }
