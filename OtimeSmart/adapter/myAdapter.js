@@ -2,58 +2,58 @@ const baseTool = require('../utils/baseTool.js')
 
 function myIndexSectionDataArray() {
   return [{
-    headerHeight: 20,
-    rowDataArray: [{
-      id: 0,
-      section: 0,
-      icon: 'my_device.png',
-      title: '请绑定设备',
-      url: '/pages/my/deviceManage/deviceManage',
-    }]
-  },
-  {
-    headerHeight: 20,
-    rowDataArray: [{
-      id: 0,
-      section: 0,
-      icon: 'my_moment.png',
-      title: '家庭圈管理',
-      url: '/pages/my/familyCircleManage/familyCircleManage',
-    }]
-  },
-  {
-    headerHeight: 20,
-    rowDataArray: [
-      // {
-      //     id: 0,
-      //     section: 0,
-      //     icon: 'my_sedentary_reminder.png',
-      //     title: '久坐提醒',
-      //     detail: '3小时',
-      //     url: '../brushContestList/brushContestList',
-      //   },
-      //   {
-      //     id: 1,
-      //     section: 0,
-      //     icon: 'my_heart_blood.png',
-      //     title: '心率与血压设置',
-      //     detail: '120次/分',
-      //     url: '../brushContestList/brushContestList',
-      //   },
-      {
-        id: 2,
+      headerHeight: 20,
+      rowDataArray: [{
+        id: 0,
         section: 0,
-        icon: 'my_find_device.png',
-        title: '查找设备',
-      },
-      {
-        id: 2,
+        icon: 'my_device.png',
+        title: '请绑定设备',
+        url: '/pages/my/deviceManage/deviceManage',
+      }]
+    },
+    {
+      headerHeight: 20,
+      rowDataArray: [{
+        id: 0,
         section: 0,
-        icon: 'my_find_device.png',
-        title: "同步时间",
-      }
-    ]
-  },
+        icon: 'my_moment.png',
+        title: '家庭圈管理',
+        url: '/pages/my/familyCircleManage/familyCircleManage',
+      }]
+    },
+    {
+      headerHeight: 20,
+      rowDataArray: [
+        // {
+        //     id: 0,
+        //     section: 0,
+        //     icon: 'my_sedentary_reminder.png',
+        //     title: '久坐提醒',
+        //     detail: '3小时',
+        //     url: '../brushContestList/brushContestList',
+        //   },
+        //   {
+        //     id: 1,
+        //     section: 0,
+        //     icon: 'my_heart_blood.png',
+        //     title: '心率与血压设置',
+        //     detail: '120次/分',
+        //     url: '../brushContestList/brushContestList',
+        //   },
+        {
+          id: 2,
+          section: 0,
+          icon: 'my_find_device.png',
+          title: '查找设备',
+        },
+        {
+          id: 2,
+          section: 0,
+          icon: 'my_find_device.png',
+          title: "同步时间",
+        }
+      ]
+    },
     // {
     //   headerHeight: 20,
     //   rowDataArray: [{
@@ -100,10 +100,12 @@ function deviceManageItemList() {
 function editIndexSectionArray(userInfo = {}) {
   let heightList = new Array(300)
   let weightList = new Array(200)
+  let ageList = new Array(200)
   for (let index = 0; index < 300; ++index) {
     heightList[index] = index + " cm"
     if (index <= 200) {
       weightList[index] = index + " kg"
+      ageList[index] = index + "岁"
     }
   }
   let sexText = (userInfo.sex == 0 ? "保密" : (userInfo.sex == 1 ? "男" : "女"))
@@ -125,12 +127,11 @@ function editIndexSectionArray(userInfo = {}) {
     }, {
       id: 0,
       section: 0,
-      title: "生日",
-      detail: userInfo.birthday ? userInfo.birthday : "暂未设置",
-      type: "date",
+      title: "年龄",
+      detail: userInfo.birthday + "岁",
+      type: "selector",
       value: userInfo.birthday,
-      endDate: baseTool.getCurrentDateWithoutTime(),
-      startDate: "1900-01-01"
+      itemList: ageList,
     }]
   }, {
     headerHeight: 20,
@@ -154,8 +155,20 @@ function editIndexSectionArray(userInfo = {}) {
   }]
 }
 
+function detailStepOrginData() {
+  let dataObjectArray = new Array(24)
+  for (let index = 0; index < dataObjectArray.length; ++index) {
+    dataObjectArray[index] = {
+      step: 0,
+      height: 0
+    }
+  }
+  return dataObjectArray
+}
+
 module.exports = {
   myIndexSectionDataArray: myIndexSectionDataArray,
   deviceManageItemList: deviceManageItemList,
-  editIndexSectionArray: editIndexSectionArray
+  editIndexSectionArray: editIndexSectionArray,
+  detailStepOrginData: detailStepOrginData
 }

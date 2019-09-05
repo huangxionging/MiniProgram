@@ -1,0 +1,112 @@
+/* pages/deviceData/stepDetail/stepDetail.wxss */
+
+page {
+  background-color: #eee;
+}
+
+.step-detail-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-detail-content {
+  position: relative;
+  width: 100%;
+  height: 530rpx;
+  background-color: #6b92fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-histogram {
+  position: absolute;
+  left: 50rpx;
+  right: 50rpx;
+  height: 266rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  white-space: nowrap;
+  bottom: 57rpx;
+  text-overflow: ellipsis;
+  /* background-color: red; */
+}
+
+.horizon-cell {
+  width: 28rpx;
+  height: 100rpx;
+  background-color: white;
+  border: 2rpx solid #eee;
+}
+
+.total-step {
+  font-family: PingFangTC-Semibold;
+  font-size: 60rpx;
+  color: #fff;
+}
+
+.total-step-container{
+  margin-top: 30rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coordinate-line{
+  position: absolute;
+  left: 0rpx;
+  right: 0rpx;
+  height: 2rpx;
+  bottom: 56rpx;
+  background-color: white;
+}
+
+.coordinate-view{
+  position: absolute;
+  font-size: 24rpx;
+  color: white;
+  left: 0rpx;
+  right: 0rpx;
+  height: 56rpx;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.hour-start{
+  position: absolute;
+  left: 24rpx;
+  top: 10rpx;
+}
+
+.hour-middle{
+  position: absolute;
+  left: 352rpx;
+  top: 10rpx;
+}
+
+.hour-end{
+  position: absolute;
+  right: 24rpx;
+  top: 10rpx;
+}
+
+.total-tip {
+  color: white;
+  font-size: 34rpx;
+}
+
+.step-table-view{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.section-view{
+  width: 100%;
+  margin-top: 10rpx;
+}

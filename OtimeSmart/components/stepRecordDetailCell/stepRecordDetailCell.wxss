@@ -1,0 +1,45 @@
+/* components/stepRecordDetailCell/stepRecordDetailCell.wxss */
+@import "../../template/cell.wxss";
+
+.container{
+  height: 140rpx;
+}
+.cell-content{
+  display: flex;
+  flex-direction: column;
+  height: 138rpx;
+  justify-content: flex-start;
+}
+
+.cell-bottom{
+  margin-top: 30rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.cell-top{
+  height: 40rpx;
+  width: 100%;
+  margin-top: 8rpx;
+  margin-left: 20rpx;
+  color: #999;
+  font-size: 30rpx;
+}
+
+.cell-middle{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.icon{
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.unit{
+  margin-left: 10rpx;
+  color: #999;
+}

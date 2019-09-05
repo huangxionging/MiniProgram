@@ -5,7 +5,7 @@
   },
   "navigationBarTitleText": "设备首页",
   "enablePullDownRefresh": true,
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "backgroundColor": "#6B92FB",
   "navigationBarBackgroundColor": "#6B92FB"
 }

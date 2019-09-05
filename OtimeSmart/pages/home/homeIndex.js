@@ -22,6 +22,7 @@ Page({
     currentStep: 0,
     currentCal: 0,
     currentDistance: 0,
+    currentPower: "0%",
     showDeviceToolBar: false,
     deviceConnectObject: {
       stateText: "暂无设备",
@@ -37,7 +38,11 @@ Page({
     needSynDayIndicator: 7, // 需要同步的历史数据天数,
     dataDateObjectList: [],
     detailStepData: [],
-    selectDateIndicator: 0
+    selectDateIndicator: 0,
+    currentAge: 0, // 当前年龄
+    currentSex: -1,
+    currentHeight: 0,
+    currentWeight: 0,
   },
 
   /**
@@ -57,6 +62,11 @@ Page({
     // 设备连接状态
     let deviceConnectObject = that.data.deviceConnectObject
     that.registerCallBack()
+    let userInfo = baseNetLinkTool.getUserInfo()
+    that.temporaryData.currentSex = (userInfo.sex == 2) ? 0 : 1
+    that.temporaryData.currentAge = userInfo.birthday
+    that.temporaryData.currentHeight = userInfo.height
+    that.temporaryData.currentWeight = userInfo.weight
     if (deviceInfo == "") {
       deviceConnectObject.stateText = "暂无设备"
       deviceConnectObject.stateColor = "red"
@@ -100,16 +110,13 @@ Page({
     let that = this
     that.removeCallBack()
   },
-  onPageScroll: function(e) {
-
-  },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
     let that = this
+    wx.stopPullDownRefresh()
     if (that.data.isSynNow == true) {
-      wx.stopPullDownRefresh()
       baseTool.showToast("设备正在同步中...")
       return
     }
@@ -172,6 +179,9 @@ Page({
       let last2Date = baseTool.getCurrentOffsetDateWithoutTime(-2)
       let last1Date = baseTool.getCurrentOffsetDateWithoutTime(-1)
       let last0Date = baseTool.getCurrentOffsetDateWithoutTime(0)
+      that.setData({
+        currentDate: last0Date
+      })
        baseNetLinkTool.getRemoteDataFromServer("step_get", "获取计步数据", {
         date: [last0Date, last1Date, last2Date, last3Date, last4Date, last5Date,last6Date],
         id: deviceInfo.macAddress
@@ -319,6 +329,29 @@ Page({
           deviceConnectObject.stateColor = "green"
           deviceConnectObject.bindTitle = "同步数据"
           deviceConnectObject.action = 2
+          let key = baseDeviceSynTool.commandDevicePower()
+          baseDeviceSynTool.registerCallBackForKey(res => {
+            baseTool.print(res)
+            baseDeviceSynTool.removeCallBackForKey(key)
+            let power = baseHexConvertTool.hexStringToValue(res.substr(6, 2)) + "%"
+            that.setData({
+              currentPower: power
+            })
+          }, key)
+
+          let UserInfokey = baseDeviceSynTool.commandUserInfo()
+          baseDeviceSynTool.registerCallBackForKey(res => {
+            baseTool.print(res)
+            baseDeviceSynTool.removeCallBackForKey(UserInfokey)
+            let sex = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+            let height = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+            let weight = baseHexConvertTool.hexStringToValue(res.substr(12, 2))
+            let age = baseHexConvertTool.hexStringToValue(res.substr(14, 2))
+            that.temporaryData.currentSex = sex
+            that.temporaryData.currentHeight = height
+            that.temporaryData.currentWeight = weight
+            that.temporaryData.currentAge = age
+          }, UserInfokey)
           if (that.temporaryData.pullDown == true) {
             that.startSynData()
           }
@@ -330,6 +363,12 @@ Page({
           deviceConnectObject.stateColor = "red"
           deviceConnectObject.bindTitle = "重新连接"
           deviceConnectObject.action = 1
+          // 此时必须关闭
+          that.setData({
+            isSynNow: false
+          })
+          // 关闭所有的指令回调
+          baseDeviceSynTool.removeAllCallBack()
           break;
         }
       case 1004:
@@ -423,7 +462,7 @@ Page({
         dataDateObject.date = date
         dataDateObject.target = 10000
         dataDateObject.distance = distance
-        dataDateObject.calorie = calorie / 1000
+        dataDateObject.calorie = (calorie / 1000).toFixed(1)
         dataDateObject.total = step
         baseTool.print(["本次数据", dataDateObject])
         that.synDeviceDetailStep()
@@ -476,7 +515,8 @@ Page({
         let length = that.temporaryData.dataDateObjectList.length
         let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
         dataDateObject.time = baseTool.zeroFormat(hour + "") + ":00:00"
-      } else if (serialNumber == totlalNumber - 1) {
+      } 
+      if (serialNumber == totlalNumber - 1) {
         // 结束标志
         // 删除 key
         let length = that.temporaryData.dataDateObjectList.length
@@ -590,6 +630,15 @@ Page({
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  stepDetailClick: function() {
+    let that = this
+    let date = that.data.currentDate
+    let height = that.temporaryData.currentHeight
+    let weight = that.temporaryData.currentWeight
+    wx.navigateTo({
+      url: '/pages/deviceData/stepDetail/stepDetail?date=' + date + "&height=" + height +  "&weight=" + weight,
     })
   }
 })

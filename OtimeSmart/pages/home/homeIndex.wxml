@@ -8,9 +8,9 @@
     <image wx:if="{{showSelectDate}}" data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png"/>
   </view>
   <view class="device-info">
-    <!-- <view class="device-power">电量 | 同步时间: 09: 23</view> -->
+    <view class="device-power">电量: {{currentPower}}</view>
   </view>
-  <view class="device-step">
+  <view class="device-step" bindtap="stepDetailClick">
     <view class="step-info-container">
       <view class="step-left">
         <view class="step-number">
@@ -29,7 +29,7 @@
       <view class="kal-view">
         <image class="kal-icon" src="/resource/cal.png"></image>
         <view class="kal-number">{{currentCal}}</view>
-        <view class="unit">kcal</view>
+        <view class="unit">kCal</view>
       </view>
       <view class="time-view">
         <image class="kal-icon" src="/resource/time.png"></image>

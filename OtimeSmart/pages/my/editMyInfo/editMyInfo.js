@@ -187,7 +187,7 @@ Page({
               }
             case 2:
               {
-                rowDataArray0[row].detail = value
+                rowDataArray0[row].detail = value + "岁"
                 rowDataArray0[row].value = value
                 break;
               }

@@ -129,9 +129,9 @@ Page({
               baseTool.setValueForKey({
                 avatar: res.avatar ? res.avatar : "",
                 alias: res.alias ? res.alias : "",
-                birthday: res.birthday ? res.birthday : "",
-                height: res.height ? res.height : "170",
-                weight: res.weight ? res.weight : "60",
+                birthday: res.birthday ? res.birthday : "25",
+                height: res.height ? res.height : "175",
+                weight: res.weight ? res.weight : "65",
                 sex: res.sex,
                 phone: res.phone ? res.phone : ""
               }, "userInfo")

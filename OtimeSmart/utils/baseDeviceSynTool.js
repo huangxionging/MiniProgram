@@ -506,6 +506,13 @@ function removeCallBackForKey(key = '') {
   delete callBackObject[key]
 }
 
+function removeAllCallBack() {
+  let keys = Object.keys(callBackObject)
+  for(let index = 0; index < keys.length; ++index) {
+    delete callBackObject[keys[index]]
+  }
+}
+
 /**
  * 查找设备
  */
@@ -534,6 +541,30 @@ function commandSettingTime() {
 }
 
 /**
+ * 设备电量
+ */
+function commandDevicePower() {
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB0423")
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "23"
+}
+
+/**
+ * 获得个人信息
+ */
+function commandUserInfo() {
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB052600")
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "26"
+}
+
+function commandSettingUserInfo(userInfo) {
+  let sex = userInfo.sex
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer("0xCB092601" + hexString)
+}
+
+
+/**
  * 同步总步数
  */
 function commandSynDeviceTotalStepData(dayNumber = 0) {
@@ -550,6 +581,8 @@ function commandSynDeviceDetailStepData(dayNumber = 0){
   return "33"
 }
 
+
+
 module.exports = {
   deviceSynMessageType: deviceSynMessageType,
   reLaunchBluetoothFlow: reLaunchBluetoothFlow,
@@ -560,8 +593,11 @@ module.exports = {
   getDeviceConnectedState: getDeviceConnectedState,
   registerCallBackForKey: registerCallBackForKey,
   removeCallBackForKey: removeCallBackForKey,
+  commandDevicePower: commandDevicePower,
   commandDindDevice: commandDindDevice,
   commandSettingTime: commandSettingTime,
   commandSynDeviceTotalStepData: commandSynDeviceTotalStepData,
-  commandSynDeviceDetailStepData: commandSynDeviceDetailStepData
+  commandSynDeviceDetailStepData: commandSynDeviceDetailStepData,
+  commandUserInfo: commandUserInfo,
+  removeAllCallBack: removeAllCallBack,
 }

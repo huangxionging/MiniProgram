@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "stepRecordDetailCell":"/components/stepRecordDetailCell/stepRecordDetailCell"
+  },
+  "navigationBarTitleText": "详细数据",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#6B92FB",
+  "navigationBarBackgroundColor": "#6B92FB"
+}

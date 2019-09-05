@@ -7,7 +7,8 @@
     "pages/my/editMyInfo/editMyInfo",
     "pages/my/bindDevice/bindDevice",
     "pages/my/deviceManage/deviceManage",
-    "pages/my/familyCircleManage/familyCircleManage"
+    "pages/my/familyCircleManage/familyCircleManage",
+    "pages/deviceData/stepDetail/stepDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -46,5 +47,7 @@
       "desc": "你的位置信息将用于展示在家庭圈中"
     }
   },
-  "requireBackgroundModes":["location"]
+  "requireBackgroundModes": [
+    "location"
+  ]
 }

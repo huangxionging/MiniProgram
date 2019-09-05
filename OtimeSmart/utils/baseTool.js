@@ -725,6 +725,59 @@ function getDeviceName(macAddress = '') {
   }
 }
 
+const HeightBuffer = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190]
+const StepLengthBuffer = [20, 22, 25, 29, 33, 37, 40, 44, 48, 51, 55, 59, 62, 66, 70];
+/**
+ * 获得步长
+ */
+function getStepLegthWithHeight(height = 0) {
+  let tempHeight = height, stepLength = 0, index = 0
+  if (tempHeight < 50) {
+    tempHeight = 50
+  } else if (tempHeight > 190) {
+    tempHeight = 190
+  } else {
+    if (tempHeight % 10) {
+      tempHeight = (parseInt(tempHeight / 10) + 1) * 10
+    }
+  }
+  for (index = 0; index < HeightBuffer.length; ++index) {
+    if (tempHeight == HeightBuffer[index]) {
+      break;
+    }
+  }
+  stepLength = StepLengthBuffer[index]
+  return stepLength
+}
+
+/**
+ * 获得距离
+ */
+function getDistanceWithStep(step = 0, height = 0) {
+  let stepLength = 0
+  let distance = 0
+  stepLength = getStepLegthWithHeight(height)
+  distance = step * stepLength
+  if ((parseInt(distance / 10) % 10) > 4) {
+    distance += 100
+  }
+  return parseInt(distance / 100);
+}
+
+/**
+ * 获得卡路里
+ */
+function getCalorieWithSteps(step = 0, weight = 0, height = 0) {
+  let distance = 0
+  let calorie = 0
+  distance = getDistanceWithStep(step, height);   //单位米
+  calorie = (6 * weight * distance) & 0xFFFFFFFF;
+  if ((calorie % 10) > 4) {
+    calorie += 10;
+  }
+  return parseInt(calorie / 10);
+}
+
 // 添加接口
 module.exports = {
   // 打印
@@ -813,4 +866,7 @@ module.exports = {
   downloadImageTohotosAlbum: downloadImageTohotosAlbum,
   hexAsciiToString: hexAsciiToString,
   getDeviceName: getDeviceName,
+  getStepLegthWithHeight: getStepLegthWithHeight,
+  getDistanceWithStep: getDistanceWithStep,
+  getCalorieWithSteps: getCalorieWithSteps
 }

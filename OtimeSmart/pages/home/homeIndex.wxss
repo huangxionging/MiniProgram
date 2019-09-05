@@ -41,7 +41,7 @@ page {
 
 .device-info {
   width: 100%;
-  margin-top: 32rpx;
+  margin-top: 0rpx;
   color: white;
 }
 

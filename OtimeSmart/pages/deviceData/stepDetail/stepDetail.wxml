@@ -1,0 +1,29 @@
+<!--pages/deviceData/stepDetail/stepDetail.wxml-->
+<view class="step-detail-container">
+  <view class="step-detail-content">
+    <view class="total-step-container">
+      <view class="total-step">{{totalStep}}</view>
+      <view class="total-tip">总步数</view>
+    </view>
+    <view class="step-histogram">
+      <block wx:for-items='{{dataObjectArray}}' wx:key='id' wx:for-item='dataObject' wx:for-index='dataObjectIndex'>
+        <view class="horizon-cell" style="height:{{dataObject.height}}rpx;"></view>
+      </block>
+    </view>
+    <view class="coordinate-line" />
+    <view class="coordinate-view">
+      <view class="hour-start">00:00</view>
+      <view class="hour-middle">12:00</view>
+      <view class="hour-end">23:59</view>
+    </view>
+  </view>
+  <view class='step-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+          <stepRecordDetailCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+</view>
