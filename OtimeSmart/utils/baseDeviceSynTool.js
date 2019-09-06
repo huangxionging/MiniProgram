@@ -596,6 +596,15 @@ function commandSynDeviceDetailStepData(dayNumber = 0){
   return "33"
 }
 
+/**
+ * 同步心率数据
+ */
+function commandSynDeviceHeartRate() {
+  let hexString = "0xCB053101"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "31"
+}
 
 
 module.exports = {
@@ -615,5 +624,6 @@ module.exports = {
   commandSynDeviceDetailStepData: commandSynDeviceDetailStepData,
   commandUserInfo: commandUserInfo,
   removeAllCallBack: removeAllCallBack,
-  clearDeviceObject: clearDeviceObject
+  clearDeviceObject: clearDeviceObject,
+  commandSynDeviceHeartRate: commandSynDeviceHeartRate
 }

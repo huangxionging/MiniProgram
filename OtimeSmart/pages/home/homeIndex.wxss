@@ -137,10 +137,10 @@ page {
 
 .circle-step {
   position: absolute;
-  width: 26px;
-  height: 26px;
-  top: 31px;
-  left: 31px;
+  width: 52rpx;
+  height: 52rpx;
+  top: 54rpx;
+  left: 54rpx;
 }
 
 .step-line {

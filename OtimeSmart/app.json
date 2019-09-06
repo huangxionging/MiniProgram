@@ -8,7 +8,8 @@
     "pages/my/bindDevice/bindDevice",
     "pages/my/deviceManage/deviceManage",
     "pages/my/familyCircleManage/familyCircleManage",
-    "pages/deviceData/stepDetail/stepDetail"
+    "pages/deviceData/stepDetail/stepDetail",
+    "pages/deviceData/heartDetail/heartDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

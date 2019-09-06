@@ -28,7 +28,8 @@ page {
 }
 
 .add-device{
-  margin-top: 200rpx;
+  margin-top: 100rpx;
+  margin-bottom: 100rpx;
   width: 524rpx;
   height: 80rpx;
   border-radius: 40rpx;

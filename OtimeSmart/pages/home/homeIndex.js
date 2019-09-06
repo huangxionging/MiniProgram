@@ -30,7 +30,10 @@ Page({
       stateColor: "red",
       action: 0
     },
-    showSelectDate: false
+    showSelectDate: false,
+    averageHeartRate: 0,
+    maxHeartRate: 0,
+    minHeartRate: 0
   },
   temporaryData: {
     pullDown: false,
@@ -677,7 +680,12 @@ Page({
     let height = that.temporaryData.currentHeight
     let weight = that.temporaryData.currentWeight
     wx.navigateTo({
-      url: '/pages/deviceData/stepDetail/stepDetail?date=' + date + "&height=" + height +  "&weight=" + weight,
+      url: "/pages/deviceData/stepDetail/stepDetail?date=" + date + "&height=" + height +  "&weight=" + weight,
+    })
+  },
+  heartDetailClick: function() {
+    wx.navigateTo({
+      url: "/pages/deviceData/heartDetail/heartDetail"
     })
   }
 })

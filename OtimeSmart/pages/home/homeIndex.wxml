@@ -42,22 +42,22 @@
       </view>
     </view>
   </view>
-  <view class="device-heart">
+  <view class="device-heart" bindtap="heartDetailClick">
     <view class="heart-top">
         <image class="heart-icon" src="/resource/heart.png"></image>
         <view class="heart-tip">心率</view>
     </view>
     <view class="heart-bottom">
       <view class="heart-average">
-        <view class="heart-number">75</view>
+        <view class="heart-number">{{averageHeartRate}}</view>
         <view class="heart-item">平均心率</view>
       </view>
       <view class="heart-max">
-        <view class="heart-number">120</view>
+        <view class="heart-number">{{maxHeartRate}}</view>
         <view class="heart-item">最大心率</view>
       </view>
       <view class="heart-min">
-        <view class="heart-number">65</view>
+        <view class="heart-number">{{minHeartRate}}</view>
         <view class="heart-item">最小心率</view>
       </view>
     </view>
