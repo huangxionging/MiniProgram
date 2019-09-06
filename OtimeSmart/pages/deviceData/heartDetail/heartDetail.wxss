@@ -1,1 +1,104 @@
 /* pages/deviceData/heartDetail/heartDetail.wxss */
+
+page {
+  background-color: #eee;
+}
+
+.heart-rate-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.heart-result-view {
+  width: 100%;
+  height: 490rpx;
+  background-color: #ff4545;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heart-circle {
+  display: flex;
+  margin-top: 52rpx;
+  border: 2rpx solid white;
+  width: 340rpx;
+  height: 340rpx;
+  border-radius: 170rpx;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-last-result {
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-top {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.heart-left {
+  font-weight: bold;
+  font-size: 100rpx;
+  color: #fff;
+}
+
+.heart-right {
+  margin-bottom: 30rpx;
+  margin-left: 5rpx;
+  font-size: 20rpx;
+  color: #fff;
+}
+
+.heart-bottom {
+  font-family: PingFangTC-Regular;
+  font-size: 24rpx;
+  color: #fff;
+}
+
+.heart-icon {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.heart-rate-table-view{
+  width: 100%;
+  margin-bottom: 140rpx;
+}
+
+.section-view{
+  width: 100%;
+}
+
+.heart-rate-check{
+  position: fixed;
+  bottom: 0;
+  height: 140rpx;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rate-icon{
+  width: 68rpx;
+  height: 68rpx;
+}
+
+.heart-rate-check .tip{
+  color: #999;
+  font-size: 24rpx;
+  margin-top: 5rpx;
+}
+
+.hover-heart-rate{
+  background-color: #eee;
+}

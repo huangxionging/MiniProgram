@@ -1,3 +1,8 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "hearRateDetailCell": "/components/hearRateDetailCell/hearRateDetailCell"
+  },
+  "navigationBarBackgroundColor": "#FF4545",
+  "navigationBarTitleText": "心率",
+  "navigationBarTextStyle": "white"
 }

@@ -119,7 +119,7 @@ function encodeCrc8(hex) {
   var ucCRC8 = 0;
   var i = 0;
   while (ucLen--) {
-    baseTool.print([ucCRC8, ucPtr[i]])
+    // baseTool.print([ucCRC8, ucPtr[i]])
     ucCRC8 = _crc8[ucCRC8 ^ ucPtr[i]];
     i++;
   }
@@ -128,7 +128,6 @@ function encodeCrc8(hex) {
 
 function hexStringToCommandBuffer(hexString = '') {
   let commandString = hexString + encodeCrc8(hexString)
-  baseTool.print(commandString)
   return hexStringToArrayBuffer(commandString)
 }
 

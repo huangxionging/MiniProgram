@@ -2,6 +2,7 @@
 const baseTool = require('../../../utils/baseTool.js')
 const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const myAdapter = require('../../../adapter/myAdapter.js')
+
 Page({
 
   /**
@@ -144,7 +145,7 @@ Page({
         baseTool.print(text)
       }
     }).catch(res => {
-
+      baseNetLinkTool.showNetWorkingError(res)
     })
   }
 })

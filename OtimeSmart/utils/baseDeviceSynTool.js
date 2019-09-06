@@ -463,7 +463,7 @@ function deviceConnectionStateChange (){
       if (deviceObject.connectedState.code == DeviceConnectedState.DeviceNoDevice.code) {
         return
       } else {
-        deviceObject.connectedState.code = DeviceConnectedState.DeviceDisconnected
+        deviceObject.connectedState = DeviceConnectedState.DeviceDisconnected
       }
     }
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
@@ -606,6 +606,24 @@ function commandSynDeviceHeartRate() {
   return "31"
 }
 
+function commandSynDeviceRealHeartRate() {
+  let hexString = "0xCB052F01"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "2f"
+}
+
+function answerRealHeartRateKey(){
+  return "30"
+}
+
+function answerRealHeartRate() {
+  let hexString = "0xCB063001"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+}
+
+
 
 module.exports = {
   deviceSynMessageType: deviceSynMessageType,
@@ -625,5 +643,8 @@ module.exports = {
   commandUserInfo: commandUserInfo,
   removeAllCallBack: removeAllCallBack,
   clearDeviceObject: clearDeviceObject,
-  commandSynDeviceHeartRate: commandSynDeviceHeartRate
+  commandSynDeviceHeartRate: commandSynDeviceHeartRate,
+  commandSynDeviceRealHeartRate: commandSynDeviceRealHeartRate,
+  answerRealHeartRateKey: answerRealHeartRateKey,
+  answerRealHeartRate: answerRealHeartRate
 }

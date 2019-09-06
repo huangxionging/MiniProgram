@@ -1,0 +1,13 @@
+<!--components/hearRateDetailCell/hearRateDetailCell.wxml-->
+<view class="cell-container">
+  <view class="cell-content">
+    <view class="cell-left">
+      <view class="cell-title heart-time">{{data.time}}</view>
+    </view>
+    <view class="cell-right">
+      <view class="cell-bmp">{{data.bmp}}</view>
+      <view class="cell-detail">次/分</view>
+    </view>
+  </view>
+  <view class="cell-line"/>
+</view>

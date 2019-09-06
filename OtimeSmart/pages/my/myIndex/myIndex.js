@@ -105,13 +105,13 @@ Page({
     let tip = that.data.sectionDataArray[section].rowDataArray[row].title
     switch (section) {
       case 0:
-      case 1: {
+      case 2: {
         wx.navigateTo({
           url: url
         })
         break
       }
-      case 2: {
+      case 1: {
         switch (row) {
           case 0: {
             wx.showLoading({

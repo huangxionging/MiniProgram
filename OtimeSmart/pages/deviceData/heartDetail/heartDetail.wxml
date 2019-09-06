@@ -1,2 +1,30 @@
 <!--pages/deviceData/heartDetail/heartDetail.wxml-->
-<text>pages/deviceData/heartDetail/heartDetail.wxml</text>
+<view class="heart-rate-container">
+  <view class="heart-result-view">
+    <view class="heart-circle">
+      <view class="heart-last-result" wx:if="{{showHearRate}}">
+        <view class="heart-top">
+          <view class="heart-left">{{lastHeartRate}}</view>
+          <view class="heart-right">次/分</view>
+        </view>
+        <view class="heart-bottom">{{heartRateTip}}</view>
+      </view>
+      <view wx:else>
+        <image class="heart-icon" src="/resource/heart.png"></image>
+      </view>
+    </view>
+  </view>
+  <view class='heart-rate-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+          <hearRateDetailCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="heart-rate-check" hover-class="hover-heart-rate" bindtap="heartRateCheckClick">
+    <image class="rate-icon" src="/resource/heart_rate_check.png"></image>
+    <view class="tip">检测</view>
+  </view>
+</view>
