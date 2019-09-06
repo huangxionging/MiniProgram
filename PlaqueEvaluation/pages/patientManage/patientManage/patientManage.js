@@ -100,7 +100,8 @@ Page({
           let patientObject = {
             id: rowObject.playerId ? rowObject.playerId.substr(rowObject.playerId.length - 6, 6) : "",
             name: rowObject.name ? rowObject.name : "",
-            isBindDevice: rowObject.bindingMacAddress ? "有" : "无"
+            isBindDevice: rowObject.bindingMacAddress ? "有" : "无",
+            playerId: rowObject.playerId ? rowObject.playerId: ""
           }
           rowDataArray.push(patientObject)
         }

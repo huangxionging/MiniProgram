@@ -17,7 +17,8 @@
     "pages/my/doctorManage/doctorManage",
     "pages/patientManage/patientManage/patientManage",
     "pages/contest/publicNumberQRCode/publicNumberQRCode",
-    "pages/contest/teethModelFlag/teethModelPage"
+    "pages/contest/teethModelFlag/teethModelPage",
+    "pages/patientManage/patientDetail/patientDetail"
   ],
   "window": {
     "backgroundTextStyle": "dark",

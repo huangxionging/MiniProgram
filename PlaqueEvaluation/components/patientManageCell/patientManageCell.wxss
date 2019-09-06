@@ -33,3 +33,9 @@
   height: 1rpx;
   background-color: #eee;
 }
+
+.cell-arrow{
+  margin-left: -30rpx;
+  width: 44rpx;
+  height: 44rpx;
+}

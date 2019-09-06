@@ -39,6 +39,7 @@ Page({
     pullDown: false,
     synActionIndicator: 0, // 同步操作指令
     needSynDayIndicator: 7, // 需要同步的历史数据天数,
+    needSynDayHeartIndicator: 7,
     dataDateObjectList: [],
     detailStepData: [],
     selectDateIndicator: 0,
@@ -143,6 +144,7 @@ Page({
       return
     }
     that.temporaryData.pullDown = true
+    that.temporaryData.synActionIndicator = 0
     let connectedState = baseDeviceSynTool.getDeviceConnectedState()
     if (connectedState.code != 1002) {
       that.connectDevice()
@@ -176,8 +178,10 @@ Page({
     let that = this
     baseMessageHandler.addMessageHandler("refresh", this, res => {
       that.getHomePage()
+      that.getHeartRate()
     }).then(res => {
       that.getHomePage()
+      that.getHeartRate()
     })
     baseMessageHandler.addMessageHandler("deviceConnectedState", that, that.showDeviceConnectState).then(res => {
       baseTool.print(res)
@@ -439,6 +443,13 @@ Page({
         })
         break
       }
+      case 1: {
+        // 同步心率数据
+        that.synHeartRate()
+        that.setData({
+          isSynNow: true
+        })
+      }
     }
   },
   synDeviceStep: function() {
@@ -510,11 +521,11 @@ Page({
         step: 0
       }
     }
-    deviceInfo.stateText = date + "的详细数据"
-    that.setData({
-      isSynNow: true,
-      deviceInfo: deviceInfo
-    })
+    // deviceInfo.stateText = date + "的详细数据"
+    // that.setData({
+    //   isSynNow: true,
+    //   deviceInfo: deviceInfo
+    // })
     baseDeviceSynTool.registerCallBackForKey(res => {
       // 总条数
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
@@ -576,6 +587,8 @@ Page({
         isSynNow: false,
       })
       baseTool.showToast("本次同步, 无数据")
+      that.temporaryData.synActionIndicator++
+      that.startSynData()
       return
     }
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -591,15 +604,17 @@ Page({
       baseTool.print(res)
       deviceInfo.stateText = "上传成功"
       that.setData({
-        isSynNow: true,
         deviceInfo: deviceInfo
       })
-      setTimeout(() => {
-        that.setData({
-          isSynNow: false
-        })
-        that.getHomePage()
-      }, 2000)
+      that.temporaryData.synActionIndicator++
+      that.startSynData()
+      that.getHomePage()
+      // that.syn
+      // setTimeout(() => {
+      //   that.setData({
+      //     isSynNow: false
+      //   })
+      // }, 2000)
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
@@ -687,5 +702,134 @@ Page({
     wx.navigateTo({
       url: "/pages/deviceData/heartDetail/heartDetail"
     })
+  },
+  synHeartRate: function() {
+
+    let that = this
+    let lastUploadHeartDate = baseTool.valueForKey("lastUploadHeartDate")
+    let currentDate = baseTool.getCurrentDateWithoutTime()
+    let offsetDays = baseTool.getOffsetDays(lastUploadHeartDate, currentDate)
+    that.temporaryData.needSynDayHeartIndicator = offsetDays
+    that.temporaryData.dataDateObjectList.length = 0
+    that.synDeviceHeartRate()
+  },
+  synDeviceHeartRate: function() {
+    let that = this
+    let key = baseDeviceSynTool.commandSynDeviceHeartRate()
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    deviceInfo.stateText = "心率数据"
+    that.setData({
+      isSynNow: true,
+      deviceInfo: deviceInfo
+    })
+    baseDeviceSynTool.registerCallBackForKey(res => {
+      baseTool.print(res)
+      // 总条数
+      let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+      // 序号
+      let serialNumber = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+      // 年
+      let year = baseHexConvertTool.hexStringToValue(res.substr(12, 2)) + 2000
+      // 月
+      let month = baseHexConvertTool.hexStringToValue(res.substr(14, 2))
+      // 日
+      let day = baseHexConvertTool.hexStringToValue(res.substr(16, 2))
+      // 时
+      let hour = baseHexConvertTool.hexStringToValue(res.substr(18, 2))
+      // 分
+      let minute = baseHexConvertTool.hexStringToValue(res.substr(20, 2))
+
+      let second = baseHexConvertTool.hexStringToValue(res.substr(22, 2))
+      // 完整的时间
+      let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "") + " " + baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "") + ":" + baseTool.zeroFormat(second + "")
+      let bmp = baseHexConvertTool.hexStringToValue(res.substr(24, 2))
+
+      let text = "总数:" + totlalNumber + " 序号:" + serialNumber + " 时间:" + date + " 心率:" +  bmp
+      baseTool.print(["一条完整的数据1", text])
+    }, key)
+  },
+  getHeartRate: function() {
+    let that = this
+    let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    let token = baseNetLinkTool.getToken()
+    baseTool.print([deviceInfo, token])
+    if (!deviceInfo.macAddress && token) {
+      that.setData({
+        deviceInfo: deviceInfo
+      })
+      return
+    } else {
+      let last6Date = baseTool.getCurrentOffsetDateWithoutTime(-6)
+      let last5Date = baseTool.getCurrentOffsetDateWithoutTime(-5)
+      let last4Date = baseTool.getCurrentOffsetDateWithoutTime(-4)
+      let last3Date = baseTool.getCurrentOffsetDateWithoutTime(-3)
+      let last2Date = baseTool.getCurrentOffsetDateWithoutTime(-2)
+      let last1Date = baseTool.getCurrentOffsetDateWithoutTime(-1)
+      let last0Date = baseTool.getCurrentOffsetDateWithoutTime(0)
+      that.setData({
+        currentDate: last0Date
+      })
+      baseNetLinkTool.getRemoteDataFromServer("heart_rate_get", "获取心率数据", {
+        date: [last0Date, last1Date, last2Date, last3Date, last4Date, last5Date, last6Date],
+        id: deviceInfo.macAddress
+      }).then(res => {
+        baseTool.print(res)
+        let dataArray = res.data
+        let maxDate = last6Date
+        let currentIndex = -1
+        let lastUploadHeartDate = baseTool.valueForKey("lastUploadHeartDate")
+        for (let index = 0; index < dataArray.length; ++index) {
+          let dataObject = dataArray[index]
+          // 如果日期大于 maxDate
+          if (dataObject.date > maxDate) {
+            maxDate = dataObject.date
+          }
+
+          if (last0Date == dataObject.date) {
+            currentIndex = index
+          }
+        }
+
+        // 表示今天上传过数据/ 渲染当天数据
+        if (currentIndex != -1) {
+          let dataObject = dataArray[currentIndex]
+          let dataList = dataObject.data
+          let sumHeart = 0
+          let averageHeartRate = 0, maxHeartRate = dataList[0].bmp, minHeartRate = dataList[0].bmp
+          for (let index = 0; index < dataList.length; ++index) {
+            let bmp = parseFloat(dataList[index].bmp)
+            sumHeart += bmp
+            if (bmp > maxHeartRate) {
+              maxHeartRate = bmp
+            }
+
+            if (bmp < minHeartRate) {
+              minHeartRate = bmp
+            }
+          }
+          averageHeartRate = sumHeart / dataList.length
+
+          that.redrawCircle(totalStep / target)
+          that.setData({
+            averageHeartRate: averageHeartRate,
+            maxHeartRate: maxHeartRate,
+            currentTime: currentTime,
+            minHeartRate: minHeartRate
+          })
+        }
+        // 如果上传日期大于上次上传时间
+        if (maxDate > lastUploadHeartDate || lastUploadHeartDate == "") {
+          baseTool.setValueForKey(maxDate, "lastUploadHeartDate")
+        }
+
+      }).catch(res => {
+        baseTool.print(res)
+        baseNetLinkTool.showNetWorkingError(res)
+        that.setData({
+          isSynNow: false
+        })
+      })
+    }
+
   }
 })
