@@ -17,7 +17,7 @@ Page({
     account: '',
     password: '',
     avatar: '',
-    launchImageUrl: baseNetLinkTool.getImagePath("launch.png")
+    launchImageUrl: "https://shouhuan.taoyt.cn/static/images/launch.png"
   },
 
   /**
