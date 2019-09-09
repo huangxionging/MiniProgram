@@ -28,9 +28,20 @@
             <deviceItemCell data='{{item}}' data-section='{{item.section}}' data-row='{{index}}' data-deviceId='{{item.deviceId}}' bind:lightDeviceClick='lightDeviceClick'/>
           </block>
        </view>
-       
       </block>
     </view>
   </block>
-
+  <view wx:if="{{showSelectSerialNumber}}" class="select-device-serial-number">
+    <view class="device-tip" style="justify-content:flex-end;">设备({{currentDevice.deviceName}})已点亮</view>
+    <view class="device-tip" style="justify-content:flex-start;">请选择设备编号</view>
+    <view class="tool-view">
+      <view class="tool-left" bindtap="cancleClick">取消</view>
+      <view class="tool-right" hover-class="hover-text" bindtap="bindDevice">确定</view>
+    </view>
+    <picker-view class="picker-view" indicator-class="number-indicator" bindchange="changeSelect">
+      <picker-view-column>
+        <view class="number-item" style="line-height:00rpx" wx:for-items="{{serialNumberList}}">{{item}}号</view>
+      </picker-view-column>
+    </picker-view>
+  </view>
 </view>

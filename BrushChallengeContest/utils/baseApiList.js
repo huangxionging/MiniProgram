@@ -90,5 +90,9 @@ module.exports = {
   /**
    * 展示信息
    */
-  forScreenInformation: 'forScreenInformation'
+  forScreenInformation: 'forScreenInformation',
+  /**
+   * 获得设备列表
+   */
+  getDeviceList: "getDeviceList"
 }

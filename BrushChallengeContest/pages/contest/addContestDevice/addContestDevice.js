@@ -22,7 +22,10 @@ Page({
     }],
     isStopDiscovery: false,
     currentDevice: {},
-    videoUrl: "http://qnimage.32teeth.cn/match3_bind.mp4"
+    videoUrl: "http://qnimage.32teeth.cn/match3_bind.mp4",
+    showSelectSerialNumber: false,
+    serialNumberList: [],
+    serialNumber: -1
   },
 
   /**
@@ -38,6 +41,14 @@ Page({
   onReady: function() {
     let that = this
     that.registerCallBack()
+    that.refreshDeviceSerialNumber()
+    let serialNumberList = new Array(50)
+    for (let index = 0; index < 50; ++index) {
+      serialNumberList[index] = index + 1
+    }
+    that.setData({
+      serialNumberList: serialNumberList
+    })
   },
 
   /**
@@ -77,6 +88,10 @@ Page({
    */
   onPullDownRefresh: function() {
     let that = this
+    wx.stopPullDownRefresh()
+    if (that.data.showSelectSerialNumber == true) {
+      return;
+    }
     baseTool.print(that.data.existDeviceObject)
     let currentDeviceObject = Object.assign({}, that.data.existDeviceObject)
     baseTool.print([currentDeviceObject, that.data.existDeviceObject])
@@ -138,22 +153,25 @@ Page({
     baseMessageHandler.addMessageHandler('bluetoothMessage', that, res => {
       // 连接成功
 
-      switch(res.type) {
-        case 0: {
-          return
-          break
-        }
-        case 1: {
-          baseTool.print("连接成功")
-          // 开始点亮设备 // 发送设备点亮指令
-          that.deviceCharacteristicValueChange(res.deviceId)
-          
-          break
-        }
-        case 2: {
-          baseTool.print("设备写成功")
-          break
-        }
+      switch (res.type) {
+        case 0:
+          {
+            return
+            break
+          }
+        case 1:
+          {
+            baseTool.print("连接成功")
+            // 开始点亮设备 // 发送设备点亮指令
+            that.deviceCharacteristicValueChange(res.deviceId)
+
+            break
+          }
+        case 2:
+          {
+            baseTool.print("设备写成功")
+            break
+          }
       }
     })
   },
@@ -221,7 +239,7 @@ Page({
       let device = res.devices[0]
 
       // 不是这个名字的, 丢弃
-      if (device.name.indexOf('game') == -1 && device.name.indexOf('32th') == -1  && !that.data.isStopDiscovery) {
+      if (device.name.indexOf('game') == -1 && device.name.indexOf('32th') == -1 && !that.data.isStopDiscovery) {
         return
       }
       // 要符合第11位大于等于2 , 其中符合要求的
@@ -309,7 +327,7 @@ Page({
         let version = baseTool.hexAsciiToString(hex.substr(10, 16))
         // 判断是不是比赛尾巴
         baseTool.print([version, '版本号', hex.substr(10, 16)]);
-      
+
         if (version >= 'V122.2.7') {
           bluetoothManager.writeValue(deviceId, bleCommandManager.findDeviceCommand())
         } else {
@@ -329,28 +347,32 @@ Page({
         baseTool.showToast("点亮设备")
         // 发起绑定
         // that.bindDevice(deviceId)
-        baseTool.showAlertInfoWithCallBack({
-          showCancel: true,
-          content: "设备("+ that.data.currentDevice.deviceName + ")已经点亮, 是否需要绑定设备?",
-          confirmText: "绑定",
-          cancelText: "取消"
-        }, res => {
-          if (res.type) {
-            that.bindDevice()
-          } else {
-            // 关闭点亮的设备
-            bluetoothManager.writeValue(that.data.currentDevice.deviceId, bleCommandManager.closeLightCommand())
-          }
+        that.setData({
+          showSelectSerialNumber: true
         })
+        // baseTool.showAlertInfoWithCallBack({
+        //   showCancel: true,
+        //   content: "设备(" + that.data.currentDevice.deviceName + ")已经点亮, 是否需要绑定设备?",
+        //   confirmText: "绑定",
+        //   cancelText: "取消"
+        // }, res => {
+        //   if (res.type) {
+        //     that.bindDevice()
+        //   } else {
+        //     // 关闭点亮的设备
+        //     bluetoothManager.writeValue(that.data.currentDevice.deviceId, bleCommandManager.closeLightCommand())
+        //   }
+        // })
       } else if (hex.indexOf('f303f5') == 0) {
         baseTool.print("关闭设备")
       }
     })
   },
-  bindDevice: function() {
+  bindDevice: function(e) {
     let that = this
     let macAddress = that.data.currentDevice.macAddress
     let deviceName = that.data.currentDevice.deviceName
+    let serialNumber = that.data.serialNumber
     let clinicId = baseNetLinkTool.getClinicId()
     let brushingMethodId = "a002c7680a5f4f8ea0b1b47fa3f2b947"
     if (macAddress.indexOf("DD5415") == 0) {
@@ -365,14 +387,20 @@ Page({
       macAddress: macAddress,
       deviceName: deviceName,
       clinicId: clinicId,
-      brushingMethodId: brushingMethodId
+      brushingMethodId: brushingMethodId,
+      no: serialNumber
     }).then(res => {
       baseTool.print(["绑定设备:", res])
       wx.hideLoading()
       wx.hideNavigationBarLoading()
+      let serialNumberList = that.data.serialNumberList
+      let location = serialNumberList.indexOf(res.no)
+      if (location != -1) {
+        serialNumberList.splice(location, 1)
+      }
       bluetoothManager.writeValue(that.data.currentDevice.deviceId, bleCommandManager.closeLightCommand())
 
-      baseTool.showInfo("请给\"" + that.data.currentDevice.deviceName + "\"标记为" + res.name + "设备")
+      baseTool.showInfo("已成功为\"" + that.data.currentDevice.deviceName + "\"设备标记为" + res.name)
       baseMessageHandler.sendMessage("refresh", "刷新")
       let sectionDataArray = that.data.sectionDataArray
       let rowDataArray = sectionDataArray[0].rowDataArray
@@ -396,7 +424,10 @@ Page({
         currentDeviceObject: currentDeviceObject,
         existDeviceObject: existDeviceObject,
         deviceCount: deviceCount,
-        currentDevice: currentDevice
+        currentDevice: currentDevice,
+        showSelectSerialNumber: false,
+        serialNumber: serialNumberList[0],
+        serialNumberList: serialNumberList
       })
 
     }).catch(res => {
@@ -404,6 +435,43 @@ Page({
       wx.hideNavigationBarLoading()
       bluetoothManager.writeValue(that.data.currentDevice.deviceId, bleCommandManager.closeLightCommand())
       baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  refreshDeviceSerialNumber: function() {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("getDeviceList", "获得已经选中的设备编号").then(res => {
+      baseTool.print(res)
+      let serialNumberList = that.data.serialNumberList
+      if (res.length > 0) {
+        for (let index = 0; index < res.length; ++index) {
+          let deviceObject = res[index]
+          let location = serialNumberList.indexOf(deviceObject.no)
+          if (location != -1) {
+            serialNumberList.splice(location, 1)
+          }
+        }
+      }
+      that.setData({
+        serialNumber: serialNumberList[0],
+        serialNumberList: serialNumberList
+      })
+    }).catch(res => {
+
+    })
+  },
+  changeSelect: function(e) {
+    let that = this
+    let selectArray = e.detail.value
+    
+    that.setData({
+      serialNumber: that.data.serialNumberList[selectArray[0]]
+    }) 
+  },
+  cancleClick: function() {
+    let that = this
+    bluetoothManager.writeValue(that.data.currentDevice.deviceId, bleCommandManager.closeLightCommand())
+    that.setData({
+      showSelectSerialNumber: false,
     })
   }
 })
