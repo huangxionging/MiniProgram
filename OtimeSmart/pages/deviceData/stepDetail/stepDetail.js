@@ -93,6 +93,12 @@ Page({
   loadData: function() {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
+    let token = baseNetLinkTool.getToken()
+    baseTool.print([deviceInfo, token])
+    if (!deviceInfo.macAddress && token) {
+      baseTool.showToast("暂无设备")
+      return
+    }
     baseNetLinkTool.getRemoteDataFromServer("step_get", "获取指定日期计步数据", {
       date: [that.temporaryData.date],
       id: deviceInfo.macAddress

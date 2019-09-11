@@ -2,7 +2,7 @@
 <view class="view-container">
   <block wx:if='{{hasDevice}}'>
     <view class="device-image-container">
-      <image class="device-image" src="{{launchImageUrl}}"></image>
+      <image class="device-image" src="https://shouhuan.taoyt.cn/static/images/device.jpg"></image>
       <view class="device-tip">型号： 黑色</view>
     </view>
     <view class="device-info-view">

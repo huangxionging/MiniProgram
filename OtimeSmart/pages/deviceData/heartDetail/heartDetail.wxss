@@ -63,20 +63,20 @@ page {
 }
 
 .heart-icon {
-  width: 120rpx;
-  height: 120rpx;
+  width: 490rpx;
+  height: 490rpx;
 }
 
-.heart-rate-table-view{
+.heart-rate-table-view {
   width: 100%;
   margin-bottom: 140rpx;
 }
 
-.section-view{
+.section-view {
   width: 100%;
 }
 
-.heart-rate-check{
+.heart-rate-check {
   position: fixed;
   bottom: 0;
   height: 140rpx;
@@ -88,17 +88,17 @@ page {
   justify-content: center;
 }
 
-.rate-icon{
+.rate-icon {
   width: 68rpx;
   height: 68rpx;
 }
 
-.heart-rate-check .tip{
+.heart-rate-check .tip {
   color: #999;
   font-size: 24rpx;
   margin-top: 5rpx;
 }
 
-.hover-heart-rate{
+.hover-heart-rate {
   background-color: #eee;
 }

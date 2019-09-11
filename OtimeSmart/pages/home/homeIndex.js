@@ -14,7 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loadDone: false,
+    loadDone: true,
     deviceInfo: {},
     isSynNow: false,
     currentDate: "",
@@ -53,15 +53,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let token = baseNetLinkTool.getToken()
-    if (!token) {
-      baseNetLinkTool.startAuthorization()
-    } else {
-      let that = this
-      that.setData({
-        loadDone: true
-      })
-    }
+
   },
 
   /**
@@ -71,9 +63,6 @@ Page({
     let that = this
     // 当前日期
     let token = baseNetLinkTool.getToken()
-    if (!token) {
-      return
-    }
     let currentDate = baseTool.getCurrentDateWithoutTime()
     // 设备信息
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -106,10 +95,11 @@ Page({
         baseTool.setValueForKey(lastUploadStepDate, "lastUploadStepDate")
       }
     }
-
-
     let percent = that.data.currentStep / 10000
     that.redrawCircle(percent)
+    if (!token) {
+      that.setData()
+    }
   },
 
   /**
@@ -196,9 +186,10 @@ Page({
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
     baseTool.print([deviceInfo, token])
-    if (!deviceInfo.macAddress && token) {
+    if (!deviceInfo.macAddress || !token) {
       that.setData({
-        deviceInfo: deviceInfo
+        deviceInfo: deviceInfo,
+        loadDone: true
       })
       return
     } else {
@@ -251,7 +242,7 @@ Page({
             currentStep: totalStep,
             currentCal: currentCal,
             currentTime: currentTime,
-            currentDistance: currentDistance
+            currentDistance: currentDistance,
           })
         }
         // 如果上传日期大于上次上传时间
@@ -263,7 +254,8 @@ Page({
         baseTool.print(res)
         baseNetLinkTool.showNetWorkingError(res)
         that.setData({
-          isSynNow: false
+          isSynNow: false,
+          loadDone: true
         })
       })
     }
@@ -314,6 +306,14 @@ Page({
   },
   actionClick: function(e) {
     let that = this
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      baseTool.showToast("该功能需要登录之后才能连接设备")
+      setTimeout(() => {
+        baseNetLinkTool.gotoAuthorization()
+      }, 2000)
+      return
+    }
     let action = parseInt(e.detail.action)
     baseTool.print(action)
     switch (action) {
@@ -694,6 +694,14 @@ Page({
   },
   stepDetailClick: function() {
     let that = this
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      baseTool.showToast("该功能需要登录才能查看详细步数!")
+      setTimeout(() => {
+        baseNetLinkTool.gotoAuthorization()
+      }, 2000)
+      return
+    }
     let date = that.data.currentDate
     let height = that.temporaryData.currentHeight
     let weight = that.temporaryData.currentWeight
@@ -702,7 +710,14 @@ Page({
     })
   },
   heartDetailClick: function() {
-    
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      baseTool.showToast("该功能需要登录才能使用心率检测功能!")
+      setTimeout(() => {
+        baseNetLinkTool.gotoAuthorization()
+      }, 2000)
+      return
+    }
     wx.navigateTo({
       url: "/pages/deviceData/heartDetail/heartDetail"
     })

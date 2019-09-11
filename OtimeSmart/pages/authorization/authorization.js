@@ -261,6 +261,11 @@ Page({
       verifyCodeDisabled: verifyCodeDisabled,
       bindDisabled: bindDisabled
     })
+  },
+  cancleClick: function() {
+    wx.navigateBack({
+      delta: 1,
+    })
   }
 
 })
