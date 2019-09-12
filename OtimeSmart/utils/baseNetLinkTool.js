@@ -44,6 +44,12 @@ function startAuthorization() {
   })
 }
 
+function gotoAuthorization(){
+  wx.navigateTo({
+    url: '/pages/authorization/authorization',
+  })
+}
+
 /**
  * @brief 从服务器接口获得数据
  * @param urlApi 接口对应的 URL API
@@ -79,7 +85,7 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
         },
       })
     } else {
-      startAuthorization()
+      // startAuthorization()
     }
   })
 }
@@ -235,5 +241,6 @@ module.exports = {
   loginAuthorization: loginAuthorization,
   getImagePath: getImagePath,
   getUserInfo: getUserInfo,
-  getDeviceInfo: getDeviceInfo
+  getDeviceInfo: getDeviceInfo,
+  gotoAuthorization: gotoAuthorization
 }

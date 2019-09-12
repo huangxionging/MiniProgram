@@ -23,8 +23,8 @@ page {
   align-items: center;
 }
 .device-icon{
-  width: 90rpx;
-  height: 90rpx;
+  width: 600rpx;
+  height: 600rpx;
 }
 
 .add-device-table-view{

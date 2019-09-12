@@ -30,7 +30,13 @@ Page({
   onReady: function () {
     let that = this
     baseTool.print(that.data)
+    let login = false
+    let token = baseNetLinkTool.getToken()
+    if (token.length > 0) {
+      login = true
+    }
     that.setData({
+      login: login,
       userInfo: baseNetLinkTool.getUserInfo()
     })
     that.registerCallBack()
@@ -98,6 +104,11 @@ Page({
     
   },
   didSelectRow: function (e) {
+    let token = baseNetLinkTool.getToken()
+    if (!token) {
+      baseTool.showToast("该功能需要登录才能使用相关功能!")
+      return
+    }
     let that = this
     let row = e.detail.row
     let section = e.detail.section
@@ -198,5 +209,8 @@ Page({
         baseTool.showToast("蓝牙打开失败")
       })
     }
+  },
+  authClick: function() {
+    baseNetLinkTool.gotoAuthorization()
   }
 })

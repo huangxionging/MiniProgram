@@ -10,7 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    bluetoothIconUrl: "/resource/my_about.png",
+    bluetoothIconUrl: "https://shouhuan.taoyt.cn/static/images/ble_find.gif",
     sectionDataArray: [{
       rowDataArray: []
     }],

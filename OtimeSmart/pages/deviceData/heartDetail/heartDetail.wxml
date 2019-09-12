@@ -1,18 +1,18 @@
 <!--pages/deviceData/heartDetail/heartDetail.wxml-->
 <view class="heart-rate-container">
   <view class="heart-result-view">
-    <view class="heart-circle">
-      <view class="heart-last-result" wx:if="{{showHearRate}}">
+    <view class="heart-circle" wx:if="{{showHearRate}}">
+      <view class="heart-last-result" >
         <view class="heart-top">
           <view class="heart-left">{{lastHeartRate}}</view>
           <view class="heart-right">次/分</view>
         </view>
         <view class="heart-bottom">{{heartRateTip}}</view>
       </view>
-      <view wx:else>
-        <image class="heart-icon" src="/resource/heart.png"></image>
-      </view>
     </view>
+    <view wx:else>
+        <image class="heart-icon" src="https://shouhuan.taoyt.cn/static/images/hr_test.gif"></image>
+      </view>
   </view>
   <view class='heart-rate-table-view'>
     <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>

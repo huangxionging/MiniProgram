@@ -9,7 +9,7 @@
         <view class="device-macAddress">({{data.macAddress}})</view>
       </view>
       <view class="device-state-view">
-        <image class="device-state-image" src="cloud://otime-smart-y6yn7.6f74-otime-smart-y6yn7/ble_search.gif" />
+        <image class="device-state-image" src="https://shouhuan.taoyt.cn/static/images/ble_search.gif" />
         <view class="device-state-tip">{{data.stateText}}</view>
       </view>
     </view>

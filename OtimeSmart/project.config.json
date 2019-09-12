@@ -15,7 +15,11 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.8.0",
 	"appid": "wx3531a61bddbb5b85",
+<<<<<<< HEAD
 	"projectname": "OtimeSmart",
+=======
+	"projectname": "Futianxia",
+>>>>>>> 97e32086dd439cdcd2db6aafdfdd8c5d098529f7
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
