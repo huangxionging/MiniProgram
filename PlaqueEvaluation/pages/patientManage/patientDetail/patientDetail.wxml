@@ -1,2 +1,31 @@
 <!--pages/patientManage/patientDetail/patientDetail.wxml-->
-<text>pages/patientManage/patientDetail/patientDetail.wxml</text>
+<view class="detail-container">
+  <view class="patient-info-container" wx:if="{{showPatientEdit}}">
+    <view class="patient-container">
+      <view class="name-tip">姓名</view>
+      <input class="name-input" value="{{patientInfo.name}}" placeholder="请输入您的名字"></input>
+      <view class="end-edit">完成</view>
+    </view>
+    <view class="patient-container">
+      <view class="name-tip">手机</view>
+      <input class="name-input" type="number" maxlength="11" value="{{patientInfo.telephone}}"></input>
+    </view>
+    <view class="patient-name-container">
+      <view class="name-tip">星级</view>
+      <block wx:for-items="{{starList}}" wx:key="id" wx:for-item="itemObject" for-index="itemIndex" >
+      </block>
+    </view>
+  </view>
+  <view class="patient-info-container" wx:else>
+      
+    <view class="patient-container">
+      <view class="patient-name">{{patientInfo.name}}</view>
+      <view class="end-edit">管理</view>
+    </view>
+    <view class='patient-line' />
+    <view class="patient-name-container">
+      <view class="name-tip">星级</view>
+      <image wx:if="{{star}}"></image>
+    </view>
+  </view>
+</view>

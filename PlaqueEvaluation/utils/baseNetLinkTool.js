@@ -79,7 +79,11 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
       baseTool.print(data)
       baseTool.getRemoteDataFromServer(urlApi, description, data).then(resolve, reject)
     } else {
-      startAuthorization()
+      // startAuthorization()
+      reject({
+        type: 1,
+        msg: "未登录"
+      })
     }
   })
 }
@@ -183,6 +187,23 @@ function getWebDomain () {
   return baseURL.baseDomain
 }
 
+function isLogin() {
+  let openid = getOpenId()
+  // memberId = clinicId
+  let memberId = getClinicId()
+  if (openid && memberId) {
+    return true
+  } else {
+    return false
+  }
+}
+
+function goAuthorization() {
+  wx.navigateTo({
+    url: '/pages/authorization/authorization',
+  })
+}
+
 module.exports = {
   getOpenId: getOpenId,
   getMemberId: getMemberId,
@@ -197,5 +218,7 @@ module.exports = {
   uploadImageToRemoteServer: uploadImageToRemoteServer,
   postRemoteBrushTeethRecord: postRemoteBrushTeethRecord,
   getSocketURLPrefix: getSocketURLPrefix,
-  getWebDomain: getWebDomain
+  getWebDomain: getWebDomain,
+  goAuthorization: goAuthorization,
+  isLogin: isLogin
 }

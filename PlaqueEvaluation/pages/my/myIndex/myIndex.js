@@ -6,6 +6,7 @@ const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const myManager = require('../../../manager/myManager.js')
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 Page({
 
   /**
@@ -21,6 +22,10 @@ Page({
    */
   onLoad: function (options) {
     let that = this
+    let isLogin = baseNetLinkTool.isLogin()
+    that.setData({
+      isLogin: isLogin
+    })
     if (app.globalData.userInfo) {
       that.setData({
         userInfo: app.globalData.userInfo
@@ -98,7 +103,14 @@ Page({
   
   },
   didSelectRow: function(e) {
-
+    let isLogin = baseNetLinkTool.isLogin()
+    if (isLogin == false) {
+      baseTool.showToast("该功能需要登录之后才能查看哦!")
+      setTimeout(() => {
+        baseNetLinkTool.goAuthorization()
+      }, 2000)
+      return
+    }
     let that = this
     let row = e.detail.row
     let section = e.detail.section
@@ -141,4 +153,24 @@ Page({
       sectionDataArray: myAdapter.myIndexSectionDataArray()
     })
   },
+  loginClick: function () {
+    baseNetLinkTool.goAuthorization()
+  },
+  logoutClick: function() {
+    baseTool.showAlertInfoWithCallBack({
+      title: "温馨提示",
+      content: "您是否要退出登录",
+      showCancel: true,
+      cancelText:  "取消",
+      cancelColor:  "#999",
+      confirmText: "确定",
+      confirmColor: "#00a0e9",
+    }, res => {
+      if (res.type == 1) {
+        baseTool.removeAllObjects()
+        baseNetLinkTool.reLauch()
+      }
+    })
+    
+  }
 })

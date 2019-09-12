@@ -29,6 +29,7 @@ page {
   width: 100%;
   height: 100%;
   align-items: center;
+  justify-content: center;
 }
 
 .my-bg-image{
@@ -42,13 +43,11 @@ page {
 
 .my-userinfo-nickname{
   position: relative;
-  margin-top: 30rpx;
   font-size: 30rpx;
   color: #fff;
 }
 .my-userinfo-avatar{
   position: relative;
-  margin-top: 20rpx;
   width: 140rpx;
   height: 140rpx;
   border-radius: 50%;
@@ -61,6 +60,7 @@ page {
   display: flex;
   flex-direction: column;
   margin-top: 300rpx;
+  align-items: center;
 }
 
 .section-view{
@@ -71,4 +71,30 @@ page {
   margin-top: 10rpx;
   width: 100%;
   height: 400rpx;
+}
+
+.auth-login{
+  font-size: 30rpx;
+  color: white;
+  width: 200rpx;
+  height: 60rpx;
+  border: 2rpx solid white;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: 10rpx;
+}
+
+.logout{
+  margin-top: 60rpx;
+  font-size: 30rpx;
+  width: 200rpx;
+  height: 60rpx;
+  border: 2rpx solid #00a0e9;
+  background-color:white;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color:#00a0e9;
+  border-radius: 10rpx;
 }

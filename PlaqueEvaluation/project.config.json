@@ -51,9 +51,9 @@
 				},
 				{
 					"id": 1,
-					"name": "pages/patientManage/patientManage/patientManage",
-					"pathName": "pages/patientManage/patientManage/patientManage",
-					"query": "",
+					"name": "pages/patientManage/patientDetail/patientDetail",
+					"pathName": "pages/patientManage/patientDetail/patientDetail",
+					"query": "playerId=8a9951366d1e3c8f016d1e477a650002&name=刘大根",
 					"scene": null
 				}
 			]

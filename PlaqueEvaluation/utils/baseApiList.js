@@ -131,5 +131,9 @@ module.exports = {
   /**
    * 绑定医生
    */
-  bindingDoctor: 'bindingDoctor'
+  bindingDoctor: 'bindingDoctor',
+  /**
+   * 获得用户信息
+   */
+  gePlayerInfo: "gePlayerInfo"
 }

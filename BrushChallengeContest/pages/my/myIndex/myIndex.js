@@ -6,6 +6,7 @@ const baseWechat = require('../../../utils/baseWeChat.js')
 const baseURL = require('../../../utils/baseURL.js')
 const baseTool = require('../../../utils/baseTool.js')
 const myManager = require('../../../manager/myManager.js')
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 Page({
 
   /**
@@ -21,6 +22,11 @@ Page({
    */
   onLoad: function (options) {
     let that = this
+
+    let isLogin = baseNetLinkTool.isLogin()
+    that.setData({
+      isLogin: isLogin
+    })
     if (app.globalData.userInfo) {
       that.setData({
         userInfo: app.globalData.userInfo
@@ -99,7 +105,14 @@ Page({
   
   },
   didSelectRow: function(e) {
-
+    let isLogin = baseNetLinkTool.isLogin()
+    if (isLogin == false) {
+      baseTool.showToast("该功能需要登录之后才能使用哦!")
+      setTimeout(() => {
+        baseNetLinkTool.goAuthorization()
+      }, 2000)
+      return
+    }
     let that = this
     let row = e.detail.row
     let section = e.detail.section
@@ -144,4 +157,7 @@ Page({
       sectionDataArray: myAdapter.myIndexSectionDataArray()
     })
   },
+  loginClick: function() {
+    baseNetLinkTool.goAuthorization()
+  }
 })

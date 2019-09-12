@@ -15,6 +15,17 @@ function getMemberId() {
   return baseTool.valueForKey('clinicId')
 }
 
+function isLogin() {
+  let openid = getOpenId()
+  // memberId = clinicId
+  let memberId = getClinicId()
+  if (openid && memberId) {
+    return true
+  } else {
+    return false
+  }
+}
+
 /**
  * 获得诊所 id
  */
@@ -49,6 +60,12 @@ function reLauch() {
   })
 }
 
+function goAuthorization() {
+  wx.navigateTo({
+    url: '/pages/authorization/authorization',
+  })
+}
+
 /**
  * 打开授权页
  */
@@ -79,7 +96,11 @@ function getRemoteDataFromServer(urlApi = '', description = '', parameter = {}) 
       baseTool.print(data)
       baseTool.getRemoteDataFromServer(urlApi, description, data).then(resolve, reject)
     } else {
-      startAuthorization()
+      // startAuthorization()
+      reject({
+        type: 1,
+        msg: "未登录"
+      })
     }
   })
 }
@@ -197,5 +218,7 @@ module.exports = {
   uploadImageToRemoteServer: uploadImageToRemoteServer,
   postRemoteBrushTeethRecord: postRemoteBrushTeethRecord,
   getSocketURLPrefix: getSocketURLPrefix,
-  getWebDomain: getWebDomain
+  getWebDomain: getWebDomain,
+  goAuthorization: goAuthorization,
+  isLogin: isLogin
 }

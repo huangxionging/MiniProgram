@@ -128,7 +128,16 @@ Page({
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseNetLinkTool.showNetWorkingError(res)
+      // baseNetLinkTool.showNetWorkingError(res)
+      if (res.msg == "未登录") {
+        wx.setNavigationBarTitle({
+          title: "刷牙挑战",
+        })
+        that.setData({
+          hasData: false,
+          loadDone: true
+        })
+      }
     })
   },
   startClick: function(e) {
@@ -167,6 +176,14 @@ Page({
   },
   createContest: function() {
     // 完善诊所信息
+    let isLogin = baseNetLinkTool.isLogin()
+    if (isLogin == false) {
+      baseTool.showToast("该功能需要登录之后才能使用哦!")
+      setTimeout(() => {
+        baseNetLinkTool.goAuthorization()
+      }, 2000)
+      return
+    }
     loginManager.completeClinicInfo("创建比赛").then(res => {
 
       let isHaveDevice = baseNetLinkTool.getIsHaveDevice()
@@ -220,6 +237,14 @@ Page({
     })
   },
   deviceManagerClick: function() {
+    let isLogin = baseNetLinkTool.isLogin()
+    if (isLogin == false) {
+      baseTool.showToast("该功能需要登录之后才能使用哦!")
+      setTimeout(() => {
+        baseNetLinkTool.goAuthorization()
+      }, 2000)
+      return
+    }
     // 完善诊所信息
     loginManager.completeClinicInfo("查看设备管理哦~").then(res => {
       wx.navigateTo({

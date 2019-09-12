@@ -13,7 +13,6 @@ Page({
     loadDone: false,
     hasImageUrl: false,
     imageUrl: '',
-    fileName: '',
     intro: '',
     clinicId: ''
   },
@@ -108,10 +107,10 @@ Page({
       return
     }
 
-    if (that.data.fileName == '') {
-      baseTool.showInfo("请上传单位照片")
-      return
-    }
+    // if (that.data.fileName == '') {
+    //   baseTool.showInfo("请上传单位照片")
+    //   return
+    // }
  
     // let intro = that.data.intro
     // let name = that.data.name
@@ -137,7 +136,6 @@ Page({
     wx.showNavigationBarLoading()
     baseNetLinkTool.getRemoteDataFromServer("updateClinicInfo", "更新诊所信息", {
       clinicId: that.data.clinicId,
-      pic: that.data.fileName,
       name: that.data.name,
       intro: that.data.intro
     }).then(res => {

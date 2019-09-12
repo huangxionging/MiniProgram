@@ -4,6 +4,7 @@
     <text class='lauch-tip1'>菌斑测评</text>
     <text class='lauch-tip2'>授权后即可进入</text>
     <button class='lauch-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo" plain="true">准备好了</button>
+    <button class='lauch-button'  bindtap="canleClick" plain="true">取消授权</button>
     <view class='lauch-space' />
   </view>
   <view wx:if='{{isAuthorization==1}}' class='bind-view'>

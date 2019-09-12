@@ -166,7 +166,28 @@ Page({
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseNetLinkTool.showNetWorkingError(res)
+      if (res.msg == "未登录") {
+        wx.setNavigationBarTitle({
+          title: "菌斑测评",
+        })
+        let windowHeight = 0
+        let contentHeight = 0
+        // 设计稿上需要 1038rpx 的内容高度, 转成像素点
+        windowHeight = baseTool.toPixel(1038)
+        // 实际除去导航栏和底部 tabBar 的高度
+        contentHeight = wx.getSystemInfoSync().windowHeight
+        // 如果 内容区高度比设计需要的大
+        if (contentHeight > windowHeight) {
+          windowHeight = contentHeight;
+        }
+        that.setData({
+          loadDone: true,
+          hasData: false,
+          height: windowHeight,
+        })
+      } else {
+        baseNetLinkTool.showNetWorkingError(res)
+      }
     })
   },
   startClick: function (e) {
@@ -322,6 +343,14 @@ Page({
   },
   deviceManagerClick: function () {
     // 完善诊所信息
+    let isLogin = baseNetLinkTool.isLogin()
+    if (isLogin == false) {
+      baseTool.showToast("该功能需要登录之后才能使用哦!")
+      setTimeout(() => {
+        baseNetLinkTool.goAuthorization()
+      }, 2000)
+      return
+    }
     loginManager.completeClinicInfo("查看设备管理哦~").then(res => {
       wx.navigateTo({
         url: '/pages/my/deviceManage/deviceManage',
@@ -364,7 +393,7 @@ Page({
             stateText: stateArray[itemObject.status],
             deviceName: itemObject.deviceNote ? itemObject.deviceNote : '--',
             plaqueLevel: itemObject.plaqueLevel != undefined ? itemObject.plaqueLevel : '--',
-            // accuracy: itemObject.accuracy ? itemObject.accuracy : '--',
+            accuracy: itemObject.accuracy ? itemObject.accuracy : '--',
             name: itemObject.name ? itemObject.name : '--',
             macAddress: itemObject.macAddress ? itemObject.macAddress : '',
             gameName: that.data.gameName ? that.data.gameName : '',

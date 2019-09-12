@@ -9,7 +9,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    playerId: "",
+    patientInfo: {}
   },
 
   /**
@@ -17,10 +18,15 @@ Page({
    */
   onLoad: function (options) {
     baseTool.print(options)
+    let that = this
     if (options.name) {
       wx.setNavigationBarTitle({
         title: options.name + "患者信息" ,
       })
+    }
+
+    if (options.playerId) {
+      that.data.playerId = options.playerId
     }
   },
 
@@ -28,7 +34,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    let that = this
+    that.loadData()
   },
 
   /**
@@ -71,5 +78,20 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  loadData: function() {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("gePlayerInfo", "获得医生列表", {
+      playerId: that.data.playerId,
+    }).then(res => {
+      baseTool.print(res)
+      if (res.name) {
+        that.setData({
+          patientInfo: res
+        })
+      }
+    }).catch(res => {
+
+    })
   }
 })

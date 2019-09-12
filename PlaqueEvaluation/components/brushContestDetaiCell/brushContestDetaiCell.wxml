@@ -7,7 +7,7 @@
       <!-- <view wx:if='{{data.telephone}}'>{{data.telephone}}</view> -->
     </view>
     <view class='cell-score cell-color{{rank}}'>
-      <view class='cell-integer'>牙面{{data.overallScore}}分 龈沟{{data.gumCleaningValue}}分</view>
+      <view class='cell-integer'>总分{{data.totalScore}}分 牙面{{data.overallScore}}.{{data.accuracy}}分 龈沟{{data.gumCleaningValue}}分</view>
       <view class='cell-float'>{{data.plaqueLevel}}级</view>
     </view>
   </view>

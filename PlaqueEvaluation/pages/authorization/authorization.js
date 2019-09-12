@@ -249,6 +249,10 @@ Page({
       verifyCodeDisabled: verifyCodeDisabled,
       bindDisabled: bindDisabled
     })
+  },
+  canleClick: function () {
+    wx.navigateBack({
+      delta: 1,
+    })
   }
-  
 })

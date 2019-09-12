@@ -112,7 +112,11 @@ Page({
     }).catch(res => {
       wx.hideNavigationBarLoading()
       wx.stopPullDownRefresh()
-      baseNetLinkTool.showNetWorkingError(res)
+      if (res.msg == "未登录") {
+        return
+      } else {
+        baseNetLinkTool.showNetWorkingError(res)
+      }
     }) 
   }
 })

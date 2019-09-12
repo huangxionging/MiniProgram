@@ -123,11 +123,12 @@ Page({
             plaqueLevel: itemObject.plaqueLevel != undefined ? itemObject.plaqueLevel : '--',
             name: itemObject.name ? itemObject.name : '--',
             recordId: itemObject.recordId ? itemObject.recordId : "",
-            // accuracy: itemObject.accuracy ? itemObject.accuracy : '--'
+            accuracy: itemObject.accuracy ? itemObject.accuracy : '--',
             telephone: itemObject.telephone ? itemObject.telephone : '',
-            overallScore: itemObject.overallScore != undefined ? itemObject.overallScore : '--',
+            overallScore:itemObject.overallScore != undefined ? itemObject.overallScore : '--',
             gumCleaningValue: itemObject.gumCleaningValue != undefined ? itemObject.gumCleaningValue : '--',
-            playerId: itemObject.playerId ? itemObject.playerId : ''
+            playerId: itemObject.playerId ? itemObject.playerId : '',
+            totalScore: (parseFloat(itemObject.overallScore + "." + itemObject.accuracy) + parseFloat(itemObject.gumCleaningValue)).toFixed(2)
           })
         }
 
@@ -139,7 +140,7 @@ Page({
           } else if (a.overallScore == '--' && b.overallScore == '--') {
             return 0
           } else {
-            return b.overallScore - a.overallScore
+            return b.totalScore - a.totalScore
           }
         })
       }
