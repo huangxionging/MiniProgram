@@ -15,21 +15,35 @@ page{
   height: 253rpx;
   width: 690rpx;
   background-color: white;
-  border-radius: 16rpx;
+  border-radius: 16rpx
 }
 
 .patient-container{
   position: relative;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .name-tip{
   margin-left: 30rpx;
   margin-top: 30rpx;
   font-size: 28rpx;
+}
+
+.color666{
   color: #666;
 }
+
+.color999{
+  color: #999;
+}
+
+.color333{
+  color: #333;
+}
+
 
 .name-input{
   margin-top: 25rpx;
@@ -59,4 +73,29 @@ page{
   margin-left: 30rpx;
   margin-right: 30rpx;
   background-color: #eee;
+}
+
+.people-star{
+  margin-top: 30rpx;
+  width: 30rpx;
+  height: 28rpx;
+  margin-left: 20rpx;
+}
+
+.patient-teeth-container{
+  margin-top: 20rpx;
+  width: 100%;
+  /* height: 617rpx; */
+  background-color: white;
+}
+
+.patient-score{
+  color: white;
+  font-size: 24rpx;
+  width: 140rpx;
+  height: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #C5D3D9;
 }

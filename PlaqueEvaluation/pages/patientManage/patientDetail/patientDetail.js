@@ -10,7 +10,10 @@ Page({
    */
   data: {
     playerId: "",
-    patientInfo: {}
+    patientInfo: {},
+    starList: [],
+    editStarList: [],
+    sectionDataArray: []
   },
 
   /**
@@ -86,8 +89,27 @@ Page({
     }).then(res => {
       baseTool.print(res)
       if (res.name) {
+        
+        let star = res.star ? res.star : 0
+        let starList = new Array(3)
+        let editStarList = new Array(3)
+        for(let index = 0; index < 3; ++index) {
+          if (index < star) {
+            starList[index] = true
+            editStarList[index] = true
+          } else {
+            starList[index] = false
+            editStarList[index] = false
+          }
+        }
+        let length = that.data.playerId.length
+        res.id =  that.data.playerId.substr(length - 6, 6)
+        let sectionDataArray = []
+        // if ()
         that.setData({
-          patientInfo: res
+          patientInfo: res,
+          editStarList: editStarList,
+          starList: starList
         })
       }
     }).catch(res => {

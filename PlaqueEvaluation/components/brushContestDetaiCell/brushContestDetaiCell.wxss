@@ -39,8 +39,8 @@
 }
 
 .cell-name-view {
-  position: absolute;
-  left: 90rpx;
+  position: relative;
+  left: 20rpx;
   height: 100%;
   color: #333;
   font-size: 30rpx;
@@ -73,12 +73,12 @@
 }
 
 .cell-color1{
-  color: #FFE159;
+  color: #ffb93c;
 }
 .cell-color2{
-  color: #D8E3EB;
+  color: #bcbcbc;
 }
 .cell-color3{
-  color: #F0C98D;
+  color: #d6984f;
 }
 

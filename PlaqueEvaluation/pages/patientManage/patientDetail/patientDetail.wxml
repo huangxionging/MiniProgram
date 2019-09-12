@@ -11,21 +11,65 @@
       <input class="name-input" type="number" maxlength="11" value="{{patientInfo.telephone}}"></input>
     </view>
     <view class="patient-name-container">
-      <view class="name-tip">星级</view>
-      <block wx:for-items="{{starList}}" wx:key="id" wx:for-item="itemObject" for-index="itemIndex" >
+      <view class="patient-nam">星级</view>
+      <block wx:for-items="{{editStarList}}" wx:key="id" wx:for-item="itemObject" for-index="itemIndex">
+        <image class="people-star" wx:if="{{!itemObject}}" src="/resource/star.png"></image>
       </block>
     </view>
   </view>
   <view class="patient-info-container" wx:else>
-      
     <view class="patient-container">
       <view class="patient-name">{{patientInfo.name}}</view>
       <view class="end-edit">管理</view>
     </view>
     <view class='patient-line' />
-    <view class="patient-name-container">
-      <view class="name-tip">星级</view>
-      <image wx:if="{{star}}"></image>
+    <view class="patient-container">
+      <view class="name-tip color999">编号: </view>
+      <view class="name-tip color666">{{patientInfo.id}}</view>
+      <view class="name-tip color999" style="margin-left:80rpx">星级: </view>
+      <block wx:for-items="{{starList}}" wx:key="id" wx:for-item="itemObject" for-index="itemIndex">
+        <image class="people-star" wx:if="{{!itemObject}}" src="/resource/star.png"></image>
+        <image class="people-star" wx:else src="/resource/star.png"></image>
+      </block>
+    </view>
+    <view class="patient-container">
+      <view class="name-tip" style="color:#999;">手机号码: </view>
+      <view class="name-tip" style="color:#999;">{{patientInfo.telphone}}</view>
     </view>
   </view>
+  <view class="patient-teeth-container">
+    <view class="patient-container">
+      <view class="name-tip color999">微信昵称: </view>
+      <view class="name-tip color666" style="flex:1;">{{patientInfo.nickname ? patientInfo.nickname: "-"}} </view>
+      <view class="name-tip color999">关注公众号: </view>
+      <view class="name-tip color666" style="margin-right:30rpx;">{{patientInfo.subscribe==1?"是":"否"}} </view>
+    </view>
+    <view class="patient-container">
+      <view class="name-tip color999">评测时间: </view>
+      <view class="name-tip color666" style="flex:1;">{{patientInfo.evaluationTime ? patientInfo.evaluationTime: "-"}} </view>
+      <view class="name-tip " style="margin-right:30rpx;color:#00a0e9;">查看测评报告 ＞</view>
+    </view>
+    <view class="patient-container">
+      <view class="name-tip color999">评测结果: </view>
+      <view class="name-tip patient-score"> 牙面{{patientInfo.overallScore ? patientInfo.overallScore : "-"}}.{{patientInfo.accuracy ? patientInfo.accuracy : "-"}}分 </view>
+      <view class="name-tip patient-score"> 牙龈{{patientInfo.gumCleaningValue ? patientInfo.gumCleaningValue : "-"}}分 </view>
+      <view class="name-tip patient-score"> 菌斑{{patientInfo.plaqueLevel ? patientInfo.plaqueLevel : "-"}}级 </view>
+    </view>
+    <view class="patient-container">
+      <view class="name-tip color999">标记刷牙重点: </view>
+      <view class='teeth-table-view'>
+        <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+          <view class='section-view'>
+            <view>{{sectionObject.name}}</view>
+            <view>
+              <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+              </block>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+  </view>
+  <view></view>
 </view>
