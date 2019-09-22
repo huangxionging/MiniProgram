@@ -11,32 +11,27 @@
             </view>
             <view class="cell-line" />
           </view>
-          <view class="family-manager">
-            <view class="manager">
-              <view class="cell-left">
-                <image class="manager-img" src="/resource/my_moment.png"></image>
-                <view class="manager-name">{{sectionObject.manager.name}}</view>
-              </view>
-              <view class="cell-right manager-tip">(管理员)</view>
-            </view>
-          </view>
-          <view class="manager-action">
-            <view class="action left" data-action="0" hover-class="hover-button" bindtap="actionClick">邀请家人</view>
-            <view class="action mid" data-action="1" hover-class="hover-button" bindtap="actionClick">移交管理</view>
-            <view class="action right" data-action="2" hover-class="hover-button" bindtap="actionClick">解散</view>
-          </view>
-          <view class="manager-line" />
         </view>
-        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
-          <familyManageCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:deleteRow='deleteRow' />
-        </block>
       </view>
     </block>
   </view>
   <view class="family-action">
     <view class="family-action-content">
       <view class="family-action-item" style="margin-bottom:28rpx;margin-top:28rpx;">家庭圈邀请码</view>
-      <view class="family-action-item" style="margin-bottom:54rpx;">创建新的家庭圈</view>
+      <view hover-class="hover-family" class="family-action-item" style="margin-bottom:54rpx;" bindtap="createFamilyClick">创建新的家庭圈</view>
     </view>
   </view>
 </view>
+<view wx:if="{{showCreate}}" class="create-input">
+    <view class="mask"></view>
+    <view class="input-container">
+      <view class="input-title">创建家庭圈</view>
+      <input class="input-view" placeholder="输入家庭圈名称" bindinput="inputContent" value="{{familyName}}"></input>
+      <view class="input-line"/>
+      <view class="input-action">
+        <view class="action1" bindtap="cancleClick">取消</view>
+        <view class="action-line"></view>
+        <view class="action2" bindtap="confirmClick">确定</view>
+      </view>
+    </view>
+  </view>
