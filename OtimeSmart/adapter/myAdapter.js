@@ -11,16 +11,16 @@ function myIndexSectionDataArray() {
         url: '/pages/my/deviceManage/deviceManage',
       }]
     },
-    // {
-    //   headerHeight: 20,
-    //   rowDataArray: [{
-    //     id: 0,
-    //     section: 0,
-    //     icon: 'my_moment.png',
-    //     title: '家庭圈管理',
-    //     url: '/pages/my/familyCircleManage/familyCircleManage',
-    //   }]
-    // },
+    {
+      headerHeight: 20,
+      rowDataArray: [{
+        id: 0,
+        section: 0,
+        icon: 'my_moment.png',
+        title: '家庭圈管理',
+        url: '/pages/my/familyCircleManage/familyCircleManage',
+      }]
+    },
     {
       headerHeight: 20,
       rowDataArray: [

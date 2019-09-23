@@ -1,0 +1,20 @@
+<!--pages/my/familyCircleDetail/familyCircleDetail.wxml-->
+<text>pages/my/familyCircleDetail/familyCircleDetail.wxml</text>
+<view class="family-manager">
+  <view class="manager">
+    <view class="cell-left">
+      <image class="manager-img" src="/resource/my_moment.png"></image>
+      <view class="manager-name">{{sectionObject.manager.name}}</view>
+    </view>
+    <view class="cell-right manager-tip">(管理员)</view>
+  </view>
+</view>
+<view class="manager-action">
+  <view class="action left" data-action="0" hover-class="hover-button" bindtap="actionClick">邀请家人</view>
+  <view class="action mid" data-action="1" hover-class="hover-button" bindtap="actionClick">移交管理</view>
+  <view class="action right" data-action="2" hover-class="hover-button" bindtap="actionClick">解散</view>
+</view>
+<view class="manager-line" />
+<block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+  <familyManageCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:deleteRow='deleteRow' />
+</block>

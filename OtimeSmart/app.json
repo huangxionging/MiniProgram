@@ -9,7 +9,8 @@
     "pages/my/deviceManage/deviceManage",
     "pages/my/familyCircleManage/familyCircleManage",
     "pages/deviceData/stepDetail/stepDetail",
-    "pages/deviceData/heartDetail/heartDetail"
+    "pages/deviceData/heartDetail/heartDetail",
+    "pages/my/familyCircleDetail/familyCircleDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

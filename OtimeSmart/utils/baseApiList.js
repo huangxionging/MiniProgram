@@ -33,6 +33,14 @@ module.exports = {
    */
   heart_rate_get: "data/heart_rate_get",
   /**
+   * 新建家庭圈
+   */
+  group_new: "user/group_new",
+  /**
+   * 获得家庭圈
+   */
+  group_get_list: "user/group_get_list",
+  /**
    * 首页接口
    */
   homePage: 'homePage',
