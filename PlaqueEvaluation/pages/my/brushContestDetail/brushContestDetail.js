@@ -106,7 +106,7 @@ Page({
   },
   loadData: function() {
     let that = this
-    baseNetLinkTool.getRemoteDataFromServer("combinedData", "合并或者查看数据", {
+    baseTool.getRemoteDataFromServer("combinedData", "合并或者查看数据", {
       gameIds: that.data.gameIds
     }).then(res => {
       baseTool.print(res)

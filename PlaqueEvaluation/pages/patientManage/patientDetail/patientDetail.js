@@ -13,7 +13,18 @@ Page({
     patientInfo: {},
     starList: [],
     editStarList: [],
-    sectionDataArray: []
+    sectionDataArray: [
+      {
+        title: "牙结石",
+        rowDataArray: []
+      }, {
+        title: "牙龈出血",
+        rowDataArray: []
+      }, {
+        title: "牙周袋",
+        rowDataArray: []
+      }
+    ]
   },
 
   /**
@@ -104,8 +115,10 @@ Page({
         }
         let length = that.data.playerId.length
         res.id =  that.data.playerId.substr(length - 6, 6)
-        let sectionDataArray = []
-        // if ()
+        let sectionDataArray = new Array(3)
+        let sectionArry0 = res.dentalCalculusList
+        sectionDataArray[0] = {}
+        sectionDataArray[0].title = "牙结石"
         that.setData({
           patientInfo: res,
           editStarList: editStarList,

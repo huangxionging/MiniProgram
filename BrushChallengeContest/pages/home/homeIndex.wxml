@@ -19,7 +19,6 @@
           <video class='video-view' src='{{videoURL}}'>
             <cover-image wx:if='{{showShare}}' class='share-contest' src='/resource/share_contest.png' bindtap='shareClick' lazy-load='true' />
           </video>
-
           <view class='video-tip'>
             <view class='video-tip-title'>指导视频</view>
             <view class='video-tip-detail'>通过视频学习，可以帮您迅速了解如何进行比赛哦~</view>

@@ -41,6 +41,7 @@ Page({
   onReady: function () {
     wx.startPullDownRefresh()
     let that = this
+    baseDeviceSynTool.clearDeviceData()
     that.registerCallBack()
   },
 
@@ -64,7 +65,9 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    let that = this
     baseDeviceSynTool.clearDeviceSyn()
+    that.removeCallBack()
   },
   onPageScroll: function(e) {
     baseTool.print(e)
@@ -366,7 +369,7 @@ Page({
     }
     let stateArray = ["等待中", "测评中", "完成"]
     wx.showNavigationBarLoading()
-    baseNetLinkTool.getRemoteDataFromServer("getPlayers", "绑定设备", {
+    baseNetLinkTool.getRemoteDataFromServer("getPlayers", "获得用户数据", {
       gameId: that.data.gameId
     }).then(res => {
       // 隐藏 
@@ -555,7 +558,7 @@ Page({
     that.temporaryData.deviceArray = that.synDeviceArray
     that.synDeviceObject()
     // 清理数据
-    baseDeviceSynTool.clearDeviceData()
+    // baseDeviceSynTool.clearDeviceData()
   },
   synDeviceObject: function () {
     let that = this
@@ -609,11 +612,12 @@ Page({
     }).then(res => {
       baseTool.print(res)
       wx.hideLoading()
-
       that.setData({
         isSyncNow: false
       })
       baseTool.showToast("同步完成")
+      // 清空数据
+      baseDeviceSynTool.clearDeviceData()
       that.getPlayers()
     }).catch(res => {
       wx.hideLoading()

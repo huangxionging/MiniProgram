@@ -68,9 +68,9 @@ Page({
     // that.loadData()
     // that.registerCallBack()
     that.createQrcode()
-    that.openSocket()
-    that.socketClose()
-    that.onSocketMessage()
+    // that.openSocket()
+    // that.socketClose()
+    // that.onSocketMessage()
   },
 
   /**
@@ -312,7 +312,7 @@ Page({
     let that = this
     wx.onSocketClose(function(res) {
       console.log('WebSocket 已关闭！', res)
-      that.openSocket()
+      // that.openSocket()
     });
     wx.onSocketError(function(res) {
       console.log('WebSocket连接打开失败，请检查！', res)
