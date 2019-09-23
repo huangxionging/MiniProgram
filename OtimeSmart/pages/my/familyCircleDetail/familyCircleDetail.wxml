@@ -1,5 +1,4 @@
 <!--pages/my/familyCircleDetail/familyCircleDetail.wxml-->
-<text>pages/my/familyCircleDetail/familyCircleDetail.wxml</text>
 <view class="family-manager">
   <view class="manager">
     <view class="cell-left">

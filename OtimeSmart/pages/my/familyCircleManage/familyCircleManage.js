@@ -143,5 +143,13 @@ Page({
     }).catch(res => {
       baseTool.print(res)
     })
+  },
+  editFamilyClick:function(e) {
+    baseTool.print(e)
+    let familyId = e.currentTarget.dataset.familyid
+    baseTool.print(familyId)
+    wx.navigateTo({
+      url: '/pages/my/familyCircleDetail/familyCircleDetail?familyId=' + familyId,
+    })
   }
 })

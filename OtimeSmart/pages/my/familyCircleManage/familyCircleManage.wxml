@@ -6,8 +6,9 @@
         <view class="section-header">
           <view class="family-info">
             <view class="family-content">
-              <view class="cell-title" style="margin-left:36rpx;">{{sectionObject.familyName}}</view>
-              <image class="cell-img" src="/resource/edit.png" data-section='{{sectionIndex}}' bindtap="editFamilyClick"></image>
+              <view class="cell-title" style="margin-left:36rpx;flex:1;">{{sectionObject.familyName}}</view>
+              <image class="cell-img" data-familyId="{{sectionObject.familyId}}"  src="/resource/edit.png" data-section='{{sectionIndex}}' bindtap="editFamilyClick"></image>
+              <image class="cell-arrow" style="margin-left:20rpx;"  src="/resource/arrow_right.png"></image>
             </view>
             <view class="cell-line" />
           </view>

@@ -41,6 +41,10 @@ module.exports = {
    */
   group_get_list: "user/group_get_list",
   /**
+   * 获得家庭圈成员
+   */
+  group_get_member: "user/group_get_member",
+  /**
    * 首页接口
    */
   homePage: 'homePage',

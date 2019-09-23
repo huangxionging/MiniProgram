@@ -1,1 +1,37 @@
 /* pages/my/familyCircleDetail/familyCircleDetail.wxss */
+.action{
+  width: 160rpx;
+  height: 52rpx;
+  background-color: #6B92FB;
+  border-radius: 26rpx;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+}
+
+.manager{
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+}
+.manager-img{
+  margin-left: 36rpx;
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.manager-name{
+  margin-left: 25rpx;
+}
+
+.manager-tip{
+  margin-right: 36rpx;
+  font-size: 24rpx;
+  color: #6B92FB;
+}
+.manager-action{
+  display: flex;
+  flex-direction: row;
+}
