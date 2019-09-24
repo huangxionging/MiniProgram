@@ -6,6 +6,10 @@ const bleCommandManager = require('../manager/bleCommandManager.js')
  * Mac 地址
  */
 let desDeviceObject = {}
+/**
+ * 比赛缓存
+ */
+let gameObject = {}
 
 /**
  * 存储一条数据部分
@@ -528,6 +532,24 @@ function getDataItemList() {
   return dataItemtList
 }
 
+function configGameInfo(gameInfo = {}) {
+  let synDeviceDataList = baseTool.valueForKey("synDeviceDataList")
+  if (!synDeviceDataList) {
+    baseTool.setValueForKey([], "synDeviceDataList")
+    synDeviceDataList = baseTool.valueForKey("synDeviceDataList")
+  }
+  synDeviceDataList.push(gameInfo)
+  baseTool.setValueForKey(synDeviceDataList, "synDeviceDataList")
+}
+
+function getSynDeviceDataList() {
+  return baseTool.valueForKey("synDeviceDataList")
+}
+
+function saveSynDeviceDataList(synDeviceDataList = []) {
+  baseTool.setValueForKey(synDeviceDataList, "synDeviceDataList")
+}
+
 module.exports = {
   reLaunchBluetoothFlow: reLaunchBluetoothFlow,
   connectDeviceFlow: connectDeviceFlow,
@@ -536,4 +558,7 @@ module.exports = {
   clearDeviceSyn: clearDeviceSyn,
   getDataItemList: getDataItemList,
   clearDeviceData: clearDeviceData,
+  configGameInfo: configGameInfo,
+  getSynDeviceDataList: getSynDeviceDataList,
+  saveSynDeviceDataList: saveSynDeviceDataList
 }

@@ -558,7 +558,7 @@ Page({
     that.temporaryData.deviceArray = that.synDeviceArray
     that.synDeviceObject()
     // 清理数据
-    // baseDeviceSynTool.clearDeviceData()
+    baseDeviceSynTool.clearDeviceData()
   },
   synDeviceObject: function () {
     let that = this
@@ -600,17 +600,23 @@ Page({
       that.setData({
         isSyncNow: false
       })
-      baseTool.showToast("本次同步无数据");
+      // baseTool.showToast("本次同步无数据");
+      that.postRemoteBrushTeethRecord()
       return
     }
     let jsonData = JSON.stringify(dataItemList)
     baseTool.print(jsonData)
-    baseNetLinkTool.postRemoteBrushTeethRecord({
+    baseDeviceSynTool.configGameInfo({
       gameName: that.data.gameName,
       gameId: that.data.gameId,
       data: jsonData
-    }).then(res => {
-      baseTool.print(res)
+    })
+    that.postRemoteBrushTeethRecord()
+  },
+  postRemoteBrushTeethRecord: function() {
+    let that = this
+    let synDeviceDataList = baseDeviceSynTool.getSynDeviceDataList()
+    if (!synDeviceDataList || synDeviceDataList.length == 0) {
       wx.hideLoading()
       that.setData({
         isSyncNow: false
@@ -619,6 +625,14 @@ Page({
       // 清空数据
       baseDeviceSynTool.clearDeviceData()
       that.getPlayers()
+      return
+    }
+    let gameInfo = synDeviceDataList[0]
+    baseNetLinkTool.postRemoteBrushTeethRecord(gameInfo).then(res => {
+      baseTool.print(res)
+      synDeviceDataList.splice(0, 1)
+      baseDeviceSynTool.saveSynDeviceDataList(synDeviceDataList)
+      that.postRemoteBrushTeethRecord()
     }).catch(res => {
       wx.hideLoading()
       that.setData({
