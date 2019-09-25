@@ -1,4 +1,50 @@
 /* pages/my/familyCircleDetail/familyCircleDetail.wxss */
+
+.detail-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.section-view {
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  overflow: hidden;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.section-header {
+  margin-top: 0rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.family-info{
+  position: relative;
+  width: 100%;
+  height: 92rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.family-content {
+  width: 100%;
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-img{
+  margin-left: 26rpx;
+  width: 36rpx;
+  height: 44rpx;
+}
 .action{
   width: 160rpx;
   height: 52rpx;
