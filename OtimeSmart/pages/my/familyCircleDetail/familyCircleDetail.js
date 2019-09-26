@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    familyName: ""
   },
 
   /**
@@ -77,6 +77,10 @@ Page({
       id: that.data.familyId
     }).then(res => {
       baseTool.print(res)
+      let familyName = res.name
+      that.setData({
+        familyName: familyName
+      })
     }).catch(res => {
       baseTool.print(res)
     })

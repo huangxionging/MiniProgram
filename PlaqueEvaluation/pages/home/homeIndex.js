@@ -186,7 +186,7 @@ Page({
         that.setData({
           loadDone: true,
           hasData: false,
-          height: windowHeight,
+          // height: windowHeight,
         })
       } else {
         baseNetLinkTool.showNetWorkingError(res)

@@ -2,12 +2,11 @@
 <view class="family-container">
   <view class='family-table-view'>
     <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
-      <view class='section-view'>
+      <view class='section-view' data-familyId="{{sectionObject.familyId}}" data-section='{{sectionIndex}}' bindtap="editFamilyClick">
         <view class="section-header">
           <view class="family-info">
             <view class="family-content">
               <view class="cell-title" style="margin-left:36rpx;flex:1;">{{sectionObject.familyName}}</view>
-              <image class="cell-img" data-familyId="{{sectionObject.familyId}}"  src="/resource/edit.png" data-section='{{sectionIndex}}' bindtap="editFamilyClick"></image>
               <image class="cell-arrow" style="margin-left:20rpx;"  src="/resource/arrow_right.png"></image>
             </view>
             <view class="cell-line" />

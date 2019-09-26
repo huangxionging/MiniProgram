@@ -2,6 +2,7 @@
 
 page {
   background-color: #eee;
+  height: 100%;
 }
 
 .list-container {
