@@ -9,6 +9,10 @@ function getToken() {
   return baseTool.valueForKey('token')
 }
 
+function getUserId() {
+  return baseTool.valueForKey('userId')
+}
+
 
 /**
  * 获取用户信息
@@ -242,5 +246,6 @@ module.exports = {
   getImagePath: getImagePath,
   getUserInfo: getUserInfo,
   getDeviceInfo: getDeviceInfo,
-  gotoAuthorization: gotoAuthorization
+  gotoAuthorization: gotoAuthorization,
+  getUserId: getUserId
 }

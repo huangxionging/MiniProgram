@@ -151,5 +151,10 @@ Page({
     wx.navigateTo({
       url: '/pages/my/familyCircleDetail/familyCircleDetail?familyId=' + familyId,
     })
+  },
+  myFamilyCodeClick: function() {
+    wx.navigateTo({
+      url: '/pages/my/myFamilyQRCode/myFamilyQRCode'
+    })
   }
 })

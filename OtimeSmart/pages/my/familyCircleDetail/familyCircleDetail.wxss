@@ -13,7 +13,7 @@ page {
 .family-content{
   margin-top: 20rpx;
   width: 710rpx;
-  height: 620rpx;
+  height: auto;
   border-radius: 10rpx;
   background-color: white;
   display: flex;
@@ -35,6 +35,7 @@ page {
   width: 36rpx;
   height: 44rpx;
 }
+
 .action{
   width: 160rpx;
   height: 52rpx;
@@ -47,7 +48,7 @@ page {
   font-size: 24rpx;
 }
 
-.manager{
+.family-manager{
   height: 90rpx;
   display: flex;
   flex-direction: row;
@@ -70,4 +71,26 @@ page {
 .manager-action{
   display: flex;
   flex-direction: row;
+}
+
+.manager-action .left {
+  margin-left: 36rpx;
+}
+
+.manager-action .mid {
+  margin-left: 84rpx;
+}
+.manager-action .right {
+  margin-left: 84rpx;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}
+.manager-line{
+  margin-left: 36rpx;
+  margin-right: 36rpx;
+  height: 2rpx;
+  background-color: #eee;
+  margin-top: 36rpx;
 }

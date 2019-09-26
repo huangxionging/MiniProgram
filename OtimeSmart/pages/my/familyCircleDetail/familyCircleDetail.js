@@ -8,7 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    familyName: ""
+    familyName: "",
+    rowDataArray: []
   },
 
   /**
@@ -78,11 +79,41 @@ Page({
     }).then(res => {
       baseTool.print(res)
       let familyName = res.name
+      let managerName = res.creator_name
+      let rowDataArray = res.list
       that.setData({
-        familyName: familyName
+        familyName: familyName,
+        managerName: managerName,
+        rowDataArray: rowDataArray
       })
     }).catch(res => {
       baseTool.print(res)
     })
+  },
+  actionClick: function(e) {
+    baseTool.print(e)
+    let action = parseInt(e.currentTarget.dataset.action)
+    switch(action) {
+      case 0: {
+        wx.scanCode({
+          onlyFromCamera: false,
+          scanType: ["qrCode"],
+          success: function(res) {
+            baseTool.get
+          },
+          fail: function(res) {
+            baseTool.showToast("扫码失败")
+          },
+          complete: function(res) {},
+        })
+        break;
+      }
+      case 1: {
+        break;
+      }
+      case 2: {
+        break;
+      }
+    }
   }
 })

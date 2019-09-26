@@ -17,7 +17,7 @@
   </view>
   <view class="family-action">
     <view class="family-action-content">
-      <view class="family-action-item" style="margin-bottom:28rpx;margin-top:28rpx;">家庭圈邀请码</view>
+      <view hover-class="hover-family" class="family-action-item" style="margin-bottom:28rpx;margin-top:28rpx;" bindtap="myFamilyCodeClick">家庭圈邀请码</view>
       <view hover-class="hover-family" class="family-action-item" style="margin-bottom:54rpx;" bindtap="createFamilyClick">创建新的家庭圈</view>
     </view>
   </view>

@@ -44,8 +44,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/my/familyCircleDetail/familyCircleDetail",
-					"pathName": "pages/my/familyCircleDetail/familyCircleDetail",
+					"name": "pages/my/familyCircleManage/familyCircleManage",
+					"pathName": "pages/my/familyCircleManage/familyCircleManage",
 					"query": "familyId=1007",
 					"scene": null
 				}

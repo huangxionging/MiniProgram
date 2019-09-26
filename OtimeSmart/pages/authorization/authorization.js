@@ -113,7 +113,7 @@ Page({
             }
 
             if (res.id != null) {
-              baseTool.setValueForKey(res.id, "id")
+              baseTool.setValueForKey(res.id, "userId")
             }
 
             if (res.active_device != null) {

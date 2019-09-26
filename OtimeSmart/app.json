@@ -10,7 +10,8 @@
     "pages/my/familyCircleManage/familyCircleManage",
     "pages/deviceData/stepDetail/stepDetail",
     "pages/deviceData/heartDetail/heartDetail",
-    "pages/my/familyCircleDetail/familyCircleDetail"
+    "pages/my/familyCircleDetail/familyCircleDetail",
+    "pages/my/myFamilyQRCode/myFamilyQRCode"
   ],
   "window": {
     "backgroundTextStyle": "light",
