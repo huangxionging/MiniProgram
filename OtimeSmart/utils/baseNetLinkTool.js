@@ -10,7 +10,12 @@ function getToken() {
 }
 
 function getUserId() {
-  return baseTool.valueForKey('userId')
+  if (baseTool.valueForKey('userId')) {
+    return baseTool.valueForKey('userId')
+  } else {
+    return baseTool.valueForKey('id')
+  }
+  
 }
 
 

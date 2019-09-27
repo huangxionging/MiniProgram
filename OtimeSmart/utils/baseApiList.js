@@ -45,6 +45,22 @@ module.exports = {
    */
   group_get_member: "user/group_get_member",
   /**
+   * 添加成员
+   */
+  group_add_member: "user/group_add_member",
+  /**
+   * 删除成员
+   */
+  group_del_member: "user/group_del_member",
+  /**
+   * 解散家庭圈
+   */
+  group_cancel: "user/group_cancel",
+  /**
+   * 上传位置信息
+   */
+  group_location: "user/group_location",
+  /**
    * 首页接口
    */
   homePage: 'homePage',

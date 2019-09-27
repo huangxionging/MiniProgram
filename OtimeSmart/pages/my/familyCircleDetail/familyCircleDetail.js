@@ -2,6 +2,7 @@
 const baseTool = require('../../../utils/baseTool.js')
 const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
+const md5Tool = require('../../../utils/md5.js')
 Page({
 
   /**
@@ -9,7 +10,9 @@ Page({
    */
   data: {
     familyName: "",
-    rowDataArray: []
+    rowDataArray: [],
+    showManager: false,
+    userId: ""
   },
 
   /**
@@ -81,17 +84,26 @@ Page({
       let familyName = res.name
       let managerName = res.creator_name
       let rowDataArray = res.list
+      let showManager = false
+      let uid = baseNetLinkTool.getUserId()
+      if (uid == res.creator_uid) {
+        showManager = true
+      }
       that.setData({
         familyName: familyName,
         managerName: managerName,
-        rowDataArray: rowDataArray
+        rowDataArray: rowDataArray,
+        showManager: showManager,
+        userId: uid
       })
     }).catch(res => {
       baseTool.print(res)
+      baseNetLinkTool.showNetWorkingError(res)
     })
   },
   actionClick: function(e) {
     baseTool.print(e)
+    let that = this
     let action = parseInt(e.currentTarget.dataset.action)
     switch(action) {
       case 0: {
@@ -99,7 +111,29 @@ Page({
           onlyFromCamera: false,
           scanType: ["qrCode"],
           success: function(res) {
-            baseTool.get
+            baseTool.print(res.result)
+            let url = "xx?" + res.result
+            let paramter =  baseTool.getParameterFromURL(url)
+            let code1 = paramter.code1, code2 = paramter.code2, code3 = paramter.code3, code4 = paramter.code4
+            let scanValid = true
+            if (code1 == undefined || code2 == undefined || code3 == undefined || code4 == undefined) {
+              scanValid = false
+            } else {
+              let check1 = "code1=" + code1 + "&code2=" + code2
+              if (md5Tool(check1) != code3) {
+                scanValid = false
+              } else {
+                let check2 = "code1=" + code1 + "&code2=" + code2 + "&code3=" + code3
+                if (md5Tool(check2) != code4) {
+                  scanValid = false
+                }
+              }
+            }
+            if (scanValid == true) {
+              that.addFamilyMember(code2)
+            } else {
+              baseTool.showToast("无法识别!")
+            }
           },
           fail: function(res) {
             baseTool.showToast("扫码失败")
@@ -112,8 +146,71 @@ Page({
         break;
       }
       case 2: {
+        that.disbandFamily()
         break;
       }
     }
+  },
+  addFamilyMember: function(uid) {
+    let that = this
+    wx.showLoading({
+      title: "添加中...",
+      mask: true,
+    })
+    baseNetLinkTool.getRemoteDataFromServer("group_add_member", "添加成员", {
+      id: that.data.familyId,
+      uid: uid
+    }).then(res => {
+      baseTool.print(res)
+      that.loadData()
+      baseTool.showToast("添加成功")
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  deleteRow: function(e) {
+    baseTool.print(e)
+    let uid = e.detail.uid
+    wx.showLoading({
+      title: "移除中...",
+      mask: true,
+    })
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("group_del_member", "删除成员", {
+      id: that.data.familyId,
+      uid: uid
+    }).then(res => {
+      baseTool.print(res)
+      that.loadData()
+      baseTool.showToast("移除成功")
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  disbandFamily: function() {
+    wx.showLoading({
+      title: "解散中...",
+      mask: true,
+    })
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("group_cancel", "解散家庭圈", {
+      id: that.data.familyId,
+    }).then(res => {
+      wx.hideLoading()
+      baseTool.showToast("解散成功")
+      baseMessageHandler.sendMessage("refresh", "刷新")
+      wx.navigateBack()
+      wx.navigateBack({
+        delta: 1,
+      })
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
+    })
   }
 })

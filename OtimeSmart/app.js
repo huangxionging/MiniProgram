@@ -1,4 +1,6 @@
 //app.js
+const baseTool = require('/utils/baseTool.js')
+const baseWeChat = require("/utils/baseWeChat.js")
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -31,5 +33,8 @@ App({
   },
   globalData: {
     userInfo: null
+  },
+  uploadLocation: function() {
+    group_location
   }
 })

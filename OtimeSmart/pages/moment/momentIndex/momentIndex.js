@@ -2,6 +2,8 @@
 const baseTool = require('../../../utils/baseTool.js')
 
 const baseWeChat = require("../../../utils/baseWeChat.js")
+const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
+const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
 Page({
 
   /**
@@ -25,6 +27,11 @@ Page({
   onReady: function () {
     let that = this
     that.startLocation()
+    let token = baseNetLinkTool.getToken() 
+
+    if (token) {
+      that.uploadUserLocation()
+    }
   },
 
   /**
@@ -68,6 +75,35 @@ Page({
   onShareAppMessage: function () {
 
   },
+  uploadUserLocation: function() {
+    let that = this
+    baseTool.clearSingleTimer()
+    baseTool.startTimer(res => {
+      baseTool.print(res)
+      baseWeChat.startLocationFlow().then(res => {
+        wx.getLocation({
+          type: "gcj02",
+          altitude: true,
+          success: function (res) {
+            baseTool.print(res)
+            that.setData({
+              longitude: res.longitude,
+              latitude: res.latitude
+            })
+            let location = {
+              longitude: res.longitude,
+              latitude: res.latitude
+            }
+            that.uploadLocation(location)
+          },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      }).catch(res => {
+
+      })
+    }, 10000, 99999999999)
+  },
   startLocation: function() {
     let that = this
     baseWeChat.startLocationFlow().then(res => {
@@ -106,6 +142,20 @@ Page({
       },
       fail: function (res) { },
       complete: function (res) { },
+    })
+  },
+  uploadLocation: function(e) {
+
+    let uid = baseNetLinkTool.getUserId()
+    baseNetLinkTool.getRemoteDataFromServer("group_location", "上报位置信息", {
+      uid: uid,
+      location: e
+    }).then(res => {
+      baseTool.print(res)
+    }).catch(res => {
+      baseTool.print(res)
+      wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
     })
   }
 })

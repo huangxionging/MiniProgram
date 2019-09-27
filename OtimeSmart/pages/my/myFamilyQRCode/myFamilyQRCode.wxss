@@ -8,3 +8,28 @@
   align-items: center;
   justify-content: center;
 }
+
+.family-qrcode-view {
+  margin-top: 100rpx;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.save-qrcode{
+  margin-top: 100rpx;
+  width: 400rpx;
+  height: 80rpx;
+  background-color: #6B92FB;
+  border-radius: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+  color: white;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}

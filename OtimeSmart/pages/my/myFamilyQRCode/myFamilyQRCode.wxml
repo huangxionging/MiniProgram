@@ -1,6 +1,8 @@
 <!--pages/my/myFamilyQRCode/myFamilyQRCode.wxml-->
 <view class="family-code-container">
+  <view style="font-size:30rpx;color:#333;margin-top:20rpx;">{{userInfo.alias}}的邀请码</view>
   <view class='family-qrcode-view'  bindtap='previewClick'>
     <canvas style='width:100%;height:100%;' canvas-id='my-family-qrcode'></canvas>
   </view>
+  <view class="save-qrcode" hover-class="hover-button" bindtap="saveQRCodeClick">保存邀请码到相册</view>
 </view>

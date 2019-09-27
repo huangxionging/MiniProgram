@@ -81,7 +81,7 @@ page {
   margin-left: 84rpx;
 }
 .manager-action .right {
-  margin-left: 84rpx;
+  margin-left: 324rpx;
 }
 
 .hover-button{

@@ -8,6 +8,14 @@ Component({
     data: {
       type: Object,
       value: {}
+    },
+    showManager: {
+      type: Boolean,
+      value: false
+    },
+    managerId: {
+      type: String,
+      value: ""
     }
   },
 
@@ -25,9 +33,10 @@ Component({
     deleteRow: function(e) {
       let that = this
       baseTool.print(that.dataset)
+      let uid = that.data.data.id
       that.triggerEvent('deleteRow', {
-        section: that.dataset.section,
-        row: that.dataset.row
+        row: that.dataset.row,
+        uid: uid
       })
     }
   }
