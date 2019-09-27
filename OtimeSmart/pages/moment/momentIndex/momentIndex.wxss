@@ -38,11 +38,87 @@ page {
   height: 30rpx;
 }
 
-.famili-list-view{
+.family-list-view{
   position: absolute;
-  left: 0;
-  width: 100%;
+  z-index: 999;
+  right: 0;
+  width: auto;
   height: 100rpx;
   background-color: white;
   border: 2rpx solid #eee;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.family-name{
+  margin-left: 30rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.family-indicator{
+  margin-right: 30rpx;
+  margin-left: 5rpx;
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}
+.family-list-container{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: black; */
+  /* opacity: 0.5; */
+  z-index: 99999
+}
+
+.family-mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+}
+
+.family-table-view{
+  position: absolute;
+  right: 30rpx;
+  top: 100rpx;
+  width: 200rpx;
+  /* height: 200rpx; */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.cell-title{
+  margin-left: 30rpx;
+}
+
+.cell-line{
+  position: absolute;
+  left: 30rpx;
+  right: 0rpx;
+  height: 2rpx;
+  bottom: 0;
+  background-color: #eee;
+}
+
+.section-view{
+  position: relative;
+  margin-top: 10rpx;
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

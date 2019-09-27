@@ -11,68 +11,77 @@ Page({
    */
   data: {
     latitude: "",
-    longitude: ""
+    longitude: "",
+    sectionDataArray: [],
+    showFamily: false,
+    selectIndex: 0,
+    familyName: "",
+    showList: false,
+    markers: [],
+    familyPoints: [],
+    polylines: [],
+    scale: 16
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     let that = this
     that.startLocation()
-    let token = baseNetLinkTool.getToken() 
-
+    let token = baseNetLinkTool.getToken()
     if (token) {
       that.uploadUserLocation()
+      that.loadData()
     }
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
   uploadUserLocation: function() {
@@ -84,11 +93,12 @@ Page({
         wx.getLocation({
           type: "gcj02",
           altitude: true,
-          success: function (res) {
+          success: function(res) {
             baseTool.print(res)
             that.setData({
               longitude: res.longitude,
-              latitude: res.latitude
+              latitude: res.latitude,
+              scale: 16,
             })
             let location = {
               longitude: res.longitude,
@@ -96,8 +106,8 @@ Page({
             }
             that.uploadLocation(location)
           },
-          fail: function (res) { },
-          complete: function (res) { },
+          fail: function(res) {},
+          complete: function(res) {},
         })
       }).catch(res => {
 
@@ -111,7 +121,7 @@ Page({
         type: "gcj02",
         altitude: true,
         success: function(res) {
-          baseTool.print(res)
+          // baseTool.print(res)
           that.setData({
             longitude: res.longitude,
             latitude: res.latitude
@@ -120,12 +130,12 @@ Page({
         fail: function(res) {},
         complete: function(res) {},
       })
-    }).catch(res=> {
+    }).catch(res => {
 
     })
 
     wx.onLocationChange(res => {
-      baseTool.print(res)
+      // baseTool.print(res)
     })
   },
   getCurrentLocationClick: function() {
@@ -133,28 +143,145 @@ Page({
     wx.getLocation({
       type: "gcj02",
       altitude: true,
-      success: function (res) {
+      success: function(res) {
         baseTool.print(res)
         that.setData({
           longitude: res.longitude,
           latitude: res.latitude
         })
       },
-      fail: function (res) { },
-      complete: function (res) { },
+      fail: function(res) {},
+      complete: function(res) {},
     })
   },
   uploadLocation: function(e) {
-
+    let that = this
     let uid = baseNetLinkTool.getUserId()
     baseNetLinkTool.getRemoteDataFromServer("group_location", "上报位置信息", {
       uid: uid,
       location: e
     }).then(res => {
       baseTool.print(res)
+      that.loadFamilyMember()
     }).catch(res => {
       baseTool.print(res)
       wx.hideLoading()
+      baseNetLinkTool.showNetWorkingError(res)
+    })
+  },
+  loadData: function() {
+    let that = this
+    baseNetLinkTool.getRemoteDataFromServer("group_get_list", "获得家庭圈").then(res => {
+      baseTool.print(res)
+      let list = res.list
+      let sectionDataArray = that.data.sectionDataArray
+      sectionDataArray.length = 0;
+      let showFamily = false
+      for (let index = 0; index < list.length; ++index) {
+        showFamily = true
+        sectionDataArray.push({
+          familyName: list[index].name,
+          familyId: list[index].id
+        })
+      }
+      let familyName = sectionDataArray[that.data.selectIndex].familyName
+      that.setData({
+        showFamily: showFamily,
+        sectionDataArray: sectionDataArray,
+        familyName: familyName
+      })
+
+      that.loadFamilyMember()
+    }).catch(res => {
+      baseTool.print(res)
+    })
+  },
+  showFamilyListClick: function() {
+    let that = this
+    that.setData({
+      showList: true
+    })
+  },
+  selectFamilyClick: function(e) {
+    baseTool.print(e)
+    let that = this
+    that.data.selectIndex = e.currentTarget.dataset.section
+    that.loadFamilyMember()
+  },
+  closeFamilyListClick: function(e) {
+    let that = this
+    that.setData({
+      showList: false
+    })
+  },
+  loadFamilyMember: function() {
+    let that = this
+    let selectIndex = that.data.selectIndex;
+    let familyId = that.data.sectionDataArray[selectIndex].familyId
+    baseNetLinkTool.getRemoteDataFromServer("group_get_member", "家庭圈详情", {
+      id: familyId
+    }).then(res => {
+      baseTool.print(res)
+      let familyName = res.name
+      let managerName = res.creator_name
+      let rowDataArray = res.list
+      let showManager = false
+      let markers = []
+      let familyPoints = []
+      let polylines = [{
+        points: [],
+        width: 2,
+        color: "#6B92FB",
+        borderColor: "#999"
+      }]
+      let scale = baseTool.toPixel(1)
+      for (let index = 0; index < rowDataArray.length; ++index) {
+        let location = rowDataArray[index].location
+
+        if (location) {
+          let object = {
+            id: rowDataArray[index].id,
+            latitude: rowDataArray[index].location.latitude,
+            longitude: rowDataArray[index].location.longitude,
+            iconPath: "/resource/distance.png",
+            title: rowDataArray[index].name,
+            width: 50 * scale,
+            height: 50 * scale,
+            callout: {
+              content: rowDataArray[index].name,
+              color: "#333",
+              fontSize: 14,
+              borderRadius: 4,
+              borderWidth: 2,
+              borderColor: "#999",
+              display: "ALWAYS",
+              padding: 5,
+              bgColor: "#fff"
+            }
+          }
+          markers.push(object)
+          familyPoints.push({
+            latitude: rowDataArray[index].location.latitude,
+            longitude: rowDataArray[index].location.longitude,
+          })
+          polylines[0].points.push({
+            latitude: rowDataArray[index].location.latitude,
+            longitude: rowDataArray[index].location.longitude,
+          })
+        }
+      }
+      that.setData({
+        familyName: familyName,
+        markers: markers,
+        showList: false,
+        familyPoints: familyPoints,
+        polylines: polylines
+      })
+      baseTool.print([markers, 1])
+      baseTool.print([familyPoints, 2])
+      baseTool.print([polylines, 3])
+    }).catch(res => {
+      baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
     })
   }
