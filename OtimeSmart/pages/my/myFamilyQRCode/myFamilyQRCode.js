@@ -31,7 +31,7 @@ Page({
     })
     let canvasId = "my-family-qrcode"
     let token = baseNetLinkTool.getToken()
-    let qrcodeConetnt = "code1=" + token + "&code2=" + "1" //baseNetLinkTool.getUserId()
+    let qrcodeConetnt = "code1=" + token + "&code2=" + baseNetLinkTool.getUserId()
     let value = md5Tool(qrcodeConetnt)
     let qrcodeUrl = qrcodeConetnt + "&code3=" + value
     qrcodeUrl += "&code4=" + md5Tool(qrcodeUrl)
