@@ -23,9 +23,9 @@ Component({
    */
   methods: {
     patientDetailClick: function(e) {
-      wx.navigateTo({
-        url: "/pages/patientManage/patientDetail/patientDetail?playerId=" + this.data.data.playerId + "&name=" + this.data.data.name,
-      })
+      // wx.navigateTo({
+      //   url: "/pages/patientManage/patientDetail/patientDetail?playerId=" + this.data.data.playerId + "&name=" + this.data.data.name,
+      // })
     }
   }
 })

@@ -71,5 +71,11 @@
     </view>
 
   </view>
-  <view></view>
+  <view class="device-conatiner">
+    <view class="device-info">
+      <view class="action-left">已购设备</view>
+      <view class="action-right">菌斑控制详情</view>
+    </view>
+    <view>连续天数</view>
+  </view>
 </view>

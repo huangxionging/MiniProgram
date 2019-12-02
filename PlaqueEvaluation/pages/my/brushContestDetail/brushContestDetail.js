@@ -29,6 +29,7 @@ Page({
     baseTool.print(options)
     if (options.gameId) {
       that.data.gameIds = options.gameId
+      // that.loadData()
     }
   },
 
