@@ -41,6 +41,7 @@ Page({
       that.uploadUserLocation()
       that.loadData()
     }
+    that.registerCallBack()
   },
 
   /**
@@ -61,7 +62,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
+    let that = this
+    that.removeCallBack()
   },
 
   /**
@@ -95,11 +97,6 @@ Page({
           altitude: true,
           success: function(res) {
             baseTool.print(res)
-            that.setData({
-              longitude: res.longitude,
-              latitude: res.latitude,
-              scale: 16,
-            })
             let location = {
               longitude: res.longitude,
               latitude: res.latitude
@@ -162,7 +159,6 @@ Page({
       location: e
     }).then(res => {
       baseTool.print(res)
-      that.loadFamilyMember()
     }).catch(res => {
       baseTool.print(res)
       wx.hideLoading()
@@ -284,5 +280,25 @@ Page({
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
     })
-  }
+  },
+  refreshFamilyClick: function() {
+    let that = this
+    // 先放到最大
+    that.setData({
+      scale: 20
+    })
+    that.loadFamilyMember()
+  },
+  registerCallBack: function () {
+    let that = this
+    baseMessageHandler.addMessageHandler("refresh", this, res => {
+      that.data.selectIndex = 0
+      that.loadData()
+    }).then(res => {
+      baseTool.print(res)
+    })
+  },
+  removeCallBack: function () {
+    baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
+  },
 })
