@@ -1,66 +1,26 @@
 <!--pages/home/homeIndex.wxml-->
 <!-- <view class='navigation-bar-line' /> -->
 <view class='home-container' wx:if='{{loadDone}}'>
-  <deviceConnectStateToolBar wx:if="{{showDeviceToolBar}}" data='{{deviceConnectObject}}' bind:actionClick="actionClick" bind:closeToolBarClick="closeToolBarClick"/>
+  <deviceConnectStateToolBar wx:if="{{showDeviceToolBar}}" data='{{deviceConnectObject}}' bind:actionClick="actionClick" bind:closeToolBarClick="closeToolBarClick" />
   <view class="date-change-view">
     <image data-type="0" bindtap="selecDateClick" class="select-img" src="/resource/select_left.png" />
     <view class="date-view">{{currentDate}}</view>
-    <image wx:if="{{showSelectDate}}" data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png"/>
+    <image wx:if="{{showSelectDate}}" data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png" />
   </view>
   <view class="device-info">
     <view class="device-power">电量: {{currentPower}}</view>
   </view>
-  <view class="device-step" bindtap="stepDetailClick">
-    <view class="step-info-container">
-      <view class="step-left">
-        <view class="step-number">
-          <view class="step-value">{{currentStep}}</view>
-          <view class="step-tip">步</view>
-        </view>
-        <view class="step-target">目标10000步</view>
-      </view>
-      <view class="step-percent" style='width:160rpx;height:160rpx;'>
-        <canvas class="circle-canvas" canvas-id="circle-percent"></canvas>
-        <image class="circle-step" src="/resource/step_icon.png"></image>
-      </view>
+  <view class="preview-device-data">
+    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
+      <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
     </view>
-    <view class="step-line"></view>
-    <view class="step-kal-view">
-      <view class="kal-view">
-        <image class="kal-icon" src="/resource/cal.png"></image>
-        <view class="kal-number">{{currentCal}}</view>
-        <view class="unit">kCal</view>
-      </view>
-      <view class="time-view">
-        <image class="kal-icon" src="/resource/time.png"></image>
-        <view class="kal-number">{{currentTime}}</view>
-      </view>
-      <view class="distance-view">
-        <image class="kal-icon" src="/resource/distance.png"></image>
-        <view class="kal-number">{{currentDistance}}</view>
-        <view class="unit">m</view>
-      </view>
+    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
+      <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
+    </view>
+    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
+      <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
     </view>
   </view>
-  <view class="device-heart" bindtap="heartDetailClick">
-    <view class="heart-top">
-        <image class="heart-icon" src="/resource/heart.png"></image>
-        <view class="heart-tip">心率</view>
-    </view>
-    <view class="heart-bottom">
-      <view class="heart-average">
-        <view class="heart-number">{{averageHeartRate}}</view>
-        <view class="heart-item">平均心率</view>
-      </view>
-      <view class="heart-max">
-        <view class="heart-number">{{maxHeartRate}}</view>
-        <view class="heart-item">最大心率</view>
-      </view>
-      <view class="heart-min">
-        <view class="heart-number">{{minHeartRate}}</view>
-        <view class="heart-item">最小心率</view>
-      </view>
-    </view>
-  </view>
+
 </view>
 <deviceSyncToolView wx:if='{{isSynNow}}' data='{{deviceInfo}}' />

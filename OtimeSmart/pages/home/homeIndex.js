@@ -265,7 +265,7 @@ Page({
     let that = this
     let degree = that.degreeForPercent(percent)
     let width = baseTool.toPixel(160)
-    let ctx = wx.createCanvasContext("circle-percent", that)
+    let ctx = wx.createCanvasContext("circle-distance-percent", that)
     ctx.beginPath()
     ctx.setLineWidth(8)
     ctx.arc(width / 2, width / 2, width / 2 - 4, -0.5 * Math.PI, degree, true)
