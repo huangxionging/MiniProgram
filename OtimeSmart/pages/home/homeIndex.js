@@ -95,8 +95,15 @@ Page({
         baseTool.setValueForKey(lastUploadStepDate, "lastUploadStepDate")
       }
     }
-    let percent = that.data.currentStep / 10000
-    that.redrawCircle(percent)
+    let percentStep = that.data.currentStep / 10000
+    let percentDistance = that.data.currentDistance / 1000
+    let percentCal = that.data.currentCal / 1000
+    percentStep = 0.33
+    percentDistance = 0.55
+    percentCal = 0.87
+    that.drawStep(percentStep)
+    that.drawDistance(percentDistance)
+    that.drawCal(percentCal)
     if (!token) {
       that.setData()
     }
@@ -237,7 +244,7 @@ Page({
           for (let index = 0; index < dataList.length; ++index) {
             totalStep += dataList[index].step
           }
-          that.redrawCircle(totalStep / target)
+          that.drawStep(totalStep / target)
           that.setData({
             currentStep: totalStep,
             currentCal: currentCal,
@@ -261,25 +268,38 @@ Page({
     }
 
   },
-  redrawCircle: function(percent = 0) {
+  redrawCircle: function (percent = 0, canvasId = "", strokeBgColor = "", strokeFgColor = "", width = 0) {
     let that = this
     let degree = that.degreeForPercent(percent)
-    let width = baseTool.toPixel(160)
-    let ctx = wx.createCanvasContext("circle-distance-percent", that)
+    let widthPx = baseTool.toPixel(width)
+    let ctx = wx.createCanvasContext(canvasId, that)
     ctx.beginPath()
     ctx.setLineWidth(8)
-    ctx.arc(width / 2, width / 2, width / 2 - 4, -0.5 * Math.PI, degree, true)
-    ctx.setStrokeStyle('#6B92FB')
+    ctx.arc(widthPx / 2, widthPx / 2, widthPx / 2 - 4, 1.5 * Math.PI, degree, true)
+    ctx.setStrokeStyle(strokeBgColor)
     ctx.stroke()
     ctx.closePath()
     ctx.beginPath()
-    ctx.arc(width / 2, width / 2, width / 2 - 4, -0.5 * Math.PI, degree, false)
-    ctx.setStrokeStyle('#D8E2FB')
+    ctx.arc(widthPx / 2, widthPx / 2, widthPx / 2 - 4, -0.5 * Math.PI, degree, false)
+    ctx.setStrokeStyle(strokeFgColor)
     ctx.stroke()
     ctx.draw()
+    // baseTool.print(["颜色", percent, strokeBgColor, strokeFgColor])
   },
   degreeForPercent: function(percent = 0) {
-    return Math.PI * (1.5 - 2 * percent)
+    return Math.PI * (2 * percent - 0.5)
+  },
+  drawDistance: function (percent = 0) {
+    let that = this
+    that.redrawCircle(percent, "circle-distance-percent", "#7b7d81", "#14D2B8", 160)
+  },
+  drawStep: function (percent = 0){
+    let that = this
+    that.redrawCircle(percent, "circle-step-percent", "#7b7d81", "#08A5F6", 280)
+  },
+  drawCal: function(percent = 0) {
+    let that = this
+    that.redrawCircle(percent, "circle-cal-percent", "#7b7d81", "#FF2828", 160)
   },
   connectDevice: function() {
     let that = this
@@ -680,7 +700,7 @@ Page({
       for (let index = 0; index < dataList.length; ++index) {
         totalStep += dataList[index].step
       }
-      that.redrawCircle(totalStep / target)
+      that.drawStep(totalStep / target)
       that.setData({
         currentStep: totalStep,
         currentCal: currentCal,

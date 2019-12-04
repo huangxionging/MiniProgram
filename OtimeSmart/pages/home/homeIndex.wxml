@@ -11,14 +11,17 @@
     <view class="device-power">电量: {{currentPower}}</view>
   </view>
   <view class="preview-device-data">
-    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
+    <view class="distance-percent">
       <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
+      <view>s</view>
     </view>
-    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
-      <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
+    <view class="step-percent" >
+      <canvas class="circle-canvas" canvas-id="circle-step-percent">
+        <view class="step-view">ss</view>
+      </canvas>
     </view>
-    <view class="distance-percent" style='width:160rpx;height:160rpx;'>
-      <canvas class="circle-canvas" canvas-id="circle-distance-percent"></canvas>
+    <view class="kal-percent">
+      <canvas class="circle-canvas" canvas-id="circle-cal-percent"></canvas>
     </view>
   </view>
 

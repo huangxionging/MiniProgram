@@ -46,14 +46,45 @@ page {
 
 .distance-percent{
   position: absolute;
-  left: 80rpx;
+  left: 90rpx;
   bottom: 36rpx;
   width: 160rpx;
   height: 160rpx;
-  background-color: white;
+  /* background-color: white; */
 }
 
 .circle-canvas {
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-percent{
+  position: absolute;
+  left: 240rpx;
+  height: 280rpx;
+  width: 280rpx;
+  bottom: 36rpx;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  /* background-color: white; */
+}
+
+.kal-percent{
+  position: absolute;
+  left: 510rpx;
+  height: 160rpx;
+  width: 160rpx;
+  bottom: 36rpx;
+  /* background-color: white; */
+}
+
+.step-view{
+  margin-left: 20rpx;
+  width: 100%;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
 }
