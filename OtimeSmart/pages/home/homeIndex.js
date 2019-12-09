@@ -19,7 +19,7 @@ Page({
     isSynNow: false,
     currentDate: "",
     currentTime: "00:00",
-    currentStep: 0,
+    currentStep: "00000",
     currentCal: 0,
     currentDistance: 0,
     currentPower: "0%",
