@@ -1,0 +1,13 @@
+/* components/deviceActionItemCell/deviceActionItemCell.wxss */
+.device-action{
+  /* margin-left: 20rpx;
+  margin-top: 20rpx; */
+  width: 322rpx;
+  height: 164rpx;
+  background-color: #171719;
+  border-radius: 8rpx;
+}
+.action-icon{
+  width: 80rpx;
+  height: 80rpx;
+}

@@ -39,6 +39,7 @@ page {
   color: white;
 }
 .preview-device-data{
+  position: relative;
   width: 100%;
   height: 430rpx;
   background-color: #171719;
@@ -114,4 +115,17 @@ page {
   right: 40rpx;
   display: flex;
   flex-direction: column;
+}
+
+.device-action-container{
+  margin-top: 60rpx;
+  width: auto;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  grid-column-gap: 22rpx;
+  grid-row-gap: 22rpx;
+  /* background-color: red; */
 }

@@ -37,6 +37,10 @@
       </canvas>
     </view>
   </view>
-
+  <view class="device-action-container">
+    <block wx:for-items="{{actionDataArray}}" wx:key="id" wx:for-item="actionObject" wx:for-index="actionIndex">
+      <deviceActionItemCell data="{{actionObject}}"/>
+    </block>
+  </view>
 </view>
 <deviceSyncToolView wx:if='{{isSynNow}}' data='{{deviceInfo}}' />
