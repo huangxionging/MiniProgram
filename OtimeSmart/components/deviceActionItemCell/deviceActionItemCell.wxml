@@ -1,9 +1,10 @@
 <!--components/deviceActionItemCell/deviceActionItemCell.wxml-->
 <view class="device-action">
-  <image src="{{data.img}}" class="action-icon"></image>
+  <image src="/resource/{{data.iconName}}.png" class="action-icon"></image>
+  <view class="action-line"/>
   <view class="action-content">
-    <view class="action-title">
-      <view class="action-title-name">{{data.titileName}}</view>
+    <view class="action-title" style="color:{{data.titleColor}};">
+      <view class="action-title-name">{{data.titleName}}</view>
       <view class="action-unit-name">{{data.unitName}}</view>
     </view>
     <view class="action-detail-name">{{data.detailName}}</view>

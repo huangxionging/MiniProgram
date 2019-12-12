@@ -3,7 +3,7 @@
   position: relative;
   height: 100rpx;
   width: 750rpx;
-  background-color: white;
+  background-color:#010101;
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -20,7 +20,7 @@
 }
 
 .device-state-tip{
-  color: #333;
+  color: white;
 }
 
 .device-action{

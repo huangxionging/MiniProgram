@@ -8,6 +8,7 @@ const baseDeviceSynTool = require('../../utils/baseDeviceSynTool.js')
 const baseURL = require('../../utils/baseURL.js')
 const baseHexConvertTool = require('../../utils/baseHexConvertTool.js')
 
+import {HomeAdapter} from "../../adapter/homeAdapter.js"
 Page({
 
   /**
@@ -47,6 +48,7 @@ Page({
     currentSex: -1,
     currentHeight: 0,
     currentWeight: 0,
+    homeAdapter: new HomeAdapter()
   },
 
   /**
@@ -65,6 +67,7 @@ Page({
     let token = baseNetLinkTool.getToken()
     let currentDate = baseTool.getCurrentDateWithoutTime()
     // 设备信息
+    let actionDataArray  = that.temporaryData.homeAdapter.getActionItems()
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     // 设备连接状态
     let deviceConnectObject = that.data.deviceConnectObject
@@ -81,12 +84,14 @@ Page({
       that.setData({
         currentDate: currentDate,
         showDeviceToolBar: true,
-        deviceConnectObject: deviceConnectObject
+        deviceConnectObject: deviceConnectObject,
+        actionDataArray: actionDataArray
       })
     } else {
       that.setData({
         deviceInfo: deviceInfo,
-        currentDate: currentDate
+        currentDate: currentDate,
+        actionDataArray: actionDataArray
       })
       that.connectDevice()
       let lastUploadStepDate = baseTool.valueForKey("lastUploadStepDate")
@@ -107,6 +112,9 @@ Page({
     if (!token) {
       that.setData()
     }
+
+    // HomeAdapter.getActionItems()
+    baseTool.print()
   },
 
   /**

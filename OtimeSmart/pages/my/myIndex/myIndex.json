@@ -3,6 +3,6 @@
   "usingComponents": {
     "myIndexItemCell": "/components/myIndexItemCell/myIndexItemCell"
   },
-  "navigationBarBackgroundColor": "#6B92FB",
+  "navigationBarBackgroundColor": "#010101",
   "navigationBarTextStyle": "white"
 }

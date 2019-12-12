@@ -39,13 +39,17 @@
 			"currentL": -1,
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
 			"current": 0,
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/moment/momentIndex/momentIndex",
-					"pathName": "pages/moment/momentIndex/momentIndex",
+					"name": "pages/my/myIndex/myIndex",
+					"pathName": "pages/my/myIndex/myIndex",
 					"query": "familyId=1007",
 					"scene": null
 				}

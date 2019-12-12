@@ -1,13 +1,52 @@
 /* components/deviceActionItemCell/deviceActionItemCell.wxss */
-.device-action{
-  /* margin-left: 20rpx;
-  margin-top: 20rpx; */
+
+.device-action {
   width: 322rpx;
   height: 164rpx;
   background-color: #171719;
   border-radius: 8rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.action-icon{
+
+.action-icon {
+  margin-left: 24rpx;
   width: 80rpx;
   height: 80rpx;
+}
+
+.action-line {
+  margin-left: 20rpx;
+  width: 6rpx;
+  height: 88rpx;
+  background-color: #111016;
+}
+
+.action-content {
+  margin-left: 26rpx;
+  display: flex;
+  flex-direction: column;
+  font-size: 24rpx;
+}
+
+.action-title {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.action-detail-name {
+  font-family: PingFangHK-Regular;
+  font-size: 24rpx;
+  color: #999;
+  /* text-align: center; */
+}
+
+.action-title-name{
+  font-size: 34rpx;
+}
+
+.action-unit-name{
+  margin-left: 10rpx;
 }
