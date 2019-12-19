@@ -100,15 +100,9 @@ Page({
         baseTool.setValueForKey(lastUploadStepDate, "lastUploadStepDate")
       }
     }
-    let percentStep = that.data.currentStep / 10000
-    let percentDistance = that.data.currentDistance / 1000
-    let percentCal = that.data.currentCal / 1000
-    percentStep = 0.33
-    percentDistance = 0.55
-    percentCal = 0.87
-    that.drawStep(percentStep)
-    that.drawDistance(percentDistance)
-    that.drawCal(percentCal)
+    that.drawStep(0)
+    that.drawDistance(0)
+    that.drawCal(0)
     if (!token) {
       that.setData()
     }
@@ -182,11 +176,11 @@ Page({
   registerCallBack: function() {
     let that = this
     baseMessageHandler.addMessageHandler("refresh", this, res => {
-      that.getHomePage()
-      that.getHeartRate()
+      let currentDate = baseTool.getCurrentOffsetDateWithoutTime(0)
+      that.getHomePage(currentDate)
     }).then(res => {
-      that.getHomePage()
-      that.getHeartRate()
+      let currentDate = baseTool.getCurrentOffsetDateWithoutTime(0)
+      that.getHomePage(currentDate)
     })
     baseMessageHandler.addMessageHandler("deviceConnectedState", that, that.showDeviceConnectState).then(res => {
       baseTool.print(res)
@@ -196,7 +190,7 @@ Page({
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
   },
-  getHomePage: function() {
+  getHomePage: function (currentDate = 0) {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
@@ -208,65 +202,54 @@ Page({
       })
       return
     } else {
-      let last6Date = baseTool.getCurrentOffsetDateWithoutTime(-6)
-      let last5Date = baseTool.getCurrentOffsetDateWithoutTime(-5)
-      let last4Date = baseTool.getCurrentOffsetDateWithoutTime(-4)
-      let last3Date = baseTool.getCurrentOffsetDateWithoutTime(-3)
-      let last2Date = baseTool.getCurrentOffsetDateWithoutTime(-2)
-      let last1Date = baseTool.getCurrentOffsetDateWithoutTime(-1)
-      let last0Date = baseTool.getCurrentOffsetDateWithoutTime(0)
       that.setData({
-        currentDate: last0Date
+        currentDate: currentDate
       })
-      baseNetLinkTool.getRemoteDataFromServer("step_get", "获取计步数据", {
-        date: [last0Date, last1Date, last2Date, last3Date, last4Date, last5Date, last6Date],
+      baseNetLinkTool.getRemoteDataFromServer("get_historical", "获取历史", {
+        date: currentDate,
         id: deviceInfo.macAddress
       }).then(res => {
-        baseTool.print(res)
-        let dataArray = res.data
-        let maxDate = last6Date
-        let currentIndex = -1
-        let lastUploadStepDate = baseTool.valueForKey("lastUploadStepDate")
-        for (let index = 0; index < dataArray.length; ++index) {
-          let dataObject = dataArray[index]
-          // 如果日期大于 maxDate
-          if (dataObject.date > maxDate) {
-            maxDate = dataObject.date
+        baseTool.print([res, "历史数据"])
+        let stepArray = res.step
+        let sportArray = res.sport
+        let sleepArray = res.sleep
+        let heart_rateArray = res.heart_rate
+        let blood_pressureArray = res.blood_pressure
+
+        let currentStep = 0
+        let target = 0
+        let percent = 0
+        let currentCal = 0
+        let currentTime = 0
+        let currentDistance = 0
+        if (stepArray.length > 0) {
+          let stepObject = stepArray[0]
+          currentStep = stepObject.step_all
+          target = stepObject.target
+          currentCal = stepObject.calorie
+          currentDistance = stepObject.distance / 1000
+
+          if (target != null && target != undefined) {
+            percent = currentStep / target
           }
 
-          if (last0Date == dataObject.date) {
-            currentIndex = index
-          }
+          
         }
 
-        // 表示今天上传过数据/ 渲染当天数据
-        if (currentIndex != -1) {
-          let dataObject = dataArray[currentIndex]
-          let dataList = dataObject.data
-          let totalStep = 0
-          let target = parseFloat(dataObject.target)
-          let duration = parseFloat(dataObject.duration)
-          let currentCal = dataObject.calorie
-          let currentTime = baseTool.zeroFormat(duration / 60 + "") + ":" + baseTool.zeroFormat(duration % 60 + "")
-          let currentDistance = dataObject.distance
-          for (let index = 0; index < dataList.length; ++index) {
-            totalStep += dataList[index].step
-          }
-          that.drawStep(totalStep / target)
-          that.setData({
-            currentStep: totalStep,
-            currentCal: currentCal,
-            currentTime: currentTime,
-            currentDistance: currentDistance,
-          })
-        }
-        // 如果上传日期大于上次上传时间
-        if (maxDate > lastUploadStepDate || lastUploadStepDate == "") {
-          baseTool.setValueForKey(maxDate, "lastUploadStepDate")
-        }
+        
 
+        that.setData({
+          currentStep: currentStep,
+          currentCal: currentCal,
+          currentTime: currentTime,
+          currentDistance: currentDistance,
+        })
+        baseTool.print(percent)
+        that.drawStep(percent)
+        that.drawDistance(0)
+        that.drawCal(0)
       }).catch(res => {
-        baseTool.print(res)
+        baseTool.print([res, "历史数据"])
         baseNetLinkTool.showNetWorkingError(res)
         that.setData({
           isSynNow: false,
@@ -302,6 +285,7 @@ Page({
     that.redrawCircle(percent, "circle-distance-percent", "#7b7d81", "#14D2B8", 160)
   },
   drawStep: function (percent = 0){
+    baseTool.print([percent, 11])
     let that = this
     that.redrawCircle(percent, "circle-step-percent", "#7b7d81", "#08A5F6", 280)
   },
@@ -673,8 +657,8 @@ Page({
       showSelectDate: showSelectDate
     })
 
-    that.getDateDetail(currentDate)
-    that.getHeartRate(currentDate)
+    that.getHomePage(currentDate)
+    // that.getHeartRate(currentDate)
   },
   getDateDetail: function(currentDate) {
     let that = this
@@ -708,7 +692,7 @@ Page({
       for (let index = 0; index < dataList.length; ++index) {
         totalStep += dataList[index].step
       }
-      that.drawStep(totalStep / target)
+      // that.drawStep(totalStep / target)
       that.setData({
         currentStep: totalStep,
         currentCal: currentCal,

@@ -76,4 +76,5 @@ module.exports = {
    * 上传图片
    */
   uploadImageURL: 'qn_upload',
+  get_historical: "Data/get_historical"
 }
