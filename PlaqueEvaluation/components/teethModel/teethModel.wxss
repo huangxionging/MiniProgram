@@ -1,7 +1,7 @@
 .bg{
   width: 700rpx;
   height: 1000rpx;
-  background:#e5f5fd url(http://qnimage.hydrodent.cn/2019-08-12_5d51800e50f35.png) center center no-repeat;
+  background:#e5f5fd url(http://qnimage.32teeth.cn/2019-08-12_5d51800e50f35.png) center center no-repeat;
   background-size: 100% 100%;
   margin: auto;
   border-radius: 20rpx;

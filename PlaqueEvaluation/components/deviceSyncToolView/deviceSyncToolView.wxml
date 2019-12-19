@@ -10,7 +10,7 @@
         <view class="device-macAddress">({{data.macAddress}})</view>
       </view>
       <view class="device-state-view">
-        <image class="device-state-image" src="http://qnimage.hydrodent.cn/evaluation_plaque_search.gif" />
+        <image class="device-state-image" src="http://qnimage.32teeth.cn/evaluation_plaque_search.gif" />
         <view class="device-state-tip">{{data.stateText}}</view>
       </view>
     </view>

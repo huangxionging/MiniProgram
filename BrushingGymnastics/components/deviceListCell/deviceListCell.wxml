@@ -1,0 +1,11 @@
+<!--components/deviceListCell/deviceListCell.wxml-->
+<view class='cell-container' hover-class='hover-touch' bindtouchstart='touchStart' bindtouchend='touchEnd' bindtouchmove='touchMove' style='{{data.style}}'>
+  <view class='cell-content'>
+    <view class='cell-title'>
+      <text style='color:#333;'>{{data.name}}</text>
+      (<text style='color:#999;'>{{data.deviceName}}</text>)
+    </view>
+    <view class='cell-delete' style='background-color:red;color:white;' bindtap='delClick'>解绑</view>
+  </view>
+  <view class='cell-line' />
+</view>

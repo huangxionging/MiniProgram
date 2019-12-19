@@ -1,0 +1,3 @@
+<!--pages/showScreen/signUp/signUp.wxml-->
+<web-view class='web-container' src='{{linkUrl}}' bindmessage='getMessage'>
+</web-view>

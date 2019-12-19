@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+   "deviceSelectCell" : "/components/deviceSelectCell/deviceSelectCell"
+  }
+}

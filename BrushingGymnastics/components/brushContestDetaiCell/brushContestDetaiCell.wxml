@@ -1,0 +1,20 @@
+<!--components/brushContestDetaiCell/brushContestDetaiCell.wxml-->
+<view class='cell-container' bindtap='brushReportClick'>
+  <view class='cell-content'>
+    <block wx:if='{{rank <= 3 }}'>
+      <image class='cell-medal' src='/resource/score_rank{{rank}}.png' />
+    </block>
+    <block wx:else>
+      <view class='cell-title'>{{rank}}</view>
+    </block>
+    <view class='cell-name-view'>
+      <view>{{data.name}} </view> 
+      <view class="plaque-level">菌斑风险等级{{data.plaqueLevel}}级</view>
+    </view>
+    <view class='cell-score'>
+      <view class='cell-total'>总分: {{data.totalScore}}分 </view>
+      <view class='cell-detail'>牙面: {{data.overallScore}}.{{data.accuracy}}分 龈沟: {{data.gumCleaningValue}}分</view>
+    </view>
+  </view>
+  <view class='cell-line' />
+</view>

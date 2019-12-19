@@ -3,7 +3,7 @@
 <view class='device-container' wx:if='{{loadDone}}'>
   <block wx:if='{{!hasData}}'>
     <view class='content-container' style='height:{{windowHeight}}px;'>
-      <image src='http://qnimage.hydrodent.cn/bcc_no_device_bg.png' class='no-device-image' />
+      <image src='http://qnimage.32teeth.cn/bcc_no_device_bg.png' class='no-device-image' />
       <text class='no-device-tip'>开始添加第一个智能设备吧</text>
       <view class='add-device-button' bindtap='addClick' hover-class='hover-button'>添加设备</view>
     </view>
@@ -30,8 +30,8 @@
   <view class='mask-view' />
   <view class='mask-content-container'>
     <view class='mask-content-view'>
-      <image class='intro-tip' mode='widthFix' src='http://qnimage.hydrodent.cn/bcc_intro_unbind_device.png' />
-      <image class='intro-iknow' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_ikonw.png' />
+      <image class='intro-tip' mode='widthFix' src='http://qnimage.32teeth.cn/bcc_intro_unbind_device.png' />
+      <image class='intro-iknow' bindtap='iknowClick' src='http://qnimage.32teeth.cn/bcc_intro_ikonw.png' />
     </view>
   </view>
 </view>

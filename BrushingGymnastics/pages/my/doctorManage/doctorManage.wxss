@@ -1,0 +1,55 @@
+/* pages/my/doctorManage/doctorManage.wxss */
+.doctor-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.add-member-view{
+  background-color: white;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-member-input{
+  height: 100%;
+  font-size: 28rpx;
+  margin-left: 30rpx;
+  flex: 1;
+}
+
+.add-member-button{
+  margin-right: 30rpx;
+  width: 140rpx;
+  height: 54rpx;
+  color: #00a0e9;
+  border-radius: 27rpx;
+  border: 1rpx solid #00a0e9;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hover-member-button{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.placeholder-doctor{
+  color: #999;
+}
+
+.doctor-table-view{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-view{
+  
+}

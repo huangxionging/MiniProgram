@@ -9,7 +9,7 @@
   </view>
   <view wx:if='{{isAuthorization==1}}' class='bind-view'>
     <view class='bind-tip-view'>
-      <image class='bind-bg-image' src='http://qnimage.hydrodent.cn/bcc_phone_background.png'></image>
+      <image class='bind-bg-image' src='http://qnimage.32teeth.cn/bcc_phone_background.png'></image>
       <view class='bind-tip-text'>
         <text>欢迎使用数字化菌斑指数测评</text>
         <!-- <text>准备迎接新的挑战吧~</text> -->

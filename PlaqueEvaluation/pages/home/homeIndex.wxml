@@ -4,7 +4,7 @@
   <block wx:if='{{!hasData}}'>
     <view class='contest-content-view' style='height:{{height}}px;background-color:white;'>
       <image class="menu-bar-image" bindtap="menuListClick" data-item="2" src="/resource/contest_menu.png" />
-      <video class="video-content" objectFit="contain" src="{{videoURL}}" poster='http://qnimage.hydrodent.cn/plaque_contest_video_poster.png'></video>
+      <video class="video-content" objectFit="contain" src="{{videoURL}}" poster='http://qnimage.32teeth.cn/plaque_contest_video_poster.png'></video>
       <view class="contest-action-view">
         <view wx:if='{{isHaveDevice}}' class="action-view create-contest" hover-class="menu-hover-item" bindtap="createContest">创建测评</view>
         <view class="action-view {{isHaveDevice ? 'add-device' : 'create-contest'}}" hover-class="menu-hover-item" bindtap="deviceManagerClick">添加设备</view>

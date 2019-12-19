@@ -1,0 +1,14 @@
+<!--components/myIndexItemCell/myIndexItemCell.wxml-->
+<view class="my-item" bindtap='didSelectRow'>
+  <view class='content-container'>
+    <view class='left-container'>
+      <image src='/resource/{{data.icon}}' class='my-item-icon'  lazy-load='true'></image>
+      <text class='my-item-title'>{{data.title}}</text>
+    </view>
+    <view class='right-container'>
+      <text class='{{data.styleCalss}}'>{{data.detail}}</text>
+      <image src='/resource/right_arrow.png' class='my-item-arrow' lazy-load='true'></image>
+    </view>
+  </view>
+  <view class='cell-line' />
+</view>

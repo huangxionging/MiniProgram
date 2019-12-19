@@ -1,0 +1,73 @@
+/* pages/contest/addContestDevice/addContestDevice.wxss */
+page{
+  background-color: #eee;
+}
+.contest-device-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.video-container{
+  height: 594rpx;
+  width: 100%;
+}
+
+.arrow-conatiner{
+  height: 70rpx;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.arrow-image{
+  width: 33rpx;
+  height: 30rpx;
+}
+
+.arrow-button{
+  width: 70rpx;
+  height: 70rpx;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.hover-button {
+  background-color: #999;
+  opacity: 0.2;
+}
+
+.device-count-tip-container{
+  width: 100%;
+  height: 100rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.device-count-tip1{
+  margin-left: 28rpx;
+}
+
+.device-count-tip2{
+  color: red;
+}
+
+.device-table-view{
+  margin-top: 1rpx;
+}
+
+.pull-down-image{
+  align-self: center;
+  margin-top: 200rpx;
+  width: 248rpx;
+  height: 156rpx;
+}

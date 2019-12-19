@@ -2,7 +2,7 @@
 <view class='navigation-bar-line' />
 <view class='my-container' wx:if='{{loadDone}}'>
   <view class='my-info-view'>
-    <image class='my-bg-image' src='http://qnimage.hydrodent.cn/bcc_my_index_background.png' lazy-load='true'/>
+    <image class='my-bg-image' src='http://qnimage.32teeth.cn/bcc_my_index_background.png' lazy-load='true'/>
     <view wx:if="{{isLogin}}" class='person-info-container'>
       <image class="my-userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover" lazy-load='true'/>
       <text class="my-userinfo-nickname">{{userInfo.nickName}}</text>

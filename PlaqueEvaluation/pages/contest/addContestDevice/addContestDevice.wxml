@@ -1,7 +1,7 @@
 <!--pages/contest/addContestDevice/addContestDevice.wxml-->
 <view class='navigation-bar-line' />
 <view class='contest-device-container' wx:if='{{loadDone}}'>
-  <video wx:if='{{arrowDirection}}' objectFit="contain" src='{{videoUrl}}' class='video-container' poster="http://qnimage.hydrodent.cn/plaque_add_device_video_poster.png"/>
+  <video wx:if='{{arrowDirection}}' objectFit="contain" src='{{videoUrl}}' class='video-container' poster="http://qnimage.32teeth.cn/plaque_add_device_video_poster.png"/>
   <view class='arrow-conatiner'>
     <view class='arrow-button' hover-class='hover-button' bindtap='arrowClick'>
       <block wx:if='{{arrowDirection}}'>

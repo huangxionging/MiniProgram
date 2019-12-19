@@ -1,0 +1,150 @@
+/* pages/my/deviceCheck/deviceCheck.wxss */
+page{
+  width: 100%;
+  background-color: #eee;
+}
+.check-container{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bg-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.device-check-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.device-check-brush{
+  position: absolute;
+  top: 98rpx;
+  left: 120rpx;
+  width: 512rpx;
+  height: 420rpx;
+}
+
+.content-container{
+  left: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.content-view{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tip-view1{
+  margin-top: 640rpx;
+  font-size: 24rpx;
+  color: white;
+  flex: 1;
+}
+
+.tip-view2{
+  margin-bottom: 40rpx;
+  font-size: 28rpx;
+  color: #00a0e9;
+}
+
+.check-button{
+  margin-bottom: 80rpx;
+  height: 80rpx;
+  width: 690rpx;
+  font-size: 30rpx;
+  background-color: #00a0e9;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+}
+
+.hover-check{
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.device-table-container{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-tip{
+  color: #666;
+  font-size: 24rpx;
+  height: 60rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #B1E7FF;
+}
+
+.item-table-view{
+  margin-bottom: 100rpx;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.device-section{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.cell-header{
+  margin-top: 20rpx;
+}
+
+.header-left{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.header-tip{
+  margin-left: 30rpx;
+}
+
+.header-device-count{
+  color: red;
+}
+
+.check-refresh-button{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100rpx;
+  bottom: 0;
+  background-color: #00a0e9;
+  color: white;
+  font-size: 30rpx;
+}
+
+.hover-refresh-check{
+  background-color: #02557c;
+  color: #a6c4d2;
+}

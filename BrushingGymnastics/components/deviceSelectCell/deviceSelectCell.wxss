@@ -1,0 +1,31 @@
+/* components/deviceSelectCell/deviceSelectCell.wxss */
+
+.cell-container {
+  width: 100%;
+  overflow: hidden;
+  height: 110rpx;
+  /* background-color: red; */
+  
+}
+
+
+.cell-content{
+  display: flex;
+  margin-left: 10rpx;
+  flex-direction: row;
+}
+
+.item-view{
+  margin-top: 46rpx;
+  background-color: white;
+  width: 90rpx;
+  height: 60rpx;
+  margin-left: 47rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #ddd;
+  border-radius: 4rpx;
+  font-size: 30rpx;
+}

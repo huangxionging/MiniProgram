@@ -1,0 +1,55 @@
+/* components/dotorManageCell/dotorManageCell.wxss */
+.cell-container{
+  width: 937.5rpx;
+  height: 111rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-content{
+  width: 100%;
+  height: 110rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-left{
+  margin-left: 35rpx;
+  color: #4E4E4E;
+  width: 750rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  flex: 1;
+}
+
+.cell-delete{
+  margin-left: 23rpx;
+  width: 187.5rpx;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.cell-right{
+  margin-right: 62rpx;
+  width: 120rpx;
+  height: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #f03838;
+  border-radius: 4rpx;
+  color: #F03838;
+  font-size: 28rpx;
+}
+
+.cell-line{
+  height: 1rpx;
+  width: 100%;
+  background-color: #eee;
+}

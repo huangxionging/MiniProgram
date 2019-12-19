@@ -2,8 +2,8 @@
 <view class='navigation-bar-line' />
 <view class='check-container' wx:if='{{loadDone}}'>
   <view class='bg-container' wx:if='{{!checkState}}' style='height:{{windowHeight}}px;'>
-    <image class='device-check-bg' mode='aspectFill' src='http://qnimage.hydrodent.cn/bcc_device_check_bg.png' />
-    <image class='device-check-brush' src='http://qnimage.hydrodent.cn/bcc_device_check_brush.png' />
+    <image class='device-check-bg' mode='aspectFill' src='http://qnimage.32teeth.cn/bcc_device_check_bg.png' />
+    <image class='device-check-brush' src='http://qnimage.32teeth.cn/bcc_device_check_brush.png' />
     <view class='content-container'>
       <view class='content-view'>
         <view class='tip-view1'>如果您的设备过多, 请分批次检测!</view>

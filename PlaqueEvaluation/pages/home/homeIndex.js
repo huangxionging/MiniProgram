@@ -19,7 +19,7 @@ Page({
     showMenu: false,
     isHaveDevice: false,
     isSyncNow: false,
-    videoURL: 'http://qnimage.hydrodent.cn/junbancepingyanshi.mp4',
+    videoURL: 'http://qnimage.32teeth.cn/junbancepingyanshi.mp4',
     papSectionDataArray: [{
       rowDataArray: []
     }],

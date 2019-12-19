@@ -1,0 +1,36 @@
+<!--pages/my/brushContestDetail/brushContestDetail.wxml-->
+<view class='navigation-bar-line' />
+<view class='brush-container' wx:if='{{loadDone}}'>
+  <view class='device-count-tip-container'>
+    <text class='device-count-tip1'>共有</text>
+    <text class='device-count-tip2'>{{playerCount}}</text>
+    <text>人数据</text>
+  </view>
+  <view class="contest-score-menu">
+    <view class="menu1">姓名</view>
+    <view class="menu2">分数</view>
+  </view>
+  <!-- <view class='contest-segement'>
+    <view class="segement-item {{isArcBrushingMethod==1?'segement-item-normal':'segement-item-selected'}}" bindtap='segmentChange' id='pap'>巴氏刷牙组</view>
+    <view class="segement-item {{isArcBrushingMethod==1?'segement-item-selected':'segement-item-normal'}}" bindtap='segmentChange' id='arc'>圆弧刷牙组</view>
+  </view> -->
+  <view wx:if='{{!isArcBrushingMethod}}' class='item-table-view'>
+    <block wx:for-items='{{papSectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='device-section' data-section='{{sectionIndex}}'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='id' wx:for-item='rowObject' wx:for-index='rowIndex'>
+          <brushContestDetaiCell data='{{rowObject}}' rank='{{rowIndex + 1}}' data-section="{{sectionIndex}}" data-row='{{rowIndex}}' data-syn='{{isSyncNow}}' bind:delClick='delClick' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view wx:else class='item-table-view'>
+    <block wx:for-items='{{arcSectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='device-section' data-section='{{sectionIndex}}'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='id' wx:for-item='rowObject' wx:for-index='rowIndex'>
+          <brushContestDetaiCell data='{{rowObject}}' rank='{{rowIndex}}' data-section="{{sectionIndex}}" data-row='{{rowIndex}}' data-syn='{{isSyncNow}}' bind:delClick='delClick' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <button class='share-view' open-type='share'>分享</button>
+</view>

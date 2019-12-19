@@ -1,0 +1,48 @@
+<!-- 牙模组件 yamo-01.wxml -->
+<custom-component>
+  <view class='bg'>
+    <view class='title'>{{ yamoTitle }}</view>
+    <view class='box'>
+      <view class='m rightUp'>
+        <block wx:for="{{yamoData.rightUp}}" wx:key="{{index}}">
+          <view bindtap='onTapYamo' data-area='rightUp' data-index='{{index}}'  data-type='1' class='mark mark{{index}}1'>
+            <view wx:if="{{yamoData.rightUp[index][1]}}" class='dot'></view>
+          </view>
+          <view bindtap='onTapYamo' data-area='rightUp' data-index='{{index}}'  data-type='0' class='mark mark{{index}}0'>
+            <view wx:if="{{yamoData.rightUp[index][0]}}" class='dot'></view>
+          </view>
+        </block>
+      </view>
+      <view class='m leftUp'>
+        <block wx:for="{{yamoData.leftUp}}" wx:key="{{index}}">
+          <view bindtap='onTapYamo' data-area='leftUp' data-index='{{index}}'  data-type='1' class='mark mark{{index}}1'>
+            <view wx:if="{{yamoData.leftUp[index][1]}}" class='dot'></view>
+          </view>
+          <view bindtap='onTapYamo' data-area='leftUp' data-index='{{index}}'  data-type='0' class='mark mark{{index}}0'>
+            <view wx:if="{{yamoData.leftUp[index][0]}}" class='dot'></view>
+          </view>
+        </block>
+      </view>
+      <view class='m rightDown'>
+        <block wx:for="{{yamoData.rightDown}}" wx:key="{{index}}">
+          <view bindtap='onTapYamo' data-area='rightDown' data-index='{{index}}'  data-type='1' class='mark mark{{index}}1'>
+            <view wx:if="{{yamoData.rightDown[index][1]}}" class='dot'></view>
+          </view>
+          <view bindtap='onTapYamo' data-area='rightDown' data-index='{{index}}'  data-type='0' class='mark mark{{index}}0'>
+            <view wx:if="{{yamoData.rightDown[index][0]}}" class='dot'></view>
+          </view>
+        </block>
+      </view>
+      <view class='m leftDown'>
+        <block wx:for="{{yamoData.leftDown}}" wx:key="{{index}}">
+          <view bindtap='onTapYamo' data-area='leftDown' data-index='{{index}}'  data-type='1' class='mark mark{{index}}1'>
+            <view wx:if="{{yamoData.leftDown[index][1]}}" class='dot'></view>
+          </view>
+          <view bindtap='onTapYamo' data-area='leftDown' data-index='{{index}}'  data-type='0' class='mark mark{{index}}0'>
+            <view wx:if="{{yamoData.leftDown[index][0]}}" class='dot'></view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</custom-component>

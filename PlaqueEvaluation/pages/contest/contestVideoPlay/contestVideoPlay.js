@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    videoURL: 'http://qnimage.hydrodent.cn/junbancepingyanshi.mp4'
+    videoURL: 'http://qnimage.32teeth.cn/junbancepingyanshi.mp4'
   },
 
   /**

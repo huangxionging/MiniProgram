@@ -1,0 +1,18 @@
+<!--components/deviceCheckItemCell/deviceCheckItemCell.wxml-->
+<view bindtap='lightClick' class='cell-container {{data.power > 25 ? "cell-low" : "cell-high"}}'>
+  <view class='cell-content'>
+    <view class='cell-top'>
+      <view class='cell-left'>
+        <view class='cell-note'>{{data.deviceNote}}设备</view>
+        <view class='cell-method {{data.brushMethod ? "cell-basi": "cell-arc"}}'>{{data.brushMethod == 1 ? "巴氏刷牙法": "圆弧刷牙法"}}</view>
+      </view>
+      <view class='cell-right'>
+        <view class='cell-power' wx:if='{{data.power != 0}}'>{{data.power}}%</view>
+        <image class='cell-power-image' wx:if='{{data.power != 0}}' src='/resource/{{data.imageUrl}}.png' />
+      </view>
+    </view>
+    <view class='check-time'>连接时间: {{data.time}}</view>
+    <view class='check-low-battery' wx:if='{{data.power <= 25 && data.power > 0}}'>建议：设备电量低于25%，请及时充电！</view>
+  </view>
+  <view class='cell-line' />
+</view>

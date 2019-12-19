@@ -22,7 +22,7 @@ Page({
     }],
     isStopDiscovery: false,
     currentDevice: {},
-    videoUrl: "http://qnimage.hydrodent.cn/tianjiashebeiyanshi.mp4"
+    videoUrl: "http://qnimage.32teeth.cn/tianjiashebeiyanshi.mp4"
   },
 
   /**

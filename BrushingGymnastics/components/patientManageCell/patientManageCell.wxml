@@ -1,0 +1,13 @@
+<!--components/patientManageCell/patientManageCell.wxml-->
+<view class="cell-container" bindtap="patientDetailClick">
+  <view class="cell-content">
+    <view class="item-detail">{{data.id}}</view>
+    <view class="item-detail">{{data.name}}</view>
+    <view class="item-detail">
+      <image class="item-star" src="/resource/star.png"></image>
+    </view>
+    <view class="item-detail">{{data.isBindDevice}}</view>
+    <image class="cell-arrow" src="/resource/right_arrow.png"></image>
+  </view>
+  <view class="cell-line" />
+</view>
