@@ -8,7 +8,9 @@ const baseDeviceSynTool = require('../../utils/baseDeviceSynTool.js')
 const baseURL = require('../../utils/baseURL.js')
 const baseHexConvertTool = require('../../utils/baseHexConvertTool.js')
 
-import {HomeAdapter} from "../../adapter/homeAdapter.js"
+import {
+  HomeAdapter
+} from "../../adapter/homeAdapter.js"
 Page({
 
   /**
@@ -19,7 +21,6 @@ Page({
     deviceInfo: {},
     isSynNow: false,
     currentDate: "",
-    currentTime: "00:00",
     currentStep: "00000",
     currentCal: 0,
     currentDistance: 0,
@@ -34,7 +35,8 @@ Page({
     showSelectDate: false,
     averageHeartRate: 0,
     maxHeartRate: 0,
-    minHeartRate: 0
+    minHeartRate: 0,
+    actionDataArray: []
   },
   temporaryData: {
     pullDown: false,
@@ -67,7 +69,7 @@ Page({
     let token = baseNetLinkTool.getToken()
     let currentDate = baseTool.getCurrentDateWithoutTime()
     // 设备信息
-    let actionDataArray  = that.temporaryData.homeAdapter.getActionItems()
+    let actionDataArray = that.temporaryData.homeAdapter.getActionItems()
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     // 设备连接状态
     let deviceConnectObject = that.data.deviceConnectObject
@@ -190,7 +192,7 @@ Page({
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
   },
-  getHomePage: function (currentDate = 0) {
+  getHomePage: function(currentDate = 0) {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
@@ -216,38 +218,70 @@ Page({
         let heart_rateArray = res.heart_rate
         let blood_pressureArray = res.blood_pressure
 
-        let currentStep = 0
-        let target = 0
-        let percent = 0
-        let currentCal = 0
+        let currentStep = "00000"
+        let targetStep = 0
+        let percentStep = 0
+        let currentCal = "0"
+        let targetCal = 0
+        let percentCal = 0
         let currentTime = 0
         let currentDistance = 0
+        let targetDistance = 0
+        let percentDistance = 0
+
+        let actionDataArray = that.data.actionDataArray
         if (stepArray.length > 0) {
           let stepObject = stepArray[0]
-          currentStep = stepObject.step_all
-          target = stepObject.target
-          currentCal = stepObject.calorie
-          currentDistance = stepObject.distance / 1000
-
-          if (target != null && target != undefined) {
-            percent = currentStep / target
+          currentStep = baseTool.isValid(stepObject.step_all) ? stepObject.step_all : "00000"
+          targetStep = stepObject.target
+          currentCal = baseTool.isValid(stepObject.calorie) ? stepObject.calorie : "0"
+          targetCal = stepObject.tar_cal
+          currentDistance = (stepObject.distance / 1000).toFixed(2)
+          targetDistance = stepObject.tar_dis
+          if (baseTool.isValid(targetStep)) {
+            percentStep = currentStep / targetStep
           }
 
-          
+          if (baseTool.isValid(targetCal)) {
+            percentCal = currentCal / targetCal
+          }
+
+          if (baseTool.isValid(targetDistance)) {
+            percentDistance = currentDistance / targetDistance
+          }
+          actionDataArray[0].titleName = currentStep
+          actionDataArray[1].titleName = currentCal
+          actionDataArray[2].titleName = currentDistance
         }
 
-        
+        if (sleepArray.length > 0) {
+          let sleepObject = sleepArray[0]
+          let total = baseTool.isValid(sleepObject.total) ? sleepObject.total : "0.00"
+          actionDataArray[3].titleName = total
+        }
 
+        if (heart_rateArray.length > 0) {
+          let heart_rateObject = heart_rateArray[0]
+          let bmp = baseTool.isValid(heart_rateObject.bmp) ? heart_rateObject.bmp : "0"
+          actionDataArray[4].titleName = bmp
+        }
+
+        if (blood_pressureArray.length > 0) {
+          let blood_pressureObject = blood_pressureArray[0]
+          let shrink = baseTool.isValid(blood_pressureObject.shrink) ? blood_pressureObject.shrink : "000"
+          let diastole = baseTool.isValid(blood_pressureObject.diastole) ? blood_pressureObject.diastole : "00"
+          actionDataArray[5].titleName = shrink + "/" + diastole
+        }
         that.setData({
           currentStep: currentStep,
           currentCal: currentCal,
           currentTime: currentTime,
           currentDistance: currentDistance,
+          actionDataArray: actionDataArray
         })
-        baseTool.print(percent)
-        that.drawStep(percent)
-        that.drawDistance(0)
-        that.drawCal(0)
+        that.drawStep(percentStep)
+        that.drawDistance(percentDistance)
+        that.drawCal(percentCal)
       }).catch(res => {
         baseTool.print([res, "历史数据"])
         baseNetLinkTool.showNetWorkingError(res)
@@ -259,7 +293,7 @@ Page({
     }
 
   },
-  redrawCircle: function (percent = 0, canvasId = "", strokeBgColor = "", strokeFgColor = "", width = 0) {
+  redrawCircle: function(percent = 0, canvasId = "", strokeBgColor = "", strokeFgColor = "", width = 0) {
     let that = this
     let degree = that.degreeForPercent(percent)
     let widthPx = baseTool.toPixel(width)
@@ -280,11 +314,11 @@ Page({
   degreeForPercent: function(percent = 0) {
     return Math.PI * (2 * percent - 0.5)
   },
-  drawDistance: function (percent = 0) {
+  drawDistance: function(percent = 0) {
     let that = this
     that.redrawCircle(percent, "circle-distance-percent", "#7b7d81", "#14D2B8", 160)
   },
-  drawStep: function (percent = 0){
+  drawStep: function(percent = 0) {
     baseTool.print([percent, 11])
     let that = this
     that.redrawCircle(percent, "circle-step-percent", "#7b7d81", "#08A5F6", 280)
@@ -827,7 +861,7 @@ Page({
       })
     })
   },
-  getHeartRate: function (currentDate) {
+  getHeartRate: function(currentDate) {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
@@ -852,7 +886,9 @@ Page({
         baseTool.print(res)
         // 表示今天上传过数据/ 渲染当天数据
         let dataArray = res.data
-        let averageHeartRate = 0, maxHeartRate = 0, minHeartRate = 0 
+        let averageHeartRate = 0,
+          maxHeartRate = 0,
+          minHeartRate = 0
         if (dataArray.length > 0) {
           let dataObject = dataArray[0]
           let dataList = dataObject.data
@@ -870,7 +906,7 @@ Page({
             }
           }
           averageHeartRate = (sumHeart / dataList.length).toFixed(0)
-          
+
         }
         that.setData({
           averageHeartRate: averageHeartRate,

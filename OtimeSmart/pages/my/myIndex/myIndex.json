@@ -2,7 +2,5 @@
   "navigationBarTitleText": "我的",
   "usingComponents": {
     "myIndexItemCell": "/components/myIndexItemCell/myIndexItemCell"
-  },
-  "navigationBarBackgroundColor": "#010101",
-  "navigationBarTextStyle": "white"
+  }
 }

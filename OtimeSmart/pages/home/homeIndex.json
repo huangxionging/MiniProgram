@@ -5,7 +5,5 @@
     "deviceActionItemCell": "/components/deviceActionItemCell/deviceActionItemCell"
   },
   "navigationBarTitleText": "设备首页",
-  "enablePullDownRefresh": true,
-  "navigationBarTextStyle": "white",
-  "navigationBarBackgroundColor": "#010101"
+  "enablePullDownRefresh": true
 }
