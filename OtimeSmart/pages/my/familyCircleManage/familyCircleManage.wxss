@@ -1,9 +1,6 @@
 /* pages/my/familyCircleManage/familyCircleManage.wxss */
 @import "../../../template/cell.wxss";
 
-page {
-  background-color: #eee;
-}
 
 .family-container {
   position: relative;
@@ -31,7 +28,7 @@ page {
   border-radius: 20rpx;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color:#171719;
 }
 
 .section-header {
@@ -107,7 +104,7 @@ page {
   position: fixed;
   bottom: 0rpx;
   width: 100%;
-  background-color: #eee;
+  background-color: #171719;
 }
 
 .family-action-content{

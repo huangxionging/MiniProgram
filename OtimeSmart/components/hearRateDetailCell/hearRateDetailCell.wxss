@@ -8,7 +8,7 @@
 .cell-bmp {
   font-family: DINCondensed-Bold;
   font-size: 56rpx;
-  color: #333;
+  color: white;
   letter-spacing: 0.08px;
   text-align: center;
   margin-right: 5rpx;

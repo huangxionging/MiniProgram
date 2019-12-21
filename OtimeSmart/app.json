@@ -22,6 +22,7 @@
   "cloud": true,
   "sitemapLocation": "sitemap.json",
   "tabBar": {
+    "backgroundColor": "#010101",
     "selectedColor": "#6B92FB",
     "color": "#ccc",
     "list": [

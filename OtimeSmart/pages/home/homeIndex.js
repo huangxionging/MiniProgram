@@ -254,24 +254,24 @@ Page({
           actionDataArray[2].titleName = currentDistance
         }
 
-        if (sleepArray.length > 0) {
-          let sleepObject = sleepArray[0]
-          let total = baseTool.isValid(sleepObject.total) ? sleepObject.total : "0.00"
-          actionDataArray[3].titleName = total
-        }
+        // if (sleepArray.length > 0) {
+        //   let sleepObject = sleepArray[0]
+        //   let total = baseTool.isValid(sleepObject.total) ? sleepObject.total : "0.00"
+        //   actionDataArray[3].titleName = total
+        // }
 
         if (heart_rateArray.length > 0) {
           let heart_rateObject = heart_rateArray[0]
           let bmp = baseTool.isValid(heart_rateObject.bmp) ? heart_rateObject.bmp : "0"
-          actionDataArray[4].titleName = bmp
+          actionDataArray[3].titleName = bmp
         }
 
-        if (blood_pressureArray.length > 0) {
-          let blood_pressureObject = blood_pressureArray[0]
-          let shrink = baseTool.isValid(blood_pressureObject.shrink) ? blood_pressureObject.shrink : "000"
-          let diastole = baseTool.isValid(blood_pressureObject.diastole) ? blood_pressureObject.diastole : "00"
-          actionDataArray[5].titleName = shrink + "/" + diastole
-        }
+        // if (blood_pressureArray.length > 0) {
+        //   let blood_pressureObject = blood_pressureArray[0]
+        //   let shrink = baseTool.isValid(blood_pressureObject.shrink) ? blood_pressureObject.shrink : "000"
+        //   let diastole = baseTool.isValid(blood_pressureObject.diastole) ? blood_pressureObject.diastole : "00"
+        //   actionDataArray[5].titleName = shrink + "/" + diastole
+        // }
         that.setData({
           currentStep: currentStep,
           currentCal: currentCal,
@@ -861,6 +861,27 @@ Page({
       })
     })
   },
+  didSelectRowAtIndexPath: function(e) {
+    let indexPath = e.detail
+    baseTool.print(indexPath)
+    let row = indexPath.row
+    let that = this
+    switch (row) {
+      case 0:
+      case 1:
+      case 2: {
+        that.stepDetailClick()
+        break
+      }
+      case 3: {
+        // break;
+      }
+      case 4: {
+        that.heartDetailClick()
+        break;
+      }
+    }
+  },
   getHeartRate: function(currentDate) {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -921,6 +942,5 @@ Page({
         })
       })
     }
-
   }
 })

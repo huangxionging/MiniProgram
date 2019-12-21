@@ -1,8 +1,6 @@
 /* pages/my/familyCircleDetail/familyCircleDetail.wxss */
 @import "../../../template/cell.wxss";
-page {
-  background-color: #eee;
-}
+
 .detail-container{
   width: 100%;
   display: flex;
@@ -15,7 +13,7 @@ page {
   width: 710rpx;
   height: auto;
   border-radius: 10rpx;
-  background-color: white;
+
   display: flex;
   flex-direction: column;
 }

@@ -9,7 +9,7 @@
       <view class="date-view">{{currentDate}}</view>
       <image wx:if="{{showSelectDate}}" data-type="1" bindtap="selecDateClick" class="select-img" src="/resource/select_right.png" />
     </view>
-    <view class="distance-percent">
+    <view class="distance-percent" bindtap="stepDetailClick">
       <canvas class="circle-canvas" canvas-id="circle-distance-percent">
         <view class="distance-view" bindtap="">
           <view class="step-content" style="font-size:40rpx;">{{currentDistance}}</view>
@@ -18,16 +18,16 @@
         </view>
       </canvas>
     </view>
-    <view class="step-percent">
+    <view class="step-percent" bindtap="stepDetailClick">
       <canvas class="circle-canvas" canvas-id="circle-step-percent">
-        <view class="step-view" bindtap="stepDetailClick">
+        <view class="step-view">
           <view class="step-content">{{currentStep}}</view>
           <view class="cirle-line" style="background-color:#08A5F6"></view>
           <view class="step-content" style="font-size:34rpx;">步</view>
         </view>
       </canvas>
     </view>
-    <view class="kal-percent">
+    <view class="kal-percent" bindtap="stepDetailClick">
       <canvas class="circle-canvas" canvas-id="circle-cal-percent">
         <view class="distance-view">
           <view class="step-content" style="font-size:40rpx;">{{currentCal}}</view>
@@ -39,7 +39,8 @@
   </view>
   <view class="device-action-container">
     <block wx:for-items="{{actionDataArray}}" wx:key="id" wx:for-item="actionObject" wx:for-index="actionIndex">
-      <deviceActionItemCell data="{{actionObject}}"/>
+      <deviceActionItemCell data="{{actionObject}}" data-row="{{actionIndex}}" bind:didSelectRowAtIndexPath="didSelectRowAtIndexPath"
+      />
     </block>
   </view>
 </view>

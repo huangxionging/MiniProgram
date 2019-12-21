@@ -1,9 +1,5 @@
 /* pages/deviceData/heartDetail/heartDetail.wxss */
 
-page {
-  background-color: #eee;
-}
-
 .heart-rate-container {
   position: relative;
   width: 100%;
@@ -14,7 +10,7 @@ page {
 .heart-result-view {
   width: 100%;
   height: 490rpx;
-  background-color: #ff4545;
+  background-color: #171719;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,12 +19,13 @@ page {
 .heart-circle {
   display: flex;
   margin-top: 52rpx;
-  border: 2rpx solid white;
+  border: 2rpx solid #E22222;
   width: 340rpx;
   height: 340rpx;
   border-radius: 170rpx;
   align-items: center;
   justify-content: center;
+  background-color: #2b1618;
 }
 
 .heart-last-result {
@@ -81,7 +78,7 @@ page {
   bottom: 0;
   height: 140rpx;
   width: 100%;
-  background-color: white;
+  background-color: #171719;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,7 +91,7 @@ page {
 }
 
 .heart-rate-check .tip {
-  color: #999;
+  color: white;
   font-size: 24rpx;
   margin-top: 5rpx;
 }

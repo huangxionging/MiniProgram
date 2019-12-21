@@ -9,7 +9,7 @@
               <view class="cell-title" style="margin-left:36rpx;flex:1;">{{sectionObject.familyName}}</view>
               <image class="cell-arrow" style="margin-left:20rpx;"  src="/resource/arrow_right.png"></image>
             </view>
-            <view class="cell-line" />
+            <!-- <view class="cell-line" /> -->
           </view>
         </view>
       </view>

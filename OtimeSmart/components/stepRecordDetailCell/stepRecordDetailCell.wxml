@@ -1,17 +1,17 @@
 <!--components/stepRecordDetailCell/stepRecordDetailCell.wxml-->
-<view class="cell-container container">
+<view class="cell-container container" >
   <view class="cell-content">
     <view class="cell-top">{{data.time}}</view>
     <view class="cell-bottom">
       <view class="cell-left" style="margin-left:20rpx;">
-        <image class="icon" src="/resource/step_icon.png"></image>
-        <view>{{data.step}}</view>
-        <view class="unit">步</view>
-      </view>
-      <view class="cell-middle">
         <image class="icon" src="/resource/cal.png"></image>
         <view>{{data.calorie}}</view>
         <view class="unit">kCal</view>
+      </view>
+      <view class="cell-middle">
+        <image class="icon" src="/resource/step_icon.png"></image>
+        <view>{{data.step}}</view>
+        <view class="unit">步</view>
       </view>
       <view class="cell-right" style="margin-right:20rpx;">
         <image class="icon" src="/resource/distance.png" ></image>

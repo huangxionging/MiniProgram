@@ -4,7 +4,6 @@
 page {
   width: 100%;
   height: 100%;
-  background-color: #eee;
 }
 
 .view-container{
@@ -49,7 +48,7 @@ page {
   margin-top: 14rpx;
   width: 100%;
   height: 730rpx;
-  background-color: white;
+  background-color: #171719;
   align-items: center;
   display: flex;
   flex-direction: column;

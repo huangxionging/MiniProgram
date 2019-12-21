@@ -3,7 +3,7 @@
   <view class="family-content">
     <view class="family-info">
       <view class="cell-title" style="margin-left:36rpx;">{{familyName}}</view>
-      <image class="cell-img" data-familyId="{{sectionObject.familyId}}" src="/resource/edit.png" data-section='{{sectionIndex}}' bindtap="editFamilyClick"></image>
+      <image class="cell-img" data-familyId="{{sectionObject.familyId}}" src="/resource/edit.png" data-section='{{sectionIndex}}' ></image>
       <view class="cell-line" />
     </view>
     <view class="family-manager">

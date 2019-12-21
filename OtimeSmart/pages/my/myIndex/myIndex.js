@@ -124,6 +124,13 @@ Page({
       }
       case 2: {
         switch (row) {
+          // case 0: {
+          //   break;
+          // }
+          // case 1: {
+          //   // baseDeviceSynTool.commandSettingTime()
+          //   break
+          // }
           case 0: {
             wx.showLoading({
               title: "查找设备中...",
@@ -150,13 +157,6 @@ Page({
                 
               }), key)
             }
-            break
-          }
-          case 1: {
-            baseDeviceSynTool.commandSettingTime()
-            break
-          }
-          case 2: {
             break
           }
         } 

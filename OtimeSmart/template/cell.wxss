@@ -36,7 +36,7 @@
 
 .cell-detail{
   margin-right: 15rpx;
-  color: #999;
+  color: white;
   font-size: 28rpx;
 }
 

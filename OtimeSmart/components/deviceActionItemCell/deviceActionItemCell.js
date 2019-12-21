@@ -1,4 +1,5 @@
 // components/deviceActionItemCell/deviceActionItemCell.js
+const baseTool = require('../../utils/baseTool.js')
 Component({
   /**
    * 组件的属性列表
@@ -21,6 +22,13 @@ Component({
    * 组件的方法列表
    */
   methods: {
-
+    didSelectRowAtIndexPath: function () {
+      let that = this
+      baseTool.print(that.dataset)
+      that.triggerEvent('didSelectRowAtIndexPath', {
+        section: that.dataset.section,
+        row: that.dataset.row
+      })
+    }
   }
 })

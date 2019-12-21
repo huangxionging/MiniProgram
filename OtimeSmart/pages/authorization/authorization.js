@@ -103,7 +103,7 @@ Page({
     wx.login({
       success: function(res) {
         if (res.code) {
-          let parameter = Object.assign({
+          let parameter = Object.assign(e, {
             code: res.code
           })
           baseNetLinkTool.loginAuthorization("login", "登录", parameter).then(res => {
@@ -127,7 +127,7 @@ Page({
 
             if (res.avatar != null || res.alias != null) {
               baseTool.setValueForKey({
-                avatar: res.avatar ? res.avatar : "",
+                avatar: e.userInfo.avatarUrl ? e.userInfo.avatarUrl : "",
                 alias: res.alias ? res.alias : "",
                 birthday: res.birthday ? res.birthday : "25",
                 height: res.height ? res.height : "175",

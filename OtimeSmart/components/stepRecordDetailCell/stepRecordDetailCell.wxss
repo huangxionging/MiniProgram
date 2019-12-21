@@ -16,6 +16,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  color: white;
 }
 
 .cell-top{
@@ -23,7 +24,7 @@
   width: 100%;
   margin-top: 8rpx;
   margin-left: 20rpx;
-  color: #999;
+  color: white;
   font-size: 30rpx;
 }
 
@@ -41,5 +42,5 @@
 
 .unit{
   margin-left: 10rpx;
-  color: #999;
+  color: white;
 }
