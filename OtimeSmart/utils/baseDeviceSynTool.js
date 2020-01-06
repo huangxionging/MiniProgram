@@ -623,6 +623,27 @@ function answerRealHeartRate() {
   writeValue(deviceObject.deviceId, commandBuffer)
 }
 
+/**
+ * 设置久坐提醒
+ * @param {*} timeInteveral  时间间隔, 单位为分钟
+ */
+function setSedentaryReminder(timeInteveral = 0){
+  let hexString = "0xCB062B01" + baseHexConvertTool.valueToHexString(timeInteveral)
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "2b"
+}
+
+/**
+ * 读取久坐提醒数据
+ */
+function readSedentaryReminder() {
+  let hexString = "0xCB052B01"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "2b"
+}
+
 
 
 module.exports = {
@@ -646,5 +667,7 @@ module.exports = {
   commandSynDeviceHeartRate: commandSynDeviceHeartRate,
   commandSynDeviceRealHeartRate: commandSynDeviceRealHeartRate,
   answerRealHeartRateKey: answerRealHeartRateKey,
-  answerRealHeartRate: answerRealHeartRate
+  answerRealHeartRate: answerRealHeartRate,
+  setSedentaryReminder: setSedentaryReminder,
+  readSedentaryReminder: readSedentaryReminder
 }

@@ -98,6 +98,9 @@ Page({
     if (deviceInfo.deviceName != undefined) {
       sectionDataArray[0].rowDataArray[0].title = deviceInfo.deviceName
     }
+    if (baseTool.valueForKey("sedentaryReminder")){
+      sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder")
+    }
     that.setData({
       sectionDataArray: sectionDataArray
     })
