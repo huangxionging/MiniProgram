@@ -780,7 +780,9 @@ function getCalorieWithSteps(step = 0, weight = 0, height = 0) {
 
 // 添加接口
 module.exports = {
-  // 打印
+  /**
+   * 打印
+   **/ 
   print: print,
   // 模拟器
   isSimulator: isSimulator,

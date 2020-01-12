@@ -19,13 +19,13 @@ class HomeAdapter {
       unitName: "千米",
       titleColor: "#14D2B8",
     }, 
-    // {
-    //   iconName: "sleep_icon",
-    //   titleName: "0.00",
-    //   detailName: "睡眠(今日)",
-    //   unitName: "小时",
-    //   titleColor: "#9013FE",
-    // }, 
+    {
+      iconName: "sleep_icon",
+      titleName: "0.00",
+      detailName: "睡眠(今日)",
+      unitName: "小时",
+      titleColor: "#9013FE",
+    }, 
     {
       iconName: "heart_icon",
       titleName: "0",
@@ -33,13 +33,13 @@ class HomeAdapter {
       unitName: "bmp",
       titleColor: "#FF2828",
     }, 
-    // {
-    //   iconName: "blood_icon",
-    //   titleName: "000/00",
-    //   detailName: "血压",
-    //   unitName: "",
-    //   titleColor: "#FD3FB2",
-    // }
+    {
+      iconName: "blood_icon",
+      titleName: "000/00",
+      detailName: "血压",
+      unitName: "",
+      titleColor: "#FD3FB2",
+    }
     ]
   }
 }

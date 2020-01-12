@@ -11,7 +11,8 @@
     "pages/deviceData/stepDetail/stepDetail",
     "pages/deviceData/heartDetail/heartDetail",
     "pages/my/familyCircleDetail/familyCircleDetail",
-    "pages/my/myFamilyQRCode/myFamilyQRCode"
+    "pages/my/myFamilyQRCode/myFamilyQRCode",
+    "pages/deviceData/sleepDetail/sleepDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

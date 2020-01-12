@@ -627,8 +627,8 @@ function answerRealHeartRate() {
  * 设置久坐提醒
  * @param {*} timeInteveral  时间间隔, 单位为分钟
  */
-function setSedentaryReminder(timeInteveral = 0){
-  let hexString = "0xCB062B01" + baseHexConvertTool.valueToHexString(timeInteveral)
+function commandSetSedentaryReminder(timeInteveral = 0){
+  let hexString = "0xCB062B01" + baseHexConvertTool.valueToHexString(timeInteveral + '')
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "2b"
@@ -637,11 +637,32 @@ function setSedentaryReminder(timeInteveral = 0){
 /**
  * 读取久坐提醒数据
  */
-function readSedentaryReminder() {
-  let hexString = "0xCB052B01"
+function commandReadSedentaryReminder() {
+  let hexString = "0xCB052B00"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "2b"
+}
+
+/**
+ * 
+ * @param unitType 距离单位 0表示共制, 1 表示英寸
+ */
+function commandSynSystemUnit(unitType = 0) {
+  let hexString = "0xCB0822010000" + baseHexConvertTool.valueToHexString(unitType + '')
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "22"
+}
+
+/**
+ * 读取英制和公制
+ */
+function commandReadSystemUnit(){
+  let hexString = "0xCB052200"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "22"
 }
 
 
@@ -668,6 +689,20 @@ module.exports = {
   commandSynDeviceRealHeartRate: commandSynDeviceRealHeartRate,
   answerRealHeartRateKey: answerRealHeartRateKey,
   answerRealHeartRate: answerRealHeartRate,
-  setSedentaryReminder: setSedentaryReminder,
-  readSedentaryReminder: readSedentaryReminder
+  /**
+   * 设置久坐提醒
+   */
+  commandSetSedentaryReminder: commandSetSedentaryReminder,
+  /**
+   * 读取久坐提醒
+   */
+  commandReadSedentaryReminder: commandReadSedentaryReminder,
+  /**
+   * 同步制式
+   */
+  commandSynSystemUnit: commandSynSystemUnit,
+  /**
+   * 读取制式
+   */
+  commandReadSystemUnit: commandReadSystemUnit
 }

@@ -53,6 +53,9 @@ function startAuthorization() {
   })
 }
 
+/**
+ * 进入授权页面
+ */
 function gotoAuthorization(){
   wx.navigateTo({
     url: '/pages/authorization/authorization',

@@ -11,9 +11,15 @@ function hexStringToArrayBuffer(hexString = '') {
 
 /**
  * 10 进制字符串转16进制字符串
+ * value 是值
  */
 function valueToHexString(value = '') {
-  return parseInt(value, 10).toString(16)
+  let hexString = parseInt(value, 10).toString(16)
+  // 如果结果不为偶数, 则在高位补 0
+  if (hexString.length % 2 == 1) {
+    hexString = "0" + hexString
+  }
+  return hexString
 }
 
 /**

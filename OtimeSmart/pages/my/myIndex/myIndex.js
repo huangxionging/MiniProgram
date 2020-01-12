@@ -98,8 +98,19 @@ Page({
     if (deviceInfo.deviceName != undefined) {
       sectionDataArray[0].rowDataArray[0].title = deviceInfo.deviceName
     }
-    if (baseTool.valueForKey("sedentaryReminder")){
-      sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder")
+    if (baseTool.valueForKey("sedentaryReminder") != undefined){
+      sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
+      sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+    } else {
+      that.readSedentaryReminder()
+    }
+
+    if (baseTool.valueForKey("synSystemUnit") != undefined) {
+      let synSystemUnit = baseTool.valueForKey("synSystemUnit")
+      sectionDataArray[3].rowDataArray[0].detail = (synSystemUnit == 1) ? "英制": "公制"
+      sectionDataArray[3].rowDataArray[0].value = synSystemUnit
+    } else {
+      that.readSynSystemUnit()
     }
     that.setData({
       sectionDataArray: sectionDataArray
@@ -127,14 +138,14 @@ Page({
       }
       case 2: {
         switch (row) {
-          // case 0: {
-          //   break;
-          // }
+          case 0: {
+            break;
+          }
           // case 1: {
           //   // baseDeviceSynTool.commandSettingTime()
           //   break
           // }
-          case 0: {
+          case 1: {
             wx.showLoading({
               title: "查找设备中...",
               mask: true
@@ -215,5 +226,172 @@ Page({
   },
   authClick: function() {
     baseNetLinkTool.gotoAuthorization()
+  },
+  indexSelectClick: function(e) {
+    let that = this
+    let section = e.currentTarget.dataset.section
+    let row = e.currentTarget.dataset.row
+    let value = e.detail.value
+    switch(section) {
+      case 2: {
+        switch(row) {
+          case 0: {
+            that.setSedentaryReminder(value)
+            break
+          }
+        }
+        break
+      }
+      case 3: {
+        switch(row) {
+          case 0: {
+            that.setSyetemUnit(value)
+            break;
+          }
+        }
+        break;
+      }
+    }
+  },
+  setSedentaryReminder: function(e) {
+    baseTool.print([e, "订单订单"])
+    let that = this
+    wx.showLoading({
+      title: "设置久坐提醒...",
+      mask: true
+    })
+    let index = e
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    if(state.code != 1002) {
+      baseTool.showToast("蓝牙打开失败")
+    } else {
+      let key = baseDeviceSynTool.commandSetSedentaryReminder(index)
+      baseDeviceSynTool.registerCallBackForKey((res => {
+        baseTool.print(["通知信息", res])
+        baseDeviceSynTool.removeCallBackForKey(key)
+        if (res.length < 10) {                                  
+          return
+        }
+        let type = parseInt(res.substr(6, 2))
+        let result = parseInt(res.substr(8, 2))
+        baseTool.print(result)
+        if (type == 1 && result == 1) {
+          baseTool.showToast("设置成功")
+          baseTool.setValueForKey(index, "sedentaryReminder")
+          if (baseTool.valueForKey("sedentaryReminder") != undefined){
+            let sectionDataArray = that.data.sectionDataArray
+            sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
+            sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+            that.setData({
+              sectionDataArray: sectionDataArray
+            })
+          }
+        } else {
+          baseTool.showToast("设置失败")
+        }
+        
+      }), key)
+    }
+  },
+  readSedentaryReminder: function() {
+    let that = this
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    if(state.code == 1002) {
+      let key = baseDeviceSynTool.commandReadSedentaryReminder()
+      baseDeviceSynTool.registerCallBackForKey((res => {
+        baseTool.print(["读取久坐提醒数据通知信息", res])
+        // 删除通道函数
+        baseDeviceSynTool.removeCallBackForKey(key)
+        if (res.length < 10) {                                  
+          return
+        }
+        let type = parseInt(res.substr(6, 2))
+        let result = parseInt(res.substr(8, 2))
+        baseTool.print(result)
+        if (type == 0) {
+          baseTool.setValueForKey(result, "sedentaryReminder")
+          if (baseTool.valueForKey("sedentaryReminder") != undefined){
+            let sectionDataArray = that.data.sectionDataArray
+            sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
+            sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+            that.setData({
+              sectionDataArray: sectionDataArray
+            })
+          }
+        }
+      }), key)
+    }
+  },
+  setSyetemUnit: function(e) {
+    baseTool.print(e)
+    let that = this
+    wx.showLoading({
+      title: "设置计量单位...",
+      mask: true
+    })
+    let index = e
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    if(state.code != 1002) {
+      baseTool.showToast("蓝牙打开失败")
+    } else {
+      let key = baseDeviceSynTool.commandSynSystemUnit(index)
+      baseDeviceSynTool.registerCallBackForKey((res => {
+        baseTool.print(["通知信息", res])
+        baseDeviceSynTool.removeCallBackForKey(key)
+        if (res.length < 10) {                                  
+          return
+        }
+        let type = parseInt(res.substr(6, 2))
+        let result = parseInt(res.substr(8, 2))
+        baseTool.print(result)
+        if (type == 1 && result == 1) {
+          baseTool.showToast("设置成功")
+          baseTool.setValueForKey(index, "synSystemUnit")
+          if (baseTool.valueForKey("synSystemUnit") != undefined){
+            let sectionDataArray = that.data.sectionDataArray
+            sectionDataArray[3].rowDataArray[0].detail = (index == 1) ? "英制" : "公制" 
+            sectionDataArray[3].rowDataArray[0].value = index
+            that.setData({
+              sectionDataArray: sectionDataArray
+            })
+          }
+        } else {
+          baseTool.showToast("设置失败")
+        }
+        
+      }), key)
+    }
+  },
+  readSynSystemUnit: function() {
+    let that = this
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    if(state.code == 1002) {
+      let key = baseDeviceSynTool.commandReadSystemUnit()
+      baseTool.print("同步")
+      baseDeviceSynTool.registerCallBackForKey((res => {
+        baseTool.print(["读取久制式通知信息", res])
+        // 删除通道函数
+        baseDeviceSynTool.removeCallBackForKey(key)
+        if (res.length < 16) {                                  
+          return
+        }
+        // ca08220000000001
+        let type = parseInt(res.substr(6, 2))
+        let result = parseInt(res.substr(12, 2))
+        if (type == 0) {
+          baseTool.print(result)
+          baseTool.setValueForKey(result, "synSystemUnit")
+          if (baseTool.valueForKey("synSystemUnit") != undefined){
+            let sectionDataArray = that.data.sectionDataArray
+            sectionDataArray[3].rowDataArray[0].detail = (result == 1) ? "英制" : "公制" 
+            sectionDataArray[3].rowDataArray[0].value = result
+            that.setData({
+              sectionDataArray: sectionDataArray
+            })
+          }
+        }
+          
+      }), key)
+    }
   }
 })

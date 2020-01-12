@@ -874,11 +874,16 @@ Page({
         break
       }
       case 3: {
-        // break;
+        baseTool.showToast("该功能敬请期待")
+        break;
       }
       case 4: {
         that.heartDetailClick()
         break;
+      }
+      case 5: {
+        baseTool.showToast("该功能敬请期待")
+        break
       }
     }
   },
