@@ -486,9 +486,11 @@ function writeValue(deviceId = '', value = []) {
     characteristicId: characteristicIdWrite,
     value: value,
     success: function(res) {
+      baseTool.print(res)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeWriteSuccess)
     },
     fail: function(res) {
+      baseTool.print(res)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeWriteFail)
     }
   })
@@ -583,6 +585,7 @@ function commandSettingUserInfo(userInfo) {
  * 同步总步数
  */
 function commandSynDeviceTotalStepData(dayNumber = 0) {
+  baseTool.print("同步总步数")
   let hexString = "0xCB05320" + dayNumber
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -590,6 +593,7 @@ function commandSynDeviceTotalStepData(dayNumber = 0) {
 }
 
 function commandSynDeviceDetailStepData(dayNumber = 0){
+  baseTool.print("同步详细步数")
   let hexString = "0xCB05330" + dayNumber
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -600,6 +604,7 @@ function commandSynDeviceDetailStepData(dayNumber = 0){
  * 同步心率数据
  */
 function commandSynDeviceHeartRate() {
+  baseTool.print("同步心率")
   let hexString = "0xCB053101"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -607,6 +612,7 @@ function commandSynDeviceHeartRate() {
 }
 
 function commandSynDeviceRealHeartRate() {
+  baseTool.print("同步实时心率")
   let hexString = "0xCB052F01"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -618,6 +624,7 @@ function answerRealHeartRateKey(){
 }
 
 function answerRealHeartRate() {
+  baseTool.print("回复心率")
   let hexString = "0xCB063001"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -665,6 +672,31 @@ function commandReadSystemUnit(){
   return "22"
 }
 
+/**
+ * 读取睡眠总时长
+ * @param {*} dayNumber 天数
+ */
+function commandSynDeviceSleepTotalData(dayNumber = 0) {
+  baseTool.print("同步总睡眠")
+  let hexString = "0xCB0534" + baseHexConvertTool.valueToHexString(dayNumber + '')
+  let commandBuffer = baseHexConvertTool.hexStringToArrayBuffer(hexString)
+  baseTool.print(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return  "34"
+}
+
+/**
+ * 同步详细睡眠数据
+ * @param {*} dayNumber 天数
+ */
+function commandSynDeviceSleepDetailData(dayNumber = 0) {
+  baseTool.print("同步详细睡眠")
+  let hexString = "0xCB0535" + baseHexConvertTool.valueToHexString(dayNumber + '')
+  let commandBuffer = baseHexConvertTool.hexStringToArrayBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "35"
+}
+
 
 
 module.exports = {
@@ -704,5 +736,13 @@ module.exports = {
   /**
    * 读取制式
    */
-  commandReadSystemUnit: commandReadSystemUnit
+  commandReadSystemUnit: commandReadSystemUnit,
+  /**
+   * 同步睡眠总数据
+   */
+  commandSynDeviceSleepTotalData: commandSynDeviceSleepTotalData,
+  /**
+   * 同步睡眠详细数据
+   */
+  commandSynDeviceSleepDetailData: commandSynDeviceSleepDetailData
 }
