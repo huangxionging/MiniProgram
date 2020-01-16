@@ -63,6 +63,9 @@ let deviceObject = {
 
 let callBackObject = {}
 
+let deviceTimer = 0
+
+let deviceStopTimer = false
 /**
  * 消息类型
  */
@@ -449,7 +452,11 @@ function deviceCharacteristicValueChange() {
     baseTool.print([hex, key, '通知信息'])
     let callBack = callBackObject[key]
     if (callBack != undefined) {
-      callBack(hex)
+      if (deviceStopTimer == false) {
+        deviceStopTimer = true
+        clearTimeout(deviceTimer)
+        callBack(hex)
+      }
     }
   })
   
@@ -513,6 +520,16 @@ function registerCallBackForKey(callBack = Function, key = '') {
     return
   }
   callBackObject[key] = callBack
+  deviceStopTimer = false
+  deviceTimer = setTimeout(() => {
+    clearTimeout(deviceTimer)
+    if (deviceStopTimer == true) {
+      return
+    }
+    deviceStopTimer = true
+    let failCallBack = callBackObject[key]
+    failCallBack("fail")
+  }, 2000);
 }
 
 function removeCallBackForKey(key = '') {

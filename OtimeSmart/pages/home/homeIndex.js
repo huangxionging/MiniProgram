@@ -99,7 +99,7 @@ Page({
       })
       that.connectDevice()
       let lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate")
-      
+
       if (baseTool.isValid(lastSynDeviceDataDate) == false) {
         lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
         baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
@@ -417,6 +417,16 @@ Page({
         let key = baseDeviceSynTool.commandDevicePower()
         baseDeviceSynTool.registerCallBackForKey(res => {
           baseTool.print(res)
+          if (res == "fail") {
+            // 此时必须关闭
+            baseDeviceSynTool.removeCallBackForKey(key)
+            that.setData({
+              showDeviceToolBar: false,
+              isSynNow: false
+            })
+            baseTool.showToast("电池信息获取超时")
+            return
+          }
           baseDeviceSynTool.removeCallBackForKey(key)
           let power = baseHexConvertTool.hexStringToValue(res.substr(6, 2)) + "%"
           that.setData({
@@ -427,6 +437,16 @@ Page({
         let UserInfokey = baseDeviceSynTool.commandUserInfo()
         baseDeviceSynTool.registerCallBackForKey(res => {
           baseTool.print(res)
+          if (res == "fail") {
+            // 此时必须关闭
+            baseDeviceSynTool.removeCallBackForKey(key)
+            that.setData({
+              showDeviceToolBar: false,
+              isSynNow: false
+            })
+            baseTool.showToast("用户信息获取超时")
+            return
+          }
           baseDeviceSynTool.removeCallBackForKey(UserInfokey)
           let sex = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
           let height = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
@@ -532,6 +552,14 @@ Page({
     })
     baseDeviceSynTool.registerCallBackForKey(res => {
       baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        baseTool.showToast("步数获取超时")
+        that.temporaryData.needSynDayIndicator--
+        that.synDeviceTotalStep()
+        return
+      }
       baseDeviceSynTool.removeCallBackForKey(key)
       let stepString = res.substr(14, 8)
       let step = baseHexConvertTool.hexStringToValue(stepString)
@@ -572,6 +600,14 @@ Page({
       }
     }
     baseDeviceSynTool.registerCallBackForKey(res => {
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        baseTool.showToast("步数获取超时")
+        that.temporaryData.needSynDayIndicator--
+        that.synDeviceTotalStep()
+        return
+      }
       // 总条数
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
       // 序号
@@ -779,6 +815,14 @@ Page({
     baseDeviceSynTool.registerCallBackForKey(res => {
       baseTool.print(res)
       // 总条数
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        baseTool.showToast("心率获取超时")
+        that.temporaryData.heartRateObjectList = baseTool.values(heartRateObjectContainer)
+        that.uploadHeartRateData()
+        return
+      }
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
       // 序号
       let serialNumber = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
@@ -815,6 +859,7 @@ Page({
       }
       // 结束
       if (serialNumber == totlalNumber) {
+        baseDeviceSynTool.removeCallBackForKey(key)
         that.temporaryData.heartRateObjectList = baseTool.values(heartRateObjectContainer)
         that.uploadHeartRateData()
       }
@@ -945,7 +990,7 @@ Page({
       })
     }
   },
-  synDeviceSleep: function() {
+  synDeviceSleep: function () {
     let that = this
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
     let currentDate = baseTool.getCurrentDateWithoutTime()
@@ -970,6 +1015,14 @@ Page({
     })
     baseDeviceSynTool.registerCallBackForKey(res => {
       baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        baseTool.showToast("睡眠获取超时")
+        that.temporaryData.needSynDayIndicator--
+        that.synDeviceTotalSleep()
+        return
+      }
       baseDeviceSynTool.removeCallBackForKey(key)
       let sleepString = res.substr(14, 4)
       let sleep = baseHexConvertTool.hexStringToValue(sleepString)
@@ -991,7 +1044,7 @@ Page({
       }
     }, key)
   },
-  synDeviceDetailSleep: function() {
+  synDeviceDetailSleep: function () {
     let that = this
     let key = baseDeviceSynTool.commandSynDeviceSleepDetailData(that.temporaryData.needSynDayIndicator)
     let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
@@ -1004,6 +1057,15 @@ Page({
     }
     baseDeviceSynTool.registerCallBackForKey(res => {
       // 总条数 站两个字节
+      baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        baseTool.showToast("睡眠获取超时")
+        that.temporaryData.needSynDayIndicator--
+        that.synDeviceTotalSleep()
+        return
+      }
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 4))
       // 序号
       let serialNumber = baseHexConvertTool.hexStringToValue(res.substr(12, 4))
