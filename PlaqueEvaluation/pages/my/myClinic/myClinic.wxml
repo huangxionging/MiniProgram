@@ -1,0 +1,22 @@
+<!--pages/my/myClinic/myClinic.wxml-->
+<view class='navigation-bar-line' />
+<view class='clinic-container' wx:if='{{loadDone}}'>
+  <view class='clinic-tip'>单位名称:</view>
+  <view class='clinic-input-container'>
+    <input class='clinic-input' placeholder='输入您的单位名字 (例: 深圳市南山区青苗口腔医院)' bindblur='inputName' value='{{name}}'></input>
+  </view>
+  <view class='clinic-tip'>单位简介:</view>
+  <view class='clinic-intro-container'>
+    <textarea class='clinic-intro-area' value='{{intro}}' maxlength='-1' placeholder='请简单介绍一下单位~' bindinput='getIntro' bindblur='getIntro' value='{{intro}}'></textarea>
+  </view>
+  <!-- <view class='clinic-tip'>单位照片:</view>
+  <block wx:if='{{!hasImageUrl}}'>
+    <image src='../../../resource/my_addImage.png' bindtap='imageClick' class='clinic-pic' data-items='拍摄:从相册选择' lazy-load='true' />
+  </block>
+  <block wx:else>
+    <image src='{{imageUrl}}' class='clinic-pic' bindtap='imageClick' data-items='拍摄:从相册选择:预览图片' lazy-load='true' />
+  </block> -->
+  <!-- <view class='warning-tip'>注：单位名称和图片将向参赛者进行展示，所以需要上传图片（例：门面照、商标）</view> -->
+  <view class='clinic-save-button' hover-class='' bindtap='clinicInfoSave'>保存</view>
+
+</view>

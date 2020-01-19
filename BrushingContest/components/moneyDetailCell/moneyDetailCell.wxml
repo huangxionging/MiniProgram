@@ -1,0 +1,9 @@
+<!--components/moneyDetailCell/moneyDetailCell.wxml-->
+<view class='money-detail-cell'>
+  <view class='money-left'>
+    <view class='money-title'>{{data.title}}</view>
+    <view class='money-time'>{{data.time}}</view>
+  </view>
+  <view class='money-number'>{{data.money}}</view>
+</view>
+<view class='cell-line'/>

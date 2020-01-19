@@ -1,0 +1,24 @@
+/* components/signUpDataCell/signUpDataCell.wxss */
+page{
+  background-color: #eee;
+}
+.sign-up-cell-container{
+  margin-top: 1rpx;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 80rpx;
+  background-color: white;
+}
+
+.item-basic{
+  width: 30%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  color: #666;
+  font-size: 26rpx;
+  /* text-overflow:ellipsis */
+}

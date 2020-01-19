@@ -1,0 +1,10 @@
+<!--components/deviceSelectCell/deviceSelectCell.wxml-->
+<view class='cell-container'>
+  <view class='cell-content'>
+    <block wx:for='{{data.rowDataArray}}' wx:key='id' wx:item='item'>
+      <view class='item-view' data-item='{{index}}' wx:if='{{item.isChoose==1}}' bindtap='selectClick'>{{item.name}}</view>
+      <view class='item-view' data-item='{{index}}' wx:if='{{item.isChoose==0}}' style='color:white;background-color:#ff7878;'>{{item.name}}</view>
+      <view class='item-view' data-item='{{index}}' wx:if='{{item.isChoose==-1}}' style='color:white;background-color:#80bb38;' bindtap='selectClick'>{{item.name}}</view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,2 @@
+<!--pages/dental/blog/blog.wxml-->
+<web-view class='web-container' src='{{linkUrl}}'></web-view>

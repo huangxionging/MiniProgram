@@ -1,0 +1,154 @@
+/* pages/moment/momentIndex/momentIndex.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.momment-container {
+  width: 100%;
+  height: 100%;
+}
+
+.map-momment {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.current-location {
+  position: absolute;
+  left: 30rpx;
+  bottom: 300rpx;
+  width: 60rpx;
+  height: 60rpx;
+  background-color: white;
+  font-size: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  justify-items: center;
+  align-self: center;
+  border-radius: 8rpx;
+}
+
+.location-img {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.family-action-view {
+  position: absolute;
+  z-index: 999;
+  right: 0;
+  width: auto;
+  height: 100rpx;
+  background-color: white;
+  border: 2rpx solid #eee;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.family-list-view {
+  position: relative;
+  width: auto;
+  display: flex;
+  height: 100%;
+  border: 2rpx solid #eee;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.family-refresh-view {
+  position: relative;
+  width: 150rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #eee;
+  text-align: center;
+  align-self: center;
+}
+
+.family-name {
+  margin-left: 30rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.family-indicator {
+  margin-right: 30rpx;
+  margin-left: 5rpx;
+  width: 24rpx;
+  height: 24rpx;
+}
+.family-refresh-img{
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.hover-button {
+  background-color: #b1c0f1;
+}
+
+.family-list-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: black; *//* opacity: 0.5; */
+  z-index: 99999;
+}
+
+.family-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+}
+
+.family-table-view {
+  position: absolute;
+  right: 30rpx;
+  top: 100rpx;
+  width: 200rpx;
+  /* height: 200rpx; */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.cell-title {
+  margin-left: 30rpx;
+}
+
+.cell-line {
+  position: absolute;
+  left: 30rpx;
+  right: 0rpx;
+  height: 2rpx;
+  bottom: 0;
+  background-color: #eee;
+}
+
+.section-view {
+  position: relative;
+  margin-top: 10rpx;
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

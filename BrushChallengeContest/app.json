@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/home/homeIndex",
+    "pages/authorization/authorization",
+    "pages/my/myIndex/myIndex",
+    "pages/contest/addContestDevice/addContestDevice",
+    "pages/contest/startContest/startContest",
+    "pages/contest/selectContestDevice/selectContestDevice",
+    "pages/my/brushContestList/brushContestList",
+    "pages/my/deviceManage/deviceManage",
+    "pages/my/deviceCheck/deviceCheck",
+    "pages/contest/contestResult/contestResult",
+    "pages/showScreen/signUp/signUp",
+    "pages/showScreen/showContest/showContest",
+    "pages/my/myClinic/myClinic",
+    "pages/my/brushContestDetail/brushContestDetail",
+    "pages/my/brushScoreReport/brushScoreReport"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "刷牙挑战赛",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "color": "#999",
+    "selectedColor": "#00a0e9",
+    "list": [
+      {
+        "pagePath": "pages/home/homeIndex",
+        "text": "比赛",
+        "iconPath": "resource/contest_normal.png",
+        "selectedIconPath": "resource/contest_select.png"
+      },
+      {
+        "pagePath": "pages/my/myIndex/myIndex",
+        "text": "我的",
+        "iconPath": "resource/my_normal.png",
+        "selectedIconPath": "resource/my_select.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

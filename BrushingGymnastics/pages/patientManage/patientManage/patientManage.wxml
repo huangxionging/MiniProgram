@@ -1,0 +1,23 @@
+<!--pages/patientManage/patientManage/patientManage.wxml-->
+<view class="patient-container">
+  <view class='patient-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view'>
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+          <patientManageCell data='{{rowItem}}' data-row='{{rowIndex}}' data-section='{{sectionIndex}}' bind:didDeleteRow='didDeleteRow' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="head-view">
+    <view>
+    </view>
+  </view>
+  <view class="patient-item-header">
+    <view class="item-serial">编号</view>
+    <view class="item-serial item-name">姓名</view>
+    <view class="item-serial item-star">星级</view>
+    <view class="item-serial item-device">绑定自用设备</view>
+  </view>
+  <view class="patient-item-header-line"/>
+</view>

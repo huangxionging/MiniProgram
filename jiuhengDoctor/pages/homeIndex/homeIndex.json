@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "expertItem": "/components/expertItem/expertItem",
+    "bigThingCell": "/components/bigThingCell/bigThingCell"
+  },
+  "navigationBarTitleText": "九恒儿童口腔",
+  "enablePullDownRefresh": true
+}

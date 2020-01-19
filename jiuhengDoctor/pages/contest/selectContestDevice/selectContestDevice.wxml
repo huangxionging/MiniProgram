@@ -1,0 +1,26 @@
+<!--pages/contest/selectContestDevice/selectContestDevice.wxml-->
+<view class='navigation-bar-line' />
+<view class='device-container' wx:if='{{loadDone}}'>
+  <view class='tip-container'>
+    <view class='user-name'>{{name}}</view>
+    <view class='game-name'>{{gameName}}</view>
+    <view class='column-line' />
+    <view class='tip-text-view'>
+      <image class='device-icon' src='/resource/select_device_icon.png'/>
+      <view>请选择参赛者的设备</view>
+    </view>
+  </view>
+  <view class='device-collection-view'>
+    <block wx:for='{{sectionDataArray}}' wx:key='id' wx:item='item'>
+      <deviceSelectCell data-section='{{index}}' data='{{item}}' bind:selectClick='selectClick'/>
+    </block>
+  </view>
+  <view class='device-collection-footer'>
+    <view class='indicator-view'>
+      <view class='item-view' >可选</view>
+      <view class='item-view' style='color:white;background-color:#ff7878;'>不可选</view>
+      <view class='item-view' style='color:white;background-color:#80bb38;'>已选</view>
+    </view>
+    <view class='confirm-button' hover-class='hover-confirm-button' bindtap='confirmClick'>确定</view>
+  </view>
+</view>

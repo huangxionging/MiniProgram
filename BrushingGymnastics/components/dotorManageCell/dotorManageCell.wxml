@@ -1,0 +1,9 @@
+<!--components/dotorManageCell/dotorManageCell.wxml-->
+<view class="cell-container" bindtouchstart='touchStart' bindtouchend='touchEnd' bindtouchmove='touchMove' style='{{data.state!=2? data.style:""}}'>
+  <view class="cell-content">
+    <view class="cell-left">{{data.name}}</view>
+    <!-- <view class="cell-right" hover-class="hover" catchtap="didDeleteRow">删除</view> -->
+    <view class='cell-delete' style='background-color:red;color:white;' catchtap="didDeleteRow">删除</view>
+  </view>
+  <view class='cell-line' />
+</view>

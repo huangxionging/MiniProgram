@@ -1,0 +1,30 @@
+<!--pages/my/deviceManage/deviceManage.wxml-->
+<view class="view-container">
+  <block wx:if='{{hasDevice}}'>
+    <view class="device-image-container">
+      <image class="device-image" src="https://shouhuan.taoyt.cn/static/images/device.jpg"></image>
+      <view class="device-tip">型号： 黑色</view>
+    </view>
+    <view class="device-info-view">
+      <block wx:for-items='{{itemList}}' wx:key='id' wx:for-item='itemObject' wx:for-index='itemIndex'>
+        <view class="cell-container" style="height:88rpx">
+          <view class="cell-content">
+            <view class="cell-left">
+              <view class="cell-title">{{itemObject.title}}</view>
+            </view>
+            <view class="cell-right">
+              <view class="cell-detail">{{itemObject.detail}}</view>
+            </view>
+          </view>
+          <view class="cell-line"/>
+        </view>
+      </block>
+    </view>
+    <view class="add-device" hover-class="hover-button" bindtap="unbindDeviceClick">解绑</view>
+  </block>
+  <block wx:else>
+    <image class="no-device-image" src="/resource/no_device.png"></image>
+    <view class="no-device-tip">没有设备, 请添加绑定设备</view>
+    <view class="add-device" hover-class="hover-button" bindtap="addDeviceClick">添加设备</view>
+  </block>
+</view>

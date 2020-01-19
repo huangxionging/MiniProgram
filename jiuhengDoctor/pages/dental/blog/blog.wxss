@@ -1,0 +1,5 @@
+/* pages/dental/blog/blog.wxss */
+.web-container{
+  width: 100%;
+  height: 100%;
+}

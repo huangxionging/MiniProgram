@@ -1,0 +1,38 @@
+<!--pages/my/deviceCheck/deviceCheck.wxml-->
+<view class='navigation-bar-line' />
+<view class='check-container' wx:if='{{loadDone}}'>
+  <view class='bg-container' wx:if='{{!checkState}}' style='height:{{windowHeight}}px;'>
+    <image class='device-check-bg' mode='aspectFill' src='http://qnimage.32teeth.cn/bcc_device_check_bg.png' />
+    <image class='device-check-brush' src='http://qnimage.32teeth.cn/bcc_device_check_brush.png' />
+    <view class='content-container'>
+      <view class='content-view'>
+        <view class='tip-view1'>如果您的设备过多, 请分批次检测!</view>
+        <view class='tip-view2'>请打开设备, 方可进行设备检测哦~</view>
+        <view class='check-button' hover-class='hover-check' bindtap='deviceCheckClick'>立即检测</view>
+      </view>
+    </view>
+  </view>
+  <view wx:else class='device-table-container'>
+    <view class='table-tip'>请打开您的设备，进行检测</view>
+    <view class='item-table-view'>
+      <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+        <view class='device-section {{sectionIndex?"cell-header":""}}' data-section='{{sectionIndex}}'>
+          <view class='section-header'>
+            <view class='header-left'>
+              <view class='header-tip'>共有</view>
+              <view class='header-device-count'>{{deviceCount}}</view>
+              <view>支设备, {{sectionIndex==0?"已":"未"}}检测</view>
+              <view class='header-device-count'>{{sectionObject.deviceCount}}</view>
+              <view>支设备</view>
+            </view>
+          </view>
+          <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='id' wx:for-item='rowObject' wx:for-index='rowIndex'>
+            <deviceCheckItemCell data='{{rowObject}}' data-section="{{sectionIndex}}" data-row='{{rowIndex}}' bind:lightClick='lightClick' />
+          </block>
+        </view>
+      </block>
+    </view>
+    <view class='check-refresh-button' hover-class='hover-refresh-check' bindtap='chekRefreshClick'>检测刷新</view>
+  </view>
+
+</view>

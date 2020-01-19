@@ -165,7 +165,7 @@ function startTimer(callback = (total) => {}, inteval = 1000, total = 0) {
 }
 
 function getCurrentTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -178,7 +178,7 @@ function getCurrentTime() {
 }
 
 function getCurrentTimeWithoutSecond() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -190,19 +190,8 @@ function getCurrentTimeWithoutSecond() {
 }
 
 function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date();
-  let year = date.getFullYear() + ''
-  let month = zeroFormat(date.getMonth() + 1 + '')
-  let day = zeroFormat(date.getDate() + '')
-  let hour = zeroFormat(date.getHours() + '')
-  let minute = zeroFormat(date.getMinutes() + '')
-
-  // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
-  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ":00"
-}
-
-function getNextMinuteTimeWithZeroSecond() {
-  let date = new Date();
+  let currentDate = new Date()
+  let date = new Date(currentDate.getTime() + 1000 * 60 * 1)
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
@@ -215,20 +204,31 @@ function getNextMinuteTimeWithZeroSecond() {
 
 
 function getNextMinuteTimeWithNoDateZeroSecond() {
-  let date = new Date();
+  let currentDate = new Date()
+  let date = new Date(currentDate.getTime() + 1000 * 60 * 1)
   let hour = zeroFormat(date.getHours() + '')
   let minute = zeroFormat(date.getMinutes() + '')
   return hour + ':' + minute
 }
 
 function getCurrentDateWithoutTime() {
-  let date = new Date();
+  let date = new Date()
   let year = date.getFullYear() + ''
   let month = zeroFormat(date.getMonth() + 1 + '')
   let day = zeroFormat(date.getDate() + '')
-
   // baseTool.print([yearHead, yearEnd, month, day, hour, minute, second])
   return year + '-' + month + '-' + day
+}
+
+/**
+ * 时分秒
+ */
+function getCurrentTimeWithNoDate() {
+  let date = new Date()
+  let hour = zeroFormat(date.getHours() + '')
+  let minute = zeroFormat(date.getMinutes() + '')
+  let second = zeroFormat(date.getSeconds() + '')
+  return hour + ':' + minute + ':' + second
 }
 
 /**
@@ -239,14 +239,13 @@ function zeroFormat(oldString = '') {
 }
 
 function values(obj) {
-  let vals = [],
-    key;
-  for (key in obj) {
+  let vals = []
+  for (let key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      vals.push(obj[key]);
+      vals.push(obj[key])
     }
   }
-  return vals;
+  return vals
 }
 /**
  * showInfo: 只用来展示信息
@@ -268,9 +267,7 @@ function showInfo(info = '') {
  * value 是转换之前的键值对
  */
 function modelAdapter(model = {}, value = {}, func = Function) {
-  // if (!value) {
-  //   return
-  // }
+
   // 遍历模型
   let keys = Object.keys(model)
   for (let index = 0; index < keys.length; ++index) {
@@ -278,7 +275,7 @@ function modelAdapter(model = {}, value = {}, func = Function) {
     let key = keys[index]
     let newkey = model[key]
     // 在值中查找新 key 对应的值
-    if (value[newkey]) {
+    if (isExist(value[newkey])) {
       // 获得新值
       model[key] = value[newkey]
     } else if (func) {
@@ -319,7 +316,6 @@ function request(url = '', data = {}) {
  * 从 URL 中提取参数, url 是完成的 url 字符串
  */
 function getParameterFromURL(url = '') {
-  decodeURI(url)
   // 是否包含问号
   if (url.indexOf('?')) {
     // 切割 url 地址和参数
@@ -347,7 +343,7 @@ function getParameterFromURL(url = '') {
       return parameterData
     }
   }
-  return null
+  return undefined
 }
 
 /**
@@ -375,7 +371,7 @@ function chooseImageFrom(sourceType = 'camera') {
  * items 包含选项以冒号:区分, 例如 item1:item2:item3
  * color 是 item 颜色, 默认为黑色
  */
-function showSheetInfo(items = '', color = '#black') {
+function showSheetInfo(items = '', color = '#000') {
   return new Promise((resolve, reject) => {
     let itemList = items.split(':')
     wx.showActionSheet({
@@ -436,9 +432,140 @@ function previewSingleImage(url) {
   wx.previewImage({
     current: url,
     urls: [url],
-    success: function (res) { },
-    fail: function (res) { },
+    success: function(res) {},
+    fail: function(res) {},
   })
+}
+
+/**
+ * 判断一个参数是否存在
+ */
+function isExist(e) {
+  return (e != undefined)
+}
+
+/**
+ * rpx 转成 px
+ */
+function toPixel(rpx = 0) {
+  return rpx * systemInfo.screenWidth / 750
+}
+
+function toRpx(px = 0) {
+  return px * 750 / systemInfo.screenWidth
+}
+
+/**
+ * 改成 http 访问
+ */
+function urlToHttp(url = '') {
+  let httpUrl = url
+  if (url.indexOf('://')) {
+    httpUrl = "http://" + url.split('://')[1]
+  }
+  return httpUrl
+}
+
+/**
+ * 通过图片地址下载图片到相册
+ * imageUrl 是图片的地址
+ */
+function downloadImageTohotosAlbum(imageUrl = '') {
+  wx.showLoading({
+    title: '正在保存...',
+    mask: true,
+  })
+  // 获得图片信息
+  wx.getImageInfo({
+    src: imageUrl,
+    success: function(res) {
+      wx.hideLoading()
+      // 保存到相册
+      wx.saveImageToPhotosAlbum({
+        filePath: res.path,
+        success: function(res) {
+          wx.hideLoading()
+          showToast("已保存", "success")
+        },
+        fail: function(res) {
+          wx.hideLoading()
+          showToast("保存失败")
+        }
+      })
+    },
+    fail: function(res) {
+      wx.hideLoading()
+      showToast("保存失败")
+    }
+  })
+}
+
+/**
+ * 简化版提示器, 基本使用默认信息就够用了
+ * icon 是提示器图标, success, fail, 或者 none
+ * message 是要提示的消息
+ * mask 是遮罩
+ * duration 是时长
+ */
+function showToast(message = '', icon = 'none', mask = true, duration = 2000) {
+  wx.hideLoading()
+  wx.showToast({
+    title: message,
+    icon: icon,
+    duration: duration,
+    mask: mask,
+  })
+}
+
+/**
+ * 是否合法
+ */
+function isValid(e) {
+  if (isExist(e)) {
+    if (e == '' || e == null) {
+      return false
+    } else {
+      return true
+    }
+  } else {
+    return false
+  }
+}
+
+/**
+ * 16进制表示的 ASCII 码转字符串, 去掉 0x
+ */
+function hexAsciiToString(hexStr = '') {
+  let hexLength = hexStr.length
+  // 16 进制字符串都是偶数个
+  if (hexLength % 2 != 0) {
+    return undefined
+  }
+
+  let desStr = ''
+  for (let index = 0; index < hexLength; index += 2) {
+    // 获取16进制数
+    let hex = hexStr.substr(index, 2)
+    // 获得 ASCII 码
+    let hexInt = parseInt(hex, 16)
+    // 拼接 ASCII 码字符
+    desStr += String.fromCharCode(hexInt)
+  }
+  return desStr
+}
+
+/**
+ * 设备命名规则
+ */
+function getDeviceName(macAddress = '') {
+  print(macAddress)
+  let lowerCaseMacAddress = macAddress.toLowerCase()
+  // 设备命名规则, dd54142开头的命名为 32th, 其他的为 game
+  if (lowerCaseMacAddress.indexOf('dd5414') != -1 && lowerCaseMacAddress.substr(0, 7) >= 'dd54142') {
+    return '(32th-' + lowerCaseMacAddress + ')'
+  } else {
+    return '(game-' + lowerCaseMacAddress + ')'
+  }
 }
 
 // 添加接口
@@ -495,6 +622,7 @@ module.exports = {
   getNextMinuteTimeWithZeroSecond: getNextMinuteTimeWithZeroSecond,
   getCurrentDateWithoutTime: getCurrentDateWithoutTime,
   getNextMinuteTimeWithNoDateZeroSecond: getNextMinuteTimeWithNoDateZeroSecond,
+  getCurrentTimeWithNoDate: getCurrentTimeWithNoDate,
   // 仿写 Object.values, 兼容
   values: values,
   showInfo: showInfo,
@@ -504,5 +632,13 @@ module.exports = {
   chooseImageFrom: chooseImageFrom,
   showSheetInfo: showSheetInfo,
   uploadLocalFile: uploadLocalFile,
-  previewSingleImage: previewSingleImage
+  previewSingleImage: previewSingleImage,
+  isExist: isExist,
+  isValid: isValid,
+  urlToHttp: urlToHttp,
+  toRpx: toRpx,
+  showToast: showToast,
+  downloadImageTohotosAlbum: downloadImageTohotosAlbum,
+  hexAsciiToString: hexAsciiToString,
+  getDeviceName: getDeviceName
 }

@@ -1,0 +1,43 @@
+/* pages/my/editMyInfo/editMyInfo.wxss */
+
+.edit-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit-avatar{
+  width: 100%;
+  height: 210rpx;
+  background-color: #171719;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.edit-table-view{
+  width: 100%;
+}
+
+.avatar{
+  margin-top: 10rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 80rpx;
+}
+
+.save-user{
+  margin-top: 100rpx;
+  width: 500rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background-color: #6B92FB;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}

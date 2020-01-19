@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "segment": "/components/segment/segment",
+    "teachBrushModel": "/components/teachBrushModel/teachBrushModel",
+    "myIndexItemCell": "/components/myIndexItemCell/myIndexItemCell"
+  },
+  "navigationBarTitleText": "活动管理"
+}

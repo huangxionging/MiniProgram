@@ -8,16 +8,41 @@ function homePageAdapter(res = {}) {
     department: 'offices',
     jobTitle: 'title',
     hospital: 'company',
-    reportDataList: []
+    reportDataList: [],
+    persons: 'trainingCampMemberCount',
+    showDoctor: true
   }
   // 模型适配器转换
-  baseTool.modelAdapter(data, res.doctorInfo)
+  baseTool.modelAdapter(data, res.doctorInfo, res => {
+    if (['loadDone', 'reportDataList'].indexOf(res) == -1) {
+      data[res] = ''
+    }
+  })
+  // 滚动高度
+  let height = baseTool.toRpx(baseTool.systemInfo.windowHeight)
+  data.tableHeight = height - 572
+  // 医生信息
+  data.doctorInfo = data.doctorName + ' ' + data.hospital + ' ' + data.department + data.jobTitle
+  // 展示医生信息
+  data.showDoctor = true
 
-  if (res.doctorInfo) {
+  if (baseTool.valueForKey('showModal') === false) {
+    data.showModal = baseTool.valueForKey('showModal')
+  } else {
+    data.showModal = true
+    baseTool.setValueForKey(true, 'showModal')
+  }
+  
+
+  if (baseTool.isExist(res.trainingCampMemberCount)) {
+    data.persons = res.trainingCampMemberCount
+  }
+
+  if (baseTool.isExist(res.doctorInfo)) {
     baseTool.setValueForKey(res.doctorInfo, 'doctorInfo')
   }
 
-  if (res.brushingRecord) {
+  if (baseTool.isExist(res.brushingRecord)) {
     for (let index = 0; index < res.brushingRecord.length; ++index) {
       let reportItem = {
         brushTime: 'brushTeethTime',
@@ -49,10 +74,60 @@ function doctorInfoDetailAdapter(doctorInfo = {}) {
   }
   // 模型适配器转换
   baseTool.modelAdapter(data, doctorInfo)
-  return data;
+  return data
+}
+
+/**
+ * 构造活动列表适配器
+ */
+function doctorActivityListAdapter(doctorData) {
+  let data = [
+    {
+    title: '马上加入"零蛀牙训练营"👇',
+    picUrl: 'http://qnimage.hydrodent.cn/dtb_zero0.png'
+  },
+  {
+      title: '黑科技告诉你, 刷牙干净了没, 不干净? 还会手把手教你怎么刷👇',
+      picUrl: 'http://qnimage.hydrodent.cn/dtb_device_banner.png'
+  },{
+      title: doctorData.doctorName + '医生今天的刷牙报告, 是不是很赞👍',
+      picUrl: '',
+      brushTime: doctorData.reportDataList[0].brushTime,
+      totalTime: doctorData.reportDataList[0].totalTime,
+      cleanIndex: doctorData.reportDataList[0].cleanIndex,
+      effectiveTime: doctorData.reportDataList[0].effectiveTime,
+      star: doctorData.reportDataList[0].star,
+      face: doctorData.reportDataList[0].face,
+      recordId: doctorData.reportDataList[0].recordId
+  }]
+  return data
+}
+
+/**
+ * 设备广告页数据
+ */
+function deviceBannerAdapter() {
+  let data = {
+    loadDone: true,
+    videoState: 'video-container',
+    videoChanged: false,
+    videoUrl: 'http://qnimage.32teeth.cn/main200860S_360.mp4',
+    videoPicUrl: 'http://qnimage.hydrodent.cn/dtb_device_play.png',
+    content: {
+      title: '32teeth智能牙刷-爱牙兔系列',
+      content: '专为6-12岁换牙期宝贝设计, 正确的刷牙方法, 让孩子少受罪, 父母少花钱, 智能主机与牙刷可拆离, 操作简单, 使用方便',
+      picUrl: 'http://qnimage.hydrodent.cn/dtb_love_rabit.png',
+      color: '#999',
+      width:710,
+      height: 12325,
+    }
+  }
+  return data
 }
 
 module.exports = {
   homePageAdapter: homePageAdapter,
   doctorInfoDetailAdapter: doctorInfoDetailAdapter,
+  doctorActivityListAdapter: doctorActivityListAdapter,
+  deviceBannerAdapter: deviceBannerAdapter
 }

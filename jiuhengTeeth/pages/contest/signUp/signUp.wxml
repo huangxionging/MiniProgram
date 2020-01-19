@@ -1,0 +1,90 @@
+<!--pages/contest/signUp/signUp.wxml-->
+<view class='sign-container' wx:if='{{loadDone}}'>
+  <image class='sign-image' src='http://qnimage.hydrodent.cn/jh_sign_up_bg.png' />
+  <view class='sign-view'>
+    <image class='sign-up-tip-image' src='http://qnimage.hydrodent.cn/jh_sign_up_tip.png' />
+    <view class='sign-up-content'>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>姓名</view>
+        </view>
+        <view class='sign-right'>
+          <input maxlength='4' wx:if='{{unSignUp}}' class='sign-input' placeholder-style='color:#C4C4C4;' placeholder='填写您的姓名' bindinput='inputName' />
+          <view wx:else class='sign-input'>{{name}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>联系手机</view>
+        </view>
+        <view class='sign-right'>
+          <input wx:if='{{unSignUp}}' class='sign-input' type='number' placeholder-style='color:#C4C4C4;' placeholder='填写您的手机号' bindinput='inputCellPhone' maxlength='11'></input>
+          <view wx:else class='sign-input'>{{tel}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>年龄</view>
+        </view>
+        <picker class='sign-right' wx:if='{{unSignUp}}' mode='selector' range='{{ageList}}' value='8' bindchange='selectAgeClick'>
+          <view class='sign-input' style='height:76rpx;' wx:if='{{age}}'>{{age}} 岁</view>
+          <view class='sign-input' style='height:76rpx;color:#C4C4C4;' wx:else>填写您的年龄</view>
+        </picker>
+        <view class='sign-right' wx:else>
+          <view class='sign-input'>{{age}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>性别</view>
+        </view>
+        <picker class='sign-right' wx:if='{{unSignUp}}' mode='selector' range='{{genderList}}' value='0' bindchange='selectGenderClick'>
+          <view class='sign-input' style='height:76rpx;' wx:if='{{gender}}'>{{gender == 1 ? "男" : "女"}}</view>
+          <view class='sign-input' style='height:76rpx;color:#C4C4C4;' wx:else>填写您的性别</view>
+        </picker>
+        <view class='sign-right' wx:else>
+          <view class='sign-input'>{{gender == 1 ? "男" : "女"}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          预约日期
+        </view>
+        <picker wx:if='{{unSignUp}}' mode='date' value='{{selectDate}}' start='{{startDate}}' bindchange='selectDateClick'>
+          <view class='sign-date'>
+            <view class='sign-input' style='flex:1'>{{selectDate}}</view>
+            <image class='sign-date-down' src='/resource/down.png' />
+          </view>
+        </picker>
+        <view class='sign-right' wx:if='{{!unSignUp}}'>
+          <view class='sign-input'>{{selectDate}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          可预约时间
+        </view>
+        <picker class='sign-right' wx:if='{{unSignUp && timeList}}' mode='selector' range='{{timeList}}' value='0' bindchange='selectTimeClick'>
+          <view class='sign-input' style='height:76rpx;' wx:if='{{timeQuantum}}'>{{timeQuantum}}</view>
+          <view class='sign-input' style='height:76rpx;color:#C4C4C4;' wx:else>预约您的到店时间</view>
+        </picker>
+        <view class='sign-right' wx:if='{{!unSignUp && timeList}}'>
+          <view class='sign-input'>{{timeQuantum}}</view>
+        </view>
+        <view class='sign-right' wx:if='{{unSignUp && !timeList}}'>
+          <view class='sign-input' style='color:#C4C4C4;'>请先预约日期</view>
+        </view>
+      </view>
+    </view>
+    <view wx:if='{{unSignUp && canSignUp}}' class='sign-up-button' hover-class='sign-up-hover' bindtap='sinUpClick'>我要报名</view>
+    <view wx:if='{{unSignUp && !canSignUp}}' class='sign-up-button' style='background-color:#999;'>我要报名</view>
+    <view wx:if='{{!unSignUp}}' class='sign-up-button' style='background-color:#999;'>已报名</view>
+    <view wx:if='{{!unSignUp}}' class='signed-contact-tip'>稍后客服会通过电话与您确认信息</view>
+  </view>
+</view>

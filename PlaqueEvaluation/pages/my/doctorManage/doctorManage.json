@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "dotorManageCell": "/components/dotorManageCell/dotorManageCell"
+  },
+  "navigationBarTitleText": "医护人员管理"
+}

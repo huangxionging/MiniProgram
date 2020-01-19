@@ -1,0 +1,21 @@
+/* components/withdrawRecordItemCell/withdrawRecordItemCell.wxss */
+.withdraw-cell-container{
+  margin-top: 2rpx;
+  height: 140rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  font-size: 30rpx;
+}
+
+.withdraw-time{
+  color: #333;
+  flex: 1;
+}
+
+.withdraw-money{
+  color: #20afff;
+}

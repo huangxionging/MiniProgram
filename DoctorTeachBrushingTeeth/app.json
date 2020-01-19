@@ -1,11 +1,14 @@
 {
   "pages": [
-    "pages/home/homeIndex/homeIndex",
     "pages/teach/teachIndex/teachIndex",
     "pages/brush/brushIndex/brushIndex",
     "pages/home/doctorInfoDetail/doctorInfoDetail",
     "pages/home/brushReportDetail/brushReportDetail",
-    "pages/authorization/authorization/authorization"
+    "pages/authorization/authorization/authorization",
+    "pages/brush/applyZeroTeeth/applyZeroTeeth",
+    "pages/brush/followBrush/followBrush",
+    "pages/brush/buyWelfare/buyWelfare",
+    "pages/home/deviceBanner/deviceBanner"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -20,12 +23,6 @@
     "selectedColor": "#00a0e9",
     "list": [
       {
-        "pagePath": "pages/home/homeIndex/homeIndex",
-        "text": "首页",
-        "iconPath": "resource/home_normal.png",
-        "selectedIconPath": "resource/home_select.png"
-      },
-      {
         "pagePath": "pages/teach/teachIndex/teachIndex",
         "text": "刷牙教学",
         "iconPath": "resource/teach_normal.png",
@@ -35,7 +32,7 @@
         "pagePath": "pages/brush/brushIndex/brushIndex",
         "iconPath": "resource/brush_normal.png",
         "selectedIconPath": "resource/brush_select.png",
-        "text": "一起刷牙"
+        "text": "训练营"
       }
     ]
   },
@@ -44,5 +41,9 @@
     "connectSocket": 20000,
     "uploadFile": 20000,
     "downloadFile": 20000
-  }
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wx944289b1fe8657ce"
+  ],
+  "sitemapLocation": "sitemap.json"
 }

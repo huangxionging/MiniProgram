@@ -1,0 +1,53 @@
+/* components/listContestItemCell/listContestItemCell.wxss */
+
+.cell-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100rpx;
+}
+.cell-content{
+  height: 98rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-line {
+  position: absolute;
+  bottom: 0;
+  left: 30rpx;
+  right: 0rpx;
+  height: 1rpx;
+  background-color: #eee;
+}
+
+.select-component-image {
+  margin-left: 70rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+}
+
+.cell-title{
+  margin-left: 20rpx;
+  color: #333;
+  font-size: 28rpx;
+  flex: 1;
+}
+
+.cell-arrow{
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 15rpx;
+  /* background-color: yellow; */
+}
+
+.cell-navigator{
+  width: 104rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  /* background-color: red; */
+}

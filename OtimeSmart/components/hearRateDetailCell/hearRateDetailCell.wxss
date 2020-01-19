@@ -1,0 +1,15 @@
+/* components/hearRateDetailCell/hearRateDetailCell.wxss */
+@import "../../template/cell.wxss";
+
+.heart-time {
+  color: #999;
+}
+
+.cell-bmp {
+  font-family: DINCondensed-Bold;
+  font-size: 56rpx;
+  color: white;
+  letter-spacing: 0.08px;
+  text-align: center;
+  margin-right: 5rpx;
+}

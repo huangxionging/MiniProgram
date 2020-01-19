@@ -9,15 +9,14 @@ function getOpenId() {
   return baseTool.valueForKey('openid')
 }
 
-
-
 /**
  * code: 登陆后获取的 code
- * userInfo: 用户授权的用户信息
+ * userInfoData: 用户授权的详细信息
  * doctorId: 医生 id
  */
-function loginWithUserInfo(code, userInfo, doctorId) {
+function loginWithUserInfo(code, userInfoData, doctorId) {
   return new Promise((resolve, reject) => {
+    let userInfo = userInfoData.userInfo
     baseTool.print(code)
     baseTool.print(userInfo)
     let url = baseURL.baseDomain + baseURL.basePath + baseApiList.login
@@ -54,6 +53,16 @@ function loginWithUserInfo(code, userInfo, doctorId) {
     if (userInfo.city) {
       data.city = userInfo.city
     }
+
+    if (userInfoData.encryptedData) {
+      data.encryptedData = userInfoData.encryptedData
+    }
+
+    if (userInfoData.iv) {
+      data.iv = encodeURI(userInfoData.iv)
+      encodeURI()
+      encodeURIComponent()
+    }
     // 参数
     baseTool.print(data)
     // url
@@ -65,7 +74,7 @@ function loginWithUserInfo(code, userInfo, doctorId) {
 function reLauch() {
   baseTool.print('重启页面')
   wx.reLaunch({
-    url: '/pages/home/homeIndex/homeIndex'
+    url: '/pages/teach/teachIndex/teachIndex'
   })
 }
 

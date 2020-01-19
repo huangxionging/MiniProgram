@@ -1,0 +1,11 @@
+<!--pages/contest/publicNumberQRCode/publicNumberQRCode.wxml-->
+<view class='navigation-bar-line' />
+<view class="public-number-container">
+  <view class="public-content">
+    <view class="public-title">温馨提醒</view>
+    <view class="public-tip">如患者未关注公众号, 则无法发送报告</view>
+    <image class="qrcode-image" src="{{qrcodeURL}}" show-menu-by-longpress='true' />
+    <view style="color:#666;font-size:28rpx;">(自我口腔风险管理, 长按可转发)</view>
+    <view class="action1" hover-class="action1-hover" bindtap="saveImageClick">保存二维码</view>
+  </view>
+</view>

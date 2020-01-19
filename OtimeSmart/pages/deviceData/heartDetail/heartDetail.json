@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "hearRateDetailCell": "/components/hearRateDetailCell/hearRateDetailCell"
+  },
+  "navigationBarTitleText": "心率",
+  "navigationBarTextStyle": "white"
+}

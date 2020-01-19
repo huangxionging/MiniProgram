@@ -1,0 +1,26 @@
+/* pages/my/bindDevice/bindDevice.wxss */
+
+.view-container{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bluetooth-view{
+  height: 600rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.device-icon{
+  width: 600rpx;
+  height: 600rpx;
+}
+
+.add-device-table-view{
+  width: 100%;
+}

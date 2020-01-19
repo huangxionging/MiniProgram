@@ -1,0 +1,7 @@
+/* component/myIndexItemCell/myIndexItemCell.wxss */
+@import "../../template/cell.wxss";
+.cell-icon{
+  margin-left: 20rpx;
+  width: 48rpx;
+  height: 48rpx;
+}

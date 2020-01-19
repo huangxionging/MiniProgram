@@ -267,9 +267,7 @@ Page({
     var that = this
     var keyCode = e.detail.keyCode
     baseTool.print(e.detail)
-    if (keyCode && keyCode == 8) {
-      return;
-    }
+   
     baseTool.print(e.detail)
     var name = e.detail.value
     var isTrue = name.match(/^[a-zA-Z0-9\u4e00-\u9fa5]+$/)
@@ -281,18 +279,8 @@ Page({
         confirmText: '确定',
         confirmColor: '#00a0e9',
       })
-      return
-    }
-    if (name === '') {
-      wx.showModal({
-        title: '提示',
-        content: '比赛名称不能为空哦!',
-        showCancel: false,
-        cancelColor: '确认',
-        confirmColor: '#00a0e9',
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
+      that.setData({
+        name: that.data.name
       })
       return
     }
@@ -300,7 +288,7 @@ Page({
     that.setData({
       name: e.detail.value
     })
-    
+    baseTool.print(that.data.name)
   },
   contestDeviceClick: function (e) {
     var that = this
@@ -341,12 +329,22 @@ Page({
             success: function (res) {
               baseTool.print("startBluetoothDevicesDiscovery: success");
               baseTool.print(res);
+              
               //Listen to find new equipment
               var bindedDevices = that.data.bindedDevices
               wx.onBluetoothDeviceFound(function (res) {
                 var device = res.devices[0]
-                if (device.name.indexOf('game') == -1) {
+                
+                if (device.name.indexOf('game') == -1 && device.name.indexOf('32th-dd5414') == -1) {
                   return
+                }
+                // 要符合第11位大于等于2
+                if (device.name.indexOf('32th-dd5414') != -1) {
+                  baseTool.print()
+                  var level = parseInt(device.name.substr(11, 1))
+                  if (level < 2) {
+                    return
+                  }
                 }
                 
                 var macAddress = device.name.split('-')[1].toUpperCase()
@@ -358,7 +356,7 @@ Page({
                 }
                 // 去重
                 deviceListObject[macAddress] = macAddress
-                baseTool.print(['发现新设备', macAddress, device, device.RSSI])
+                baseTool.print(['发现新设备', device.name, device, device.RSSI])
                 var dataList = that.data.dataList
                 var index = dataList.length
                

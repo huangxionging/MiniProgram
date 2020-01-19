@@ -1,0 +1,14 @@
+/* pages/my/brushScoreReport/brushScoreReport.wxss */
+page{
+  width: 100%;
+  height: 100%;
+}
+.brush-score-container{
+  width: 100%;
+  height: 100%;
+}
+
+.image-view{
+  width: 100%;
+  height: 100%;
+}

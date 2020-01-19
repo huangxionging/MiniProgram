@@ -3,10 +3,9 @@ const baseTool = require('../utils/baseTool.js')
 const baseApiList = require('../utils/baseApiList.js')
 const loginManager = require('./loginManager.js')
 
-function getDoctorInfo() {
+function getDoctorInfo(memberId = '') {
   return new Promise((resolve, reject) => {
     let openid = loginManager.getOpenId()
-    let memberId = loginManager.getMeberId()
     if (openid && memberId) {
 
       let url = baseURL.baseDomain + baseURL.basePath + baseApiList.getDoctorInfo
@@ -24,16 +23,82 @@ function getDoctorInfo() {
 /**
  * 生成二维码地址
  */
-function getDoctorQRCodeURL() {
+function getDoctorQRCodeURL(doctorId = '') {
   let url = 'https://32teeth.cn/index/index/createQrcode?str='
-  let parameter = "https://dos.32teeth.cn/static/min/doctorTeachesBrushing/qrcode?doctorId=" + loginManager.getMeberId()
+  let parameter = "https://dos.32teeth.cn/static/min/doctorTeachesBrushing/qrcode?doctorId=" + doctorId
   return url + parameter
+}
+
+/**
+ * 生成跳转医生端二维码
+ */
+function getDoctorManagerQRCodeURL(doctorId = '') {
+  let url = 'https://32teeth.cn/index/index/createQrcode?str='
+  let parameter = "https://dos.32teeth.cn/static/min/doctorInfoEdit/qrcode?doctorId=" + doctorId
+  return url + parameter
+}
+
+function getDoctorPosterQRCodeURL(doctorId = '') {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    let memberId = loginManager.getMemberId()
+    if (openid && memberId) {
+      // 海报生成地址
+      let url = "https://32teeth.cn/tem_img/doctor_qr_png.php?doctorId=" + doctorId
+      // 统一处理
+      wx.request({
+        url: url,
+        success: function(res) {
+          // 返回图片地址
+          if (res.statusCode == 200) {
+            resolve(res.data)
+          }
+        },
+        fail: function(res) {
+          baseTool.print(res)
+          reject(res)
+        },
+      })
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
+}
+
+/**
+ * 生成医生端海报
+ */
+function getDoctorManagerPosterQRCodeURL(doctorId = '') {
+  return new Promise((resolve, reject) => {
+    let openid = loginManager.getOpenId()
+    let memberId = loginManager.getMemberId()
+    if (openid && memberId) {
+      // 海报生成地址
+      let url = "https://32teeth.cn/tem_img/doctor_qr_png_zwkqfxgl.php?doctorId=" + doctorId
+      // 统一处理
+      wx.request({
+        url: url,
+        success: function(res) {
+          // 返回图片地址
+          if (res.statusCode == 200) {
+            resolve(res.data)
+          }
+        },
+        fail: function(res) {
+          baseTool.print(res)
+          reject(res)
+        },
+      })
+    } else {
+      loginManager.startAuthorization()
+    }
+  })
 }
 
 function updateDoctorInfo(doctorInfo = {}) {
   return new Promise((resolve, reject) => {
     let openid = loginManager.getOpenId()
-    let memberId = loginManager.getMeberId()
+    let memberId = loginManager.getMemberId()
     if (openid && memberId) {
 
       let url = baseURL.baseDomain + baseURL.basePath + baseApiList.updateDoctorInfo
@@ -45,7 +110,7 @@ function updateDoctorInfo(doctorInfo = {}) {
     } else {
       loginManager.startAuthorization()
     }
-  });
+  })
 }
 
 function doctorInfoComplete(doctorInfo = {}) {
@@ -83,7 +148,9 @@ function chooseDoctorAvatar(items = '', url = '') {
                   reject('上传失败')
                 }
               }).catch(reject)
-            }).catch(reject)
+            }).catch(res => {
+              baseTool.print(res)
+            })
             break
           }
         case 2:
@@ -92,14 +159,20 @@ function chooseDoctorAvatar(items = '', url = '') {
             break
           }
       }
+    }).catch(res => {
+      baseTool.print(res)
     })
   })
 }
+
 
 module.exports = {
   getDoctorInfo: getDoctorInfo,
   getDoctorQRCodeURL: getDoctorQRCodeURL,
   updateDoctorInfo: updateDoctorInfo,
   doctorInfoComplete: doctorInfoComplete,
-  chooseDoctorAvatar: chooseDoctorAvatar
+  chooseDoctorAvatar: chooseDoctorAvatar,
+  getDoctorPosterQRCodeURL: getDoctorPosterQRCodeURL,
+  getDoctorManagerQRCodeURL: getDoctorManagerQRCodeURL,
+  getDoctorManagerPosterQRCodeURL: getDoctorManagerPosterQRCodeURL
 }

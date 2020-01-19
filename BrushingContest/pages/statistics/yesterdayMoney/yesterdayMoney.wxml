@@ -1,0 +1,10 @@
+<!--pages/statistics/yesterdayMoney/yesterdayMoney.wxml-->
+<view class='navigation-bar-line' />
+<view class='yesterday-container'>
+  <view class='money-table-view'>
+    <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+      <moneyDetailCell data='{{item}}' />
+    </block>
+  </view>
+
+</view>

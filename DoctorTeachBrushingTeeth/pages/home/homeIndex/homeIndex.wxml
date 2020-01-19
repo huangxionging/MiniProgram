@@ -1,18 +1,11 @@
 <!--pages/home/homeIndex.wxml-->
-<view class='navigation-bar-line' />
+<view class='navigation-bar-line'/>
 <view class='doctor-container' wx:if='{{loadDone}}'>
   <doctorInfo class='doctorInfo' binddoctorInfoClick='onDoctorInfoClick' avatar='{{avatar}}' name='{{doctorName}}' department='{{department}}' jobTitle='{{jobTitle}}' hospital='{{hospital}}' />
-  <view class='text-tip'>干净的牙齿不会病，跟着{{doctorName}}医生一起用正确的方法及牙线把牙齿清洁干净吧!</view>
-  <view class='text-line' />
-  <view class='report-view'>
-    <image src='{{brushReportUrl}}' class='image-view' bindload='imageLoadDone' mode='widthFix' bindtap='previewImage' lazy-load='true' binderror='imageLoadError' bindlongpress='imageLongTapClick'/>
-    <!-- <block wx:for='{{reportDataList}}' wx:key='id' wx:item='item'>
-      <brushReport 
-        id='{{index}}'
-        data='{{item}}'
-        bind:reportTap='reportTapClick'
-      />
-    </block> -->
+  <view class='home-table-view'>
+    <block wx:for='{{doctorActivityList}}' wx:key='id' wx:item='item'>
+      <doctorActivityCell data='{{item}}' id='{{index}}' bind:activityDelegate='activityDelegate'/>
+    </block>
   </view>
 
 </view>

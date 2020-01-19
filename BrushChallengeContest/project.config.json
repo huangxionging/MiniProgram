@@ -1,0 +1,61 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.6.4",
+	"appid": "wx3855a09efccb350a",
+	"projectname": "BrushChallengeContest",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "pages/contest/addContestDevice/addContestDevice",
+					"pathName": "pages/contest/addContestDevice/addContestDevice",
+					"query": "gameId=8a9951366af7d3b1016b49a9e0a509ff&applyTime=2019-06-12&memberId=8a995136589863490158998c66fc0458&clinicName=福永人民医院",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "指定页面",
+					"pathName": "pages/contest/addContestDevice/addContestDevice",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

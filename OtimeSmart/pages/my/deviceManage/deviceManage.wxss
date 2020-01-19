@@ -1,0 +1,75 @@
+/* pages/my/deviceManage/deviceManage.wxss */
+@import "../../../template/cell.wxss";
+
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.view-container{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-device-image{
+  margin-top: 332rpx;
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.no-device-tip{
+  margin-top: 60rpx;
+  color: #999;
+  font-size: 30rpx;
+}
+
+.add-device{
+  margin-top: 100rpx;
+  margin-bottom: 100rpx;
+  width: 524rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background-color: #6B92FB;
+  color: white;
+  font-size: 30rpx;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}
+
+.device-image-container{
+  margin-top: 14rpx;
+  width: 100%;
+  height: 730rpx;
+  background-color: #171719;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-image{
+  margin-top: 114rpx;
+  border: 2rpx solid black;
+  width: 572rpx;
+  height: 432rpx;
+}
+
+.device-tip{
+  margin-top: 66rpx;
+  color: #333;
+  font-size: 34rpx;
+}
+
+.device-info-view{
+  margin-top: 16rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

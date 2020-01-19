@@ -6,7 +6,8 @@ const loginManager = require('./loginManager.js')
 function getDoctorInfo(){
   return new Promise((resolve, reject) => {
     let openid = loginManager.getOpenId()
-    if (openid) {
+    let isJoinTrainingCamp = baseTool.valueForKey('isJoinTrainingCamp')
+    if (openid && isJoinTrainingCamp == 1) {
       
       let url = baseURL.baseDomain + baseURL.basePath + baseApiList.homePage
       let doctorId = baseTool.valueForKey('doctorId')
@@ -19,7 +20,7 @@ function getDoctorInfo(){
     } else {
       loginManager.startAuthorization()
     }
-  }); 
+  })
 }
 /**
  * 刷牙报告

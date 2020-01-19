@@ -1,0 +1,31 @@
+<!--pages/moment/momentIndex/momentIndex.wxml-->
+<view class="momment-container">
+  <map class="map-momment" scale="{{scale}}" longitude="{{longitude}}" latitude="{{latitude}}" markers="{{markers}}" show-location="true" show-compass show-scale enable-overlooking enable-scroll enable-rotate enable-zoom include-points="{{familyPoints}}"
+    polyline="{{polylines}}">
+    <cover-view class="family-action-view">
+      <cover-view wx:if="{{showFamily}}" class="family-list-view" hover-class="hover-button" bindtap="showFamilyListClick">
+        <cover-view class="family-name">{{familyName}}</cover-view>
+        <cover-image class="family-indicator" src="/resource/family.png"></cover-image>
+      </cover-view>
+      <cover-view class="family-refresh-view" hover-class="hover-button" bindtap="refreshFamilyClick">
+        <cover-view>刷新</cover-view>
+        <cover-image class="family-refresh-img"  src="/resource/refresh.png"></cover-image>
+      </cover-view>
+      
+    </cover-view>
+    <cover-view class="current-location" bindtap="getCurrentLocationClick">
+      <cover-image class="location-img" src="/resource/distance.png"></cover-image>
+    </cover-view>
+    <cover-view wx:if="{{showList}}" class="family-list-container">
+      <cover-view class="family-mask" bindtap="closeFamilyListClick"></cover-view>
+      <cover-view scroll-y class="family-table-view">
+        <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+          <cover-view class="section-view" data-section="{{sectionIndex}}" data-familyId="{{sectionObject.familyId}}" bindtap="selectFamilyClick">
+            <cover-view class="cell-title" style="margin-left:30rpx;">{{sectionObject.familyName}}</cover-view>
+            <cover-view class="cell-line"></cover-view>
+          </cover-view>
+        </block>
+      </cover-view>
+    </cover-view>
+  </map>
+</view>

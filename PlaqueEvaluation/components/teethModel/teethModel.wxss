@@ -1,0 +1,99 @@
+.bg{
+  width: 700rpx;
+  height: 1000rpx;
+  background:#e5f5fd url(http://qnimage.32teeth.cn/2019-08-12_5d51800e50f35.png) center center no-repeat;
+  background-size: 100% 100%;
+  margin: auto;
+  border-radius: 20rpx;
+  position: relative;
+  }
+.bg .title{
+  position: absolute;
+  left: 280rpx;
+  top: 480rpx;
+  width: 150rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 32rpx;
+  color: #4e4e4e;
+  text-align: center;
+  border-radius: 6rpx;
+}
+.bg .box{height: 100%;width: 100%;display: flex;flex-wrap: wrap;}
+.bg .box .m{width: 50%;height: 50%;position: relative;}
+/* 右上区 */
+.bg .box .rightUp .mark{width: 60rpx;height: 60rpx;border-radius: 20rpx;background:rgba(0, 0, 0, 0);position: absolute;}
+.bg .box .rightUp .mark .dot{width: 26rpx;height: 26rpx;background: rgba(255,240,0,0.8);border: solid #b78e53 2rpx;border-radius: 15rpx;margin: auto;margin-top: 15rpx;}
+.bg .box .rightUp .mark70{bottom: 30rpx;left: 85rpx;}
+.bg .box .rightUp .mark71{bottom: 40rpx;left: 160rpx;}
+.bg .box .rightUp .mark60{bottom: 100rpx;left: 75rpx;}
+.bg .box .rightUp .mark61{bottom: 108rpx;left: 150rpx;}
+.bg .box .rightUp .mark50{bottom: 172rpx;left: 75rpx;}
+.bg .box .rightUp .mark51{bottom: 172rpx;left: 150rpx;}
+.bg .box .rightUp .mark40{bottom: 240rpx;left: 88rpx;}
+.bg .box .rightUp .mark41{bottom: 230rpx;left: 160rpx;}
+.bg .box .rightUp .mark30{bottom: 300rpx;left: 120rpx;}
+.bg .box .rightUp .mark31{bottom: 270rpx;left: 180rpx;}
+.bg .box .rightUp .mark20{bottom: 340rpx;left: 150rpx;}
+.bg .box .rightUp .mark21{bottom: 310rpx;left: 200rpx;}
+.bg .box .rightUp .mark10{bottom: 385rpx;left: 190rpx;}
+.bg .box .rightUp .mark11{bottom: 330rpx;left: 230rpx;}
+.bg .box .rightUp .mark00{bottom: 405rpx;left: 270rpx;}
+.bg .box .rightUp .mark01{bottom: 340rpx;left: 280rpx;}
+/* 左上区 */
+.bg .box .leftUp .mark{width: 60rpx;height: 60rpx;border-radius: 20rpx;background:rgba(0, 0, 0, 0);position: absolute;}
+.bg .box .leftUp .mark .dot{width: 26rpx;height: 26rpx;background: rgba(255,240,0,0.8);border: solid #b78e53 2rpx;border-radius: 15rpx;margin: auto;margin-top: 15rpx;}
+.bg .box .leftUp .mark70{bottom: 30rpx;right: 85rpx;}
+.bg .box .leftUp .mark71{bottom: 40rpx;right: 160rpx;}
+.bg .box .leftUp .mark60{bottom: 100rpx;right: 75rpx;}
+.bg .box .leftUp .mark61{bottom: 108rpx;right: 150rpx;}
+.bg .box .leftUp .mark50{bottom: 172rpx;right: 75rpx;}
+.bg .box .leftUp .mark51{bottom: 172rpx;right: 150rpx;}
+.bg .box .leftUp .mark40{bottom: 240rpx;right: 88rpx;}
+.bg .box .leftUp .mark41{bottom: 230rpx;right: 160rpx;}
+.bg .box .leftUp .mark30{bottom: 300rpx;right: 120rpx;}
+.bg .box .leftUp .mark31{bottom: 270rpx;right: 180rpx;}
+.bg .box .leftUp .mark20{bottom: 340rpx;right: 150rpx;}
+.bg .box .leftUp .mark21{bottom: 310rpx;right: 200rpx;}
+.bg .box .leftUp .mark10{bottom: 385rpx;right: 190rpx;}
+.bg .box .leftUp .mark11{bottom: 330rpx;right: 230rpx;}
+.bg .box .leftUp .mark00{bottom: 405rpx;right: 270rpx;}
+.bg .box .leftUp .mark01{bottom: 340rpx;right: 280rpx;}
+/* 右下区 */
+.bg .box .rightDown .mark{width: 60rpx;height: 60rpx;border-radius: 20rpx;background:rgba(0, 0, 0, 0);position: absolute;}
+.bg .box .rightDown .mark .dot{width: 26rpx;height: 26rpx;background: rgba(255,240,0,0.8);border: solid #b78e53 2rpx;border-radius: 15rpx;margin: auto;margin-top: 15rpx;}
+.bg .box .rightDown .mark70{top: 35rpx;left: 80rpx;}
+.bg .box .rightDown .mark71{top: 55rpx;left: 150rpx;}
+.bg .box .rightDown .mark60{top: 120rpx;left: 80rpx;}
+.bg .box .rightDown .mark61{top: 118rpx;left: 160rpx;}
+.bg .box .rightDown .mark50{top: 205rpx;left: 100rpx;}
+.bg .box .rightDown .mark51{top: 190rpx;left: 185rpx;}
+.bg .box .rightDown .mark40{top: 280rpx;left: 138rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark41{top: 250rpx;left: 200rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark30{top: 325rpx;left: 175rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark31{top: 300rpx;left: 220rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark20{top: 370rpx;left: 208rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark21{top: 320rpx;left: 250rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark10{top: 390rpx;left: 250rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark11{top: 350rpx;left: 270rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark00{top: 400rpx;left: 305rpx;width: 50rpx;height: 50rpx;}
+.bg .box .rightDown .mark01{top: 350rpx;left: 310rpx;width: 50rpx;height: 50rpx;}
+/* 左下区 */
+.bg .box .leftDown .mark{width: 60rpx;height: 60rpx;border-radius: 20rpx;background:rgba(0, 0, 0, 0);position: absolute;}
+.bg .box .leftDown .mark .dot{width: 26rpx;height: 26rpx;background: rgba(255,240,0,0.8);border: solid #b78e53 2rpx;border-radius: 15rpx;margin: auto;margin-top: 15rpx;}
+.bg .box .leftDown .mark70{top: 35rpx;right: 80rpx;}
+.bg .box .leftDown .mark71{top: 55rpx;right: 150rpx;}
+.bg .box .leftDown .mark60{top: 120rpx;right: 80rpx;}
+.bg .box .leftDown .mark61{top: 118rpx;right: 160rpx;}
+.bg .box .leftDown .mark50{top: 205rpx;right: 100rpx;}
+.bg .box .leftDown .mark51{top: 190rpx;right: 185rpx;}
+.bg .box .leftDown .mark40{top: 280rpx;right: 138rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark41{top: 250rpx;right: 200rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark30{top: 325rpx;right: 175rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark31{top: 300rpx;right: 220rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark20{top: 370rpx;right: 208rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark21{top: 320rpx;right: 250rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark10{top: 390rpx;right: 250rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark11{top: 350rpx;right: 270rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark00{top: 400rpx;right: 305rpx;width: 50rpx;height: 50rpx;}
+.bg .box .leftDown .mark01{top: 350rpx;right: 310rpx;width: 50rpx;height: 50rpx;}

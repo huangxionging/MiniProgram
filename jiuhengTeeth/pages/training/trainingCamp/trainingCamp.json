@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "segment": "/components/segment/segment",
+    "teachBrushModel": "/components/teachBrushModel/teachBrushModel"
+  }
+}

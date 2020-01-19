@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "pages/homeIndex/homeIndex",
+    "pages/authorization/authorization",
+    "pages/contest/signUp/signUp",
+    "pages/training/trainingCamp/trainingCamp",
+    "pages/dental/blog/blog"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "佛山九恒",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#bababa",
+    "selectedColor": "#00a0e9",
+    "list": [
+      {
+        "pagePath": "pages/homeIndex/homeIndex",
+        "text": "佛山九恒",
+        "iconPath": "resource/home_normal.png",
+        "selectedIconPath": "resource/home_selected.png"
+      },
+      {
+        "pagePath": "pages/contest/signUp/signUp",
+        "text": "挑战赛",
+        "iconPath": "resource/contest_normal.png",
+        "selectedIconPath": "resource/contest_selected.png"
+      },
+      {
+        "pagePath": "pages/training/trainingCamp/trainingCamp",
+        "text": "训练营",
+        "iconPath": "resource/training_camp_normal.png",
+        "selectedIconPath": "resource/training_camp_selected.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

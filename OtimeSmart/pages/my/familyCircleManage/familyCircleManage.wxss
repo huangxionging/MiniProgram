@@ -1,0 +1,222 @@
+/* pages/my/familyCircleManage/familyCircleManage.wxss */
+@import "../../../template/cell.wxss";
+
+
+.family-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.family-table-view {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 270rpx;
+  overflow: hidden;
+}
+
+.section-view {
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  overflow: hidden;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  background-color:#171719;
+}
+
+.section-header {
+  margin-top: 0rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.family-info{
+  position: relative;
+  width: 100%;
+  height: 92rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.family-content {
+  width: 100%;
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-img{
+  margin-left: 26rpx;
+  width: 36rpx;
+  height: 44rpx;
+}
+.manager{
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+}
+.manager-img{
+  margin-left: 36rpx;
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.manager-name{
+  margin-left: 25rpx;
+}
+
+.manager-tip{
+  margin-right: 36rpx;
+  font-size: 24rpx;
+  color: #6B92FB;
+}
+.manager-action{
+  display: flex;
+  flex-direction: row;
+}
+
+.action{
+  width: 160rpx;
+  height: 52rpx;
+  background-color: #6B92FB;
+  border-radius: 26rpx;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}
+
+.family-action{
+  position: fixed;
+  bottom: 0rpx;
+  width: 100%;
+  background-color: #171719;
+}
+
+.family-action-content{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.family-action-item{
+  width: 524rpx;
+  height: 80rpx;
+  display: flex;
+  background-color: #6B92FB;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 40rpx;
+}
+
+
+.hover-family{
+  background-color: #b1c0f1;
+}
+
+.create-input{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.5;
+}
+
+.input-container{
+  position: relative;
+  width: 540rpx;
+  height: 300rpx;
+  border-radius: 14rpx;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.input-title{
+  margin-top: 25rpx;
+  color: #333;
+  font-size: 30rpx;
+  letter-spacing: -0.41px;
+}
+
+.input-view{
+  padding-left: 10rpx;
+  padding-right: 10rpx;
+  color: #333;
+  font-size: 28rpx;
+  margin-top: 40rpx;
+  border: 2rpx solid #999;
+  width: 476rpx;
+  height: 50rpx;
+}
+
+.input-line{
+  margin-top: 22rpx;
+  height: 2rpx;
+  width: 100%;
+  background-color: #eee;
+}
+
+.input-action{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.action1{
+  flex: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.action-line{
+  /* flex: 1; */
+  width: 2rpx;
+  height: 120rpx;
+  background-color: #eee;
+}
+
+.action2{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #2283E2;
+}

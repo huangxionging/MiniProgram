@@ -1,0 +1,83 @@
+/* pages/my/myClinic/myClinic.wxss */
+page{
+  width: 100%;
+  height: 100%;
+}
+.clinic-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.clinic-tip{
+  margin-top: 30rpx;
+  margin-left: 30rpx;
+  color: #333;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.clinic-input-container{
+  margin-top: 30rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  height: 80rpx;
+  background-color: #eee;
+  border-radius: 6rpx;
+}
+
+.clinic-intro-container{
+  margin-top: 30rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  height: 340rpx;
+  background-color: #eee;
+  border-radius: 6rpx;
+}
+
+.clinic-intro-area{
+  margin-left: 20rpx;
+  margin-top: 20rpx;
+  width: 650rpx;
+  height: 300rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.clinic-input{
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  height: 100%;
+  font-size: 26rpx;
+}
+
+.clinic-pic{
+  margin-left: 30rpx;
+  margin-top: 30rpx;
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.warning-tip{
+  margin-top: 16rpx;
+  color: red;
+  font-size: 26rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+}
+
+.clinic-save-button{
+  position: fixed;
+  width: 100%;
+  height: 98rpx; 
+  bottom: 0;
+  font-size: 30rpx;
+  background-color: #00a0e9;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-weight: normal;
+}

@@ -1,0 +1,83 @@
+<!--pages/training/trainingCamp/trainingCamp.wxml-->
+<!-- <view class='navigation-bar-line' /> -->
+<view class='traing-container'>
+  <segment style='position:fixed;width:100%;background-color:white;' data='{{segmentObject}}' bind:segmentItemClick='segmentItemClick' />
+  <view class='navigation-bar-line' style='margin-top:80rpx;' />
+  <view class='traing-content' wx:if='{{traingSelected}}'>
+    <image class='traing-image' bindtap='previewClick' data-url='http://qnimage.hydrodent.cn/jh_training_tip.png' mode='widthFix' src='http://qnimage.hydrodent.cn/jh_training_tip.png'></image>
+    <view class='sign-up-content'>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>姓名</view>
+        </view>
+        <view class='sign-right'>
+          <input maxlength='4' value='{{name}}' wx:if='{{unSignUp}}' class='sign-input' placeholder-style='color:#C4C4C4;' placeholder='填写您孩子的姓名' bindinput='inputName' />
+          <view wx:else class='sign-input'>{{name}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>联系手机</view>
+        </view>
+        <view class='sign-right'>
+          <input value='{{tel}}' wx:if='{{unSignUp}}' class='sign-input' type='number' placeholder-style='color:#C4C4C4;' placeholder='填写您的手机号' bindinput='inputCellPhone' maxlength='11'></input>
+          <view wx:else class='sign-input'>{{tel}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>孩子年龄</view>
+        </view>
+        <picker class='sign-right' wx:if='{{unSignUp}}' mode='selector' range='{{ageList}}' value='8' bindchange='selectAgeClick'>
+          <view class='sign-input' style='height:76rpx;' wx:if='{{age}}'>{{age}} 岁</view>
+          <view class='sign-input' style='height:76rpx;color:#C4C4C4;' wx:else>填写您孩子的年龄</view>
+        </picker>
+        <view class='sign-right' wx:else>
+          <view class='sign-input'>{{age}}</view>
+        </view>
+      </view>
+      <view class='sign-item'>
+        <view class='sign-left'>
+          <view class='sign-key-tip'>*</view>
+          <view>孩子性别</view>
+        </view>
+        <picker class='sign-right' wx:if='{{unSignUp}}' mode='selector' range='{{genderList}}' value='0' bindchange='selectGenderClick'>
+          <view class='sign-input' style='height:76rpx;' wx:if='{{gender}}'>{{gender == 1 ? "男" : "女"}}</view>
+          <view class='sign-input' style='height:76rpx;color:#C4C4C4;' wx:else>填写您孩子的性别</view>
+        </picker>
+        <view class='sign-right' wx:else>
+          <view class='sign-input'>{{gender == 1 ? "男" : "女"}}</view>
+        </view>
+      </view>
+      <view wx:if='{{unSignUp && canSignUp}}' class='sign-up-button' hover-class='sign-up-hover' bindtap='sinUpClick'>我要报名</view>
+      <view wx:if='{{unSignUp && !canSignUp}}' class='sign-up-button' style='background-color:#999;'>我要报名</view>
+      <view wx:if='{{!unSignUp}}' class='sign-up-button' style='background-color:#999;'>已报名</view>
+      <view wx:if='{{!unSignUp}}' class='signed-contact-tip'>稍后客服会通过电话与您确认信息</view>
+      <view style='height: 35rpx;'></view>
+    </view>
+  </view>
+  <view class='study-content' wx:else>
+    <video id='teach-video' src='{{teachVideoUrl}}' autoplay='{{autoplay}}' controls='{{false}}' class='look-video' binderror='binderror' bindended='videoPlayEnd'>
+      <cover-view class='cover-view' wx:if='{{showCover}}'>
+        <cover-view class='cover-title'>{{title}}</cover-view>
+        <cover-view class='cover-time'>{{secondTime}}</cover-view>
+      </cover-view>
+
+    </video>
+    <view class='video-key-point'>
+      <view class='video-key-content'>
+        <view class='video-key-title'>{{title}}</view>
+        <view class='video-key-time'>时长: {{totalTime}}</view>
+      </view>
+      <view class='video-key-line' />
+      <view class='key-point-content'>{{keyPoint}}</view>
+      <view style='height: 52rpx;'></view>
+    </view>
+    <view class='teach-content-bg'>
+      <teachBrushModel data='{{surfaceInfoModel}}' />
+    </view>
+  </view>
+</view>

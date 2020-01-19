@@ -1,0 +1,12 @@
+<!--components/familyManageCell/familyManageCell.wxml-->
+<view class="cell-container" style="height:88rpx:width:100%;">
+  <view class="cell-content">
+    <view class="cell-left">
+      <view class="cell-title" style="margin-left:36rpx;">{{data.name}}</view>
+    </view>
+    <view class="cell-right">
+      <view wx:if="{{showManager && (data.id != managerId)}}" class="cell-detail" style="margin-right:36rpx;color:#6B92FB" bindtap="deleteRow">移除</view>
+    </view>
+  </view>
+  <view class="cell-line"/>
+</view>

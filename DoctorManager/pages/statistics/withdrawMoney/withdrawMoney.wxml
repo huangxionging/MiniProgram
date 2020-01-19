@@ -1,8 +1,69 @@
 <!--pages/statistics/withdrawMoney/withdrawMoney.wxml-->
-<view class='navigation-bar-line'/>
-<view class='knowledge-rule-container'>
-  <view class='develop-view'>
-    <image class='develop-image' src='../../../resource/develop.png'></image>
-    <view>开发中, 敬请期待</view>
+<view class='navigation-bar-line' />
+<view class='withdraw-container' wx:if='{{loadDone}}'>
+  <view class='segment-background' wx:if='{{segmentIndex!=-1}}'>
+    <view class='segment-container'>
+      <view class="segment-item {{(segmentIndex==1)?'segment-color-left':''}}" bindtap='segmentClick' data-index='1'>提现</view>
+      <view class="segment-item {{(segmentIndex==2)?'segment-color-right':''}}" bindtap='segmentClick' data-index='2'>记录</view>
+    </view>
+  </view>
+  <view wx:if='{{segmentIndex==1}}' class='withdraw-content'>
+    <view class='withdraw-content-item'>
+      <view class='withdraw-left'>提现路径</view>
+      <view class='withdraw-right'>微信零钱</view>
+    </view>
+    <view class='withdraw-content-item'>
+      <view class='withdraw-left'>可提现金额</view>
+      <view class='withdraw-right'>{{totalMoney}}元</view>
+    </view>
+    <view class='withdraw-input-container'>
+      <view class='withdraw-input-content'>
+        <view class='withdraw-input-money'>
+          <view class='withdraw-input-tip'>提现金额</view>
+          <view class='input-money'>
+            <view class='money-tip'>¥</view>
+            <input class='money-input' value='{{money}}' type='digit' bindinput='getInputContent' focus='true' placeholder='输入金额'></input>
+          </view>
+        </view>
+        <view class='withdraw-delete-container'>
+          <view wx:if='{{money}}' class='withdraw-delete-content' bindtap='deleteClick'>
+            <image class='withdraw-delete-image' src='../../../resource/withdraw_delete.png'></image>
+          </view>
+        </view>
+      </view>
+      <view class='remaing-tip'>剩余可提现金额为{{remaingMoney}}</view>
+    </view>
+    <view class='tip-container'>
+      <view>注: </view>
+      <view>1、最低提现金额为20元;</view>
+      <view>2、审核通过后, 1个工作日即可到账.</view>
+    </view>
+    <view class='confirm-button-container'>
+      <view wx:if='{{enabled}}' class='confirm-button' hover-class='confirm-hover' bindtap='confirmClick'>确认</view>
+      <view wx:else class='confirm-button-disalbed'>确认</view>
+    </view>
+  </view>
+  <view wx:if='{{segmentIndex==2}}' class='withdraw-content'>
+    <block wx:for='{{recordList}}' wx:key='id' wx:item='item'>
+      <withdrawRecordItemCell data='{{item}}' />
+    </block>
+  </view>
+  <view wx:if='{{segmentIndex==-1}}' class='withdraw-content'>
+    <view class='withdraw-header'>
+      <image src='/resource/withdraw_success.png' class='withdraw-state-image'></image>
+      <view class='withdraw-title'>提现申请已经提交</view>
+      <view class='withdraw-tip'>审核通过后1个工作日到账</view>
+    </view>
+    <view class='withdraw-content-item'>
+      <view class='withdraw-left'>提现路径</view>
+      <view class='withdraw-right'>微信零钱</view>
+    </view>
+    <view class='withdraw-content-item'>
+      <view class='withdraw-left'>提现金额</view>
+      <view class='withdraw-right'>{{totalMoney}}元</view>
+    </view>
+    <view class='confirm-button-container'>
+      <view class='confirm-button' hover-class='confirm-hover' bindtap='confirmDoneClick'>完成</view>
+    </view>
   </view>
 </view>

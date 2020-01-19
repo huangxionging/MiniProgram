@@ -1,0 +1,41 @@
+/* components/bigThingCell/bigThingCell.wxss */
+.cell-container{
+  margin-top: 23rpx;
+  background-color: white;
+  width: 100%;
+}
+
+.cell-time-view{
+  margin-left: 30rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-time-image{
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.cell-time-tip{
+  margin-left: 20rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.cell-title{
+  margin-top: 26rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.cell-image{
+  margin-top: 40rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  margin-bottom: 30rpx;
+  width: 690rpx;
+  background-color: yellow;
+}

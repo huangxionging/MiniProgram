@@ -1,0 +1,37 @@
+<!--pages/my/deviceManage/deviceManage.wxml-->
+<view class='navigation-bar-line' />
+<view class='device-container' wx:if='{{loadDone}}'>
+  <block wx:if='{{!hasData}}'>
+    <view class='content-container' style='height:{{windowHeight}}px;'>
+      <image src='http://qnimage.hydrodent.cn/bcc_no_device_bg.png' class='no-device-image' />
+      <text class='no-device-tip'>开始添加第一个智能设备吧</text>
+      <view class='add-device-button' bindtap='addClick' hover-class='hover-button'>添加设备</view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='device-count-tip-container'>
+      <text class='device-count-tip1'>共有设备</text>
+      <text class='device-count-tip2'>{{deviceCount}}</text>
+      <text>支</text>
+    </view>
+    <view class='device-table-view'>
+      <block wx:for='{{sectionDataArray}}' wx:key='id' wx:item='item'>
+        <view class='device-section'>
+          <block wx:for='{{item.rowDataArray}}' wx:key='id' wx:item='item'>
+            <deviceListCell data='{{item}}' data-section="{{0}}" data-row='{{index}}' data-deviceId='{{item.id}}' bind:delClick='delClick'/>
+          </block>
+        </view>
+      </block>
+    </view>
+    <view class='add-bottom-device' bindtap='addClick' hover-class='hover-bottom-button'>添加设备</view>
+  </block>
+</view> 
+<view wx:if='{{showIntroPage}}' class='mask-container'>
+  <view class='mask-view' />
+  <view class='mask-content-container'>
+    <view class='mask-content-view'>
+      <image class='intro-tip' mode='widthFix' src='http://qnimage.hydrodent.cn/bcc_intro_unbind_device.png' />
+      <image class='intro-iknow' bindtap='iknowClick' src='http://qnimage.hydrodent.cn/bcc_intro_ikonw.png' />
+    </view>
+  </view>
+</view>

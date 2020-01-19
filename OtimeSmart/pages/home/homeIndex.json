@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "deviceSyncToolView": "/components/deviceSyncToolView/deviceSyncToolView",
+    "deviceConnectStateToolBar": "/components/deviceConnectStateToolBar/deviceConnectStateToolBar",
+    "deviceActionItemCell": "/components/deviceActionItemCell/deviceActionItemCell"
+  },
+  "navigationBarTitleText": "设备首页",
+  "enablePullDownRefresh": true
+}

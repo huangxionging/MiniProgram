@@ -1,0 +1,34 @@
+<!--pages/my/brushContestList/brushContestList.wxml-->
+<view class='navigation-bar-line' />
+<view class='list-container' wx:if='{{loadDone}}'>
+  <view class='list-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' style='margin-top:{{item.headerHeight}}rpx;'>
+        <view class='section-header'>
+          <block wx:if='{{sectionObject.isSelect}}'>
+            <image src='/resource/box-selected.png' class='select-component-image' bindtap='selectClick' data-section='{{sectionIndex}}' />
+          </block>
+          <block wx:else>
+            <image src='/resource/box-normal.png' class='select-component-image' bindtap='selectClick' data-section='{{sectionIndex}}' />
+          </block>
+          <view class='section-date' bindtap='selectClick' data-section='{{sectionIndex}}'>{{sectionObject.date}}</view>
+        </view>
+        <view class='navigation-bar-line' />
+        <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+          <listContestItemCell data='{{rowItem}}' data-row='{{rowIndex}}' data-section='{{sectionIndex}}' bind:didSelect='didSelect' />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class='merge-view'>
+    <block wx:if='{{isSelect}}'>
+      <image src='/resource/box-selected.png' class='select-component-image' bindtap='allSelectClick' data-id='{{id}}' data-section='{{index}}' />
+    </block>
+    <block wx:else>
+      <image src='/resource/box-normal.png' class='select-component-image' bindtap='allSelectClick' data-id='{{id}}' data-section='{{index}}' />
+    </block>
+    <view class='section-date' style='flex:1;' bindtap='allSelectClick' data-section='{{index}}'>全选</view>
+    <view class='action-view action-bg1'  hover-class='hover-action-view' bindtap='delClick'>删除</view>
+    <view class='action-view action-bg2'  hover-class='hover-action-view' bindtap='mergeClick'>合并数据</view>
+  </view>
+</view>

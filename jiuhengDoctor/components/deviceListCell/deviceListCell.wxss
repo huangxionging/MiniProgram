@@ -1,0 +1,49 @@
+/* components/deviceListCell/deviceListCell.wxss */
+
+.cell-container{
+  display: flex;
+  width: 937.5rpx;
+  flex-direction: column;
+  height: 100rpx;
+  background-color: white;
+}
+
+.cell-content{
+  display: flex;
+  flex-direction: row;
+  height: 98rpx;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.cell-title{
+  width: 750rpx;
+  height: 100%;
+  display: flex;
+  padding-left: 30rpx;
+  align-items: center;
+  color: #333;
+}
+.cell-delete{
+  margin-left: 1rpx;
+  width: 187.5rpx;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
+}
+
+
+.cell-line{
+  /* position: absolute; */
+  margin-left: 0;
+  margin-right: 0;
+  height: 2rpx;
+  background-color: #eee;
+}
+
+.hover-touch{
+  background-color: #eee;
+  color: #a6c4d2;
+}

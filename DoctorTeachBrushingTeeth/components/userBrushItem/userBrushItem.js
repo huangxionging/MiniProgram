@@ -8,46 +8,6 @@ Component({
       type: Object,
       value: {}
     },
-    avatar: {
-      type: String,
-      value: ''
-    },
-    name: {
-      type: String,
-      value: ''
-    },
-    score: {
-      type: String,
-      value: ''
-    },
-    brushTime: {
-      type: String,
-      value: ''
-    },
-    totalTime: {
-      type: String,
-      value: ''
-    },
-    cleanIndex: {
-      type: String,
-      value: ''
-    },
-    effectiveTime: {
-      type: String,
-      value: ''
-    },
-    star: {
-      type: Number,
-      value: ''
-    },
-    face: {
-      type: Number,
-      value: ''
-    },
-    recordId: {
-      type: String,
-      value: ''
-    }
   },
 
   /**
@@ -64,6 +24,10 @@ Component({
     reportTapClick: function(e) {
       let that = this
       this.triggerEvent('reportTap', that.data)
+    },
+    selectDeviceClick: function(e) {
+      let that = this
+      that.triggerEvent('selectDeviceClick', that.data)
     }
   }
 })

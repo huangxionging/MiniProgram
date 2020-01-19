@@ -1,0 +1,5 @@
+<!--pages/contest/contestVideoPlay/contestVideoPlay.wxml-->
+
+<view class="video-container">
+  <video poster='http://qnimage.hydrodent.cn/plaque_contest_video_poster.png' id="contest-video" show-location="true" class="video-content" src="{{videoURL}}" object-fit="contain"></video>
+</view>

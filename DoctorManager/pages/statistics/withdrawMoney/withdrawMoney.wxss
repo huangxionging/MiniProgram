@@ -1,23 +1,269 @@
 /* pages/statistics/withdrawMoney/withdrawMoney.wxss */
-.knowledge-rule-container{
+
+page {
+  background-color: #eee;
+}
+
+.withdraw-container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 }
-.develop-image{
-  margin-top: 300rpx;
-  width: 411rpx;
-  height: 350rpx;
-  margin-bottom: 20rpx;
-}
-.develop-view{
-  font-size: 25rpx;
+
+.segment-background {
+  width: 100%;
+  height: 120rpx;
+  background-color: #eee;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.segment-container {
+  width: 560rpx;
+  height: 60rpx;
+  border-radius: 10rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.segment-item {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
+  color: #20afff;
+}
+
+.segment-color-left {
+  background-color: #20afff;
+  border-bottom-left-radius: 10rpx;
+  border-top-left-radius: 10rpx;
+  color: white;
+}
+
+.segment-color-right {
+  background-color: #20afff;
+  border-bottom-right-radius: 10rpx;
+  border-top-right-radius: 10rpx;
+  color: white;
+}
+
+.withdraw-content {
+  width: 100%;
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw-content-item {
+  width: 100%;
+  height: 100rpx;
+  margin-top: 2rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 26rpx;
+}
+
+.withdraw-left {
+  margin-left: 20rpx;
+  flex: 1;
+  color: #333;
+}
+
+.withdraw-right {
+  margin-right: 20rpx;
+  color: #20afff;
+}
+
+.withdraw-input-container {
+  margin-top: 20rpx;
+  width: 100%;
+  height: 300rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw-input-content {
+  width: 100%;
+  height: 240rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.withdraw-input-money {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  flex-direction: column;
+}
+
+.withdraw-input-tip {
+  margin-top: 30rpx;
+  margin-left: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  height: 30rpx;
+}
+
+.withdraw-delete-container {
+  width: 80rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* background-color: gold; */
+  align-items: center;
+}
+
+.withdraw-delete-content {
+  width: 60rpx;
+  height: 60rpx;
+  margin-top: 120rpx;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.withdraw-delete-image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.input-money {
+  margin-top: 30rpx;
+  height: 150rpx;
+  width: 100%;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.money-tip {
+  height: 100%;
+  margin-left: 48rpx;
+  font-weight: bold;
+  font-size: 44rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.money-input {
+  height: 100%;
+  margin-left: 52rpx;
+  font-weight: bold;
+  font-size: 76rpx;
+  /* background-color: gold; */
+}
+
+.remaing-tip {
+  margin-top: 2rpx;
+  height: 60rpx;
+  background-color: white;
+  font-size: 26rpx;
+  padding-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #20afff;
+}
+
+.tip-container {
+  margin-top: 40rpx;
+  padding-left: 30rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.confirm-button {
+  margin-top: 160rpx;
+  width: 560rpx;
+  height: 70rpx;
+  background-color: #20afff;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.confirm-button-container {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 28rpx;
+}
+
+.confirm-hover {
+  background-color: #02557c;
+  color: #a6c4d2;
+}
+
+.confirm-button-disalbed {
+  margin-top: 160rpx;
+  width: 560rpx;
+  height: 70rpx;
+  background-color: #999;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.withdraw-detail-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw-header {
+  width: 100%;
+  height: 342rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  margin-bottom: 20rpx;
+}
+
+.withdraw-state-image {
+  margin-top: 58rpx;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.withdraw-title {
+  margin-top: 44rpx;
+  font-size: 30rpx;
+  color: #20afff;
+}
+
+.withdraw-tip {
+  margin-top: 38rpx;
+  font-size: 28rpx;
   color: #999;
 }

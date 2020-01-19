@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "expertItem": "/components/expertItem/expertItem",
+    "bigThingCell": "/components/bigThingCell/bigThingCell",
+    "myIndexItemCell": "/components/myIndexItemCell/myIndexItemCell"
+  },
+  "navigationBarTitleText": "佛山九恒",
+  "enablePullDownRefresh": true
+}

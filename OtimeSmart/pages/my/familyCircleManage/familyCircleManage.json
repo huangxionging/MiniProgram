@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "familyManageCell": "/components/familyManageCell/familyManageCell"
+  },
+  "navigationBarTitleText": "家庭圈"
+}

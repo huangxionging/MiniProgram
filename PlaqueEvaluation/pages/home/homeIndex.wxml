@@ -1,0 +1,90 @@
+<!--pages/home/homeIndex.wxml-->
+<!-- <view class='navigation-bar-line' /> -->
+<view class='contest-container' wx:if='{{loadDone}}'>
+  <block wx:if='{{!hasData}}'>
+    <view class='contest-content-view' style='height:{{height}}px;background-color:white;'>
+      <image class="menu-bar-image" bindtap="menuListClick" data-item="2" src="/resource/contest_menu.png" />
+      <video class="video-content" objectFit="contain" src="{{videoURL}}" poster='http://qnimage.32teeth.cn/plaque_contest_video_poster.png'></video>
+      <view class="contest-action-view">
+        <view wx:if='{{isHaveDevice}}' class="action-view create-contest" hover-class="menu-hover-item" bindtap="createContest">创建测评</view>
+        <view class="action-view {{isHaveDevice ? 'add-device' : 'create-contest'}}" hover-class="menu-hover-item" bindtap="deviceManagerClick">添加设备</view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='contest-content-view'>
+      <!-- <view class='add-member-view'>
+        <input class='add-member-input' value='{{addPlayerName}}' placeholder='请输入测评者名称' bindinput='getInputContent'></input>
+        <view class='add-member-button' hover-class='hover-member-button' bindtap='addMemberClick'>添加</view>
+      </view> -->
+      <view class="contest-data-view" wx:if='{{hasData}}'>
+        <view class="menu-bar-view">
+          <view class="menu-item-button" hover-class="menu-hover-item" bindtap="menuListClick" data-item="0">查看排名</view>
+          <view class="menu-item-button" hover-class="menu-hover-item" bindtap="menuListClick" data-item="1">报名二维码</view>
+          <view class="menu-item-syn"  hover-class="menu-hover-item" wx:if='{{bindingCount && !isSyncNow}}' catchtap="synDeviceClick">同步数据</view>
+          <view class="menu-item-syn" style="background-color:#B9B9B9" wx:else>同步数据</view>
+          <image class="menu-item-image" bindtap="menuListClick" data-item="2" src="/resource/contest_menu.png" />
+        </view>
+        <view class="basic-data-view">
+          <view class="basic-item">
+            <view class="basic-title">报名人数</view>
+            <view class="basic-data">
+              <view class="basic-people">{{playerCount}}</view>人
+            </view>
+          </view>
+          <view class="basic-item">
+            <view class="basic-title">未分配设备</view>
+            <view class="basic-data">
+              <view class="basic-people">{{noBindingCount}}</view>人
+            </view>
+          </view>
+          <view class="basic-item">
+            <view class="basic-title">已分配设备</view>
+            <view class="basic-data">
+              <view class="basic-people">{{bindingCount}}</view>人
+            </view>
+          </view>
+          <view class="basic-item">
+            <view class="basic-title">患者已刷牙</view>
+            <view class="basic-data">
+              <view class="basic-people">{{brushCount}}</view>人
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="contet-table-view">
+          <block wx:for-items='{{papSectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+            <view class="section-view" >
+              <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='rowItem' wx:for-item='rowItem' wx:for-index='rowIndex'>
+                <contestItemCell  data='{{rowItem}}' data-row='{{rowIndex}}' data-section='{{sectionIndex}}' bind:synSingleDeviceClick='synSingleDeviceClick' bind:previewReportClick='previewReportClick' bind:sendDeviceReportClick='sendDeviceReportClick' bind:deleteRowClick='deleteRowClick'/>
+              </block>
+            </view>
+          </block>
+        </view>
+    </view>
+  </block>
+</view>
+<view wx:if='{{showMenu}}' class='menu-list' catchtap="menuListRowClick" data-row="-1">
+  <view class="menu-item-list2" wx:if='{{hasData}}'>
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="0">测评教学视频</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="1">历史测评记录</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="2">结束当前测评</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="3">查看公众号二维码</view>
+  </view>
+  <view class="menu-item-list1" wx:if='{{!hasData && isHaveDevice}}'>
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="0">测评教学视频</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="1">历史测评记录</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="3">查看公众号二维码</view>
+  </view>
+  <view class="menu-item-list3" wx:if='{{!hasData && !isHaveDevice}}'>
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="0">测评教学视频</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="3">查看公众号二维码</view>
+  </view>
+</view>
+<deviceSyncToolView wx:if='{{isSyncNow}}' data='{{currentDeviceObject}}' />

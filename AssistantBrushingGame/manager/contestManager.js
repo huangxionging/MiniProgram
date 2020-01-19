@@ -76,13 +76,14 @@ function getHomePage() {
                   var macAddress = playersList[index].macAddress.toUpperCase()
                   // 待同步的列表项
                   baseTool.print(playersList[index])
+                  
                   var item = {
                     playerId: playersList[index].playerId,
                     name: playersList[index].name,
                     macAddress: macAddress,
                     score: (playersList[index].score != undefined ? playersList[index].score : -1),
                     recordId: (playersList[index].recordId ? playersList[index].recordId : ''),
-                    tail: '(game-' + playersList[index].macAddress.toLowerCase() + ')',
+                    tail: baseTool.getDeviceName(macAddress),
                     isBound: true,
                     accuracy: playersList[index].accuracy,
                     isSyn: true,
@@ -252,7 +253,7 @@ function selectContestUser() {
  * 创建比赛
  */
 
-function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 1, type = "create") {
+function addContest(gameId = "", name = undefined, time = undefined, brushMethod = 0, type = "create") {
   return new Promise((resolve, reject) => {
     baseTool.print([gameId, name, time, brushMethod, type])
     if (type == "modify") {
@@ -389,14 +390,13 @@ function bindContestUser(name = '', macAddress = '') {
       success: function (res) {
         var gameObject = res.data
         var gameNewItem = gameObject.gameNewItem
-
         var obj = {
           playerId: -1,
           name: name,
           macAddress: macAddress,
           score: -1,
           recordId: "",
-          tail: '(game-' + macAddress.toLowerCase() + ')',
+          tail: baseTool.getDeviceName(macAddress),
           isBound: true,
           accuracy: "",
           isSyn: false,

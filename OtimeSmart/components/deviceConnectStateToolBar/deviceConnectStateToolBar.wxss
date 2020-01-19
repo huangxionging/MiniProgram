@@ -1,0 +1,56 @@
+/* components/deviceConnectStateToolBar/deviceConnectStateToolBar.wxss */
+.device-container{
+  position: relative;
+  height: 100rpx;
+  width: 750rpx;
+  background-color:#010101;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: 24rpx;
+}
+
+.device-left{
+  height: 100%;
+  margin-left: 30rpx;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+}
+
+.device-state-tip{
+  color: white;
+}
+
+.device-action{
+  display: flex;
+  margin-right: 40rpx;
+  width: 180rpx;
+  height: 50rpx;
+  border-radius: 25rpx;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  background-color: #6b92fb;
+}
+
+.device-state{
+  margin-left: 10rpx;
+}
+
+.device-close{
+  margin-right: 30rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.close-img{
+  width: 26rpx;
+  height: 26rpx;
+}
+
+.hover-button{
+  background-color: #b1c0f1;
+}

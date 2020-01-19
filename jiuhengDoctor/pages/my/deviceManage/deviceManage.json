@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "deviceListCell": "/components/deviceListCell/deviceListCell" 
+  },
+  "navigationBarTitleText": "设备管理"
+}

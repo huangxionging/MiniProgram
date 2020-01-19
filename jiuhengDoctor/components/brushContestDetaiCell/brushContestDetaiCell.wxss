@@ -1,0 +1,78 @@
+/* components/brushContestDetaiCell/brushContestDetaiCell.wxss */
+
+.cell-container {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.cell-content {
+  display: flex;
+  position: relative;
+  height: 118rpx;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background-color: #eee;
+}
+
+.cell-title {
+  margin-left: 35rpx;
+  color: #333;
+  font-size: 40rpx;
+}
+
+.cell-medal {
+  width: 40rpx;
+  height: 54rpx;
+  margin-left: 30rpx;
+}
+
+.cell-name {
+  position: absolute;
+  left: 90rpx;
+  color: #333;
+  font-size: 28rpx;
+  flex: 1;
+}
+
+.cell-score {
+  position: absolute;
+  right: 30rpx;
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cell-integer {
+  position: relative;
+  font: medium;
+  font-size: 48rpx;
+}
+
+.cell-float {
+  font: medium;
+  font-size: 34rpx;
+}
+
+.cell-color1{
+  color: #FFE159;
+}
+.cell-color2{
+  color: #D8E3EB;
+}
+.cell-color3{
+  color: #F0C98D;
+}
+

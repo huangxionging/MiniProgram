@@ -2,5 +2,6 @@
   "navigationBarTitleText": "知识变现收益",
   "usingComponents": {
     "moneyDetailCell": "/components/moneyDetailCell/moneyDetailCell"
-  }
+  },
+  "enablePullDownRefresh": true
 }

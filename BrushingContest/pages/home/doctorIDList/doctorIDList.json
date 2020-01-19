@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "医生ID 列表",
+  "usingComponents": {
+    "doctorIdQRCodeItem": "/components/doctorIdQRCodeItem/doctorIdQRCodeItem"
+  }
+}

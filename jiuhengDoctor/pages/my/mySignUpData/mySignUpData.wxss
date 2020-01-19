@@ -1,0 +1,34 @@
+/* pages/my/mySignUpData/mySignUpData.wxss */
+.sign-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.segment-conatiner{
+  display: flex;
+  height: 100rpx;
+  flex-direction: row;
+  background-color: white;
+}
+
+.segment-item{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 30rpx;
+  color: #333;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sign-up-tableview{
+  display: flex;
+  flex-direction: column;
+}
+
+.device-section{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

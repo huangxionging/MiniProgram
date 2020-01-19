@@ -1,0 +1,14 @@
+<!--components/doctorIdQRCodeItem/doctorIdQRCodeItem.wxml-->
+<view class='doctorId-container'>
+  <view class='doctorId-view'>{{index}}医生ID:
+    <view class='doctorId'>{{data}}</view>
+  </view>
+  <view class='doctorId-brushing'>
+    <view class='save-button' hover-class='save-button-hover' bindtap='saveBrushClick'>保存医生教刷牙二维码</view>
+    <view class='save-button' hover-class='save-button-hover' bindtap='previewBrushClick'>查看医生教刷牙二维码</view>
+  </view>
+  <view class='doctorId-brushing'>
+    <view class='save-button' hover-class='save-button-hover' bindtap='saveManagerClick'>保存医生端二维码</view>
+    <view class='save-button' hover-class='save-button-hover' bindtap='previewManagerClick'>查看医生端二维码</view>
+  </view>
+</view>

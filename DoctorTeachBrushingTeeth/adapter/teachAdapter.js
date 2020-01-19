@@ -8,68 +8,91 @@ function videoAdapter(videoInfo = {}) {
     loadDone: true,
     videoUrl: 'videoUrl',
     videPicUrl: 'videPicUrl',
-    newsList: []
+    name: 'title',
+    picUrl: 'picUrl',
+    intro: 'intro',
+    duration: 'duration',
+    videoList: [],
+    tagVideoList: [],
+    selectIndex: 0,
   }
-  // 模型适配器转换
-  baseTool.print(videoInfo)
-  baseTool.modelAdapter(data, videoInfo)
-  let newsItem1 = {
-    title: 'title',
-    content: 'intro',
-    picUrl: 'picUrl'
+  // 模型适配器转换.l
+
+  if (baseTool.isExist(videoInfo.mainVideo)) {
+    baseTool.modelAdapter(data, videoInfo.mainVideo, function(res) {
+      if (res == 'intro') {
+        data.intro = ''
+      }
+    })
   }
-  baseTool.modelAdapter(newsItem1, videoInfo, res => {
-    newsItem1[res] = ''
-  })
 
-  data.newsList.push(newsItem1)
-  let newsItem2 = {
-    title: 'titleTwo',
-    content: 'introTwo',
-    picUrl: 'picUrlTwo'
-  }
-  baseTool.modelAdapter(newsItem2, videoInfo, res => {
-    newsItem2[res] = ''
-  })
+  if (baseTool.isExist(videoInfo.videoList)) {
+    for (let indexSection = 0; indexSection < videoInfo.videoList.length; ++indexSection) {
+      let sectionItem = videoInfo.videoList[indexSection]
+      let item = {
+        icon: sectionItem.icon,
+        name: sectionItem.name,
+        tagVideoList: []
+      }
 
-  data.newsList.push(newsItem2)
-  return data
-}
+      if (indexSection == 0) {
+        sectionItem.tagVideoList.splice(0, 0, {
+          title: data.name,
+          picUrl: data.picUrl,
+          intro: data.intro,
+          videoUrl: data.videoUrl,
+          duration: data.duration
+        })
+      }
+      for (let indexTag = 0; indexTag < sectionItem.tagVideoList.length; ++indexTag) {
+        let tagItem = {
+          name: 'title',
+          videoPicUrl: 'picUrl',
+          videoIntro: 'intro',
+          videoUrl: 'videoUrl',
+          duration: 'duration'
+        }
 
-function burshModelAdpter(brushModels = []){
-  let data = []
-  
-  for (let index = 0; index < brushModels.length; ++index) {
-    let brushItem = {
-      imageUrl: 'pic',
-      name: 'name',
-      videoPic: 'videoPic',
-      videoUrl: 'videoUrl'
+        // baseTool.print([sectionItem.tagVideoList[indexTag], indexTag])
+
+        if (sectionItem.tagVideoList[indexTag]) {
+          baseTool.modelAdapter(tagItem, sectionItem.tagVideoList[indexTag], function (res) {
+            tagItem[res] = ''
+          })
+          tagItem.videoUrl = encodeURI(tagItem.videoUrl)
+
+          item.tagVideoList.push(tagItem)
+        }
+        
+      }
+      baseTool.print(item)
+      data.videoList.push(item)
+      data.tagVideoList = data.videoList[0].tagVideoList
     }
-    baseTool.modelAdapter(brushItem, brushModels[index])
-    data.push(brushItem)
-  }
-  return data
-}
-
-/**
- * 绑定手机号
- */
-function telphoneAdapter(wxUser = {}) {
-  if (wxUser.telephone) {
-    baseTool.setValueForKey(wxUser.telephone, 'telephone')
-  }
-
-  if (wxUser.memberId) {
-    baseTool.setValueForKey(wxUser.telephone, 'memberId')
-  }
-  return {
-    telephone: wxUser.telephone
+    
+    return data
   }
 }
+
+function getVideoListAdapter(e = []) {
+  let videoList = []
+  for (let index0 = 0; index0 < e.length; ++index0) {
+    let burshVideoList = e[index0].brushVideoList
+    for (let index1 = 0; index1 < burshVideoList.length; ++index1) {
+      let videoItem = burshVideoList[index1]
+      if (videoItem.videoUrl == 'http://qnimage.hydrodent.cn/shuipingzhendongfushua.mp4') {
+        videoList.splice(0, 0, videoItem)
+      } else {
+        videoList.push(videoItem)
+      }
+
+    }
+  }
+  return videoList
+}
+
 
 module.exports = {
   videoAdapter: videoAdapter,
-  burshModelAdpter: burshModelAdpter,
-  telphoneAdapter: telphoneAdapter
+  getVideoListAdapter: getVideoListAdapter
 }

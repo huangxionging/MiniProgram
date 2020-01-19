@@ -1,0 +1,131 @@
+/* pages/home/homeIndex.wxss */
+
+page {
+  width: 100%;
+  background-color: #101016
+}
+
+.home-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.deviceConnectStateToolBar{
+  width: 100%;
+}
+
+.date-change-view {
+  margin-top: 44rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-img {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.date-view {
+  margin-left: 40rpx;
+  margin-right: 40rpx;
+  width: 200rpx;
+  height: 50rpx;
+  font-size: 34rpx;
+  color: white;
+}
+.preview-device-data{
+  position: relative;
+  width: 100%;
+  height: 430rpx;
+  background-color: #171719;
+}
+
+.distance-percent{
+  position: absolute;
+  left: 90rpx;
+  bottom: 36rpx;
+  width: 160rpx;
+  height: 160rpx;
+  /* background-color: white; */
+}
+
+.circle-canvas {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+}
+
+.step-percent{
+  position: absolute;
+  left: 240rpx;
+  height: 280rpx;
+  width: 280rpx;
+  bottom: 36rpx;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  /* background-color: white; */
+}
+
+.kal-percent{
+  position: absolute;
+  left: 510rpx;
+  height: 160rpx;
+  width: 160rpx;
+  bottom: 36rpx;
+  /* background-color: white; */
+}
+
+.step-view{
+  position: absolute;
+  left: 50rpx;
+  top: 76rpx;
+  right: 50rpx;
+  display: flex;
+  flex-direction: column;
+}
+.step-content{
+  position: relative;
+  width: 100%;
+  align-items: center;
+  align-self: center;
+  text-align: center;
+  justify-content: center;
+  color: white;
+  font-size: 60rpx;
+}
+
+.cirle-line{
+  width: 100%;
+  height: 8rpx;
+}
+
+.distance-view{
+  position: absolute;
+  left: 40rpx;
+  top: 36rpx;
+  right: 40rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-action-container{
+  margin-top: 60rpx;
+  width: auto;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  grid-column-gap: 22rpx;
+  grid-row-gap: 22rpx;
+  /* background-color: red; */
+}

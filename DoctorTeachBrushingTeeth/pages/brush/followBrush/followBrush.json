@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "跟刷教学",
+  "usingComponents": {
+    "teachBrushModel": "/components/teachBrushModel/teachBrushModel",
+    "modalDialog": "/components/modalDialog/modalDialog"
+  }
+}

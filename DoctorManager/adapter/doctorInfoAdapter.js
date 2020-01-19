@@ -9,7 +9,7 @@ function getDoctorInfoAdapter(doctorInfo = {}) {
     jobTitle: 'title',
     hospital: 'company',
     goodat: 'goodat',
-    experience: 'experience',
+    experience:  'experience',
   }
   // 模型适配器转换
   baseTool.print(doctorInfo)
@@ -18,7 +18,7 @@ function getDoctorInfoAdapter(doctorInfo = {}) {
       data[res] = '未填写'
     }
   })
-  return data;
+  return data
 }
 
 function encodeDoctorInfoAdapter(doctorInfo = {}) {
@@ -34,7 +34,7 @@ function encodeDoctorInfoAdapter(doctorInfo = {}) {
   // 模型适配器转换
   baseTool.print(doctorInfo)
   baseTool.modelAdapter(data, doctorInfo)
-  return data;
+  return data
 }
 
 

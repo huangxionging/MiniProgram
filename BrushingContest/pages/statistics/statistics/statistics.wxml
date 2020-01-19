@@ -1,0 +1,43 @@
+<!--pages/statistics/statistics/statistics.wxml-->
+<view wx:if='{{loadDone}}' class='statistics-container'>
+  <view class='money-header'>
+    <view class='knowledge-money-rule-view'>
+      <view bindtap='knowledgeMoneyRuleClick'>
+        <view>知识变现收益规则</view>
+        <view class='knowledge-line'></view>
+      </view>
+    </view>
+    <view class='money-view'>
+      <view class='money-yesterday'>昨日收益 (元)</view>
+      <view class='yesterday-number' bindtap='yesterdayClick'>{{yesterdayMoney}}</view>
+      <view class='total-money'>
+        <text space='ensp'>总收益 {{totalMoney}} 元</text>
+      </view>
+      <view class='withdraw-cash' hover-class='withdraw-cash-hover' bindtap='withdrawClick'>提现</view>
+    </view>
+    <view class='traffic-revenue'>
+      <view class='revenue'>
+        <view class='revenue-money'>{{weekMoney}}</view>
+        <view class='revenue-tip'>近一周流量收益</view>
+      </view>
+      <view class='white-line'/>
+      <view class='revenue'>
+        <view class='revenue-money'>{{monthMoney}}</view>
+        <view class='revenue-tip'>近一月流量收益</view>
+      </view>
+    </view>
+  </view>
+  <view class='column-line'/>
+  <view class='money-table-view'>
+    <view class='money-table-tip'>
+      <view class='money-table-title-view'>
+        <view class='blue-line'/>
+        <view>今日知识变现明细</view>
+      </view>
+      <view class='tip-line'/>
+    </view>
+    <block wx:for='{{dataList}}' wx:key='id' wx:item='item'>
+      <moneyDetailCell data='{{item}}' />
+    </block>
+  </view>
+</view>

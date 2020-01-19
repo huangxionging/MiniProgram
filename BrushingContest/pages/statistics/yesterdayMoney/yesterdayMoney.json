@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "昨日收益明细",
+  "usingComponents": {
+    "moneyDetailCell": "/components/moneyDetailCell/moneyDetailCell"
+  }
+}

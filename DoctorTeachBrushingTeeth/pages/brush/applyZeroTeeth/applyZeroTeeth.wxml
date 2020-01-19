@@ -1,0 +1,30 @@
+<!--pages/brush/applyZeroTeeth/applyZeroTeeth.wxml-->
+<view class='apply-container'>
+   <view class='bind-view'>
+    <image class='bind-image' bindtap='doctorInfoClick' src='{{avatar}}' />
+    <view>{{nickName}}</view>
+    <view class='tel-view'>
+      <input type='number' class='tel-input' placeholder='请输入手机号' maxlength='11' bindinput='getInputContent' placeholder-class='placeholder'></input>
+    </view>
+    <view class='verify-view'>
+      <view class='verify-input-view'>
+        <input type='number' class='verify-input' placeholder='验证码' maxlength='4' bindinput='getInputVerifyCode' placeholder-class='placeholder'></input>
+      </view>
+      <view wx:if='{{verifyCodeDisabled}}' class='get-verify-code' style='background-color:#f5f5f5;color:#999'>
+        {{verifyTitle}}
+      </view>
+      <view wx:else class='get-verify-code' hover-class='get-verify-code-hover' bindtap='getVerifyCodeClick'>
+        {{verifyTitle}}
+      </view>
+    </view>
+    <view wx:if='{{bindDisabled}}' class='confirm_button'>
+      <image class='confirm_image' src='../../../resource/confirm_button_disabled.png'></image>
+      <view class='confirm_text'>立即参与</view>
+    </view>
+    <view wx:else class='confirm_button' bindtap='confirmClick' hover-class='confirm_button-hover'>
+      <image class='confirm_image' src='../../../resource/confirm_button.png'></image>
+      <view class='confirm_text'>立即参与</view>
+    </view>
+    <view style='width:100%;height:35rpx;' />
+  </view>
+</view>

@@ -11,10 +11,17 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.1.2",
+	"libVersion": "2.2.1",
 	"appid": "wx19b77905328cce92",
 	"projectname": "DoctorTeachBrushingTeeth",
 	"isGameTourist": false,
+	"scripts": {
+		"beforeCompile": "",
+		"beforePreview": "",
+		"beforeUpload": ""
+	},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -38,7 +45,7 @@
 				{
 					"id": 0,
 					"name": "logs",
-					"pathName": "pages/teach/teachIndex/teachIndex",
+					"pathName": "pages/brush/brushIndex/brushIndex",
 					"query": ""
 				}
 			]

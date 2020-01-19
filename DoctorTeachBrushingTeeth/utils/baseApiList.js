@@ -26,5 +26,41 @@ module.exports = {
   /**
    * 绑定手机号
    */
-  bindPhoneNumber: 'bindPhoneNumber'
+  bindPhoneNumber: 'bindPhoneNumber',
+  /**
+   * 加入训练营
+   */
+  joinTrainingCamp: 'joinTrainingCamp',
+  /**
+   * 获得训练营首页
+   */
+  trainingCampHomeForMember: 'trainingCampHomeForMember',
+  /**
+   * 获得训练营动态信息
+   */
+  getTrainingCampDynamic: 'getTrainingCampDynamic',
+  /**
+   * 签到
+   */
+  signIn: 'signIn',
+  /**
+   * 视频列表
+   */
+  videoList: "find/videoList",
+  /**
+   * 获得人数计算
+   */
+  getPeopleCounting: 'getPeopleCounting',
+  /**
+   * 教学视频
+   */
+  getTeachingVideoDetails: 'getTeachingVideoDetails',
+  /**
+   * 获取训练营首页
+   */
+  getDoctorTrainingCampHome: 'getDoctorTrainingCampHome',
+  /**
+   * 加入医生的训练营
+   */
+  joinDoctorTrainingCamp: 'joinDoctorTrainingCamp'
 }

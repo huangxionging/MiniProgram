@@ -1,0 +1,59 @@
+/* components/doctorIdQRCodeItem/doctorIdQRCodeItem.wxss */
+.doctorId-container{
+  margin-top: 5rpx;
+  margin-left: 5rpx;
+  margin-right: 5rpx;
+  height: 260rpx;
+  display: flex;
+  flex-direction: column;
+  border: 2rpx solid #999;
+  border-radius: 20rpx;
+  /* align-items: center; */
+}
+
+.doctorId-view{
+  padding-left: 20rpx;
+  font-size: 25rpx;
+  height: 60rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: gold; */
+}
+
+.doctorId{
+  margin-left: 20rpx;
+  color: red;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+.doctorId-brushing{
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.doctorId-line{
+  margin-top: 10rpx;
+  height: 10rpx;
+  background-color: #999;
+}
+
+.save-button{
+  width: 50%;
+  height: 80rpx;
+  font-size: 25rpx;
+  margin-top: 10rpx;
+  border: 2rpx solid #00a0e9;
+  border-radius: 10rpx;
+  color: #00a0e9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.save-button-hover{
+  background-color: #02557c;
+  color: #a6c4d2;
+}

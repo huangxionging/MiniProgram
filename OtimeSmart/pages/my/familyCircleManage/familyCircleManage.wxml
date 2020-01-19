@@ -1,0 +1,37 @@
+<!--pages/my/familyCircleManage/familyCircleManage.wxml-->
+<view class="family-container">
+  <view class='family-table-view'>
+    <block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+      <view class='section-view' data-familyId="{{sectionObject.familyId}}" data-section='{{sectionIndex}}' bindtap="editFamilyClick">
+        <view class="section-header">
+          <view class="family-info">
+            <view class="family-content">
+              <view class="cell-title" style="margin-left:36rpx;flex:1;">{{sectionObject.familyName}}</view>
+              <image class="cell-arrow" style="margin-left:20rpx;"  src="/resource/arrow_right.png"></image>
+            </view>
+            <!-- <view class="cell-line" /> -->
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class="family-action">
+    <view class="family-action-content">
+      <view hover-class="hover-family" class="family-action-item" style="margin-bottom:28rpx;margin-top:28rpx;" bindtap="myFamilyCodeClick">家庭圈邀请码</view>
+      <view hover-class="hover-family" class="family-action-item" style="margin-bottom:54rpx;" bindtap="createFamilyClick">创建新的家庭圈</view>
+    </view>
+  </view>
+</view>
+<view wx:if="{{showCreate}}" class="create-input">
+    <view class="mask"></view>
+    <view class="input-container">
+      <view class="input-title">创建家庭圈</view>
+      <input class="input-view" placeholder="输入家庭圈名称" bindinput="inputContent" value="{{familyName}}"></input>
+      <view class="input-line"/>
+      <view class="input-action">
+        <view class="action1" bindtap="cancleClick">取消</view>
+        <view class="action-line"></view>
+        <view class="action2" bindtap="confirmClick">确定</view>
+      </view>
+    </view>
+  </view>

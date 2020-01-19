@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "myIndexItemCell": "/components/myIndexItemCell/myIndexItemCell"
+  },
+  "navigationBarTitleText": "个人信息"
+}
