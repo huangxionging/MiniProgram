@@ -1,0 +1,11 @@
+/* pages/deviceData/bloodDetail/bloodDetail.wxss */
+.blood-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#shrink-blood-line-chart {
+  width: 100%;
+  height: 161px;
+}

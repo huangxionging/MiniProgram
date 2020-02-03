@@ -12,7 +12,8 @@
     "pages/deviceData/heartDetail/heartDetail",
     "pages/my/familyCircleDetail/familyCircleDetail",
     "pages/my/myFamilyQRCode/myFamilyQRCode",
-    "pages/deviceData/sleepDetail/sleepDetail"
+    "pages/deviceData/sleepDetail/sleepDetail",
+    "pages/deviceData/bloodDetail/bloodDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -61,6 +61,18 @@ module.exports = {
    */
   group_location: "user/group_location",
   /**
+   * 保存血压
+   */
+  blood_pressure_save: "data/blood_pressure_save",
+  /**
+   * 睡眠数据上传
+   */
+  sleep_save: "data/sleep_save",
+  /**
+   * 获取血压数据
+   */
+  blood_pressure_get: "data/blood_pressure_get",
+  /**
    * 首页接口
    */
   homePage: 'homePage',

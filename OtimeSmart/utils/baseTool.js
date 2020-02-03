@@ -270,6 +270,24 @@ function getDateOffsetDate(firstDate, offset = 0) {
   return year + '-' + month + '-' + day
 }
 
+function getObjectForDate(firstDate = "") {
+  let date = new Date(firstDate)
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+  let second = date.getSeconds()
+  return {
+    year: year,
+    month: month,
+    day: day,
+    hour: hour,
+    minute: minute,
+    second: second
+  }
+}
+
 /**
  * 时分秒
  */
@@ -280,6 +298,7 @@ function getCurrentTimeWithNoDate() {
   let second = zeroFormat(date.getSeconds() + '')
   return hour + ':' + minute + ':' + second
 }
+
 
 
 
@@ -870,5 +889,6 @@ module.exports = {
   getDeviceName: getDeviceName,
   getStepLegthWithHeight: getStepLegthWithHeight,
   getDistanceWithStep: getDistanceWithStep,
-  getCalorieWithSteps: getCalorieWithSteps
+  getCalorieWithSteps: getCalorieWithSteps,
+  getObjectForDate: getObjectForDate
 }

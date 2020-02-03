@@ -713,7 +713,16 @@ function commandSynDeviceSleepDetailData(dayNumber = 0) {
   writeValue(deviceObject.deviceId, commandBuffer)
   return "35"
 }
-
+/**
+ * 同步血压数据
+ */
+function commandSynDeviceBlood () {
+  let hexString = "0xCB053102"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  baseTool.print("同步血压:" + hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "31"
+}
 
 
 module.exports = {
@@ -761,5 +770,9 @@ module.exports = {
   /**
    * 同步睡眠详细数据
    */
-  commandSynDeviceSleepDetailData: commandSynDeviceSleepDetailData
+  commandSynDeviceSleepDetailData: commandSynDeviceSleepDetailData,
+  /**
+   * 同步血压数据
+   */
+  commandSynDeviceBlood: commandSynDeviceBlood
 }

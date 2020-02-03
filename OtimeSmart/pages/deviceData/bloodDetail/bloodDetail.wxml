@@ -1,0 +1,4 @@
+<!--pages/deviceData/bloodDetail/bloodDetail.wxml-->
+<view class="blood-container">
+  <ec-canvas id="shrink-blood-line-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+</view>
