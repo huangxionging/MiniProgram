@@ -86,15 +86,15 @@ class HomeAdapter {
   getBloodDataByDay(dayNumber = 0){
     let date = baseTool.getCurrentOffsetDateWithoutTime(dayNumber)
     let data = []
-    for (let index = 1; index <= 144; ++index) {
-      let hour = parseInt(index / 6)
+    for (let index = 0; index < 24; ++index) {
+      let hour = parseInt(index / 1)
       let minute = parseInt(Math.random() * 10 + (index % 6 ) * 10)
       let second = parseInt(Math.random() * 60)
       let time = baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "") + ":" + baseTool.zeroFormat(second + "")
       let object = {
         time: time,
-        shrink: parseInt(Math.random() * 100 + 100),
-        diastole: parseInt(Math.random() * 100 + 80),
+        shrink: parseInt(Math.random() * 50 + 90),
+        diastole: parseInt(Math.random() * 30 + 60),
       }
       data.push(object)
     }

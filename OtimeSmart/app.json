@@ -13,7 +13,8 @@
     "pages/my/familyCircleDetail/familyCircleDetail",
     "pages/my/myFamilyQRCode/myFamilyQRCode",
     "pages/deviceData/sleepDetail/sleepDetail",
-    "pages/deviceData/bloodDetail/bloodDetail"
+    "pages/deviceData/bloodDetail/bloodDetail",
+    "components/bloodDetailItemCell/bloodDetailItemCell"
   ],
   "window": {
     "backgroundTextStyle": "light",

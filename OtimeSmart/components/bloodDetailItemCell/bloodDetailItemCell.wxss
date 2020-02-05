@@ -1,0 +1,54 @@
+/* components/bloodDetailItemCell/bloodDetailItemCell.wxss */
+@import "../../template/cell.wxss";
+.blood-cell{
+  height: 148rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bood-time{
+  color: #999;
+  margin-left: 24rpx;
+  font-size: 30rpx;
+}
+
+.cell-right{
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  left: 270rpx;
+  right: 0;
+  /* height: ; */
+}
+
+.cell-shrink{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cell-diastole{
+  margin-right: 48rpx;
+}
+
+.cell-value{
+  position: relative;
+  font-size: 56rpx;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.cell-tip{
+  font-size: 24rpx;
+  color: white;
+}
+
+.value-unit{
+  font-size: 24rpx;
+  margin-left: 10rpx;
+  margin-bottom: 15rpx;
+}
+

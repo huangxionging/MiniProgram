@@ -72,7 +72,7 @@ Page({
     }
     // baseTool.print(that.temporaryData.bloodObjectList)
     // that.uploadStepData()
-    that.uploadBloodData()
+    // that.uploadBloodData()
     // that.uploadHeartRateData()
     // that.uploadSleepData()
   },

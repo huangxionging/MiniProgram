@@ -1,4 +1,14 @@
 <!--pages/deviceData/bloodDetail/bloodDetail.wxml-->
-<view class="blood-container">
-  <ec-canvas id="shrink-blood-line-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+<view wx:if="{{hasData}}" class="blood-container">
+	<ec-canvas id="shrink-blood-line-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+	<ec-canvas id="diastole-blood-line-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+	<view class='blood-table-view'>
+		<block wx:for-items='{{sectionDataArray}}' wx:key='id' wx:for-item='sectionObject' wx:for-index='sectionIndex'>
+			<view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
+				<block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
+					<bloodDetailItemCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}'/>
+				</block>
+			</view>
+		</block>
+	</view>
 </view>

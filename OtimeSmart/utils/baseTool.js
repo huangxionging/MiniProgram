@@ -270,6 +270,8 @@ function getDateOffsetDate(firstDate, offset = 0) {
   return year + '-' + month + '-' + day
 }
 
+
+
 function getObjectForDate(firstDate = "") {
   let date = new Date(firstDate)
   let year = date.getFullYear()
@@ -797,6 +799,25 @@ function getCalorieWithSteps(step = 0, weight = 0, height = 0) {
   return parseInt(calorie / 10);
 }
 
+/**
+ * 按指定字符串将原字符串分割成数组
+ * @param {*} original 原字符串
+ * @param {*} separator 分割字符串
+ * @return 返回分割后的字符串数组
+ */
+function componentsSeparatedByString(original = "", separator = "") {
+  return original.split(separator)
+}
+/**
+ * 将原字符串数据黏合成字符串
+ * @param  components 字符串数组
+ * @param  separator 分割字符串
+ * @return 返回最后的结果
+ */
+function componentsJoinedByString(components = [], separator = "") {
+  return components.join(separator)
+}
+
 // 添加接口
 module.exports = {
   /**
@@ -890,5 +911,7 @@ module.exports = {
   getStepLegthWithHeight: getStepLegthWithHeight,
   getDistanceWithStep: getDistanceWithStep,
   getCalorieWithSteps: getCalorieWithSteps,
-  getObjectForDate: getObjectForDate
+  getObjectForDate: getObjectForDate,
+  componentsSeparatedByString: componentsSeparatedByString,
+  componentsJoinedByString: componentsJoinedByString
 }

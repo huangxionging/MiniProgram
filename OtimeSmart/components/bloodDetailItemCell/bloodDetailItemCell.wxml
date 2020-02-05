@@ -1,0 +1,19 @@
+<!--components/bloodDetailItemCell/bloodDetailItemCell.wxml-->
+<view  class="cell-container blood-cell">
+  <view class="cell-title bood-time">{{data.time}}</view>
+  <view class="cell-right">
+    <view class="cell-shrink">
+      <view class="cell-tip">血压收缩</view>
+      <view class="cell-value">{{data.shrink}}
+        <view class="value-unit">/mmHg</view>
+      </view>
+    </view>
+    <view class="cell-diastole">
+      <view class="cell-tip">血压舒张</view>
+      <view class="cell-value">{{data.diastole}}
+        <view class="value-unit">/mmHg</view>
+      </view>
+    </view>
+  </view>
+  <view class="cell-line" />
+</view>

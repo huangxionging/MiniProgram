@@ -62,7 +62,7 @@
 					"id": 0,
 					"name": "pages/deviceData/bloodDetail/bloodDetail",
 					"pathName": "pages/deviceData/bloodDetail/bloodDetail",
-					"query": "date=2020-02-03",
+					"query": "date=2020-02-05",
 					"scene": null
 				}
 			]
