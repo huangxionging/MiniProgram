@@ -81,14 +81,14 @@ function myIndexSectionDataArray() {
           type: "selector",
           itemList: ["公制", "英制"]
         },
-        // {
-        //   id: 2,
-        //   section: 0,
-        //   icon: 'my_about.png',
-        //   title: '关于',
-        //   url: '../brushContestList/brushContestList',
-        //   showPiker: false
-        // }
+        {
+          id: 2,
+          section: 0,
+          icon: 'my_about.png',
+          title: '模拟数据',
+          url: '/pages/my/mockData/mockData',
+          showPiker: false
+        }
       ]
     }
   ]

@@ -60,8 +60,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/deviceData/bloodDetail/bloodDetail",
-					"pathName": "pages/deviceData/bloodDetail/bloodDetail",
+					"name": "pages/my/mockData/mockData",
+					"pathName": "pages/my/mockData/mockData",
 					"query": "date=2020-02-05",
 					"scene": null
 				}

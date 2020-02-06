@@ -181,6 +181,10 @@ Page({
             break
           }
           case 1: {
+            baseTool.print(url)
+            wx.navigateTo({
+              url: url
+            })
             break
           }
           case 2: {

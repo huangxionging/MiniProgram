@@ -14,7 +14,7 @@
     "pages/my/myFamilyQRCode/myFamilyQRCode",
     "pages/deviceData/sleepDetail/sleepDetail",
     "pages/deviceData/bloodDetail/bloodDetail",
-    "components/bloodDetailItemCell/bloodDetailItemCell"
+    "pages/my/mockData/mockData"
   ],
   "window": {
     "backgroundTextStyle": "light",

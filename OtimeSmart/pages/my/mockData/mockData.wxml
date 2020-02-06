@@ -1,0 +1,14 @@
+<!--pages/my/mockData/mockData.wxml-->
+<view class="mock-container">
+  <picker mode="date" bindchange='dateDidSelected'>
+    <view class="data-piker">日期选择</view>
+  </picker>
+  
+  <view>{{date}}</view>
+  <view>
+    <view>上传计步数据</view>
+    <view>上传睡眠数据</view>
+    <view>上传心率数据</view>
+    <view>上传血压数据</view>
+  </view>
+</view>
