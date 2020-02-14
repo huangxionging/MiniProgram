@@ -23,8 +23,12 @@ class ChartOption {
         trigger: 'axis',
         formatter: function (params) {
           params = params[0];
+          baseTool.print(params)
           let object = baseTool.getObjectForDate(params.name)
+          baseTool.print(params.name)
+          baseTool.print(object)
           let time = baseTool.zeroFormat(object.month + "") + "-" + baseTool.zeroFormat(object.day + "") + " " + baseTool.zeroFormat(object.hour + "") + ":" + baseTool.zeroFormat(object.minute + "")
+          baseTool.print(time)
           return time + " 的收缩压: " + params.value[1];
         },
         axisPointer: {

@@ -133,11 +133,13 @@ class HomeAdapter {
     let data = new Array()
     let startIndex = 20 + parseInt(Math.random() * 8)
     let startHour = startIndex % 24
+    let startMinute = 0
     let endIndex = 5 + parseInt(Math.random() * 5)
     let total = 0
     let totalDeep = 0
     let totalShallow = 0
     let totalSober = 0
+    let lastSober = 0
     for (let index = startIndex; index < startIndex + endIndex; ++index) {
       let hour = index % 24
       let year = dateComponent.year
@@ -149,10 +151,13 @@ class HomeAdapter {
         month = yesterdayComponent.month
         day = yesterdayComponent.day
       }
-      let deep = parseInt(Math.random() * 60)
-      let shallow = parseInt(Math.random() * (60 - deep)) + deep
-      let sober = parseInt(Math.random() * (60 - shallow)) + shallow
-      
+      let deep = parseInt(Math.random() * 20) + 10
+      let shallow = parseInt(Math.random() * (30 - deep)) + deep + 10
+      let sober = parseInt(Math.random() * (40 - shallow)) + shallow + 10
+
+      if (index == startHour) {
+        startMinute = deep
+      }
       // let 
       data.push({
         year: year,
@@ -170,7 +175,6 @@ class HomeAdapter {
         minute: shallow,
         quality: "shallow"
       })
-      totalDeep += shallow - deep
       data.push({
         year: year,
         month: month,
@@ -179,26 +183,27 @@ class HomeAdapter {
         minute: sober,
         quality: "sober"
       })
-      totalSober += sober - shallow
-      if (index > startHour) {
-        totalSober += 60 - sober + deep 
-      }
-      if (index == startHour + endIndex - 1) {
-        totalSober += 60 - sober 
-      }
+      totalDeep += shallow - deep
+      totalShallow += sober - shallow
+      baseTool.print([index, startIndex, startIndex + endIndex])
+      if ((index > startIndex) && (index < startIndex + endIndex)) {
+        totalSober += 60 - lastSober + deep 
+        baseTool.print([totalSober, lastSober, deep])
+      } 
+      lastSober = sober
     }
-    baseTool.print(data)
+    // baseTool.print(data)
     total = totalDeep + totalShallow + totalSober
     let dateObject = {
       date: date,
-      time: baseTool.zeroFormat(startHour + "") + ":00:00",
+      time: baseTool.zeroFormat(startHour + "") + ":"+ baseTool.zeroFormat(startMinute + ""),
       total: total,
       deep: totalDeep,
       shallow: totalShallow,
       sober: totalSober,
       data: data
     }
-    baseTool.print(dateObject)
+    baseTool.print([dateObject, totalSober])
     return dateObject
   }
 }

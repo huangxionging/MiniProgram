@@ -87,7 +87,6 @@ Page({
   getBloodData: function () {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
-    let token = baseNetLinkTool.getToken()
     let date = that.data.date
     baseNetLinkTool.getRemoteDataFromServer("blood_pressure_get", "获得血压详细数据", {
       date: [date],

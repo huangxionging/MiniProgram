@@ -1,2 +1,76 @@
 <!--pages/deviceData/sleepDetail/sleepDetail.wxml-->
-<view class=""></view>
+<view wx:if="{{hasData}}" class="sleep-container">
+	<view class="sleep-chart">
+		<view class="sleep-tip">昨晚睡眠</view>
+		<view class="sleep-data">
+			<view class="sleep-time">{{totalTime}}</view>
+			<view class="time-tip">分钟</view>
+		</view>
+		<view class="action-icon-container">
+			<view class="action-icon-item">
+				<view class="item-icon" style="background-color:#CFA2F6;"></view>
+				<view>浅睡</view>
+			</view>
+			<view class="action-icon-item" style="margin-left:96rpx">
+				<view class="item-icon" style="background-color:#9013FE;"></view>
+				<view>深睡</view>
+			</view>
+			<view class="action-icon-item" style="margin-left:96rpx">
+				<view class="item-icon" style="background-color:#FFC201;"></view>
+				<view>清醒</view>
+			</view>
+		</view>
+		<view class="action-container">
+			<view class="action-view">
+				<block wx:for-items="{{actionDataArray}}" wx:key="id" wx:for-item="actionObject" wx:for-index="actionIndex">
+					<view class="action-item" style="width:{{actionObject.width}}rpx;background-color:{{actionObject.color}}"></view>
+				</block>
+			</view>
+			<view class="action-indicator">
+					<view class="indicator" style="margin-left:-35rpx;flex:1;">{{startTime}}</view>
+					<view class="indicator" style="flex:1;">{{middleTime}}</view>
+					<view class="indicator" style="margin-right:-35rpx;">{{endTime}}</view>
+				</view>
+		</view>
+	</view>
+	<view class="sleep-detail-data">
+		<view class="sleep-detail-item">
+			<view class="sleep-detail-top">
+				<view class="sleep-data">
+          <view class="sleep-time detail-time">{{shallowTime}}</view>
+          <view class="time-tip" style="margin-left:0;">分钟</view>
+				</view>
+				<view class="action-icon-item">
+					<view class="item-icon" style="background-color:#CFA2F6;margin-right:10rpx;"></view>
+					<view>浅睡</view>
+				</view>
+			</view>
+		</view>
+		<view class="sleep-detail-line" style="margin-left:50rpx;margin-right:50rpx"></view>
+    <view class="sleep-detail-item">
+			<view class="sleep-detail-top">
+				<view class="sleep-data">
+          <view class="sleep-time detail-time">{{deepTime}}</view>
+          <view class="time-tip" style="margin-left:0;">分钟</view>
+				</view>
+				<view class="action-icon-item">
+          <view class="item-icon" style="background-color:#9013FE;margin-right:10rpx;"></view>
+					<view>深睡</view>
+				</view>
+			</view>
+		</view>
+		<view class="sleep-detail-line" style="margin-left:50rpx;margin-right:50rpx"></view>
+    <view class="sleep-detail-item">
+			<view class="sleep-detail-top">
+				<view class="sleep-data">
+          <view class="sleep-time detail-time">{{soberTime}}</view>
+          <view class="time-tip" style="margin-left:0;">分钟</view>
+				</view>
+				<view class="action-icon-item">
+          <view class="item-icon" style="background-color:#FFC201;margin-right:10rpx;"></view>
+					<view>清醒</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>

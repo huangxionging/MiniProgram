@@ -72,21 +72,6 @@ module.exports = {
    * 获取血压数据
    */
   blood_pressure_get: "data/blood_pressure_get",
-  /**
-   * 首页接口
-   */
-  homePage: 'homePage',
-  /**
-   * 验证码
-   */
-  getVerifyCode: 'generateCode',
-  /**
-   * 绑定手机号
-   */
-  bindPhoneNumber: 'bindPhoneNumber',
-  /**
-   * 上传图片
-   */
-  uploadImageURL: 'qn_upload',
+  sleep_get: "data/sleep_get",
   get_historical: "Data/get_historical"
 }

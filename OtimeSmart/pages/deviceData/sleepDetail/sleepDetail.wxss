@@ -1,1 +1,97 @@
 /* pages/deviceData/sleepDetail/sleepDetail.wxss */
+.sleep-container{
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+.sleep-chart{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #171719;
+  height: 500rpx;
+}
+.sleep-tip{
+  font-size: 34rpx;
+  margin-top: 70rpx;
+}
+.sleep-data{
+  margin-top: 12rpx;
+  display: flex;
+  font-size: 30rpx;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.sleep-time{
+  font-size: 60rpx;
+  font-weight: bold;
+}
+.time-tip{
+  margin-left: 8rpx;
+  margin-bottom: 15rpx;
+}
+.action-icon-container{
+  margin-top: 60rpx;
+  display: flex;
+  flex-direction: row;
+}
+.action-icon-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+}
+.item-icon{
+  width: 16rpx;
+  height: 16rpx;
+  background-color: white;
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+}
+.action-container{
+  margin-top: 26rpx;
+  display: flex;
+  flex-direction: column;
+}
+.action-indicator{
+  display: flex;
+  flex-direction: row;
+}
+.action-indicator indicator{
+  
+}
+.action-view{
+  width: 600rpx;
+  height: 50rpx;
+  border-radius: 25rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+.action-item{
+  margin-left: 0rpx;
+  height: 100%;
+}
+.sleep-detail-data{
+  margin-top: 20rpx;
+  height: 168rpx;
+  background-color: #171719;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.sleep-detail-line{
+  height: 46rpx;
+  width: 6rpx;
+  background-color: white;
+}
+
+.detail-time{
+  font-size: 56rpx;
+}

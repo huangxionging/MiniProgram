@@ -270,23 +270,29 @@ function getDateOffsetDate(firstDate, offset = 0) {
   return year + '-' + month + '-' + day
 }
 
-
-
-function getObjectForDate(firstDate = "") {
-  let date = new Date(firstDate)
+function getObjectForDate(firstDate = "" | Date) {
+  let date = undefined
+  if (typeof(firstDate) == Date) {
+    date = firstDate
+  } else {
+    let result = firstDate.toString().replace(/-/g, "/")
+    date = new Date(result)
+  }
   let year = date.getFullYear()
   let month = date.getMonth() + 1
   let day = date.getDate()
   let hour = date.getHours()
   let minute = date.getMinutes()
   let second = date.getSeconds()
+  let milloSeconds = date.getMilliseconds()
   return {
     year: year,
     month: month,
     day: day,
     hour: hour,
     minute: minute,
-    second: second
+    second: second,
+    milloSeconds: milloSeconds
   }
 }
 

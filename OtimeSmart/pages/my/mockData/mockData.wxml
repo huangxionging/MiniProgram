@@ -1,14 +1,11 @@
 <!--pages/my/mockData/mockData.wxml-->
 <view class="mock-container">
-  <picker mode="date" bindchange='dateDidSelected'>
-    <view class="data-piker">日期选择</view>
+  <picker mode="date" value="{{date}}" bindchange='dateDidSelected'>
+    <view class="date-piker">日期选择</view>
   </picker>
-  
-  <view>{{date}}</view>
-  <view>
-    <view>上传计步数据</view>
-    <view>上传睡眠数据</view>
-    <view>上传心率数据</view>
-    <view>上传血压数据</view>
-  </view>
+  <view class="select-date" hover-class="main-button-hover">选择的日期: {{date}}</view>
+  <view data-index="1000" class="upload-data" hover-class="main-button-hover" bindtap="uploadDataClick">上传计步数据</view>
+  <view data-index="1001" class="upload-data" hover-class="main-button-hover" bindtap="uploadDataClick">上传睡眠数据</view>
+  <view data-index="1002" class="upload-data" hover-class="main-button-hover" bindtap="uploadDataClick">上传心率数据</view>
+  <view data-index="1003" class="upload-data" hover-class="main-button-hover" bindtap="uploadDataClick">上传血压数据</view>
 </view>

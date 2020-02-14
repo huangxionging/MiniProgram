@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
 }
-.data-piker{
+.date-piker{
   margin-top: 100rpx;
   background-color: #00a0e9;
   width: 200rpx;
@@ -18,4 +18,26 @@
   font-size: 30rpx;
   border-radius: 8rpx;
   color: white;
+}
+
+.select-date{
+  margin-top: 20rpx;
+  color:  white;
+}
+
+.upload-data{
+  margin-top: 30rpx;
+  width: 300rpx;
+  height: 60rpx;
+  border-radius: 8rpx;
+  color: white;
+  background-color: #00a0e9;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.main-button-hover{
+  background-color: #02557c;
+  color: #a6c4d2;
 }
