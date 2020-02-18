@@ -60,8 +60,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/deviceData/sleepDetail/sleepDetail",
-					"pathName": "pages/deviceData/sleepDetail/sleepDetail",
+					"name": "pages/trend/trendIndex/trendIndex",
+					"pathName": "pages/trend/trendIndex/trendIndex",
 					"query": "date=2020-02-08",
 					"scene": null
 				}

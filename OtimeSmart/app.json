@@ -14,7 +14,8 @@
     "pages/my/myFamilyQRCode/myFamilyQRCode",
     "pages/deviceData/sleepDetail/sleepDetail",
     "pages/deviceData/bloodDetail/bloodDetail",
-    "pages/my/mockData/mockData"
+    "pages/my/mockData/mockData",
+    "pages/trend/trendIndex/trendIndex"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -34,6 +35,12 @@
         "text": "首页",
         "iconPath": "/resource/normal_home.png",
         "selectedIconPath": "/resource/selected_home.png"
+      },
+      {
+        "pagePath": "pages/trend/trendIndex/trendIndex",
+        "text": "趋势",
+        "iconPath": "/resource/normal_trend.png",
+        "selectedIconPath": "/resource/selected_trend.png"
       },
       {
         "pagePath": "pages/moment/momentIndex/momentIndex",
