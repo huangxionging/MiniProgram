@@ -111,7 +111,7 @@ Page({
         baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
       } else {
         let offsetDay = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
-        if (offsetDay < -6) {
+        if (offsetDay > 6) {
           lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
           baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
         }
@@ -569,9 +569,11 @@ Page({
     }
     let currentDate = baseTool.getCurrentDateWithoutTime()
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
-    // if (offsetDays < -6) {
-    //   offsetDays = -6
-    // }
+    if (offsetDays > 6) {
+      offsetDays = 6
+      lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+      baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
+    }
     that.temporaryData.needSynDayIndicator = offsetDays
     that.temporaryData.dataDateObjectList.length = 0
     setTimeout(() => {
