@@ -172,6 +172,7 @@ Page({
         let option = chartOption.getBloodShrinkOption()
         option.yAxis.min = parseInt(minShrik / 10) * 10 - 10
         option.yAxis.max = parseInt(maxShrik / 10) * 10 + 10
+        baseTool.print(shrinkData)
         option.series[0].data = shrinkData
         option.series[1].data = anchorData
         option.series[0].areaStyle.color = "#352223"

@@ -15,6 +15,7 @@
 		"nodeModules": true,
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": false,
+		"scopeDataCheck": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -34,6 +35,11 @@
 	"isGameTourist": false,
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"scripts": {
+		"beforeCompile": "",
+		"beforePreview": "",
+		"beforeUpload": "b"
+	},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -60,8 +66,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/trend/trendIndex/trendIndex",
-					"pathName": "pages/trend/trendIndex/trendIndex",
+					"name": "pages/moment/momentIndex/momentIndex",
+					"pathName": "pages/moment/momentIndex/momentIndex",
 					"query": "date=2020-02-08",
 					"scene": null
 				}

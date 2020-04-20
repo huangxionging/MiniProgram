@@ -61,20 +61,8 @@ Page({
   onLoad: function (options) {
     let that = this
     that.temporaryData.bloodObjectList.length = 0
-    for (let index = 0; index < 1; ++index) {
-      // let dataObject = that.temporaryData.homeAdapter.getStepDataByDay(0)
-      // let dataObject = that.temporaryData.homeAdapter.getSleepDataByDay(0)
-      // let dataObject = that.temporaryData.homeAdapter.getHeartDataByDay(0)
-      // let dataObject = that.temporaryData.homeAdapter.getBloodDataByDay(0)
-      // that.temporaryData.dataDateObjectList.push(dataObject)
-      // that.temporaryData.heartRateObjectList.push(dataObject)
-      // that.temporaryData.bloodObjectList.push(dataObject)
-    }
-    // baseTool.print(that.temporaryData.bloodObjectList)
-    // that.uploadStepData()
-    // that.uploadBloodData()
-    // that.uploadHeartRateData()
-    // that.uploadSleepData()
+    that.registerDeviceSynMessageBlock()
+
   },
 
   /**
@@ -114,7 +102,10 @@ Page({
       })
       that.connectDevice()
       let lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate")
-
+      if (lastSynDeviceDataDate == undefined) {
+        lastSynDeviceDataDate = ""
+      }
+      baseTool.print({"title": "最后同步的日期", "lastSynDate": lastSynDeviceDataDate, "currentDate": currentDate})
       if (baseTool.isValid(lastSynDeviceDataDate) == false) {
         lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
         baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
@@ -139,8 +130,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let that = this
-    // that.registerDeviceSynMessageBlock()
+
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -211,6 +201,7 @@ Page({
   },
   removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
+    baseMessageHandler.removeSpecificInstanceMessageHandler("deviceSynMessage", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
   },
   getHomePage: function (currentDate = 0) {
@@ -402,6 +393,7 @@ Page({
         break
       }
       case 2: {
+        that.temporaryData.synActionIndicator = 0
         that.startSynData()
         break
       }
@@ -451,33 +443,36 @@ Page({
             currentPower: power
           })
         }, key)
-
-        let UserInfokey = baseDeviceSynTool.commandUserInfo()
-        baseDeviceSynTool.registerCallBackForKey(res => {
-          baseTool.print(res)
-          if (res == "fail") {
-            // 此时必须关闭
-            baseDeviceSynTool.removeCallBackForKey(key)
-            that.setData({
-              showDeviceToolBar: false,
-              isSynNow: false
-            })
-            baseTool.showToast("用户信息获取超时")
-            return
+        setTimeout(() => {
+          let UserInfokey = baseDeviceSynTool.commandUserInfo()
+          baseDeviceSynTool.registerCallBackForKey(res => {
+            baseTool.print(res)
+            if (res == "fail") {
+              // 此时必须关闭
+              baseDeviceSynTool.removeCallBackForKey(key)
+              that.setData({
+                showDeviceToolBar: false,
+                isSynNow: false
+              })
+              baseTool.showToast("用户信息获取超时")
+              return
+            }
+            baseDeviceSynTool.removeCallBackForKey(UserInfokey)
+            let sex = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+            let height = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+            let weight = baseHexConvertTool.hexStringToValue(res.substr(12, 2))
+            let age = baseHexConvertTool.hexStringToValue(res.substr(14, 2))
+            that.temporaryData.currentSex = sex
+            that.temporaryData.currentHeight = height
+            that.temporaryData.currentWeight = weight
+            that.temporaryData.currentAge = age
+          }, UserInfokey)
+          if (that.temporaryData.pullDown == true) {
+            that.temporaryData.synActionIndicator = 0
+            that.startSynData()
           }
-          baseDeviceSynTool.removeCallBackForKey(UserInfokey)
-          let sex = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
-          let height = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
-          let weight = baseHexConvertTool.hexStringToValue(res.substr(12, 2))
-          let age = baseHexConvertTool.hexStringToValue(res.substr(14, 2))
-          that.temporaryData.currentSex = sex
-          that.temporaryData.currentHeight = height
-          that.temporaryData.currentWeight = weight
-          that.temporaryData.currentAge = age
-        }, UserInfokey)
-        if (that.temporaryData.pullDown == true) {
-          that.startSynData()
-        }
+        }, 250);
+
         break;
       }
       case 1003: {
@@ -502,8 +497,8 @@ Page({
       case 1006: {
         deviceConnectObject.stateText = "设备连接失败"
         deviceConnectObject.stateColor = "red"
-        deviceConnectObject.bindTitle = "重新绑定设备"
-        deviceConnectObject.action = 0
+        deviceConnectObject.bindTitle = "重新连接"
+        deviceConnectObject.action = 1
         break
       }
     }
@@ -550,11 +545,20 @@ Page({
   synDeviceStep: function (date = "") {
     let that = this
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
+    if (baseTool.isValid(lastSynDeviceDataDate) == false) {
+      // lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate") 
+      baseTool.print(that.temporaryData)
+    }
     let currentDate = baseTool.getCurrentDateWithoutTime()
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
+    // if (offsetDays < -6) {
+    //   offsetDays = -6
+    // }
     that.temporaryData.needSynDayIndicator = offsetDays
     that.temporaryData.dataDateObjectList.length = 0
-    that.synDeviceTotalStep()
+    setTimeout(() => {
+      that.synDeviceTotalStep()
+    }, 250);
   },
   synDeviceTotalStep() {
     let that = this
@@ -572,15 +576,17 @@ Page({
     })
     baseDeviceSynTool.registerCallBackForKey(res => {
       baseTool.print(res)
+      baseDeviceSynTool.removeCallBackForKey(key)
       if (res == "fail") {
         // 此时必须关闭
-        baseDeviceSynTool.removeCallBackForKey(key)
-        baseTool.showToast("步数获取超时")
+        // baseTool.showToast("步数获取超时")
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalStep()
+        // 
+        setTimeout(() => {
+          that.synDeviceTotalStep()
+        }, 250);
         return
       }
-      baseDeviceSynTool.removeCallBackForKey(key)
       let stepString = res.substr(14, 8)
       let step = baseHexConvertTool.hexStringToValue(stepString)
       let year = baseHexConvertTool.hexStringToValue(res.substr(8, 2)) + 2000
@@ -590,7 +596,9 @@ Page({
       // 改天无数据
       if (step == 0) {
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalStep()
+        setTimeout(() => {
+          that.synDeviceTotalStep()
+        }, 250);
       } else if (step > 0) {
         let distanceString = res.substr(22, 8)
         let calorieString = res.substr(30, 8)
@@ -604,7 +612,9 @@ Page({
         dataDateObject.calorie = (calorie / 1000).toFixed(1)
         dataDateObject.total = step
         baseTool.print(["本次数据", dataDateObject])
-        that.synDeviceDetailStep()
+        setTimeout(() => {
+          that.synDeviceDetailStep()
+        }, 250);
       }
     }, key)
   },
@@ -623,9 +633,11 @@ Page({
       if (res == "fail") {
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
-        baseTool.showToast("步数获取超时")
+        // baseTool.showToast("步数获取超时")
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalStep()
+        setTimeout(() => {
+          that.synDeviceTotalStep()
+        }, 250);
         return
       }
       // 总条数
@@ -677,7 +689,9 @@ Page({
         baseDeviceSynTool.removeCallBackForKey(key)
         // 继续同步下一个日期
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalStep()
+        setTimeout(() => {
+          that.synDeviceTotalStep()
+        }, 250);
       }
     }, key)
   },
@@ -687,9 +701,11 @@ Page({
       that.setData({
         isSynNow: false,
       })
-      baseTool.showToast("本次同步, 无数据")
+      baseTool.showToast("本次同步, 无计步数据")
       that.temporaryData.synActionIndicator++
-      that.startSynData()
+      setTimeout(() => {
+        that.startSynData()
+      }, 250);
       return
     }
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -708,7 +724,9 @@ Page({
         deviceInfo: deviceInfo
       })
       that.temporaryData.synActionIndicator++
-      that.startSynData()
+      setTimeout(() => {
+        that.startSynData()
+      }, 250);
       that.getHomePage(baseTool.getCurrentDateWithoutTime())
       // setTimeout(() => {
       //   that.setData({
@@ -745,50 +763,6 @@ Page({
 
     that.getHomePage(currentDate)
     // that.getHeartRate(currentDate)
-  },
-  getDateDetail: function (currentDate) {
-    let that = this
-    let deviceInfo = baseNetLinkTool.getDeviceInfo()
-    baseNetLinkTool.getRemoteDataFromServer("step_get", "获取指定日期计步数据", {
-      date: [currentDate],
-      id: deviceInfo.macAddress
-    }).then(res => {
-      let dataArray = res.data
-      baseTool.print(dataArray)
-
-      let dataObject = {
-        target: "10000",
-        duration: "00:00",
-        calorie: 0,
-        distance: 0,
-        data: []
-      }
-      // 表示今天上传过数据/ 渲染当天数据
-      if (dataArray.length > 0) {
-        dataObject = dataArray[0]
-
-      }
-      let dataList = dataObject.data
-      let totalStep = 0
-      let target = parseFloat(dataObject.target)
-      let duration = parseFloat(dataObject.duration)
-      let currentCal = dataObject.calorie
-      let currentTime = baseTool.zeroFormat(duration / 60 + "") + ":" + baseTool.zeroFormat(duration % 60 + "")
-      let currentDistance = dataObject.distance
-      for (let index = 0; index < dataList.length; ++index) {
-        totalStep += dataList[index].step
-      }
-      // that.drawStep(totalStep / target)
-      that.setData({
-        currentStep: totalStep,
-        currentCal: currentCal,
-        currentTime: currentTime,
-        currentDistance: currentDistance
-      })
-    }).catch(res => {
-      baseTool.print(res)
-      baseNetLinkTool.showNetWorkingError(res)
-    })
   },
   stepDetailClick: function () {
     let that = this
@@ -837,9 +811,12 @@ Page({
       if (res == "fail") {
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
-        baseTool.showToast("心率获取超时")
+        // baseTool.showToast("未获取到心率数据")
         that.temporaryData.synActionIndicator++
-        that.startSynData()
+        setTimeout(() => {
+          that.startSynData()
+        }, 250);
+
         return
       }
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
@@ -948,67 +925,6 @@ Page({
       }
     }
   },
-  getHeartRate: function (currentDate) {
-    let that = this
-    let deviceInfo = baseNetLinkTool.getDeviceInfo()
-    let token = baseNetLinkTool.getToken()
-    baseTool.print([deviceInfo, token])
-    if (!deviceInfo.macAddress && token) {
-      that.setData({
-        deviceInfo: deviceInfo
-      })
-      return
-    } else {
-      let last0Date = baseTool.getCurrentOffsetDateWithoutTime(0)
-      if (currentDate != undefined) {
-        last0Date = currentDate
-      }
-      that.setData({
-        currentDate: last0Date
-      })
-      baseNetLinkTool.getRemoteDataFromServer("heart_rate_get", "获取心率数据", {
-        date: [last0Date],
-        id: deviceInfo.macAddress
-      }).then(res => {
-        baseTool.print(res)
-        // 表示今天上传过数据/ 渲染当天数据
-        let dataArray = res.data
-        let averageHeartRate = 0,
-          maxHeartRate = 0,
-          minHeartRate = 0
-        if (dataArray.length > 0) {
-          let dataObject = dataArray[0]
-          let dataList = dataObject.data
-          let sumHeart = 0
-          maxHeartRate = dataList[0].bmp, minHeartRate = dataList[0].bmp
-          for (let index = 0; index < dataList.length; ++index) {
-            let bmp = parseFloat(dataList[index].bmp)
-            sumHeart += bmp
-            if (bmp > maxHeartRate) {
-              maxHeartRate = bmp
-            }
-
-            if (bmp < minHeartRate) {
-              minHeartRate = bmp
-            }
-          }
-          averageHeartRate = (sumHeart / dataList.length).toFixed(0)
-
-        }
-        that.setData({
-          averageHeartRate: averageHeartRate,
-          maxHeartRate: maxHeartRate,
-          minHeartRate: minHeartRate
-        })
-      }).catch(res => {
-        baseTool.print(res)
-        baseNetLinkTool.showNetWorkingError(res)
-        that.setData({
-          isSynNow: false
-        })
-      })
-    }
-  },
   synDeviceSleep: function () {
     let that = this
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
@@ -1016,7 +932,9 @@ Page({
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
     that.temporaryData.needSynDayIndicator = offsetDays
     that.temporaryData.dataDateObjectList.length = 0
-    that.synDeviceTotalSleep()
+    setTimeout(() => {
+      that.synDeviceTotalSleep()
+    }, 250);
   },
   synDeviceTotalSleep: function () {
     let that = this
@@ -1037,9 +955,11 @@ Page({
       if (res == "fail") {
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
-        baseTool.showToast("睡眠获取超时")
+        // baseTool.showToast("睡眠获取超时")
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalSleep()
+        setTimeout(() => {
+          that.synDeviceTotalSleep()
+        }, 250);
         return
       }
       baseDeviceSynTool.removeCallBackForKey(key)
@@ -1052,14 +972,18 @@ Page({
       // 改天无数据
       if (sleep == 0) {
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalSleep()
+        setTimeout(() => {
+          that.synDeviceTotalSleep()
+        }, 250);
       } else if (sleep > 0) {
         let dataDateObject = {}
         that.temporaryData.dataDateObjectList.push(dataDateObject)
         dataDateObject.date = date
         dataDateObject.total = sleep
         baseTool.print(["本次睡眠数据", dataDateObject])
-        that.synDeviceDetailSleep()
+        setTimeout(() => {
+          that.synDeviceDetailSleep()
+        }, 250);
       }
     }, key)
   },
@@ -1078,7 +1002,9 @@ Page({
         baseDeviceSynTool.removeCallBackForKey(key)
         baseTool.showToast("睡眠获取超时")
         that.temporaryData.needSynDayIndicator--
-        that.synDeviceTotalSleep()
+        setTimeout(() => {
+          that.synDeviceTotalSleep()
+        }, 250);
         return
       }
       let totlalNumber = baseHexConvertTool.hexStringToValue(res.substr(8, 4))
@@ -1149,7 +1075,9 @@ Page({
           baseDeviceSynTool.removeCallBackForKey(key)
           // 继续同步下一个日期
           that.temporaryData.needSynDayIndicator--
-          that.synDeviceTotalSleep()
+          setTimeout(() => {
+            that.synDeviceTotalSleep()
+          }, 250);
         }
       }
     }, key)
@@ -1179,7 +1107,9 @@ Page({
       })
       baseTool.showToast("本次同步, 无数据")
       that.temporaryData.synActionIndicator++
-      that.startSynData()
+      setTimeout(() => {
+        that.startSynData()
+      }, 250);
       return
     }
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -1198,7 +1128,9 @@ Page({
         deviceInfo: deviceInfo
       })
       that.temporaryData.synActionIndicator++
-      that.startSynData()
+      setTimeout(() => {
+        that.startSynData()
+      }, 250);
       that.getHomePage(baseTool.getCurrentDateWithoutTime())
       // that.syn
       // setTimeout(() => {
@@ -1231,7 +1163,7 @@ Page({
       if (res == "fail") {
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
-        baseTool.showToast("血压数据获取超时")
+        // baseTool.showToast("血压数据获取超时")
         that.setData({
           isSynNow: false
         })

@@ -73,5 +73,6 @@ module.exports = {
    */
   blood_pressure_get: "data/blood_pressure_get",
   sleep_get: "data/sleep_get",
-  get_historical: "Data/get_historical"
+  get_historical: "Data/get_historical",
+  getTrend: "Trend/getTrend"
 }

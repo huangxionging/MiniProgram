@@ -134,6 +134,7 @@ function encodeCrc8(hex) {
 
 function hexStringToCommandBuffer(hexString = '') {
   let commandString = hexString + encodeCrc8(hexString)
+  baseTool.print(["命令:", commandString])
   return hexStringToArrayBuffer(commandString)
 }
 

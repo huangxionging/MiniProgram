@@ -18,10 +18,10 @@ let singleTimer = -1
  */
 function print(e) {
   // 测试环境下或者模拟器状态下, 才输入内容到控制台
-  console.log(e)
+  console.log(e, getCurrentTimeWithNoDate())
   if (baseState || isSimulator) {
     // 打印内容
-    console.log(e)
+    // console.log(e)
   }
 }
 
@@ -252,14 +252,14 @@ function getCurrentOffsetDateWithoutTime(offset = 0) {
  * 获得第二个日期相对于第一个日期差值的天数
  */
 function getOffsetDays(firstDate = "", secondDate = "") {
-  let date1 = new Date(firstDate)
-  let date2 = new Date(secondDate)
+  let date1 = getDateByDateString(firstDate)
+  let date2 = getDateByDateString(secondDate)
   // 计算两个日期直接的毫秒数差值并除以 1 的毫秒数 86400000
   return (date2.getTime() - date1.getTime()) / 86400000
 }
 
 function getDateOffsetDate(firstDate, offset = 0) {
-  let date = new Date(firstDate)
+  let date = getDateByDateString(firstDate)
   let time = date.getTime()
   // 添加偏移毫秒数
   date.setTime(time + offset * 86400000)
@@ -270,14 +270,28 @@ function getDateOffsetDate(firstDate, offset = 0) {
   return year + '-' + month + '-' + day
 }
 
-function getObjectForDate(firstDate = "" | Date) {
+/**
+ * 从日期或者日期字符串获得日期
+ */
+function getDateByDateString(dateString = String || Date) {
   let date = undefined
-  if (typeof(firstDate) == Date) {
-    date = firstDate
-  } else {
-    let result = firstDate.toString().replace(/-/g, "/")
-    date = new Date(result)
+  if (dateString === undefined || dateString === "") {
+    print("日期为空")
+    return
   }
+  if (typeof(dateString) == Date) {
+    date = dateString
+  } else {
+    let result = dateString.toString().replace(/-/g, "/")
+    date = new Date(result)
+    print(["获得日期", date, result])
+  }
+  
+  return date
+}
+
+function getObjectForDate(firstDate = "" | Date) {
+  let date = getDateByDateString(firstDate)
   let year = date.getFullYear()
   let month = date.getMonth() + 1
   let day = date.getDate()
@@ -285,14 +299,40 @@ function getObjectForDate(firstDate = "" | Date) {
   let minute = date.getMinutes()
   let second = date.getSeconds()
   let milloSeconds = date.getMilliseconds()
+  let weekDay = date.getDay()
   return {
+    /**
+     * 年
+     */
     year: year,
+    /**
+     * 月
+     */
     month: month,
+    /**
+     * 日
+     */
     day: day,
+    /**
+     * 时
+     */
     hour: hour,
+    /**
+     * 分
+     */
     minute: minute,
+    /**
+     * 秒
+     */
     second: second,
-    milloSeconds: milloSeconds
+    /**
+     * 毫秒
+     */
+    milloSeconds: milloSeconds,
+    /**
+     * 周几
+     */
+    weekDay: weekDay
   }
 }
 
@@ -306,10 +346,6 @@ function getCurrentTimeWithNoDate() {
   let second = zeroFormat(date.getSeconds() + '')
   return hour + ':' + minute + ':' + second
 }
-
-
-
-
 /**
  * 加 0 格式化字符串
  */
@@ -705,15 +741,11 @@ function showToast(message = '', icon = 'none', mask = true, duration = 2000) {
  * 是否合法
  */
 function isValid(e) {
-  if (isExist(e)) {
-    if (e == '' || e == null) {
+    if (e == '' || e == null || e == undefined) {
       return false
     } else {
       return true
     }
-  } else {
-    return false
-  }
 }
 
 /**
@@ -876,6 +908,8 @@ module.exports = {
   clearSingleTimer: clearSingleTimer,
   // 格式化
   zeroFormat: zeroFormat,
+  // 从日期或者日期字符串获得日期
+  getDateByDateString: getDateByDateString,
   // 获取当前时间
   getCurrentTime: getCurrentTime,
   // 获取当前时间, 时分, 无秒
@@ -919,5 +953,5 @@ module.exports = {
   getCalorieWithSteps: getCalorieWithSteps,
   getObjectForDate: getObjectForDate,
   componentsSeparatedByString: componentsSeparatedByString,
-  componentsJoinedByString: componentsJoinedByString
+  componentsJoinedByString: componentsJoinedByString,
 }

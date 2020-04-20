@@ -20,7 +20,12 @@ Page({
     markers: [],
     familyPoints: [],
     polylines: [],
-    scale: 16
+    scale: 16,
+    showFamilyMember: false,
+    familyMemberName: "",
+    lastUpdateTime: "",
+    memberStep: 0,
+    memberHeartRate: 0
   },
 
   /**
@@ -233,10 +238,11 @@ Page({
       let scale = baseTool.toPixel(1)
       for (let index = 0; index < rowDataArray.length; ++index) {
         let location = rowDataArray[index].location
-
+        let item = rowDataArray[index]
+        let name = item.name, step = item.step
         if (location) {
           let object = {
-            id: rowDataArray[index].id,
+            id: index,
             latitude: rowDataArray[index].location.latitude,
             longitude: rowDataArray[index].location.longitude,
             iconPath: "/resource/distance.png",
@@ -273,9 +279,7 @@ Page({
         familyPoints: familyPoints,
         polylines: polylines
       })
-      baseTool.print([markers, 1])
-      baseTool.print([familyPoints, 2])
-      baseTool.print([polylines, 3])
+      that.data.rowDataArray = rowDataArray
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
@@ -301,4 +305,27 @@ Page({
   removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
   },
+  markerTapClick: function(e) {
+    baseTool.print(e)
+  },
+  calloutTapClick: function(e) {
+    baseTool.print(e)
+    let that = this
+    let rowDataArray = that.data.rowDataArray
+    let markerId = e.markerId
+    let object = rowDataArray[markerId]
+    that.setData({
+      showFamilyMember: true,
+      familyMemberName: object.name,
+      lastUpdateTime: object.date,
+      memberStep: object.step,
+      memberHeartRate: object.heart_rate
+    })
+  },
+  memberCloseClick: function() {
+    let that = this
+    that.setData({
+      showFamilyMember: false
+    })
+  }
 })

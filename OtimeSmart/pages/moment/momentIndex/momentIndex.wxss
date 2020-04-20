@@ -152,3 +152,90 @@ page {
   flex-direction: column;
   justify-content: center;
 }
+.family-member-view{
+  position: absolute;
+  left: 101rpx;
+  top: 400rpx;
+  height: 280rpx;
+  width: 548rpx;
+  border-radius: 20rpx;
+  background-color: #171719;
+  display: flex;
+  flex-direction: column;
+}
+.title-view{
+  margin-left: 0;
+  height: 80rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.member-name{
+  color: white;
+  margin-left: 40rpx;
+  font-size: 30rpx;
+  flex: 1;
+}
+.lastupdate-time{
+  margin-right: 16rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+.family-member-line{
+  height: 6rpx;
+  margin-left: 0;
+  width: 100%;
+  background-color: #dadada;
+}
+.content-view{
+  display: flex;
+  height: 106rpx;
+  margin-left: 0;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+.member-step{
+  display: flex;
+  flex-direction: row;
+  margin-left: 40rpx;
+  flex: 1;
+  height: 100%;
+  align-items: flex-end;
+}
+.member-heart{
+  margin-right: 32rpx;
+  height: 100%;
+  align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+}
+.member-heart-unit{
+  margin-bottom: 10rpx;
+  color: white;
+  font-size: 24rpx;
+}
+.member-info{
+  margin-left: 20rpx;
+  color: white;
+  font-size: 56rpx;
+}
+.icon-family{
+  margin-bottom: 10rpx;
+  width: 48rpx;
+  height: 48rpx;
+}
+.family-member-close-button{
+  margin-left: 0;
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: white;
+}
+.family-member-hover{
+  background-color: #494949;
+}

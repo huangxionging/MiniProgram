@@ -1,14 +1,40 @@
 <!--pages/trend/trendIndex/trendIndex.wxml-->
 <view class="trend-container">
-  <view class="action-container">
-    <view wx:if="{{actionSelect != 1}}" data-index="1" class="action-item" bindtap="actionSlectClick">日</view>
-    <view wx:if="{{actionSelect == 1}}" class="action-item action-select">日</view>
-    <view wx:if="{{actionSelect != 2}}" data-index="2" class="action-item" bindtap="actionSlectClick">周</view>
-    <view wx:if="{{actionSelect == 2}}" class="action-item action-select">周</view>
-    <view wx:if="{{actionSelect != 3}}" data-index="3" class="action-item" bindtap="actionSlectClick">月</view>
-    <view wx:if="{{actionSelect == 3}}" class="action-item action-select">月</view>
-    <view wx:if="{{actionSelect != 4}}" data-index="4" class="action-item" bindtap="actionSlectClick">年</view>
-    <view wx:if="{{actionSelect == 4}}" class="action-item action-select">年</view>
-  </view>
-  <view></view>
+	<view class="action-container">
+		<view wx:if="{{actionSelect != 1}}" data-index="1" class="action-item" bindtap="actionSlectClick">日</view>
+		<view wx:if="{{actionSelect == 1}}" class="action-item action-select">日</view>
+		<view wx:if="{{actionSelect != 4}}" data-index="4" class="action-item" bindtap="actionSlectClick">周</view>
+		<view wx:if="{{actionSelect == 4}}" class="action-item action-select">周</view>
+		<view wx:if="{{actionSelect != 2}}" data-index="2" class="action-item" bindtap="actionSlectClick">月</view>
+		<view wx:if="{{actionSelect == 2}}" class="action-item action-select">月</view>
+		<view wx:if="{{actionSelect != 3}}" data-index="3" class="action-item" bindtap="actionSlectClick">年</view>
+		<view wx:if="{{actionSelect == 3}}" class="action-item action-select">年</view>
+	</view>
+	<view class="trend-content-view">
+		<view class="content-item">
+			<view class="content-title">步数</view>
+			<ec-canvas class="content-echart" id="step-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+    <view class="content-item">
+			<view class="content-title">里程</view>
+			<ec-canvas class="content-echart" id="distance-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+    <view class="content-item">
+			<view class="content-title">卡路里</view>
+			<ec-canvas class="content-echart" id="kal-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+    <view class="content-item">
+			<view class="content-title">睡眠</view>
+			<ec-canvas class="content-echart" id="sleep-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+    <view class="content-item">
+			<view class="content-title">心率</view>
+			<ec-canvas class="content-echart" id="heart-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+    <view class="content-item">
+			<view class="content-title">血压</view>
+			<ec-canvas class="content-echart" id="blood-chart" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+		</view>
+	</view>
+
 </view>

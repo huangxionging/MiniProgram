@@ -1,4 +1,5 @@
 const baseTool = require('../utils/baseTool.js')
+const baseNetLinkTool = require('../utils/baseNetLinkTool.js')
 class HomeAdapter {
   getActionItems() {
     return [{
@@ -46,6 +47,11 @@ class HomeAdapter {
 
   getStepDataByDay(dayNumber = 0) {
     let date = baseTool.getCurrentOffsetDateWithoutTime(dayNumber)
+    let userInfo = baseNetLinkTool.getUserInfo()
+    let currentSex = (userInfo.sex == 2) ? 0 : 1
+    let currentAge = userInfo.birthday
+    let currentHeight = userInfo.height
+    let currentWeight = userInfo.weight
     let data = new Array(24)
     for (let index = 0; index < data.length; ++index) {
       data[index] = {
@@ -67,9 +73,9 @@ class HomeAdapter {
         duration += minute
       }
     }
-    let calorie = baseTool.getCalorieWithSteps(total, 75, 175)
+    let calorie = baseTool.getCalorieWithSteps(total, currentWeight, currentHeight)
     calorie = (calorie / 1000).toFixed(1)
-    let distance = baseTool.getDistanceWithStep(total, 175)
+    let distance = baseTool.getDistanceWithStep(total, currentHeight)
     let dateObject = {
       date: date,
       time: time,

@@ -22,14 +22,14 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
     let that = this
     that.registerCallBack()
     that.foundDevice()
@@ -38,21 +38,21 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
     let that = this
     that.removeCallBack()
   },
@@ -60,7 +60,7 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     let that = this
     if (that.isSearchNow == false) {
       that.foundDevice()
@@ -71,17 +71,17 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   },
-  foundDevice: function() {
+  foundDevice: function () {
     let that = this
     that.isSearchNow = true
     wx.showNavigationBarLoading()
@@ -119,7 +119,7 @@ Page({
     })
 
   },
-  registerCallBack: function() {
+  registerCallBack: function () {
     let that = this
     baseMessageHandler.addMessageHandler("refresh", this, res => {
       baseTool.print(res)
@@ -133,25 +133,23 @@ Page({
       baseTool.print(res)
       // baseTool.showToast(res.text)
       switch (section) {
-        case 1:
-          {
-            that.processDeviceSynSuccessMessage(res)
-            break;
-          }
-        case 2:
-          {
-            that.processDeviceSynFailMessage(res)
-            break;
-          }
+        case 1: {
+          that.processDeviceSynSuccessMessage(res)
+          break;
+        }
+        case 2: {
+          that.processDeviceSynFailMessage(res)
+          break;
+        }
       }
 
     })
   },
-  removeCallBack: function() {
+  removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler('deviceSynMessage', this)
   },
-  bindDeviceClick: function(e) {
+  bindDeviceClick: function (e) {
     baseTool.print(e)
     let that = this
     let deviceObject = e.detail.data
@@ -167,64 +165,76 @@ Page({
       deviceAlias: deviceObject.deviceAlias ? deviceObject.deviceAlias : ""
     })
   },
-  processDeviceSynSuccessMessage: function(res) {
+  processDeviceSynSuccessMessage: function (res) {
     let that = this
     let section = parseInt(res.code / 1000)
     let row = parseInt(res.code - section * 1000)
     switch (row) {
-      case 9:
-        {
-          // 获得特征值成功
-          // 同步时间
-          let key = baseDeviceSynTool.commandSettingTime()
-          baseDeviceSynTool.registerCallBackForKey(res => {
-            baseDeviceSynTool.removeCallBackForKey(key)
-            that.formBindDevice()
-          }, key)
-          break;
-        }
-      case 11:
-        {
-          baseTool.print(res)
-          baseTool.showToast(res.deviceName)
-          baseTool.print(res.deviceName)
-          let deviceInfo = baseNetLinkTool.getDeviceInfo()
-
-          let sectionDataArray = that.data.sectionDataArray
-          let rowDataArray = sectionDataArray[0].rowDataArray
-          if (deviceInfo == "") {
-            rowDataArray.push(res)
-          } else {
-            if (res.macAddress == deviceInfo.macAddress) {
-              rowDataArray.push(res)
-            }
-          }
-          that.setData({
-            sectionDataArray: sectionDataArray
-          })
-          break
-        }
-    }
-  },
-  processDeviceSynFailMessage: function(res) {
-    let that = this
-    let section = parseInt(res.code / 1000)
-    let row = parseInt(res.code - section * 1000)
-    switch (row) {
-      case 6:
-        {
-          // 超时
-          let timer = setTimeout(() => {
+      case 9: {
+        // 获得特征值成功
+        // 同步时间
+        let key = baseDeviceSynTool.commandSettingTime()
+        baseDeviceSynTool.registerCallBackForKey(res => {
+          baseTool.print(["同步时间成功", res])
+          baseDeviceSynTool.removeCallBackForKey(key)
+          if (res === "fail") {
+            baseTool.showToast("绑定失败")
+            let that = this
             that.setData({
               isConnectNow: false,
               currentDeviceObject: {}
             })
-          }, 500)
-          break
+          } else {
+            that.formBindDevice()
+          }
+        }, key)
+        break;
+      }
+      case 11: {
+        baseTool.print(res)
+        baseTool.showToast(res.deviceName)
+        baseTool.print(res.deviceName)
+        let deviceInfo = baseNetLinkTool.getDeviceInfo()
+        let sectionDataArray = that.data.sectionDataArray
+        let rowDataArray = sectionDataArray[0].rowDataArray
+        if (deviceInfo == "") {
+          rowDataArray.push(res)
+        } else {
+          if (res.macAddress == deviceInfo.macAddress) {
+            rowDataArray.push(res)
+          }
         }
+        that.setData({
+          sectionDataArray: sectionDataArray
+        })
+        break
+      }
     }
   },
-  formBindDevice: function() {
+  processDeviceSynFailMessage: function (res) {
+    let that = this
+    let section = parseInt(res.code / 1000)
+    let row = parseInt(res.code - section * 1000)
+    that.setData({
+      isConnectNow: false,
+      currentDeviceObject: {}
+    })
+    baseTool.showToast(res.text)
+    baseTool.print(res)
+    // switch (row) {
+    //   case 6: {
+    //     // 超时
+    //     let timer = setTimeout(() => {
+    //       that.setData({
+    //         isConnectNow: false,
+    //         currentDeviceObject: {}
+    //       })
+    //     }, 500)
+    //     break
+    //   }
+    // }
+  },
+  formBindDevice: function () {
     let that = this
     let deviceObject = that.data.currentDeviceObject
     baseTool.print(deviceObject)

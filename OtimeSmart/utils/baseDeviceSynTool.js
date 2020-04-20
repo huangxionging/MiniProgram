@@ -63,9 +63,7 @@ let deviceObject = {
 
 let callBackObject = {}
 
-let deviceTimer = 0
-
-let deviceStopTimer = false
+// let deviceStopTimer = false
 /**
  * 消息类型
  */
@@ -216,21 +214,25 @@ function clearDeviceObject() {
 function reLaunchBluetoothFlow() {
   return new Promise((resolve, reject) => {
     wx.closeBluetoothAdapter({
-      success: function(res) {
+      success: function (res) {
+        baseTool.print("关闭蓝牙成功")
         baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeCloseAdapterSuccess)
         let timer = setTimeout(() => {
           clearTimeout(timer)
           wx.openBluetoothAdapter({
-            success: function(res) {
+            success: function (res) {
+              baseTool.print("重启蓝牙成功")
               resolve(res)
             },
-            fail: function(res) {
+            fail: function (res) {
+              baseTool.print("重启蓝牙失败")
               reject(res)
             }
           })
         }, 500)
       },
-      fail: function(res) {
+      fail: function (res) {
+        baseTool.print("关闭蓝牙失败")
         reject(res)
       }
     })
@@ -245,14 +247,14 @@ function openBluetoothFlow() {
   wx.startBluetoothDevicesDiscovery({
     services: serviceUUIDs,
     allowDuplicatesKey: false,
-    success: function(res) {
+    success: function (res) {
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoverySuccess)
-      wx.onBluetoothDeviceFound(function(res) {
+      wx.onBluetoothDeviceFound(function (res) {
         let device = res.devices[0]
         baseTool.print(res)
         let advertisData = baseHexConvertTool.arrayBufferToHexString(device.advertisData).toUpperCase()
         if (advertisData.length < 10) {
-          return;
+          return
         }
         let macAddress = advertisData.substr(0, 2) + ':' + advertisData.substr(2, 2) + ':' + advertisData.substr(4, 2) + ':' + advertisData.substr(6, 2) + ':' + advertisData.substr(8, 2) + ':' + advertisData.substr(10, 2)
         let object = Object.assign({
@@ -272,7 +274,7 @@ function openBluetoothFlow() {
         baseMessageHandler.sendMessage('deviceSynMessage', object)
       })
     },
-    fail: function(res) {
+    fail: function (res) {
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeStartDiscoveryFail)
     },
   })
@@ -283,7 +285,7 @@ function openBluetoothFlow() {
  */
 function connectDeviceFlow(deviceInfo = {}) {
 
-  if (!deviceInfo.macAddress || !deviceInfo.deviceId)  {
+  if (!deviceInfo.macAddress || !deviceInfo.deviceId) {
     deviceObject.connectedState = DeviceConnectedState.DeviceNoDevice
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     return
@@ -303,33 +305,46 @@ function connectDeviceFlow(deviceInfo = {}) {
     if (stopTimer == true) {
       return
     }
+    baseTool.print("设备连接超时")
     deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
-  wx.createBLEConnection({
+
+  function createBLEConnection() {
+    wx.createBLEConnection({
+      deviceId: deviceId,
+      success: function (res) {
+        // 连接成功
+        stopTimer = true
+        clearTimeout(timer)
+        baseTool.print("连接成功")
+        baseTool.print(res)
+        baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedSuccess)
+        // 获得服务
+        getBLEDeviceServices(deviceId)
+      },
+      fail: function (res) {
+        // 连接失败
+        stopTimer = true
+        clearTimeout(timer)
+        baseTool.print(["连接失败", res])
+        baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedFail)
+        deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
+        baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
+      }
+    })
+    deviceConnectionStateChange()
+  }
+  wx.closeBLEConnection({
     deviceId: deviceId,
-    success: function(res) {
-      // 连接成功
-      baseTool.print("连接成功")
-      baseTool.print(res)
-      clearTimeout(timer)
-      stopTimer = true
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedSuccess)
-      // 获得服务
-      getBLEDeviceServices(deviceId)
+    success: (res) => {
+      createBLEConnection()
     },
-    fail: function(res) {
-      // 连接失败
-      baseTool.print("连接失败")
-      clearTimeout(timer)
-      stopTimer = true
-      baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeConnectedFail)
-      deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
-      baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
+    fail: (res) => {
+      createBLEConnection()
     }
   })
-  deviceConnectionStateChange()
 }
 
 function getBLEDeviceServices(deviceId = '') {
@@ -341,28 +356,29 @@ function getBLEDeviceServices(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    baseTool.print("获得服务超时")
     deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
   }, 5000)
   wx.getBLEDeviceServices({
     deviceId: deviceId,
-    success: function(res) {
+    success: function (res) {
       // 获得设备服务成功
       // res.services
+      stopTimer = true
+      clearTimeout(timer)
       baseTool.print("获得服务成功")
       baseTool.print(res.services)
-      clearTimeout(timer)
-      stopTimer = true
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceServicesSuccess)
       // 获得特征
       getBLEDeviceCharacteristics(deviceId)
     },
-    fail: function(res) {
+    fail: function (res) {
       // 获得设备服务失败
-      baseTool.print("获得服务失败")
-      clearTimeout(timer)
       stopTimer = true
+      clearTimeout(timer)
+      baseTool.print("获得服务失败")
       deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceServicesFail)
@@ -379,6 +395,7 @@ function getBLEDeviceCharacteristics(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    baseTool.print("获得特征值超时")
     deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
     baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
@@ -386,21 +403,21 @@ function getBLEDeviceCharacteristics(deviceId = '') {
   wx.getBLEDeviceCharacteristics({
     deviceId: deviceId,
     serviceId: serviceUUID,
-    success: function(res) {
+    success: function (res) {
       // 获得特征值成功
+      stopTimer = true
+      clearTimeout(timer)
       baseTool.print("获取特征值成功")
       baseTool.print(res.characteristics)
-      clearTimeout(timer)
-      stopTimer = true
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceCharacteristicsSuccess)
       // 一个设备的数据集合清空
       // 预定特征峰
       notifyBLECharacteristicValueChange(deviceId)
     },
-    fail: function(res) {
-      baseTool.print("获取特征值失败")
-      clearTimeout(timer)
+    fail: function (res) {
       stopTimer = true
+      clearTimeout(timer)
+      baseTool.print("获取特征值失败")
       deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeGetBLEDeviceCharacteristicsFail)
@@ -416,26 +433,29 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
     if (stopTimer == true) {
       return
     }
+    baseTool.print("预定特征值超时")
     deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
     baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
-    baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
+    baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifyFail)
   }, 5000)
   wx.notifyBLECharacteristicValueChange({
     deviceId: deviceId,
     serviceId: serviceUUID,
     characteristicId: characteristicIdNotify,
     state: true,
-    success: function(res) {
-      clearTimeout(timer)
+    success: function (res) {
       stopTimer = true
+      clearTimeout(timer)
       deviceCharacteristicValueChange()
+      baseTool.print("预定特征值成功")
       deviceObject.connectedState = DeviceConnectedState.DeviceConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifySuccess)
     },
-    fail: function(res) {
-      clearTimeout(timer)
+    fail: function (res) {
       stopTimer = true
+      clearTimeout(timer)
+      baseTool.print("预定特征值失败")
       deviceObject.connectedState = DeviceConnectedState.DeviceNeverConnected
       baseMessageHandler.sendMessage('deviceConnectedState', deviceObject)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeNotifyFail)
@@ -445,27 +465,40 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
 
 function deviceCharacteristicValueChange() {
   let that = this
-  wx.onBLECharacteristicValueChange(function(res) {
+  baseTool.print("接收通知信息")
+  wx.onBLECharacteristicValueChange(function (res) {
     let values = new Uint8Array(res.value)
     let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
     let key = hex.substr(4, 2)
-    baseTool.print([hex, key, '通知信息'])
-    let callBack = callBackObject[key]
-    if (callBack != undefined) {
+    baseTool.print([hex, key, "显示回调信息", callBackObject])
+    let callBack = callBackObject[key].callBack
+    let deviceStopTimer = callBackObject[key].deviceStopTimer
+    let deviceTimer = callBackObject[key].deviceTimer
+    if (deviceStopTimer == undefined && deviceTimer == undefined) {
+      if (callBack !== undefined) {
+        callBack(hex)
+      }
+      return
+    }
+    baseTool.print([hex, key, '通知信息', callBackObject, deviceStopTimer])
+    if (callBack !== undefined) {
       if (deviceStopTimer == false) {
         deviceStopTimer = true
-        clearTimeout(deviceTimer)
+        baseTool.print(["清除定时器", key, callBackObject[key].deviceTimer])
+        clearTimeout(callBackObject[key].deviceTimer)
+        callBackObject[key].deviceTimer = undefined
+        callBack(hex)
+      } else {
         callBack(hex)
       }
     }
   })
-  
 }
 
-function deviceConnectionStateChange (){
-  wx.onBLEConnectionStateChange(function(res){
+function deviceConnectionStateChange() {
+  wx.onBLEConnectionStateChange(function (res) {
     if (res.connected == true) {
-      deviceObject.connectedState = DeviceConnectedState.DeviceConnected
+      // deviceObject.connectedState = DeviceConnectedState.DeviceConnected
     } else {
       if (deviceObject.connectedState.code == DeviceConnectedState.DeviceNoDevice.code) {
         return
@@ -487,16 +520,17 @@ function bluetoothAdapterStateChange() {
  * 写数据
  */
 function writeValue(deviceId = '', value = []) {
+  // 每次间隔 250 ms 发送
   wx.writeBLECharacteristicValue({
     deviceId: deviceId,
     serviceId: serviceUUID,
     characteristicId: characteristicIdWrite,
     value: value,
-    success: function(res) {
+    success: function (res) {
       baseTool.print(res)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeWriteSuccess)
     },
-    fail: function(res) {
+    fail: function (res) {
       baseTool.print(res)
       baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeWriteFail)
     }
@@ -505,34 +539,73 @@ function writeValue(deviceId = '', value = []) {
 
 function stopBluetoothDiscoveryFlow() {
   wx.stopBluetoothDevicesDiscovery({
-    success: function(res) {},
-    fail: function(res) {},
-    complete: function(res) {},
+    success: function (res) {},
+    fail: function (res) {},
+    complete: function (res) {},
   })
 }
 
 function getDeviceConnectedState() {
   return deviceObject.connectedState
 }
-
-function registerCallBackForKey(callBack = Function, key = '') {
-  if (key == '' || callBackObject[key] != undefined) {
+/**
+ * 等待回调
+ * @param {*} callBack 回调函数
+ * @param {*} key 关键字
+ */
+function wattingCallBackForKey(callBack = Function, key = '') {
+  // baseTool.print(["回调对象", callBackObject])
+  if (key == '' || (callBackObject[key] != undefined)) {
+    baseTool.print("注册不合法")
     return
   }
-  callBackObject[key] = callBack
-  deviceStopTimer = false
-  deviceTimer = setTimeout(() => {
+  callBackObject[key] = {
+    key: key,
+    callBack: callBack,
+  }
+}
+
+function registerCallBackForKey(callBack = Function, key = '') {
+  // baseTool.print(["回调对象", callBackObject])
+  if (key == '' || (callBackObject[key] != undefined)) {
+    baseTool.print("注册不合法")
+    return
+  }
+  callBackObject[key] = {
+    key: key,
+    callBack: callBack,
+    deviceStopTimer: false,
+    deviceTimer: 0
+  }
+  // callBackObject[key] = callBack
+  // baseTool.print(["回调对象", callBackObject])
+  // 开启定时器
+  let deviceTimer = setTimeout((res) => {
     clearTimeout(deviceTimer)
+    // 定时器结束
+    baseTool.print([res, '定时器停止工作', callBackObject, callBackObject[res].callBack], callBackObject[res].key)
+    let deviceStopTimer = callBackObject[res].deviceStopTimer
+
+    let deviceTimer = callBackObject[res].deviceTimer
+    baseTool.print([res, '定时器停止工作', callBackObject, deviceStopTimer, deviceTimer])
+    // 根据设备命令状态判断
     if (deviceStopTimer == true) {
       return
     }
-    deviceStopTimer = true
-    let failCallBack = callBackObject[key]
+    // 设备超时
+    callBackObject[res].deviceStopTimer = true
+    // 失败回调
+    let failCallBack = callBackObject[res].callBack
     failCallBack("fail")
-  }, 2000);
+    // 删除
+    // removeCallBackForKey(res)
+  }, 5000, key)
+  callBackObject[key].deviceTimer = deviceTimer
+  baseTool.print(["注册定时器", key, callBackObject[key].deviceTimer])
 }
 
 function removeCallBackForKey(key = '') {
+  baseTool.print(["删除: " + key + " 定时器:" + callBackObject[key].deviceTimer])
   if (key == '') {
     return
   }
@@ -541,7 +614,7 @@ function removeCallBackForKey(key = '') {
 
 function removeAllCallBack() {
   let keys = Object.keys(callBackObject)
-  for(let index = 0; index < keys.length; ++index) {
+  for (let index = 0; index < keys.length; ++index) {
     delete callBackObject[keys[index]]
   }
 }
@@ -567,7 +640,6 @@ function commandSettingTime() {
   const minute = date.getMinutes()
   const second = date.getSeconds()
   let hex = "0xCB0B2401" + baseHexConvertTool.arrayToHexString([year, month, day, hour, minute, second])
-
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hex)
   writeValue(deviceObject.deviceId, commandBuffer)
   baseTool.print(hex)
@@ -609,7 +681,7 @@ function commandSynDeviceTotalStepData(dayNumber = 0) {
   return "32"
 }
 
-function commandSynDeviceDetailStepData(dayNumber = 0){
+function commandSynDeviceDetailStepData(dayNumber = 0) {
   baseTool.print("同步详细步数")
   let hexString = "0xCB05330" + dayNumber
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
@@ -636,7 +708,7 @@ function commandSynDeviceRealHeartRate() {
   return "2f"
 }
 
-function answerRealHeartRateKey(){
+function answerRealHeartRateKey() {
   return "30"
 }
 
@@ -651,7 +723,7 @@ function answerRealHeartRate() {
  * 设置久坐提醒
  * @param {*} timeInteveral  时间间隔, 单位为分钟
  */
-function commandSetSedentaryReminder(timeInteveral = 0){
+function commandSetSedentaryReminder(timeInteveral = 0) {
   let hexString = "0xCB062B01" + baseHexConvertTool.valueToHexString(timeInteveral + '')
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -682,7 +754,7 @@ function commandSynSystemUnit(unitType = 0) {
 /**
  * 读取英制和公制
  */
-function commandReadSystemUnit(){
+function commandReadSystemUnit() {
   let hexString = "0xCB052200"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
@@ -699,7 +771,7 @@ function commandSynDeviceSleepTotalData(dayNumber = 0) {
   let commandBuffer = baseHexConvertTool.hexStringToArrayBuffer(hexString)
   baseTool.print(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
-  return  "34"
+  return "34"
 }
 
 /**
@@ -716,7 +788,7 @@ function commandSynDeviceSleepDetailData(dayNumber = 0) {
 /**
  * 同步血压数据
  */
-function commandSynDeviceBlood () {
+function commandSynDeviceBlood() {
   let hexString = "0xCB053102"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   baseTool.print("同步血压:" + hexString)
@@ -734,6 +806,7 @@ module.exports = {
   stopBluetoothDiscoveryFlow: stopBluetoothDiscoveryFlow,
   getDeviceConnectedState: getDeviceConnectedState,
   registerCallBackForKey: registerCallBackForKey,
+  wattingCallBackForKey: wattingCallBackForKey,
   removeCallBackForKey: removeCallBackForKey,
   commandDevicePower: commandDevicePower,
   commandDindDevice: commandDindDevice,

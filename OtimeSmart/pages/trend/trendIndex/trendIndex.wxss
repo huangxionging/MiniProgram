@@ -1,12 +1,12 @@
 /* pages/trend/trendIndex/trendIndex.wxss */
 .trend-container{
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 }
-
 .action-container{
   margin-top: 30rpx;
   width: 520rpx;
@@ -30,4 +30,30 @@
 .action-select{
   background-color: #08A5F6;
   border-radius: 30rpx;
+}
+.trend-content-view{
+  margin-top: 66rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.content-item{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.content-title{
+  background-color: #171719;
+  width: 100%;
+  height: 60rpx;
+  font-size: 30rpx;
+  color: white;
+  margin-left: 38rpx;
+  display: flex;
+  align-items: center;
+}
+
+.content-echart {
+  width: 100%;
+  height: 260rpx;
 }

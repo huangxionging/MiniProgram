@@ -14,22 +14,20 @@ class ChartOption {
         }
       },
       grid: {
-        // left: 10,
+        left: 5,
         bottom: 10,
+        top: 45,
+        right: 20,
         containLabel: true
       },
       tooltip: {
         show: true,
         trigger: 'axis',
         formatter: function (params) {
-          params = params[0];
-          baseTool.print(params)
+          params = params[0]
           let object = baseTool.getObjectForDate(params.name)
-          baseTool.print(params.name)
-          baseTool.print(object)
           let time = baseTool.zeroFormat(object.month + "") + "-" + baseTool.zeroFormat(object.day + "") + " " + baseTool.zeroFormat(object.hour + "") + ":" + baseTool.zeroFormat(object.minute + "")
-          baseTool.print(time)
-          return time + " 的收缩压: " + params.value[1];
+          return time + " 的收缩压: " + params.value[1]
         },
         axisPointer: {
           animation: false
@@ -38,8 +36,6 @@ class ChartOption {
       xAxis: {
         type: 'time',
         boundaryGap: false,
-        // data: ['0:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'],
-        // show: true
         splitLine: {
           show: true,
           lineStyle: {
@@ -60,7 +56,7 @@ class ChartOption {
         },
         axisLabel: {
           formatter: function (value) {
-            baseTool.print(value)
+            // baseTool.print(value)
             let date = new Date()
             date.setTime(value)
             let object = baseTool.getObjectForDate(date)
@@ -84,12 +80,15 @@ class ChartOption {
             color: "#999",
             type: "dotted"
           }
-        }
+        },
+        interval: 20
       },
       series: [{
         name: '血压收缩',
         type: 'line',
         smooth: true,
+        symbol: "circle",
+        symbolSize: 0,
         lineStyle: {
           color: "#e22222"
         },
@@ -107,38 +106,121 @@ class ChartOption {
         lineStyle: { normal: { opacity: 0 } }
       }]
     }
-    //   var option = {
-    //     dataset: {
-    //         source: [
-    //             ['score', 'amount', 'product'],
-    //             ['00:15:09', 197, "00:00"],
-    //             ['00:28:55', 122, '00:25'],
-    //             ['00:37:17', 146, 'Milk Tea'],
-    //             ['00:43:19', 175, 'Cheese Cocoa'],
-    //             ['00:54:21', 155, 'Cheese Brownie'],
-    //             ['01:01:25', 153, 'Matcha Cocoa'],
-    //             ['01:19:28', 153, 'Tea'],
-    //             ['01:21:22', 130, 'Orange Juice'],
-    //             ['01:31:53', 195, 'Lemon Juice'],
-    //             ['01:46:17', 154, 'Walnut Brownie']
-    //         ]
-    //     },
-    //     grid: {containLabel: true},
-    //     xAxis: {type: 'category'},
-    //     yAxis: {type: 'value'},
-    //     series: [
-    //         {
-    //             type: 'line',
-    //             smooth: true,
-    //             encode: {
-    //                 // Map the "amount" column to X axis.
-    //                 x: 'score',
-    //                 // Map the "product" column to Y axis
-    //                 y: 'amount'
-    //             }
-    //         }
-    //     ]
-    // };
+    return option
+  }
+  getStepOption(type = 1) {
+    let option = {
+      animation: false,
+      grid: {
+        left: 10,
+        right: 15,
+        top: 10,
+        bottom: 10,
+        containLabel: true
+      },
+      tooltip: {
+        show: true,
+        trigger: 'axis',
+        axisPointer: {
+          animation: false
+        },
+        /**
+         * 计算 tooltip 的微信
+         * @param {*} point 鼠标位置
+         * @param {*} params 参数
+         * @param {*} dom 
+         * @param {*} rect 
+         * @param {*} size 尺寸信息
+         */
+        position: function (point, params, dom, rect, size) {
+          // 获得坐标位置
+          let x = point[0], y = point[1]
+          // 获得尺寸宽高
+          let width = size.contentSize[0], height = size.contentSize[1]
+          // 获得 Chart canvas 的宽高
+          let maxWidth = size.viewSize[0], maxHeight = size.viewSize[1]
+          if (y + height >= maxHeight ) {
+            y = maxHeight - height
+          }
+          if (x - width / 2 > 0 && x + width / 2 < maxWidth) {
+            x = x - width / 2
+          } else if(x + width / 2 > maxWidth) {
+            x = maxWidth - width
+          }
+          // baseTool.print([x, y])
+          return [x, y]
+        }
+      },
+      xAxis: {
+        type: 'time',
+        boundaryGap: true,
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: 'dotted',
+            width: 0.5
+          }
+        },
+        axisLine: {
+          lineStyle: {
+            color: "#999",
+            type: "dotted"
+          }
+        },
+        axisTick: {
+          // alignWithLabel: true,
+          lineStyle: {
+            width: 2,
+            type: "dotted",
+            color: "#999"
+          }
+        },
+        axisLabel: {
+          show: false, // 此处不显示刻度
+          lineStyle: {
+            color: "#999"
+          }
+        },
+        // interval:  // 分割
+      },
+      yAxis: {
+        axisLabel: {
+          formatter: function(value) {
+            // baseTool.print(value)
+            return parseInt(value / 100)
+          }
+        },
+        type: 'value',
+        splitLine: {
+          lineStyle: {
+            type: 'dotted',
+            width: 0.5
+          }
+        },
+        // show: false,
+        axisLine: {
+          lineStyle: {
+            color: "#999",
+            type: "dotted"
+          }
+        }
+      },
+      series: [{
+        name: '步数',
+        type: 'line',
+        symbol: "circle", // 实心还是空心,
+        symbolSize: 6,
+        smooth: false,
+        lineStyle: {
+          width: 3,
+          color: "#008EFF"
+        },
+        data: [],
+        itemStyle: {
+          color: "#008EFF"
+        }
+      }]
+    }
     return option
   }
 }

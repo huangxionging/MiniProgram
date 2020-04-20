@@ -126,11 +126,19 @@ Page({
     })
     wx.showLoading({
       title: "心率检测中",
-      mask: true,
+      // mask: true,
     })
     let key = baseDeviceSynTool.commandSynDeviceRealHeartRate()
     baseDeviceSynTool.registerCallBackForKey(res => {
       baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        // baseTool.showToast("未获取到心率数据")
+        baseTool.showToast("检测失败")
+        wx.hideLoading()
+        return
+      }
       baseDeviceSynTool.removeCallBackForKey(key)
       let result = baseHexConvertTool.hexStringToValue(res.substr(6, 2))
       baseTool.print(result)
@@ -141,14 +149,15 @@ Page({
         wx.hideLoading()
       }
     }, key)
+    that.answerRealHeartRateData()
   },
   answerRealHeartRateData: function () {
     let that = this
     let key = baseDeviceSynTool.answerRealHeartRateKey()
-    baseTool.print(["22w", key])
-    baseDeviceSynTool.registerCallBackForKey(res => {
-      baseDeviceSynTool.answerRealHeartRate()
+    // 等待回调
+    baseDeviceSynTool.wattingCallBackForKey(res => {
       baseDeviceSynTool.removeCallBackForKey(key)
+      baseDeviceSynTool.answerRealHeartRate()
       baseTool.print(res)
       let bmp = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
       baseTool.print(bmp)
@@ -158,5 +167,6 @@ Page({
       })
       wx.hideLoading()
     }, key)
+
   }
 })
