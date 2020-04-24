@@ -7,7 +7,8 @@ const baseTool = require('../../../utils/baseTool.js')
 const baseNetLinkTool = require('../../../utils/baseNetLinkTool.js')
 // const baseNetLinkTool = require('../../utils/baseCloundNetLinkTool.js')
 const baseMessageHandler = require('../../../utils/baseMessageHandler.js')
-
+const baseDeviceSynTool = require('../../../utils/baseDeviceSynTool.js')
+const baseHexConvertTool = require('../../../utils/baseHexConvertTool.js')
 Page({
 
   /**
@@ -94,6 +95,9 @@ Page({
     }).then(res => {
       if (res.data.length == 0) {
         baseTool.showToast("该日期暂无无血压数据")
+        that.setData({
+          hasData: true
+        })
         return
       }
       
@@ -225,5 +229,66 @@ Page({
       chart.setOption(option)
       return chart;
     });
+  },
+  heartRateCheckClick: function() {
+    let that = this
+    let connectedDeviceState = baseDeviceSynTool.getDeviceConnectedState()
+    if (connectedDeviceState.code != 1002) {
+      baseTool.showToast("设备未连接, 无法测血压")
+      return
+    }
+    that.setData({
+      showHearRate: false
+    })
+    wx.showLoading({
+      title: "血压检测中",
+      // mask: true,
+    })
+    let key = baseDeviceSynTool.commandSynDeviceRealBlood()
+    baseDeviceSynTool.registerCallBackForKey(res => {
+      baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        // baseTool.showToast("未获取到心率数据")
+        baseTool.showToast("检测失败")
+        wx.hideLoading()
+        return
+      }
+      baseDeviceSynTool.removeCallBackForKey(key)
+      let result = baseHexConvertTool.hexStringToValue(res.substr(6, 2))
+      baseTool.print(result)
+      if (result == 2) {
+        that.answerRealBloodData()
+      } else {
+        baseTool.showToast("检测失败")
+        wx.hideLoading()
+      }
+    }, key)
+    that.answerRealBloodData()
+  },
+  answerRealBloodData: function () {
+    let that = this
+    let key = baseDeviceSynTool.answerRealBloodKey()
+    // 等待回调
+    baseDeviceSynTool.wattingCallBackForKey(res => {
+      baseDeviceSynTool.removeCallBackForKey(key)
+      baseDeviceSynTool.answerRealBlood()
+      baseTool.print(res)
+      let diastole = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+      let shrink = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+      let sectionDataArray = that.data.sectionDataArray
+      baseTool.print([shrink, diastole])
+      sectionDataArray[0].rowDataArray.push({
+        time: "上次测量结果",
+        shrink: shrink,
+        diastole: diastole
+      })
+      that.setData({
+        sectionDataArray: sectionDataArray
+      })
+      wx.hideLoading()
+    }, key)
+
   }
 })

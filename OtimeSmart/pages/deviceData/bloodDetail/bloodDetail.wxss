@@ -25,3 +25,29 @@
 .section-view{
   width: 100%;
 }
+.heart-rate-check {
+  position: fixed;
+  bottom: 0;
+  height: 140rpx;
+  width: 100%;
+  background-color: #171719;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rate-icon {
+  width: 68rpx;
+  height: 68rpx;
+}
+
+.heart-rate-check .tip {
+  color: white;
+  font-size: 24rpx;
+  margin-top: 5rpx;
+}
+
+.hover-heart-rate {
+  background-color: #eee;
+}

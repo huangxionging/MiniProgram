@@ -470,9 +470,13 @@ Page({
           if (that.temporaryData.pullDown == true) {
             that.temporaryData.synActionIndicator = 0
             that.startSynData()
+          } else {
+            that.synSettingTime()
           }
+
         }, 250);
 
+       
         break;
       }
       case 1003: {
@@ -511,6 +515,20 @@ Page({
       showDeviceToolBar: showDeviceToolBar,
       deviceConnectObject: deviceConnectObject
     })
+  },
+  synSettingTime: function() {
+    let that = this
+    let key = baseDeviceSynTool.commandSettingTime()
+    baseDeviceSynTool.registerCallBackForKey(res => {
+      baseTool.print(["同步时间成功", res])
+      baseDeviceSynTool.removeCallBackForKey(key)
+      if (res === "fail") {
+        baseTool.showToast("同步时间失败")
+      } else {
+        // 同步时间成功之后刷新
+        that.onPullDownRefresh()
+      }
+    }, key)
   },
   startSynData: function () {
     let that = this
@@ -1024,7 +1042,7 @@ Page({
       // 完整的时间
       let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "") + " " + baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "")
       let sleepSate = baseHexConvertTool.hexStringToValue(res.substr(26, 2))
-      let sleepSateText = (sleepSate == 1) ? 清醒 : (sleepSate == 2 ? "浅睡" : "深睡")
+      let sleepSateText = (sleepSate == 1) ? "清醒" : (sleepSate == 2 ? "浅睡" : "深睡")
       let text = "总数:" + totlalNumber + " 序号:" + serialNumber + " 时间:" + date + " 睡眠状态:" + sleepSateText + "(\"sleep\")"
       baseTool.print(["一条完整的数据1", text])
       let time = baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "") + ":00"
@@ -1083,7 +1101,7 @@ Page({
     }, key)
   },
   getSleepStateKeyByValue: function (sleepState = 1) {
-    switch (sleepSate) {
+    switch (sleepState) {
       case 1: {
         return "sober"
       }

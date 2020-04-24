@@ -11,4 +11,8 @@
 			</view>
 		</block>
 	</view>
+	<view class="heart-rate-check" hover-class="hover-heart-rate" bindtap="heartRateCheckClick">
+    <image class="rate-icon" src="/resource/heart_rate_check.png"></image>
+    <view class="tip">检测</view>
+  </view>
 </view>

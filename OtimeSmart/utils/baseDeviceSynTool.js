@@ -768,7 +768,7 @@ function commandReadSystemUnit() {
 function commandSynDeviceSleepTotalData(dayNumber = 0) {
   baseTool.print("同步总睡眠")
   let hexString = "0xCB0534" + baseHexConvertTool.valueToHexString(dayNumber + '')
-  let commandBuffer = baseHexConvertTool.hexStringToArrayBuffer(hexString)
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   baseTool.print(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "34"
@@ -781,7 +781,7 @@ function commandSynDeviceSleepTotalData(dayNumber = 0) {
 function commandSynDeviceSleepDetailData(dayNumber = 0) {
   baseTool.print("同步详细睡眠")
   let hexString = "0xCB0535" + baseHexConvertTool.valueToHexString(dayNumber + '')
-  let commandBuffer = baseHexConvertTool.hexStringToArrayBuffer(hexString)
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
   return "35"
 }
@@ -796,6 +796,24 @@ function commandSynDeviceBlood() {
   return "31"
 }
 
+function commandSynDeviceRealBlood() {
+  baseTool.print("同步实时血压")
+  let hexString = "0xCB052F02"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "2f"
+}
+
+function answerRealBloodKey() {
+  return "30"
+}
+
+function answerRealBlood() {
+  baseTool.print("回复血压")
+  let hexString = "0xCB063002"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+}
 
 module.exports = {
   deviceSynMessageType: deviceSynMessageType,
@@ -847,5 +865,8 @@ module.exports = {
   /**
    * 同步血压数据
    */
-  commandSynDeviceBlood: commandSynDeviceBlood
+  commandSynDeviceBlood: commandSynDeviceBlood,
+  commandSynDeviceRealBlood: commandSynDeviceRealBlood,
+  answerRealBloodKey: answerRealBloodKey,
+  answerRealBlood: answerRealBlood
 }

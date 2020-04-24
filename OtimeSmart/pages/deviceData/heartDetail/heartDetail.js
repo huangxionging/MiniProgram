@@ -9,6 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    hasData: false,
     lastHeartRate: "0",
     showHearRate: true,
     heartRateTip: "上次测量结果",
@@ -106,6 +107,7 @@ Page({
         }
       }
       that.setData({
+        hasData: true,
         lastHeartRate: lastHeartRate,
         sectionDataArray: sectionDataArray
       })
