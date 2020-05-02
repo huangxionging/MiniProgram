@@ -110,6 +110,7 @@ Page({
         lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
         baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
       } else {
+        baseTool.print([lastSynDeviceDataDate, currentDate])
         let offsetDay = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
         if (offsetDay > 6) {
           lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
@@ -541,17 +542,19 @@ Page({
         that.synDeviceStep()
         break
       }
-      case 2: {
-        // 同步心率数据
-        that.synHeartRate()
-      }
       // 同步睡眠数据
       case 1: {
         that.synDeviceSleep()
         break
       }
+      case 2: {
+        // 同步心率数据
+        that.synHeartRate()
+        break
+      }
       case 3: {
         that.synDeviceBlood()
+        break
       }
       default: {
         that.setData({
@@ -568,6 +571,7 @@ Page({
       baseTool.print(that.temporaryData)
     }
     let currentDate = baseTool.getCurrentDateWithoutTime()
+    baseTool.print([lastSynDeviceDataDate, currentDate])
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
     if (offsetDays > 6) {
       offsetDays = 6
@@ -582,7 +586,7 @@ Page({
   },
   synDeviceTotalStep() {
     let that = this
-    if (that.temporaryData.needSynDayIndicator == -1) {
+    if (that.temporaryData.needSynDayIndicator <= -1) {
       that.uploadStepData()
       return
     }
@@ -600,9 +604,9 @@ Page({
       if (res == "fail") {
         // 此时必须关闭
         // baseTool.showToast("步数获取超时")
-        that.temporaryData.needSynDayIndicator--
         // 
         setTimeout(() => {
+          that.temporaryData.needSynDayIndicator--
           that.synDeviceTotalStep()
         }, 250);
         return
@@ -615,8 +619,8 @@ Page({
       let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "")
       // 改天无数据
       if (step == 0) {
-        that.temporaryData.needSynDayIndicator--
         setTimeout(() => {
+          that.temporaryData.needSynDayIndicator--
           that.synDeviceTotalStep()
         }, 250);
       } else if (step > 0) {
@@ -654,8 +658,8 @@ Page({
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
         // baseTool.showToast("步数获取超时")
-        that.temporaryData.needSynDayIndicator--
         setTimeout(() => {
+          that.temporaryData.needSynDayIndicator--
           that.synDeviceTotalStep()
         }, 250);
         return
@@ -708,8 +712,14 @@ Page({
         dataDateObject.duration = timeArray.length * 60
         baseDeviceSynTool.removeCallBackForKey(key)
         // 继续同步下一个日期
-        that.temporaryData.needSynDayIndicator--
         setTimeout(() => {
+          that.temporaryData.needSynDayIndicator--
+          that.synDeviceTotalStep()
+        }, 250);
+      } else {
+        // 继续同步下一个日期
+        setTimeout(() => {
+          that.temporaryData.needSynDayIndicator--
           that.synDeviceTotalStep()
         }, 250);
       }
@@ -718,12 +728,9 @@ Page({
   uploadStepData: function () {
     let that = this
     if (that.temporaryData.dataDateObjectList.length == 0) {
-      that.setData({
-        isSynNow: false,
-      })
       baseTool.showToast("本次同步, 无计步数据")
-      that.temporaryData.synActionIndicator++
       setTimeout(() => {
+        that.temporaryData.synActionIndicator = 1
         that.startSynData()
       }, 250);
       return
@@ -743,22 +750,19 @@ Page({
       that.setData({
         deviceInfo: deviceInfo
       })
-      that.temporaryData.synActionIndicator++
       setTimeout(() => {
+        that.temporaryData.synActionIndicator = 1
         that.startSynData()
+        that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
-      that.getHomePage(baseTool.getCurrentDateWithoutTime())
-      // setTimeout(() => {
-      //   that.setData({
-      //     isSynNow: false
-      //   })
-      // }, 2000)
+      
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
-      that.setData({
-        isSynNow: false
-      })
+      setTimeout(() => {
+        that.temporaryData.synActionIndicator = 1
+        that.startSynData()
+      }, 250);
     })
   },
   selecDateClick: function (e) {
@@ -832,7 +836,7 @@ Page({
         // 此时必须关闭
         baseDeviceSynTool.removeCallBackForKey(key)
         // baseTool.showToast("未获取到心率数据")
-        that.temporaryData.synActionIndicator++
+        that.temporaryData.synActionIndicator = 3
         setTimeout(() => {
           that.startSynData()
         }, 250);
@@ -878,16 +882,17 @@ Page({
         baseDeviceSynTool.removeCallBackForKey(key)
         that.temporaryData.heartRateObjectList = baseTool.values(heartRateObjectContainer)
         that.uploadHeartRateData()
+      } else {
+        that.uploadHeartRateData()
       }
     }, key)
   },
   uploadHeartRateData: function () {
     let that = this
     if (that.temporaryData.heartRateObjectList.length == 0) {
-      that.setData({
-        isSynNow: false,
-      })
       baseTool.showToast("本次同步, 无心率数据")
+      that.temporaryData.synActionIndicator = 3
+      that.startSynData()
       return
     }
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
@@ -906,17 +911,13 @@ Page({
         deviceInfo: deviceInfo
       })
       that.getHomePage(baseTool.getCurrentDateWithoutTime())
-      setTimeout(() => {
-        that.setData({
-          isSynNow: false
-        })
-      }, 2000)
+      that.temporaryData.synActionIndicator = 3
+      that.startSynData()
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
-      that.setData({
-        isSynNow: false
-      })
+      that.temporaryData.synActionIndicator = 3
+      that.startSynData()
     })
   },
   didSelectRowAtIndexPath: function (e) {
@@ -949,6 +950,7 @@ Page({
     let that = this
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
     let currentDate = baseTool.getCurrentDateWithoutTime()
+    baseTool.print([lastSynDeviceDataDate, currentDate])
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
     that.temporaryData.needSynDayIndicator = offsetDays
     that.temporaryData.dataDateObjectList.length = 0
@@ -958,11 +960,11 @@ Page({
   },
   synDeviceTotalSleep: function () {
     let that = this
-    if (that.temporaryData.needSynDayIndicator == -1) {
+    if (that.temporaryData.needSynDayIndicator <= -1) {
       that.uploadSleepData()
       return
     }
-    let key = baseDeviceSynTool.commandSynDeviceSleepTotalData()
+    let key = baseDeviceSynTool.commandSynDeviceSleepTotalData(that.temporaryData.needSynDayIndicator)
     let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     deviceInfo.stateText = "同步 " + date + " 的睡眠数据"
@@ -1098,6 +1100,11 @@ Page({
           setTimeout(() => {
             that.synDeviceTotalSleep()
           }, 250);
+        } else {
+          that.temporaryData.needSynDayIndicator--
+          setTimeout(() => {
+            that.synDeviceTotalSleep()
+          }, 250);
         }
       }
     }, key)
@@ -1122,12 +1129,9 @@ Page({
     baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
     that.temporaryData.lastSynDeviceDataDate = lastSynDeviceDataDate
     if (that.temporaryData.dataDateObjectList.length == 0) {
-      that.setData({
-        isSynNow: false,
-      })
-      baseTool.showToast("本次同步, 无数据")
-      that.temporaryData.synActionIndicator++
+      baseTool.showToast("本次同步, 无数睡眠据")
       setTimeout(() => {
+        that.temporaryData.synActionIndicator = 2
         that.startSynData()
       }, 250);
       return
@@ -1147,23 +1151,18 @@ Page({
       that.setData({
         deviceInfo: deviceInfo
       })
-      that.temporaryData.synActionIndicator++
       setTimeout(() => {
+        that.temporaryData.synActionIndicator = 2
         that.startSynData()
+        that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
-      that.getHomePage(baseTool.getCurrentDateWithoutTime())
-      // that.syn
-      // setTimeout(() => {
-      //   that.setData({
-      //     isSynNow: false
-      //   })
-      // }, 2000)
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
-      that.setData({
-        isSynNow: false
-      })
+      setTimeout(() => {
+        that.temporaryData.synActionIndicator = 2
+        that.startSynData()
+      }, 250);
     })
   },
   synDeviceBlood: function () {
