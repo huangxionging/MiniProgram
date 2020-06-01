@@ -1,9 +1,5 @@
 /* pages/home/homeIndex.wxss */
 
-page {
-  width: 100%;
-  background-color: #101016
-}
 
 .home-container {
   width: 100%;

@@ -98,19 +98,27 @@ Page({
     if (deviceInfo.deviceName != undefined) {
       sectionDataArray[0].rowDataArray[0].title = deviceInfo.deviceName
     }
-    if (baseTool.valueForKey("sedentaryReminder") != undefined){
-      sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
-      sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+    let sedentaryReminder = baseTool.valueForKey("sedentaryReminder")
+    if (baseTool.isValid(sedentaryReminder) === true){
+      sectionDataArray[2].rowDataArray[0].detail = sedentaryReminder + " 分钟"
+      sectionDataArray[2].rowDataArray[0].value = parseInt(sedentaryReminder) - 10
     } else {
       that.readSedentaryReminder()
+      sectionDataArray[2].rowDataArray[0].value = 0
     }
-
-    if (baseTool.valueForKey("synSystemUnit") != undefined) {
-      let synSystemUnit = baseTool.valueForKey("synSystemUnit")
-      sectionDataArray[3].rowDataArray[0].detail = (synSystemUnit == 1) ? "英制": "公制"
-      sectionDataArray[3].rowDataArray[0].value = synSystemUnit
+    let synSystemUnit = parseInt(baseTool.valueForKey("synSystemUnit"))
+    if (baseTool.isValid(synSystemUnit) === true) {
+      sectionDataArray[3].rowDataArray[1].detail = (synSystemUnit == 1) ? "英制": "公制"
+      sectionDataArray[3].rowDataArray[1].value = synSystemUnit
     } else {
       that.readSynSystemUnit()
+    }
+
+    let token = baseTool.valueForKey("token")
+    let heartIntervalTimeKey = "heartIntervalTime" + token
+    let heartIntervalTime = baseTool.valueForKey(heartIntervalTimeKey)
+    if (baseTool.isValid(heartIntervalTime) === true) {
+      sectionDataArray[2].rowDataArray[1].detail = heartIntervalTime + "分钟"
     }
     that.setData({
       sectionDataArray: sectionDataArray
@@ -141,11 +149,13 @@ Page({
           case 0: {
             break;
           }
-          // case 1: {
-          //   // baseDeviceSynTool.commandSettingTime()
-          //   break
-          // }
           case 1: {
+            wx.navigateTo({
+              url: url
+            })
+            break
+          }
+          case 2: {
             wx.showLoading({
               title: "查找设备中...",
               mask: true
@@ -177,18 +187,12 @@ Page({
       }
       case 3: {
         switch (row) {
-          case 0: {
-            break
-          }
-          case 1: {
+          case 0: 
+          case 2: {
             baseTool.print(url)
             wx.navigateTo({
               url: url
             })
-            break
-          }
-          case 2: {
-            
             break
           }
         } 
@@ -235,12 +239,12 @@ Page({
     let that = this
     let section = e.currentTarget.dataset.section
     let row = e.currentTarget.dataset.row
-    let value = e.detail.value
+    let value = parseInt(e.detail.value) + 10
     switch(section) {
       case 2: {
         switch(row) {
           case 0: {
-            that.setSedentaryReminder(value)
+            that.setSedentaryReminderAction(value)
             break
           }
         }
@@ -257,22 +261,57 @@ Page({
       }
     }
   },
+  setSedentaryReminderAction: function(value) {
+    let that = this
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    if(state.code != 1002) {
+      baseTool.showToast("蓝牙打开失败")
+    } else {
+      let key = baseDeviceSynTool.commandSetSedentaryReminderAction()
+      baseDeviceSynTool.registerCallBackForKey((res => {
+        baseDeviceSynTool.removeCallBackForKey(key)
+        if (res == "fail") {
+          // 此时必须关闭 
+          baseTool.showToast("设置久坐提醒超时")
+          return
+        }
+        if (res.length < 10) {                                  
+          return
+        }
+        let type = parseInt(res.substr(6, 2))
+        let result = parseInt(res.substr(8, 2))
+        baseTool.print(result)
+        if (type == 1 && result == 1) {
+          // 开关打开成功
+          baseTool.print(["打开开关成功", value])
+          that.setSedentaryReminder(value)
+        } else {
+          baseTool.showToast("设置失败")
+        }
+        
+      }), key)
+    }
+  },
   setSedentaryReminder: function(e) {
-    baseTool.print([e, "订单订单"])
     let that = this
     wx.showLoading({
       title: "设置久坐提醒...",
-      mask: true
+      mask: false
     })
-    let index = e
+    let index = parseInt(e)
     let state = baseDeviceSynTool.getDeviceConnectedState()
     if(state.code != 1002) {
       baseTool.showToast("蓝牙打开失败")
     } else {
       let key = baseDeviceSynTool.commandSetSedentaryReminder(index)
       baseDeviceSynTool.registerCallBackForKey((res => {
-        baseTool.print(["通知信息", res])
         baseDeviceSynTool.removeCallBackForKey(key)
+        if (res == "fail") {
+          // 此时必须关闭
+          baseTool.showToast("设置久坐提醒超时")
+          return
+        }
+        baseTool.print(["通知信息", res])
         if (res.length < 10) {                                  
           return
         }
@@ -284,8 +323,8 @@ Page({
           baseTool.setValueForKey(index, "sedentaryReminder")
           if (baseTool.valueForKey("sedentaryReminder") != undefined){
             let sectionDataArray = that.data.sectionDataArray
-            sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
-            sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+            sectionDataArray[2].rowDataArray[0].detail = index + " 分钟"
+            sectionDataArray[2].rowDataArray[0].value = index - 10
             that.setData({
               sectionDataArray: sectionDataArray
             })
@@ -314,10 +353,11 @@ Page({
         baseTool.print(result)
         if (type == 0) {
           baseTool.setValueForKey(result, "sedentaryReminder")
-          if (baseTool.valueForKey("sedentaryReminder") != undefined){
+          let sedentaryReminder = baseTool.valueForKey("sedentaryReminder")
+          if (baseTool.isValid(sedentaryReminder) === true){
             let sectionDataArray = that.data.sectionDataArray
-            sectionDataArray[2].rowDataArray[0].detail = baseTool.valueForKey("sedentaryReminder") + " 分钟"
-            sectionDataArray[2].rowDataArray[0].value = baseTool.valueForKey("sedentaryReminder")
+            sectionDataArray[2].rowDataArray[0].detail = sedentaryReminder + " 分钟"
+            sectionDataArray[2].rowDataArray[0].value = parseInt(sedentaryReminder) - 10
             that.setData({
               sectionDataArray: sectionDataArray
             })
@@ -387,8 +427,8 @@ Page({
           baseTool.setValueForKey(result, "synSystemUnit")
           if (baseTool.valueForKey("synSystemUnit") != undefined){
             let sectionDataArray = that.data.sectionDataArray
-            sectionDataArray[3].rowDataArray[0].detail = (result == 1) ? "英制" : "公制" 
-            sectionDataArray[3].rowDataArray[0].value = result
+            sectionDataArray[3].rowDataArray[1].detail = (result == 1) ? "英制" : "公制" 
+            sectionDataArray[3].rowDataArray[1].value = result
             that.setData({
               sectionDataArray: sectionDataArray
             })

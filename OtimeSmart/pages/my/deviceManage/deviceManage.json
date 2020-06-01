@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "showModalView": "/components/showModalView/showModalView"
+  },
   "navigationBarTitleText": "设备管理"
 }

@@ -17,7 +17,7 @@
       <view class='section-view' style='margin-top:{{sectionObject.headerHeight}}rpx;'>
         <block wx:for-items='{{sectionObject.rowDataArray}}' wx:key='row' wx:for-item='rowObject' wx:for-index='rowndex'>
           <myIndexItemCell wx:if="{{rowObject.showPiker==0}}" data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
-          <picker wx:else mode="{{rowObject.type}}"  range="{{rowObject.itemList}}" value='{{rowObject.value}}' bindchange='indexSelectClick' data-row='{{rowndex}}' data-section='{{sectionIndex}}'>
+          <picker wx:else mode="{{rowObject.type}}" header-text="{{rowObject.header}}"  range="{{rowObject.itemList}}" value='{{rowObject.value}}' bindchange='indexSelectClick' data-row='{{rowndex}}' data-section='{{sectionIndex}}'>
             <myIndexItemCell data='{{rowObject}}' data-row='{{rowndex}}' data-section='{{sectionIndex}}' bind:didSelectRow='didSelectRow' />
           </picker>
         </block>

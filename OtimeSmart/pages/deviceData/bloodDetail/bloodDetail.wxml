@@ -16,3 +16,4 @@
     <view class="tip">检测</view>
   </view>
 </view>
+<showModalView wx:if="{{showModal}}" data="{{showModalData}}"/>

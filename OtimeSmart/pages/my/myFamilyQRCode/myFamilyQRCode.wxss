@@ -21,7 +21,7 @@
   margin-top: 100rpx;
   width: 400rpx;
   height: 80rpx;
-  background-color: #6B92FB;
+  background-color: #08A5F6;
   border-radius: 40rpx;
   display: flex;
   justify-content: center;

@@ -20,7 +20,9 @@ Page({
       lazyLoad: true
     },
     date: "",
-    sectionDataArray: []
+    sectionDataArray: [{
+      rowDataArray: []
+    }]
   },
   chartOption: undefined,
 
@@ -100,7 +102,7 @@ Page({
         })
         return
       }
-      
+
       let minShrik = 0
       let maxShrik = 0
       let minDiastole = 0
@@ -230,7 +232,7 @@ Page({
       return chart;
     });
   },
-  heartRateCheckClick: function() {
+  heartRateCheckClick: function () {
     let that = this
     let connectedDeviceState = baseDeviceSynTool.getDeviceConnectedState()
     if (connectedDeviceState.code != 1002) {
@@ -275,8 +277,8 @@ Page({
       baseDeviceSynTool.removeCallBackForKey(key)
       baseDeviceSynTool.answerRealBlood()
       baseTool.print(res)
-      let diastole = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
-      let shrink = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+      let shrink = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+      let diastole= baseHexConvertTool.hexStringToValue(res.substr(10, 2))
       let sectionDataArray = that.data.sectionDataArray
       baseTool.print([shrink, diastole])
       sectionDataArray[0].rowDataArray.push({
@@ -288,7 +290,47 @@ Page({
         sectionDataArray: sectionDataArray
       })
       wx.hideLoading()
-    }, key)
 
+      let token = baseTool.valueForKey("token")
+      let shrinkAlarmValueKey = "shrinkAlarmValue" + token
+      let shrinkAlarmValue = baseTool.valueForKey(shrinkAlarmValueKey)
+      if (baseTool.isValid(shrinkAlarmValue) === false) {
+        shrinkAlarmValue = 0
+      }
+      shrinkAlarmValue = parseInt(shrinkAlarmValue)
+      let diastoleAlarmValueKey = "diastoleAlarmValue" + token
+      let diastoleAlarmValue = baseTool.valueForKey(diastoleAlarmValueKey)
+      if (baseTool.isValid(diastoleAlarmValue) === false) {
+        diastoleAlarmValue = 0
+      }
+      diastoleAlarmValue = parseInt(diastoleAlarmValue)
+      let bloodCheckSwitchKey = "bloodCheckSwitch" + token
+      let bloodCheckSwitch = baseTool.valueForKey(bloodCheckSwitchKey)
+      if (baseTool.isValid(bloodCheckSwitch) === false) {
+        bloodCheckSwitch = false
+      }
+      baseTool.print([bloodCheckSwitch, shrinkAlarmValue, diastoleAlarmValue, shrink, diastole])
+      if (bloodCheckSwitch === true) {
+        if (shrink >= shrinkAlarmValue || diastole >= diastoleAlarmValue) {
+          that.showAlarm()
+        }
+      }
+    }, key)
+  },
+  showAlarm: function () {
+    let that = this
+    that.setData({
+      showModal: true,
+      showModalData: {
+        confirmText: "知道了",
+        title: "血压超高！",
+        backgroundColor: "#171719",
+        success: (result) => {
+          that.setData({
+            showModal: false
+          })
+        }
+      }
+    })
   }
 })

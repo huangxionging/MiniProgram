@@ -15,7 +15,10 @@
     "pages/deviceData/sleepDetail/sleepDetail",
     "pages/deviceData/bloodDetail/bloodDetail",
     "pages/my/mockData/mockData",
-    "pages/trend/trendIndex/trendIndex"
+    "pages/trend/trendIndex/trendIndex",
+    "pages/my/mininProgramInfomation/mininProgramInfomation",
+    "pages/my/myAbout/myAbout",
+    "pages/my/myHeartAndBloodAlarmSystem/myHeartAndBloodAlarmSystem"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -27,7 +30,7 @@
   "sitemapLocation": "sitemap.json",
   "tabBar": {
     "backgroundColor": "#010101",
-    "selectedColor": "#6B92FB",
+    "selectedColor": "#08A5F6",
     "color": "#ccc",
     "list": [
       {

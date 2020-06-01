@@ -189,17 +189,17 @@ class HomeAdapter {
         minute: sober,
         quality: "sober"
       })
-      totalDeep += shallow - deep
-      totalShallow += sober - shallow
+      totalShallow += shallow - deep
+      totalSober += sober - shallow
       baseTool.print([index, startIndex, startIndex + endIndex])
       if ((index > startIndex) && (index < startIndex + endIndex)) {
-        totalSober += 60 - lastSober + deep 
+        totalDeep += 60 - lastSober + deep 
         baseTool.print([totalSober, lastSober, deep])
       } 
       lastSober = sober
     }
     // baseTool.print(data)
-    total = totalDeep + totalShallow + totalSober
+    total = totalDeep + totalShallow
     let dateObject = {
       date: date,
       time: baseTool.zeroFormat(startHour + "") + ":"+ baseTool.zeroFormat(startMinute + ""),

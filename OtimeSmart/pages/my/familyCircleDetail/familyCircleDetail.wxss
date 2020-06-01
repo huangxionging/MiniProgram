@@ -37,7 +37,7 @@
 .action{
   width: 160rpx;
   height: 52rpx;
-  background-color: #6B92FB;
+  background-color: #08A5F6;
   border-radius: 26rpx;
   color: white;
   display: flex;
@@ -64,7 +64,7 @@
 .manager-tip{
   margin-right: 36rpx;
   font-size: 24rpx;
-  color: #6B92FB;
+  color: #08A5F6;
 }
 .manager-action{
   display: flex;

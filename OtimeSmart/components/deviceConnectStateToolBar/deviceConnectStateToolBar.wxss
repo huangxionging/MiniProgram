@@ -32,7 +32,7 @@
   color: white;
   justify-content: center;
   align-items: center;
-  background-color: #6b92fb;
+  background-color: #08A5F6;
 }
 
 .device-state{

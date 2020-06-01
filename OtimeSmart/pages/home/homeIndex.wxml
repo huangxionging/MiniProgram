@@ -45,3 +45,4 @@
   </view>
 </view>
 <deviceSyncToolView wx:if='{{isSynNow}}' data='{{deviceInfo}}' />
+<showModalView wx:if="{{showModal}}" data="{{showModalData}}"/>

@@ -275,7 +275,9 @@ function getDateOffsetDate(firstDate, offset = 0) {
  */
 function getDateByDateString(dateString = String || Date) {
   let date = undefined
+  print(typeof(dateString))
   if (dateString === undefined || dateString === "") {
+    
     print("日期为空")
     return
   }
@@ -741,7 +743,7 @@ function showToast(message = '', icon = 'none', mask = true, duration = 2000) {
  * 是否合法
  */
 function isValid(e) {
-    if (e == '' || e == null || e == undefined) {
+    if (e === '' || e === null || e === undefined) {
       return false
     } else {
       return true

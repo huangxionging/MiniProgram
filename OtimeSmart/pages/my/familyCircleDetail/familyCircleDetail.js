@@ -21,7 +21,7 @@ Page({
   onLoad: function (options) {
     let that = this
     baseTool.print(options)
-    if(options.familyId) {
+    if (options.familyId) {
       that.data.familyId = options.familyId
     }
   },
@@ -75,7 +75,7 @@ Page({
   onShareAppMessage: function () {
 
   },
-  loadData:function() {
+  loadData: function () {
     let that = this
     baseNetLinkTool.getRemoteDataFromServer("group_get_member", "新建家庭圈", {
       id: that.data.familyId
@@ -101,19 +101,19 @@ Page({
       baseNetLinkTool.showNetWorkingError(res)
     })
   },
-  actionClick: function(e) {
+  actionClick: function (e) {
     baseTool.print(e)
     let that = this
     let action = parseInt(e.currentTarget.dataset.action)
-    switch(action) {
+    switch (action) {
       case 0: {
         wx.scanCode({
           onlyFromCamera: false,
           scanType: ["qrCode"],
-          success: function(res) {
+          success: function (res) {
             baseTool.print(res.result)
             let url = "xx?" + res.result
-            let paramter =  baseTool.getParameterFromURL(url)
+            let paramter = baseTool.getParameterFromURL(url)
             let code1 = paramter.code1, code2 = paramter.code2, code3 = paramter.code3, code4 = paramter.code4
             let scanValid = true
             if (code1 == undefined || code2 == undefined || code3 == undefined || code4 == undefined) {
@@ -135,10 +135,10 @@ Page({
               baseTool.showToast("无法识别!")
             }
           },
-          fail: function(res) {
+          fail: function (res) {
             baseTool.showToast("扫码失败")
           },
-          complete: function(res) {},
+          complete: function (res) { },
         })
         break;
       }
@@ -151,7 +151,7 @@ Page({
       }
     }
   },
-  addFamilyMember: function(uid) {
+  addFamilyMember: function (uid) {
     let that = this
     wx.showLoading({
       title: "添加中...",
@@ -170,7 +170,7 @@ Page({
       baseNetLinkTool.showNetWorkingError(res)
     })
   },
-  deleteRow: function(e) {
+  deleteRow: function (e) {
     baseTool.print(e)
     let uid = e.detail.uid
     wx.showLoading({
@@ -191,26 +191,83 @@ Page({
       baseNetLinkTool.showNetWorkingError(res)
     })
   },
-  disbandFamily: function() {
-    wx.showLoading({
-      title: "解散中...",
-      mask: true,
-    })
+  disbandFamily: function () {
+
     let that = this
-    baseNetLinkTool.getRemoteDataFromServer("group_cancel", "解散家庭圈", {
-      id: that.data.familyId,
-    }).then(res => {
-      wx.hideLoading()
-      baseTool.showToast("解散成功")
-      baseMessageHandler.sendMessage("refresh", "刷新")
-      wx.navigateBack()
-      wx.navigateBack({
-        delta: 1,
-      })
-    }).catch(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      baseNetLinkTool.showNetWorkingError(res)
+    that.setData({
+      showModal: true,
+      showModalData: {
+        showCancel: true,
+        cancelText: "取消",
+        confirmText: "确定",
+        title: "是否接解散家庭圈？",
+        backgroundColor: "#171719",
+        success: (result) => {
+          baseTool.print(result)
+          that.setData({
+            showModal: false
+          })
+          if (result.confirm == true) {
+            baseTool.print(result)
+            wx.showLoading({
+              title: "解散中...",
+              mask: true,
+            })
+            let that = this
+            baseNetLinkTool.getRemoteDataFromServer("group_cancel", "解散家庭圈", {
+              id: that.data.familyId,
+            }).then(res => {
+              wx.hideLoading()
+              baseTool.showToast("解散成功")
+              baseMessageHandler.sendMessage("refresh", "刷新")
+              wx.navigateBack()
+              wx.navigateBack({
+                delta: 1,
+              })
+            }).catch(res => {
+              baseTool.print(res)
+              wx.hideLoading()
+              baseNetLinkTool.showNetWorkingError(res)
+            })
+          }
+
+        }
+      }
     })
+
+    // wx.showModal({
+    //   cancelColor: '#666666',
+    //   cancelText: '取消',
+    //   confirmColor: '#2283E2',
+    //   confirmText: '确定',
+    //   content: '是否接解散家庭圈？',
+    //   showCancel: true,
+    //   success: (result) => {
+    //     if (result.confirm == true) {
+    //       wx.showLoading({
+    //         title: "解散中...",
+    //         mask: true,
+    //       })
+    //       let that = this
+    //       baseNetLinkTool.getRemoteDataFromServer("group_cancel", "解散家庭圈", {
+    //         id: that.data.familyId,
+    //       }).then(res => {
+    //         wx.hideLoading()
+    //         baseTool.showToast("解散成功")
+    //         baseMessageHandler.sendMessage("refresh", "刷新")
+    //         wx.navigateBack()
+    //         wx.navigateBack({
+    //           delta: 1,
+    //         })
+    //       }).catch(res => {
+    //         baseTool.print(res)
+    //         wx.hideLoading()
+    //         baseNetLinkTool.showNetWorkingError(res)
+    //       })
+    //     }
+    //   },
+    //   title: '提示:',
+    // })
+
   }
 })

@@ -1,0 +1,13 @@
+<!--components/showModalView/showModalView.wxml-->
+<view class="show-modal-container">
+    <view class="mask"></view>
+    <view class="show-modal-content" style="background-color:{{data.backgroundColor}}">
+      <view class="show-modal-title" style="color:{{data.titleColor}}" >{{data.title}}</view>
+      <view class="show-modal-line"/>
+      <view class="show-modal-action">
+        <view class="action1" wx:if="{{data.showCancel}}" hover-class="hover-action" bindtap="cancelClick">{{data.cancelText}}</view>
+        <view class="action-line" wx:if="{{data.showCancel}}"/>
+        <view class="action2"  hover-class="hover-action" bindtap="confirmClick">{{data.confirmText}}</view>
+      </view>
+    </view>
+</view>

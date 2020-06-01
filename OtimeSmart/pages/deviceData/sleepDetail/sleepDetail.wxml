@@ -23,7 +23,7 @@
 		<view class="action-container">
 			<view class="action-view">
 				<block wx:for-items="{{actionDataArray}}" wx:key="id" wx:for-item="actionObject" wx:for-index="actionIndex">
-					<view class="action-item" style="width:{{actionObject.width}}rpx;background-color:{{actionObject.color}}"></view>
+					<view class="action-item" style="width:{{actionObject.width}}px;background-color:{{actionObject.color}}"></view>
 				</block>
 			</view>
 			<view class="action-indicator">

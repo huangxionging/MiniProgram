@@ -470,10 +470,14 @@ function deviceCharacteristicValueChange() {
     let values = new Uint8Array(res.value)
     let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
     let key = hex.substr(4, 2)
+    if (callBackObject[key] == undefined) {
+      return
+    }
     baseTool.print([hex, key, "显示回调信息", callBackObject])
     let callBack = callBackObject[key].callBack
     let deviceStopTimer = callBackObject[key].deviceStopTimer
     let deviceTimer = callBackObject[key].deviceTimer
+    
     if (deviceStopTimer == undefined && deviceTimer == undefined) {
       if (callBack !== undefined) {
         callBack(hex)
@@ -605,10 +609,11 @@ function registerCallBackForKey(callBack = Function, key = '') {
 }
 
 function removeCallBackForKey(key = '') {
-  baseTool.print(["删除: " + key + " 定时器:" + callBackObject[key].deviceTimer])
-  if (key == '') {
+  
+  if (key == '' || callBackObject[key] === undefined) {
     return
   }
+  baseTool.print(["删除: " + key + " 结果" + callBackObject[key]])
   delete callBackObject[key]
 }
 
@@ -719,6 +724,14 @@ function answerRealHeartRate() {
   writeValue(deviceObject.deviceId, commandBuffer)
 }
 
+
+function commandSetSedentaryReminderAction() {
+  let hexString = "0xCB072801ff02"
+  let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
+  writeValue(deviceObject.deviceId, commandBuffer)
+  return "28"
+}
+
 /**
  * 设置久坐提醒
  * @param {*} timeInteveral  时间间隔, 单位为分钟
@@ -808,9 +821,13 @@ function answerRealBloodKey() {
   return "30"
 }
 
+function wattingRealTimeStepKey() {
+  return  "32"
+}
+
 function answerRealBlood() {
   baseTool.print("回复血压")
-  let hexString = "0xCB063002"
+  let hexString = "0xCB06300201"
   let commandBuffer = baseHexConvertTool.hexStringToCommandBuffer(hexString)
   writeValue(deviceObject.deviceId, commandBuffer)
 }
@@ -838,6 +855,7 @@ module.exports = {
   commandSynDeviceRealHeartRate: commandSynDeviceRealHeartRate,
   answerRealHeartRateKey: answerRealHeartRateKey,
   answerRealHeartRate: answerRealHeartRate,
+  commandSetSedentaryReminderAction: commandSetSedentaryReminderAction, // 久坐提醒开关
   /**
    * 设置久坐提醒
    */
@@ -868,5 +886,6 @@ module.exports = {
   commandSynDeviceBlood: commandSynDeviceBlood,
   commandSynDeviceRealBlood: commandSynDeviceRealBlood,
   answerRealBloodKey: answerRealBloodKey,
-  answerRealBlood: answerRealBlood
+  answerRealBlood: answerRealBlood,
+  wattingRealTimeStepKey: wattingRealTimeStepKey
 }

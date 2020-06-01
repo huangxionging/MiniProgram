@@ -1,0 +1,4 @@
+<!--pages/my/mininProgramInfomation/mininProgramInfomation.wxml-->
+<view class="infomation-container">
+  <view>版本号: 2.1.1</view>
+</view>

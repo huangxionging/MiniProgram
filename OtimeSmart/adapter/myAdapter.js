@@ -2,95 +2,104 @@ const baseTool = require('../utils/baseTool.js')
 
 function myIndexSectionDataArray() {
   let timeItemList = []
-  for (let timeIndex = 0; timeIndex <= 120; ++timeIndex) {
+  for (let timeIndex = 10; timeIndex <= 120; ++timeIndex) {
     timeItemList.push(timeIndex + " 分钟")
   }
   return [{
-      headerHeight: 20,
-      rowDataArray: [{
+    headerHeight: 20,
+    rowDataArray: [{
+      id: 0,
+      section: 0,
+      icon: 'my_device.png',
+      title: '请绑定设备',
+      url: '/pages/my/deviceManage/deviceManage',
+      showPiker: false
+    }]
+  },
+  {
+    headerHeight: 20,
+    rowDataArray: [{
+      id: 0,
+      section: 0,
+      icon: 'my_moment.png',
+      title: '家庭圈管理',
+      url: '/pages/my/familyCircleManage/familyCircleManage',
+      showPiker: false
+    }]
+  },
+  {
+    headerHeight: 20,
+    rowDataArray: [
+      {
         id: 0,
         section: 0,
-        icon: 'my_device.png',
-        title: '请绑定设备',
-        url: '/pages/my/deviceManage/deviceManage',
+        icon: 'my_sedentary_reminder.png',
+        title: '久坐提醒',
+        header: "久坐提醒",
+        detail: '未设置',
+        url: '../brushContestList/brushContestList',
+        type: "selector",
+        showPiker: true,
+        itemList: timeItemList
+      },
+      {
+        id: 1,
+        section: 0,
+        icon: 'my_heart_blood.png',
+        title: '心率与血压设置',
+        detail: '未设置',
+        url: '../myHeartAndBloodAlarmSystem/myHeartAndBloodAlarmSystem',
         showPiker: false
-      }]
-    },
-    {
-      headerHeight: 20,
-      rowDataArray: [{
+      },
+      {
+        id: 2,
+        section: 0,
+        icon: 'my_find_device.png',
+        title: '查找设备',
+        showPiker: false
+      }
+    ]
+  },
+  {
+    headerHeight: 20,
+    rowDataArray: [
+      {
         id: 0,
         section: 0,
-        icon: 'my_moment.png',
-        title: '家庭圈管理',
-        url: '/pages/my/familyCircleManage/familyCircleManage',
+        icon: 'my_message.png',
+        title: '版本',
+        url: '../mininProgramInfomation/mininProgramInfomation',
         showPiker: false
-      }]
-    },
-    {
-      headerHeight: 20,
-      rowDataArray: [
-        {
-          id: 0,
-          section: 0,
-          icon: 'my_sedentary_reminder.png',
-          title: '久坐提醒',
-          detail: '未设置',
-          url: '../brushContestList/brushContestList',
-          type: "selector",
-          showPiker: true,
-          itemList: timeItemList
-        },
-        // {
-        //   id: 1,
-        //   section: 0,
-        //   icon: 'my_heart_blood.png',
-        //   title: '心率与血压设置',
-        //  detail: '未设置',
-        //   url: '../brushContestList/brushContestList',
-        //   showPiker: false
-        // },
-        {
-          id: 2,
-          section: 0,
-          icon: 'my_find_device.png',
-          title: '查找设备',
-          showPiker: false
-        }
-      ]
-    },
-    { 
-      headerHeight: 20,
-      rowDataArray: [
-        // {
-        //   // id: 0,
-        //   // section: 0,
-        //   // icon: 'my_message.png',
-        //   // title: '信息',
-        //   // url: '../brushContestList/brushContestList',
-        //   // showPiker: false
-        // },
-        {
-          id: 1,
-          section: 0,
-          icon: 'my_unit.png',
-          title: '计量单位',
-          detail: '未设置',
-          url: '../brushContestList/brushContestList',
-          showPiker: true,
-          type: "selector",
-          itemList: ["公制", "英制"]
-        },
-        {
-          id: 2,
-          section: 0,
-          icon: 'my_about.png',
-          title: '模拟数据',
-          url: '/pages/my/mockData/mockData',
-          showPiker: false
-        }
-      ]
-    }
+      },
+      {
+        id: 1,
+        section: 0,
+        icon: 'my_unit.png',
+        title: '计量单位',
+        detail: '未设置',
+        url: '../brushContestList/brushContestList',
+        showPiker: true,
+        type: "selector",
+        itemList: ["公制", "英制"]
+      },
+      {
+        id: 2,
+        section: 0,
+        icon: 'my_about.png',
+        title: '关于',
+        url: '/pages/my/myAbout/myAbout',
+        showPiker: false
+      },
+      // {
+      //   id: 2,
+      //   section: 0,
+      //   icon: 'my_about.png',
+      //   title: '模拟数据',
+      //   url: '/pages/my/mockData/mockData',
+      //   showPiker: false
+      // }
+    ]
+  }
   ]
 }
 

@@ -52,7 +52,9 @@ Page({
     currentHeight: 0,
     currentWeight: 0,
     homeAdapter: new HomeAdapter(),
-    lastSynDeviceDataDate: ""
+    lastSynDeviceDataDate: "",
+    toDayTotalStep: "",
+    toDayTotalSleep: ""
   },
 
   /**
@@ -62,7 +64,8 @@ Page({
     let that = this
     that.temporaryData.bloodObjectList.length = 0
     that.registerDeviceSynMessageBlock()
-
+    that.registerHeartRateCheckMessageBlock()
+    // that.showAlarm()
   },
 
   /**
@@ -84,6 +87,21 @@ Page({
     that.temporaryData.currentAge = userInfo.birthday
     that.temporaryData.currentHeight = userInfo.height
     that.temporaryData.currentWeight = userInfo.weight
+    /**
+     * 设置最后同步日期
+     */
+    let lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate")
+    if (baseTool.isValid(lastSynDeviceDataDate) == false) {
+      lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+      baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
+    } else {
+      let offsetDay = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
+      if (offsetDay > 6) {
+        lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+        baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
+      }
+    }
+    that.temporaryData.lastSynDeviceDataDate = lastSynDeviceDataDate
     if (deviceInfo == "") {
       deviceConnectObject.stateText = "暂无设备"
       deviceConnectObject.stateColor = "red"
@@ -101,23 +119,6 @@ Page({
         actionDataArray: actionDataArray
       })
       that.connectDevice()
-      let lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate")
-      if (lastSynDeviceDataDate == undefined) {
-        lastSynDeviceDataDate = ""
-      }
-      baseTool.print({"title": "最后同步的日期", "lastSynDate": lastSynDeviceDataDate, "currentDate": currentDate})
-      if (baseTool.isValid(lastSynDeviceDataDate) == false) {
-        lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
-        baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
-      } else {
-        baseTool.print([lastSynDeviceDataDate, currentDate])
-        let offsetDay = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
-        if (offsetDay > 6) {
-          lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
-          baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
-        }
-      }
-      that.temporaryData.lastSynDeviceDataDate = lastSynDeviceDataDate
     }
     that.drawStep(0)
     that.drawDistance(0)
@@ -131,7 +132,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    let that = this
+    let state = baseDeviceSynTool.getDeviceConnectedState()
+    // 未连接
+    if (state.code != 1002) {
+      baseDeviceSynTool.reLaunchBluetoothFlow().then(res => {
+        let deviceInfo = baseNetLinkTool.getDeviceInfo()
+        if (deviceInfo.macAddress) {
+          baseDeviceSynTool.connectDeviceFlow(deviceInfo)
+        }
+      }).catch(res => {
+        baseTool.print(res)
+        baseTool.showToast("蓝牙打开失败")
+      })
+    } else {
+      that.onPullDownRefresh()
+    }
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -153,6 +169,7 @@ Page({
     let that = this
     wx.stopPullDownRefresh()
     if (that.data.isSynNow == true) {
+      baseTool.print("正在同步0")
       baseTool.showToast("设备正在同步中...")
       return
     }
@@ -162,6 +179,7 @@ Page({
     if (connectedState.code != 1002) {
       that.connectDevice()
     } else {
+      baseTool.print("正在同步1")
       that.startSynData()
     }
   },
@@ -200,15 +218,123 @@ Page({
       baseTool.print(res)
     })
   },
+  registerHeartRateCheckMessageBlock: function () {
+    let that = this
+    let timer = undefined
+    baseMessageHandler.addMessageHandler("heartRateCheckIntervalMessage", that, res => {
+      baseTool.print("收到消息")
+      if (timer != undefined) {
+        clearInterval(timer)
+      }
+      let time = res.time
+      if (time == 0) {
+        return
+      }
+      timer = setInterval(() => {
+        that.checkHeartRate()
+      }, time * 60 * 1000);
+    }).then(res => {
+      baseTool.print(res)
+    })
+  },
   removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceSynMessage", this)
     baseMessageHandler.removeSpecificInstanceMessageHandler("deviceConnectedState", this)
+    baseMessageHandler.removeSpecificInstanceMessageHandler("heartRateCheckIntervalMessage", this)
+  },
+  checkHeartRate: function () {
+    let that = this
+    let connectedDeviceState = baseDeviceSynTool.getDeviceConnectedState()
+    if (connectedDeviceState.code != 1002) {
+      baseTool.showToast("设备未连接, 无法测心率")
+      return
+    }
+
+    wx.showLoading({
+      title: "心率检测中",
+      // mask: true,
+    })
+    let key = baseDeviceSynTool.commandSynDeviceRealHeartRate()
+    baseDeviceSynTool.registerCallBackForKey(res => {
+      baseTool.print(res)
+      if (res == "fail") {
+        // 此时必须关闭
+        baseDeviceSynTool.removeCallBackForKey(key)
+        // baseTool.showToast("未获取到心率数据")
+        baseTool.showToast("检测失败")
+        wx.hideLoading()
+        return
+      }
+      baseDeviceSynTool.removeCallBackForKey(key)
+      let result = baseHexConvertTool.hexStringToValue(res.substr(6, 2))
+      baseTool.print(result)
+      if (result == 1) {
+        that.answerRealHeartRateData()
+      } else {
+        baseTool.showToast("检测失败")
+        wx.hideLoading()
+      }
+    }, key)
+    that.answerRealHeartRateData()
+  },
+  answerRealHeartRateData: function () {
+    let that = this
+    let key = baseDeviceSynTool.answerRealHeartRateKey()
+    // 等待回调
+    baseDeviceSynTool.wattingCallBackForKey(res => {
+      baseDeviceSynTool.removeCallBackForKey(key)
+      baseDeviceSynTool.answerRealHeartRate()
+      baseTool.print(res)
+      let bmp = baseHexConvertTool.hexStringToValue(res.substr(8, 2))
+      baseTool.print(bmp)
+      wx.hideLoading()
+      baseTool.showToast('本次测量心率:' + bmp + "bmp")
+
+      let token = baseTool.valueForKey("token")
+      let heartRateAlarmValueKey = "heartRateAlarmValue" + token
+      let heartRateAlarmValue = baseTool.valueForKey(heartRateAlarmValueKey)
+      if (!heartRateAlarmValue) {
+        heartRateAlarmValue = 0
+      }
+
+      let heartRateCheckSwitchKey = "heartRateCheckSwitch" + token
+      let heartRateCheckSwitch = baseTool.valueForKey(heartRateCheckSwitchKey)
+      if (!heartRateCheckSwitch) {
+        heartRateCheckSwitch = false
+      }
+
+      if (heartRateCheckSwitch == true && heartRateAlarmValue > 0 && bmp >= heartRateAlarmValue) {
+        that.showAlarm()
+      }
+    }, key)
+
+  },
+  showAlarm: function () {
+    let that = this
+    that.setData({
+      showModal: true,
+      showModalData: {
+        confirmText: "知道了",
+        title: "血压超高！",
+        backgroundColor: "#171719",
+        success: (result) => {
+          that.setData({
+            showModal: false
+          })
+        }
+      }
+    })
   },
   getHomePage: function (currentDate = 0) {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
+    let userInfo = baseNetLinkTool.getUserInfo()
+    let currentSex = (userInfo.sex == 2) ? 0 : 1
+    let currentAge = userInfo.birthday
+    let currentHeight = userInfo.height
+    let currentWeight = userInfo.weight
     baseTool.print([deviceInfo, token])
     if (!deviceInfo.macAddress || !token) {
       that.setData({
@@ -246,11 +372,18 @@ Page({
         if (stepArray.length > 0) {
           let stepObject = stepArray[0]
           currentStep = baseTool.isValid(stepObject.step_all) ? stepObject.step_all : "00000"
+          // 当天
           targetStep = stepObject.target
           currentCal = baseTool.isValid(stepObject.calorie) ? stepObject.calorie : "0"
           targetCal = stepObject.tar_cal
           currentDistance = (stepObject.distance / 1000).toFixed(2)
           targetDistance = stepObject.tar_dis
+          if (currentDate === baseTool.getCurrentDateWithoutTime() && that.temporaryData.toDayTotalStep > 0) {
+            currentStep = that.temporaryData.toDayTotalStep
+            currentCal = (baseTool.getCalorieWithSteps(currentStep, currentWeight, currentHeight) / 1000).toFixed(1)
+            currentDistance = (baseTool.getDistanceWithStep(currentStep, currentHeight) / 1000).toFixed(2)
+          }
+
           if (baseTool.isValid(targetStep)) {
             percentStep = currentStep / targetStep
           }
@@ -270,6 +403,10 @@ Page({
         if (sleepArray.length > 0) {
           let sleepObject = sleepArray[0]
           let total = baseTool.isValid(sleepObject.total) ? sleepObject.total : "0.00"
+
+          if (currentDate === baseTool.getCurrentDateWithoutTime() && that.temporaryData.toDayTotalSleep > 0) {
+            total = that.temporaryData.toDayTotalSleep
+          }
           actionDataArray[3].titleName = total
         }
 
@@ -292,6 +429,9 @@ Page({
         //   let diastole = baseTool.isValid(blood_pressureObject.diastole) ? blood_pressureObject.diastole : "00"
         //   actionDataArray[5].titleName = shrink + "/" + diastole
         // }
+        that.temporaryData.targetCal = targetCal
+        that.temporaryData.targetDistance = targetDistance
+        that.temporaryData.targetStep = targetStep
         that.setData({
           currentStep: currentStep,
           currentCal: currentCal,
@@ -394,7 +534,14 @@ Page({
         break
       }
       case 2: {
-        that.temporaryData.synActionIndicator = 0
+        if (that.data.isSynNow == true) {
+          return
+        }
+        if (that.data.isSynNow == true) {
+          baseTool.print("正在同步-1")
+          return
+        }
+        baseTool.print("正在同步2")
         that.startSynData()
         break
       }
@@ -418,6 +565,12 @@ Page({
         deviceConnectObject.stateColor = "red"
         deviceConnectObject.bindTitle = "绑定设备"
         deviceConnectObject.action = 0
+        // 此时必须关闭
+        that.setData({
+          isSynNow: false
+        })
+        // 关闭所有的指令回调
+        baseDeviceSynTool.removeAllCallBack()
         break;
       }
       case 1002: {
@@ -469,15 +622,25 @@ Page({
             that.temporaryData.currentAge = age
           }, UserInfokey)
           if (that.temporaryData.pullDown == true) {
+            if (that.data.isSynNow == true) {
+              baseTool.print("正在同步-2")
+              return
+            }
             that.temporaryData.synActionIndicator = 0
+            baseTool.print("正在同步3")
             that.startSynData()
           } else {
             that.synSettingTime()
           }
 
         }, 250);
-
-       
+        let token = baseTool.valueForKey("token")
+        let heartIntervalTime = baseTool.valueForKey("heartIntervalTime" + token)
+        if (baseTool.isValid(heartIntervalTime)) {
+          baseMessageHandler.sendMessage("heartRateCheckIntervalMessage", {
+            time: heartIntervalTime
+          })
+        }
         break;
       }
       case 1003: {
@@ -504,6 +667,12 @@ Page({
         deviceConnectObject.stateColor = "red"
         deviceConnectObject.bindTitle = "重新连接"
         deviceConnectObject.action = 1
+        // 此时必须关闭
+        that.setData({
+          isSynNow: false
+        })
+        // 关闭所有的指令回调
+        baseDeviceSynTool.removeAllCallBack()
         break
       }
     }
@@ -517,7 +686,7 @@ Page({
       deviceConnectObject: deviceConnectObject
     })
   },
-  synSettingTime: function() {
+  synSettingTime: function () {
     let that = this
     let key = baseDeviceSynTool.commandSettingTime()
     baseDeviceSynTool.registerCallBackForKey(res => {
@@ -565,13 +734,22 @@ Page({
   },
   synDeviceStep: function (date = "") {
     let that = this
+    let currentDate = baseTool.getCurrentDateWithoutTime()
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
     if (baseTool.isValid(lastSynDeviceDataDate) == false) {
-      // lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate") 
-      baseTool.print(that.temporaryData)
+      lastSynDeviceDataDate = baseTool.valueForKey("lastSynDeviceDataDate")
+      if (baseTool.isValid(lastSynDeviceDataDate) == false) {
+        lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+        baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
+      } else {
+        let offsetDay = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
+        if (offsetDay > 6) {
+          lastSynDeviceDataDate = baseTool.getCurrentOffsetDateWithoutTime(-6)
+          baseTool.setValueForKey(lastSynDeviceDataDate, "lastSynDeviceDataDate")
+        }
+      }
+      that.temporaryData.lastSynDeviceDataDate = lastSynDeviceDataDate
     }
-    let currentDate = baseTool.getCurrentDateWithoutTime()
-    baseTool.print([lastSynDeviceDataDate, currentDate])
     let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
     if (offsetDays > 6) {
       offsetDays = 6
@@ -590,7 +768,9 @@ Page({
       that.uploadStepData()
       return
     }
-    let key = baseDeviceSynTool.commandSynDeviceTotalStepData(that.temporaryData.needSynDayIndicator)
+    let key = baseDeviceSynTool.wattingRealTimeStepKey()
+    baseDeviceSynTool.removeCallBackForKey(key)
+    key = baseDeviceSynTool.commandSynDeviceTotalStepData(that.temporaryData.needSynDayIndicator)
     let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     deviceInfo.stateText = "同步 " + date + " 的计步数据"
@@ -636,11 +816,79 @@ Page({
         dataDateObject.calorie = (calorie / 1000).toFixed(1)
         dataDateObject.total = step
         baseTool.print(["本次数据", dataDateObject])
+        if (that.temporaryData.needSynDayIndicator == 0) {
+          that.temporaryData.toDayTotalStep = step
+          that.redrawHomepage(step)
+          that.acceptRealTimeSetep()
+        }
         setTimeout(() => {
           that.synDeviceDetailStep()
         }, 250);
       }
     }, key)
+  },
+  acceptRealTimeSetep: function () {
+    baseTool.print("实时数据")
+    let key = baseDeviceSynTool.wattingRealTimeStepKey()
+    let that = this
+    baseDeviceSynTool.wattingCallBackForKey(res => {
+
+      let stepString = res.substr(14, 8)
+      let step = baseHexConvertTool.hexStringToValue(stepString)
+      let year = baseHexConvertTool.hexStringToValue(res.substr(8, 2)) + 2000
+      let month = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
+      let day = baseHexConvertTool.hexStringToValue(res.substr(12, 2))
+      let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "")
+      // 改天无数据
+
+      if (date === baseTool.getCurrentDateWithoutTime()) {
+        that.redrawHomepage(step)
+      }
+    }, key)
+  },
+  redrawHomepage: function (step = 0) {
+    let that = this
+    let date = baseTool.getCurrentDateWithoutTime()
+    let userInfo = baseNetLinkTool.getUserInfo()
+    let currentSex = (userInfo.sex == 2) ? 0 : 1
+    let currentAge = userInfo.birthday
+    let currentHeight = userInfo.height
+    let currentWeight = userInfo.weight
+    that.temporaryData.toDayTotalStep = step
+    let currentStep = that.temporaryData.toDayTotalStep
+    let currentCal = (baseTool.getCalorieWithSteps(currentStep, currentWeight, currentHeight) / 1000).toFixed(1)
+    let currentDistance = (baseTool.getDistanceWithStep(currentStep, currentHeight) / 1000).toFixed(2)
+    let targetCal = that.temporaryData.targetCal
+    let targetDistance = that.temporaryData.targetDistance
+    let targetStep = that.temporaryData.targetStep
+    let percentStep = 0
+    let percentCal = 0
+    let percentDistance = 0
+    if (baseTool.isValid(targetStep)) {
+      percentStep = currentStep / targetStep
+    }
+
+    if (baseTool.isValid(targetCal)) {
+      percentCal = currentCal / targetCal
+    }
+
+    if (baseTool.isValid(targetDistance)) {
+      percentDistance = currentDistance / targetDistance
+    }
+    let actionDataArray = that.data.actionDataArray
+    actionDataArray[0].titleName = currentStep
+    actionDataArray[1].titleName = currentCal
+    actionDataArray[2].titleName = currentDistance
+    that.setData({
+      currentStep: currentStep,
+      currentCal: currentCal,
+      currentTime: date,
+      currentDistance: currentDistance,
+      actionDataArray: actionDataArray
+    })
+    that.drawStep(percentStep)
+    that.drawDistance(percentDistance)
+    that.drawCal(percentCal)
   },
   synDeviceDetailStep: function () {
     let that = this
@@ -692,30 +940,33 @@ Page({
       baseTool.print([that.temporaryData.detailStepData, hour])
       let dataObject = that.temporaryData.detailStepData[hour]
       dataObject.step += step
-      if (serialNumber == 0) {
-        // 开始标志
-        let length = that.temporaryData.dataDateObjectList.length
-        let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
-        dataDateObject.time = baseTool.zeroFormat(hour + "") + ":00:00"
-      }
-      baseTool.print(["一条完整的数据2", text])
-      if (serialNumber == totlalNumber - 1) {
-        // 结束标志
-        // 删除 key
-        let length = that.temporaryData.dataDateObjectList.length
-        let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
-        // 当天数据
-        dataDateObject.data = that.temporaryData.detailStepData
-        let timeArray = that.temporaryData.detailStepData.filter((value, index, array) => {
-          return value.step > 0
-        })
-        dataDateObject.duration = timeArray.length * 60
-        baseDeviceSynTool.removeCallBackForKey(key)
-        // 继续同步下一个日期
-        setTimeout(() => {
-          that.temporaryData.needSynDayIndicator--
-          that.synDeviceTotalStep()
-        }, 250);
+
+      if (totlalNumber > 0) {
+        if (serialNumber == 0) {
+          // 开始标志
+          let length = that.temporaryData.dataDateObjectList.length
+          let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
+          dataDateObject.time = baseTool.zeroFormat(hour + "") + ":00:00"
+        }
+        baseTool.print(["一条完整的数据2", text])
+        if (serialNumber == totlalNumber - 1) {
+          // 结束标志
+          // 删除 key
+          let length = that.temporaryData.dataDateObjectList.length
+          let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
+          // 当天数据
+          dataDateObject.data = that.temporaryData.detailStepData
+          let timeArray = that.temporaryData.detailStepData.filter((value, index, array) => {
+            return value.step > 0
+          })
+          dataDateObject.duration = timeArray.length * 60
+          baseDeviceSynTool.removeCallBackForKey(key)
+          // 继续同步下一个日期
+          setTimeout(() => {
+            that.temporaryData.needSynDayIndicator--
+            that.synDeviceTotalStep()
+          }, 250);
+        }
       } else {
         // 继续同步下一个日期
         setTimeout(() => {
@@ -731,6 +982,7 @@ Page({
       baseTool.showToast("本次同步, 无计步数据")
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 1
+        baseTool.print("正在同步4")
         that.startSynData()
       }, 250);
       return
@@ -752,15 +1004,17 @@ Page({
       })
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 1
+        baseTool.print("正在同步5")
         that.startSynData()
         that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
-      
+
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 1
+        baseTool.print("正在同步6")
         that.startSynData()
       }, 250);
     })
@@ -838,6 +1092,7 @@ Page({
         // baseTool.showToast("未获取到心率数据")
         that.temporaryData.synActionIndicator = 3
         setTimeout(() => {
+          baseTool.print("正在同步7")
           that.startSynData()
         }, 250);
 
@@ -882,8 +1137,6 @@ Page({
         baseDeviceSynTool.removeCallBackForKey(key)
         that.temporaryData.heartRateObjectList = baseTool.values(heartRateObjectContainer)
         that.uploadHeartRateData()
-      } else {
-        that.uploadHeartRateData()
       }
     }, key)
   },
@@ -892,6 +1145,7 @@ Page({
     if (that.temporaryData.heartRateObjectList.length == 0) {
       baseTool.showToast("本次同步, 无心率数据")
       that.temporaryData.synActionIndicator = 3
+      baseTool.print("正在同步8")
       that.startSynData()
       return
     }
@@ -911,12 +1165,14 @@ Page({
         deviceInfo: deviceInfo
       })
       that.getHomePage(baseTool.getCurrentDateWithoutTime())
+      baseTool.print("正在同步9")
       that.temporaryData.synActionIndicator = 3
       that.startSynData()
     }).catch(res => {
       baseTool.print(res)
       baseNetLinkTool.showNetWorkingError(res)
       that.temporaryData.synActionIndicator = 3
+      baseTool.print("正在同步10")
       that.startSynData()
     })
   },
@@ -951,16 +1207,16 @@ Page({
     let lastSynDeviceDataDate = that.temporaryData.lastSynDeviceDataDate
     let currentDate = baseTool.getCurrentDateWithoutTime()
     baseTool.print([lastSynDeviceDataDate, currentDate])
-    let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate)
+    let offsetDays = baseTool.getOffsetDays(lastSynDeviceDataDate, currentDate) + 1
     that.temporaryData.needSynDayIndicator = offsetDays
     that.temporaryData.dataDateObjectList.length = 0
     setTimeout(() => {
-      that.synDeviceTotalSleep()
+      that.synDeviceDetailSleep()
     }, 250);
   },
   synDeviceTotalSleep: function () {
     let that = this
-    if (that.temporaryData.needSynDayIndicator <= -1) {
+    if (that.temporaryData.needSynDayIndicator <= 0) {
       that.uploadSleepData()
       return
     }
@@ -991,6 +1247,13 @@ Page({
       let month = baseHexConvertTool.hexStringToValue(res.substr(10, 2))
       let day = baseHexConvertTool.hexStringToValue(res.substr(12, 2))
       let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "")
+      let otherDate = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
+      // 如果日期一样
+      if (date === otherDate) {
+        // 往后推一天算数据
+        date = baseTool.getDateOffsetDate(date, 1)
+      }
+
       // 改天无数据
       if (sleep == 0) {
         that.temporaryData.needSynDayIndicator--
@@ -1003,6 +1266,14 @@ Page({
         dataDateObject.date = date
         dataDateObject.total = sleep
         baseTool.print(["本次睡眠数据", dataDateObject])
+        if (that.temporaryData.needSynDayIndicator == 1) {
+          that.temporaryData.toDayTotalSleep = sleep
+          let actionDataArray = that.data.actionDataArray
+          actionDataArray[3].titleName = sleep
+          that.setData({
+            actionDataArray: actionDataArray
+          })
+        }
         setTimeout(() => {
           that.synDeviceDetailSleep()
         }, 250);
@@ -1011,10 +1282,18 @@ Page({
   },
   synDeviceDetailSleep: function () {
     let that = this
-    // let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
+    if (that.temporaryData.needSynDayIndicator <= 0) {
+      that.uploadSleepData()
+      return
+    }
+    let date = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     that.temporaryData.detailSleepData = new Array()
-
+    deviceInfo.stateText = "同步 " + date + " 的睡眠数据"
+    that.setData({
+      isSynNow: true,
+      deviceInfo: deviceInfo
+    })
     let key = baseDeviceSynTool.commandSynDeviceSleepDetailData(that.temporaryData.needSynDayIndicator)
     baseDeviceSynTool.registerCallBackForKey(res => {
       // 总条数 站两个字节
@@ -1050,62 +1329,79 @@ Page({
       let text = "总数:" + totlalNumber + " 序号:" + serialNumber + " 时间:" + date + " 睡眠状态:" + sleepSateText + "(\"sleep\")"
       baseTool.print(["一条完整的数据1", text])
       let time = baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "") + ":00"
-      if (hour >= that.temporaryData.detailStepData.length) {
-        hour = 0
+      baseTool.print([serialNumber, typeof (serialNumber)])
+
+      date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "")
+      let otherDate = baseTool.getCurrentOffsetDateWithoutTime(-that.temporaryData.needSynDayIndicator)
+      // 如果日期一样
+      if (date === otherDate) {
+        // 往后推一天算数据
+        date = baseTool.getDateOffsetDate(date, 1)
       }
-      if (serialNumber == 0) {
-        // 开始标志
-        let length = that.temporaryData.dataDateObjectList.length
-        let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
-        dataDateObject.time = time
-        dataDateObject.deep = 0
-        dataDateObject.shallow = 0
-        dataDateObject.sober = 0
-        let dataObject = {
-          year: year,
-          month: month,
-          day: day,
-          hour: hour,
-          minute: minute,
-          quality: that.getSleepStateKeyByValue(sleepSate)
+      if (totlalNumber > 0) {
+        if (serialNumber == 0) {
+          // 开始标志
+
+          let dataDateObject = {}
+          dataDateObject.date = date
+          dataDateObject.time = time
+          dataDateObject.deep = 0
+          dataDateObject.shallow = 0
+          dataDateObject.sober = 0
+          that.temporaryData.dataDateObjectList.push(dataDateObject)
+          let dataObject = {
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute,
+            quality: that.getSleepStateKeyByValue(sleepSate)
+          }
+          that.temporaryData.detailSleepData.push(dataObject)
+
+        } else {
+          let dataObject = {
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute,
+            quality: that.getSleepStateKeyByValue(sleepSate)
+          }
+          let length = that.temporaryData.detailSleepData.length
+          let preObject = that.temporaryData.detailSleepData[length - 1]
+          // 总时长
+          baseTool.print([preObject, dataObject, length, that.temporaryData.detailSleepData])
+          let stateMinute = ((dataObject.day - preObject.day) * 24 + dataObject.hour - preObject.hour) * 60 + (dataObject.minute - preObject.minute)
+
+          let dateLength = that.temporaryData.dataDateObjectList.length
+          let dataDateObject = that.temporaryData.dataDateObjectList[dateLength - 1]
+          dataDateObject[dataObject.quality] += stateMinute
+
+          that.temporaryData.detailSleepData.push(dataObject)
         }
-        that.temporaryData.detailSleepData.push(dataObject)
-      } else {
-        let dataObject = {
-          year: year,
-          month: month,
-          day: day,
-          hour: hour,
-          minute: minute,
-          quality: that.getSleepStateKeyByValue(sleepSate)
-        }
-        let length = that.temporaryData.detailSleepData.length
-        let preObject = that.temporaryData.detailSleepData[length - 1]
-        let oldStateMinute = ((dataObject.day - preObject.day) * 24 + dataObject.hour - preObject.hour) * 60 + (dataObject.minute - preObject.minute)
-        let dateLength = that.temporaryData.dataDateObjectList.length
-        let dataDateObject = that.temporaryData.dataDateObjectList[dateLength - 1]
-        dataDateObject[preObject.quality] += oldStateMinute
-        that.temporaryData.detailSleepData.push(dataObject)
+
         if (serialNumber == totlalNumber - 1) {
           // 结束标志
           // 删除 key
+          // 最后一个数据要减去一分钟
           let length = that.temporaryData.dataDateObjectList.length
           let dataDateObject = that.temporaryData.dataDateObjectList[length - 1]
           // 当天数据
           dataDateObject.data = that.temporaryData.detailSleepData
-          // dataDateObject.total = dataDateObject.deep + dataDateObject.shallow + dataDateObject.sober
+          dataDateObject.total = dataDateObject.deep + dataDateObject.shallow
           baseDeviceSynTool.removeCallBackForKey(key)
           // 继续同步下一个日期
           that.temporaryData.needSynDayIndicator--
           setTimeout(() => {
-            that.synDeviceTotalSleep()
-          }, 250);
-        } else {
-          that.temporaryData.needSynDayIndicator--
-          setTimeout(() => {
-            that.synDeviceTotalSleep()
+            that.synDeviceDetailSleep()
           }, 250);
         }
+      } else {
+        that.temporaryData.needSynDayIndicator--
+        setTimeout(() => {
+          that.synDeviceDetailSleep()
+        }, 250);
       }
     }, key)
   },
@@ -1132,6 +1428,7 @@ Page({
       baseTool.showToast("本次同步, 无数睡眠据")
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 2
+        baseTool.print("正在同步11")
         that.startSynData()
       }, 250);
       return
@@ -1153,6 +1450,7 @@ Page({
       })
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 2
+        baseTool.print("正在同步12")
         that.startSynData()
         that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
@@ -1161,6 +1459,7 @@ Page({
       baseNetLinkTool.showNetWorkingError(res)
       setTimeout(() => {
         that.temporaryData.synActionIndicator = 2
+        baseTool.print("正在同步13")
         that.startSynData()
       }, 250);
     })
@@ -1250,6 +1549,7 @@ Page({
       isSynNow: true,
       deviceInfo: deviceInfo
     })
+    that.temporaryData.synActionIndicator = 0
     baseNetLinkTool.getRemoteDataFromServer("blood_pressure_save", "保存血压数据", {
       data: that.temporaryData.bloodObjectList,
       id: deviceInfo.macAddress

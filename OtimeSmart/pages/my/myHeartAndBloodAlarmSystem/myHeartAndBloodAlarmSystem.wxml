@@ -1,0 +1,33 @@
+<view class='alarm-container'>
+	<view class="alarm-content" style="margin-top: 20rpx">
+		<view class="heart-inteval-title">心率检测间隔</view>
+		<picker mode="selector" header-text="时间间隔" range="{{timeItemList}}" value='{{heartIntervalTime}}' bindchange='selectSelectClick'>
+			<view class="cell-right" style="flex-direction:row-reverse;">
+				<image class="cell-arrow" src="/resource/arrow_right.png"></image>
+				<view class="cell-detail">{{heartIntervalTime==0?"未设置":(heartIntervalTime + "分钟")}}</view>
+			</view>
+		</picker>
+	</view>
+	<view class="alarm-content" style="margin-top: 20rpx">
+		<view class="heart-inteval-title">心率报警</view>
+		<view class="cell-right" style="flex-direction:row-reverse;">
+			<switch checked="{{heartRateCheckSwitch}}" type="switch" bindchange="heartRateCheckSwitchClick"></switch>
+			<picker wx:if="{{heartRateCheckSwitch}}" mode="selector" header-text="心率报警" range="{{heartRateAlarmItemList}}" value='{{heartRateAlarmValue?heartRateAlarmValue - 80 : 0}}' bindchange='heartRateSelectSelectClick'>
+				<view class="cell-detail">{{heartRateAlarmValue==0?"未设置":(heartRateAlarmValue + "次/分")}}</view>
+			</picker>
+			<view wx:else class="cell-detail">{{heartRateAlarmValue==0?"未设置":(heartRateAlarmValue + "次/分")}}</view>
+		</view>
+
+	</view>
+	<view class="navigation-bar-line"></view>
+	<view class="alarm-content">
+		<view class="heart-inteval-title">血压报警</view>
+		<view class="cell-right" style="flex-direction:row-reverse;">
+			<switch checked="{{bloodCheckSwitch}}" type="switch" bindchange="bloodCheckSwitchClick"></switch>
+			<picker wx:if="{{bloodCheckSwitch}}" mode="multiSelector" header-text="血压报警" range="{{bloodAlarmItemList}}" value='{{[shrinkAlarmValue?shrinkAlarmValue-120:0, "/", diastoleAlarmValue?diastoleAlarmValue-80:0]}}' bindchange='bloodSelectSelectClick'>
+				<view class="cell-detail">{{shrinkAlarmValue==0?"未设置":shrinkAlarmValue}}/{{diastoleAlarmValue==0?"未设置":diastoleAlarmValue}}</view>
+			</picker>
+			<view wx:else class="cell-detail">{{shrinkAlarmValue==0?"未设置":shrinkAlarmValue}}/{{diastoleAlarmValue==0?"未设置":diastoleAlarmValue}}</view>
+		</view>
+	</view>
+</view>

@@ -3,7 +3,7 @@
     "stepRecordDetailCell":"/components/stepRecordDetailCell/stepRecordDetailCell"
   },
   "navigationBarTitleText": "详细数据",
-  "backgroundColor": "#6B92FB",
+  "backgroundColor": "#08A5F6",
   "navigationBarTextStyle": "white",
   "navigationBarBackgroundColor": "#010101"
 }

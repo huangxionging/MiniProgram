@@ -12,6 +12,7 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: auto;
 }
 
 .no-device-image{
@@ -27,12 +28,12 @@ page {
 }
 
 .add-device{
-  margin-top: 100rpx;
-  margin-bottom: 100rpx;
+  position: fixed;
+  bottom: 100rpx;
   width: 524rpx;
   height: 80rpx;
   border-radius: 40rpx;
-  background-color: #6B92FB;
+  background-color: #08A5F6;
   color: white;
   font-size: 30rpx;
   justify-content: center;

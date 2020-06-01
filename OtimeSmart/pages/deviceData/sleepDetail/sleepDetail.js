@@ -89,62 +89,80 @@ Page({
       let dataObject = res.data[0]
       let hasData = true
       let actionDataArray = []
-      let totalTime = dataObject.total
-      let shallowTime = dataObject.shallow
-      let deepTime = dataObject.deep
-      let soberTime = dataObject.sober
+      let totalTime = parseInt(dataObject.total) + parseInt(dataObject.sober)
+      let shallowTime = 0// = dataObject.shallow
+      let deepTime = 0// = dataObject.deep
+      let soberTime = 0// = dataObject.sober
       let startTime = "", middleTime = "", endTime = ""
       let totalWidth = 0
       let detailDataArray = dataObject.data
-      let lastObect = Object.assign({}, detailDataArray[0])
-      lastObect.minute = 0
-      for(let index = 0; index < detailDataArray.length; ++index) {
+      let totalMinute = 0
+      for(let index = 1; index < detailDataArray.length; ++index) {
         let itemObject = detailDataArray[index]
-        // baseTool.print(itemObject)
+        let lastObect = detailDataArray[index - 1]
         let subDay = itemObject.day - lastObect.day
         let subHour = itemObject.hour - lastObect.hour
         let subMinute = itemObject.minute - lastObect.minute
+        // baseTool.print([lastObect, itemObject, subDay, subHour, subMinute])
         let minute = 0
         if (subDay !== 0) {
           minute = (subHour + 24) * 60 + subMinute
         } else {
           minute = subHour * 60 + subMinute
         }
-        let width = minute / parseInt(totalTime) * 600
+        
+        let width =  minute * 600 / parseFloat(totalTime)
         totalWidth += width
+        totalMinute += minute
+        // baseTool.print(minute + "分钟 " + width + " " + totalWidth)
         // 第一个数据
-        if (index === 0) {
-          startTime = baseTool.zeroFormat(itemObject.hour + "") + ":" + baseTool.zeroFormat(itemObject.minute + "")
-          let middleHour = itemObject.hour +  parseInt((itemObject.minute + totalTime / 2) / 60)
-          let middleMinute = (itemObject.minute + parseInt(totalTime / 2)) % 60
+        if (index === 1) {
+          if (width < 3){
+            width = 3
+          }
+          startTime = baseTool.zeroFormat(lastObect.hour + "") + ":" + baseTool.zeroFormat(lastObect.minute + "")
+          let middleHour = (lastObect.hour +  parseInt((lastObect.minute + totalTime / 2) / 60)) % 24
+          let middleMinute = (lastObect.minute + parseInt(totalTime / 2)) % 60
           middleTime = baseTool.zeroFormat(middleHour + "") + ":" + baseTool.zeroFormat(middleMinute + "")
         } 
         if (index === detailDataArray.length - 1) {
-          width += 3
+          // width += 30
           endTime = baseTool.zeroFormat(itemObject.hour + "") + ":" + baseTool.zeroFormat(itemObject.minute + "")
+          // baseTool.print(["结束时间", endTime, totalTime])
         }
-        let quality = lastObect.quality
+        let quality = itemObject.quality
         let color = "#ffffff"
         if (quality === "shallow") {
           color = "#CFA2F6"
+          shallowTime += minute
+          baseTool.print(["浅睡时间", shallowTime])
         } else if (quality === "deep") {
           color = "#9013FE"
+          deepTime += minute
         } else if (quality === "sober") {
+          soberTime += minute
           color = "#FFC201"
         }
+        let pixWidth = baseTool.toPixel(width)
         let sleepObject = {
           color: color,
           time: minute,
-          width: width,
+          width: pixWidth,
           quality: quality
         }
         actionDataArray.push(sleepObject)
         lastObect = itemObject
-        baseTool.print(itemObject)
       }
+      // baseTool.print(["打印结果", shallowTime, deepTime, soberTime, totalWidth, totalMinute, actionDataArray])
+      // let sumMinute = 0, sumWidth = 0
+      // for (let index = 0; index < actionDataArray.length; ++index) {
+      //   sumMinute += actionDataArray[index].time
+      //   sumWidth += actionDataArray[index].width
+      // }
+      // baseTool.print([sumWidth, sumMinute])
       that.setData({
         hasData: hasData,
-        totalTime: totalTime,
+        totalTime: dataObject.total,
         shallowTime: shallowTime,
         deepTime: deepTime,
         soberTime: soberTime,

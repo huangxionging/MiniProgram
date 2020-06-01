@@ -232,7 +232,7 @@ Page({
       let polylines = [{
         points: [],
         width: 2,
-        color: "#6B92FB",
+        color: "#08A5F6",
         borderColor: "#999"
       }]
       let scale = baseTool.toPixel(1)
@@ -266,10 +266,10 @@ Page({
             latitude: rowDataArray[index].location.latitude,
             longitude: rowDataArray[index].location.longitude,
           })
-          polylines[0].points.push({
-            latitude: rowDataArray[index].location.latitude,
-            longitude: rowDataArray[index].location.longitude,
-          })
+          // polylines[0].points.push({
+          //   latitude: rowDataArray[index].location.latitude,
+          //   longitude: rowDataArray[index].location.longitude,
+          // })
         }
       }
       that.setData({

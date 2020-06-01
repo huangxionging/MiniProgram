@@ -1,9 +1,5 @@
 /* pages/deviceData/stepDetail/stepDetail.wxss */
 
-page {
-  /* background-color: ##101016; */
-}
-
 .step-detail-container {
   width: 100%;
   display: flex;

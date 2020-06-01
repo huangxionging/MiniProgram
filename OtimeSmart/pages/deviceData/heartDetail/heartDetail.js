@@ -15,66 +15,69 @@ Page({
     heartRateTip: "上次测量结果",
     sectionDataArray: [{
       rowDataArray: []
-    }]
+    }],
+    heartRateAlarmValue: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-
+  onLoad: function (options) {
+    let that = this
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
     let that = this
     that.loadData()
+    // that.showAlarm()
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
-    
+  onUnload: function () {
+    baseDeviceSynTool.removeCallBackForKey("2f")
+    baseDeviceSynTool.removeCallBackForKey(baseDeviceSynTool.answerRealHeartRateKey())
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
-    
+  onShareAppMessage: function () {
+
   },
-  loadData: function() {
+  loadData: function () {
     let that = this
     let deviceInfo = baseNetLinkTool.getDeviceInfo()
     let token = baseNetLinkTool.getToken()
@@ -116,7 +119,7 @@ Page({
       baseNetLinkTool.showNetWorkingError(res)
     })
   },
-  heartRateCheckClick: function() {
+  heartRateCheckClick: function () {
     let that = this
     let connectedDeviceState = baseDeviceSynTool.getDeviceConnectedState()
     if (connectedDeviceState.code != 1002) {
@@ -151,7 +154,7 @@ Page({
         wx.hideLoading()
       }
     }, key)
-    that.answerRealHeartRateData()
+    // that.answerRealHeartRateData()
   },
   answerRealHeartRateData: function () {
     let that = this
@@ -168,7 +171,44 @@ Page({
         lastHeartRate: bmp
       })
       wx.hideLoading()
-    }, key)
+      // 心率报警开关打开
+      let token = baseTool.valueForKey("token")
+      let heartRateAlarmValueKey = "heartRateAlarmValue" + token
+      let heartRateAlarmValue = baseTool.valueForKey(heartRateAlarmValueKey)
+      baseTool.print(heartRateAlarmValue)
+      if (baseTool.isValid(heartRateAlarmValue) === false) {
+        heartRateAlarmValue = 0
+      }
 
+      heartRateAlarmValue = parseInt(heartRateAlarmValue)
+
+      let heartRateCheckSwitchKey = "heartRateCheckSwitch" + token
+      let heartRateCheckSwitch = baseTool.valueForKey(heartRateCheckSwitchKey)
+      baseTool.print(heartRateCheckSwitch)
+      if (baseTool.isValid(heartRateCheckSwitch) === false) {
+        heartRateCheckSwitch = false
+      }
+      baseTool.print([heartRateCheckSwitch, heartRateAlarmValue, bmp])
+      if (heartRateCheckSwitch === true &&  heartRateAlarmValue > 0 && bmp >= heartRateAlarmValue) {
+        that.showAlarm()
+      }
+
+    }, key)
+  },
+  showAlarm: function () {
+    let that = this
+    that.setData({
+      showModal: true,
+      showModalData: {
+        confirmText: "知道了",
+        title: "心率超高！",
+        backgroundColor: "#171719",
+        success: (result) => {
+          that.setData({
+            showModal: false
+          })
+        }
+      }
+    })
   }
 })

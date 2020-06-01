@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "hearRateDetailCell": "/components/hearRateDetailCell/hearRateDetailCell"
+    "hearRateDetailCell": "/components/hearRateDetailCell/hearRateDetailCell",
+    "showModalView": "/components/showModalView/showModalView"
   },
   "navigationBarTitleText": "心率",
   "navigationBarTextStyle": "white"

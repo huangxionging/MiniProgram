@@ -23,7 +23,9 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"useCompilerModule": false,
+		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.9.2",
@@ -66,8 +68,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/moment/momentIndex/momentIndex",
-					"pathName": "pages/moment/momentIndex/momentIndex",
+					"name": "pages/my/myAbout/myAbout",
+					"pathName": "pages/my/myAbout/myAbout",
 					"query": "date=2020-02-08",
 					"scene": null
 				}

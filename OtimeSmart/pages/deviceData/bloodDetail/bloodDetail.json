@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "ec-canvas": "../../../components/ec-canvas/ec-canvas",
-    "bloodDetailItemCell": "/components/bloodDetailItemCell/bloodDetailItemCell"
+    "bloodDetailItemCell": "/components/bloodDetailItemCell/bloodDetailItemCell",
+    "showModalView": "/components/showModalView/showModalView"
   },
   "navigationBarTitleText": "血压"
 }

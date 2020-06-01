@@ -28,3 +28,4 @@
     <view class="add-device" hover-class="hover-button" bindtap="addDeviceClick">添加设备</view>
   </block>
 </view>
+<showModalView wx:if="{{showModal}}" data="{{showModalData}}"/>

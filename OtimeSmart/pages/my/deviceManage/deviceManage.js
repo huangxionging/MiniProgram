@@ -74,33 +74,54 @@ Page({
   onShareAppMessage: function () {
 
   },
-  addDeviceClick: function() {
+  addDeviceClick: function () {
     wx.navigateTo({
       url: '/pages/my/bindDevice/bindDevice'
     })
   },
-  unbindDeviceClick: function() {
-    wx.showLoading({
-      title: '设备解绑中...',
-      mask: true,
+  unbindDeviceClick: function () {
+
+    let that = this
+    that.setData({
+      showModal: true,
+      showModalData: {
+        showCancel: true,
+        cancelText: "取消",
+        confirmText: "确定",
+        title: "是否解除设备绑定？",
+        backgroundColor: "#171719",
+        success: (result) => {
+          baseTool.print(result)
+          that.setData({
+            showModal: false
+          })
+          if (result.confirm == true) {
+            wx.showLoading({
+              title: '设备解绑中...',
+              mask: true,
+            })
+            let deviceInfo = baseTool.valueForKey("deviceInfo")
+            baseNetLinkTool.getRemoteDataFromServer("unbind", "解绑设备", {
+              device: deviceInfo.deviceId,
+              name: deviceInfo.deviceName ? deviceInfo.deviceName : "",
+              id: deviceInfo.macAddress,
+              alias: deviceInfo.deviceAlias ? deviceInfo.deviceAlias : "",
+            }).then(res => {
+              baseTool.print(res)
+              wx.hideLoading()
+              baseDeviceSynTool.clearDeviceObject()
+              baseTool.removeObjectForKey("deviceInfo")
+              baseMessageHandler.sendMessage("refresh", "刷新")
+              wx.navigateBack()
+            }).catch(res => {
+              wx.hideLoading()
+              baseNetLinkTool.showNetWorkingError(res)
+            })
+          }
+        }
+      }
     })
-    let deviceInfo = baseTool.valueForKey("deviceInfo")
-    baseNetLinkTool.getRemoteDataFromServer("unbind", "解绑设备", {
-      device: deviceInfo.deviceId,
-      name: deviceInfo.deviceName ? deviceInfo.deviceName : "",
-      id: deviceInfo.macAddress,
-      alias: deviceInfo.deviceAlias ? deviceInfo.deviceAlias : "",
-    }).then(res => {
-      baseTool.print(res)
-      wx.hideLoading()
-      baseDeviceSynTool.clearDeviceObject()
-      baseTool.removeObjectForKey("deviceInfo")
-      baseMessageHandler.sendMessage("refresh", "刷新")
-      wx.navigateBack()
-    }).catch(res => {
-      wx.hideLoading()
-      baseNetLinkTool.showNetWorkingError(res)
-    })
+
   },
   registerCallBack: function () {
     let that = this
@@ -115,7 +136,7 @@ Page({
   removeCallBack: function () {
     baseMessageHandler.removeSpecificInstanceMessageHandler("refresh", this)
   },
-  loadData: function() {
+  loadData: function () {
     let that = this
     let deviceInfo = baseTool.valueForKey("deviceInfo")
     if (deviceInfo.macAddress != undefined) {

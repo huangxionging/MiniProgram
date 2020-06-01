@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "familyManageCell": "/components/familyManageCell/familyManageCell"
+    "familyManageCell": "/components/familyManageCell/familyManageCell",
+    "showModalView": "/components/showModalView/showModalView"
   },
   "navigationBarTitleText": "家庭圈详情"
 }
