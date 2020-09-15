@@ -239,6 +239,9 @@ Page({
       let object = heartRateArray[index]
       let time = currentDate + object.date
       let heart = object.heart
+      if (object.bmp != undefined) {
+        heart = object.bmp
+      }
       if (type == 1) {
         let dateDataArray = baseTool.componentsSeparatedByString(object.date, "-")
         time = currentDate + baseTool.componentsJoinedByString(dateDataArray, ":")

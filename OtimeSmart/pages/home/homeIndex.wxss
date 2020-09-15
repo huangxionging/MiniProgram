@@ -22,8 +22,8 @@
 }
 
 .select-img {
-  width: 24rpx;
-  height: 24rpx;
+  width: 48rpx;
+  height: 48rpx;
 }
 
 .date-view {

@@ -1,8 +1,10 @@
 <!--pages/my/myAbout/myAbout.wxml-->
 <view class="infomation-container">
-	<view>福天下小程序：财商控股基于“中福智慧健康养老生态系统”为社区长者生活提供便利，开发的”互联网+智慧养老“服务系统。实现”健康、养老、代购、旅居、保险“服务一体的生态服务体系。</view>
-	<view style="margin-top:10rpx;">健康手环功能：包含心率、血压、睡眠、步数、距离、卡路里检测，家庭圈定位，久坐提醒，心率与血压超高报警，趋势折线图，设备查找，信息提醒等</view>
-	<view style="margin-top:10rpx;">一部电话一张卡，智慧养老送到家！</view>
-	<view style="margin-top:10rpx;">企业理念：创新智慧健康养老事业，服务您的健康幸福生活！</view>
-	<view style="margin-top:10rpx;">服务热线：4000 678 783</view>
+	<view >福天下小程序</view>
+	<text style="margin-top:20rpx;" decode="{{true}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;财商控股基于“中福智慧健康养老生态系统”为社区长者生活提供便利，开发的”互联网+智慧养老“服务系统。实现”健康、养老、代购、旅居、保险“服务一体的生态服务体系。</text>
+	<text style="margin-top:80rpx;">健康手环功能</text>
+	<text style="margin-top:20rpx; "decode="{{true}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含心率、血压、睡眠、步数、距离、卡路里检测，家庭圈定位，久坐提醒，心率与血压超高报警，趋势折线图，设备查找，信息提醒等</text>
+	<text style="margin-top:80rpx;">企业理念：创新智慧健康养老事业，服务您的健康幸福生活！</text>
+	<text style="margin-top:40rpx;">一部电话一张卡，智慧养老送到家！</text>
+	<text style="margin-top:40rpx;">服务热线：4000 678 783</text>
 </view>

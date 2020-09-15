@@ -2,6 +2,7 @@ const baseTool = require('../utils/baseTool.js')
 
 function myIndexSectionDataArray() {
   let timeItemList = []
+  timeItemList.push("关闭久坐提醒")
   for (let timeIndex = 10; timeIndex <= 120; ++timeIndex) {
     timeItemList.push(timeIndex + " 分钟")
   }

@@ -219,8 +219,8 @@ Page({
       isConnectNow: false,
       currentDeviceObject: {}
     })
-    baseTool.showToast(res.text)
-    baseTool.print(res)
+    // baseTool.showToast(res.text)
+    // baseTool.print(res)
     // switch (row) {
     //   case 6: {
     //     // 超时

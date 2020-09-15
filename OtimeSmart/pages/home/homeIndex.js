@@ -1006,7 +1006,7 @@ Page({
         that.temporaryData.synActionIndicator = 1
         baseTool.print("正在同步5")
         that.startSynData()
-        that.getHomePage(baseTool.getCurrentDateWithoutTime())
+        // that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
 
     }).catch(res => {
@@ -1133,6 +1133,7 @@ Page({
         })
       }
       // 结束
+      baseTool.print(["心率", serialNumber, totlalNumber])
       if (serialNumber == totlalNumber) {
         baseDeviceSynTool.removeCallBackForKey(key)
         that.temporaryData.heartRateObjectList = baseTool.values(heartRateObjectContainer)
@@ -1164,7 +1165,7 @@ Page({
       that.setData({
         deviceInfo: deviceInfo
       })
-      that.getHomePage(baseTool.getCurrentDateWithoutTime())
+      // that.getHomePage(baseTool.getCurrentDateWithoutTime())
       baseTool.print("正在同步9")
       that.temporaryData.synActionIndicator = 3
       that.startSynData()
@@ -1452,7 +1453,7 @@ Page({
         that.temporaryData.synActionIndicator = 2
         baseTool.print("正在同步12")
         that.startSynData()
-        that.getHomePage(baseTool.getCurrentDateWithoutTime())
+        // that.getHomePage(baseTool.getCurrentDateWithoutTime())
       }, 250);
     }).catch(res => {
       baseTool.print(res)
@@ -1507,8 +1508,8 @@ Page({
       let date = baseTool.zeroFormat(year + "") + "-" + baseTool.zeroFormat(month + "") + "-" + baseTool.zeroFormat(day + "")
       let time = baseTool.zeroFormat(hour + "") + ":" + baseTool.zeroFormat(minute + "") + ":" + baseTool.zeroFormat(second + "")
       // 舒张压
-      let diastole = baseHexConvertTool.hexStringToValue(res.substr(24, 2))
-      let shrink = baseHexConvertTool.hexStringToValue(res.substr(26, 2))
+      let shrink  = baseHexConvertTool.hexStringToValue(res.substr(24, 2))
+      let diastole = baseHexConvertTool.hexStringToValue(res.substr(26, 2))
       let bloodObject = bloodObjectContainer[date]
       if (typeof (bloodObject) != "object") {
         bloodObjectContainer[date] = {
@@ -1536,6 +1537,17 @@ Page({
   },
   uploadBloodData: function () {
     let that = this
+    that.temporaryData.selectDateIndicator = 0
+    let currentDate = baseTool.getCurrentOffsetDateWithoutTime(that.temporaryData.selectDateIndicator)
+    let showSelectDate = true
+    if (that.temporaryData.selectDateIndicator == 0) {
+      showSelectDate = false
+    }
+    that.setData({
+      currentDate: currentDate,
+      showSelectDate: showSelectDate
+    })
+    that.getHomePage(currentDate)
     if (that.temporaryData.bloodObjectList.length == 0) {
       that.setData({
         isSynNow: false,

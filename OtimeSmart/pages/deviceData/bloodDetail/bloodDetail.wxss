@@ -20,6 +20,7 @@
 .blood-table-view{
   width: 100%;
   margin-top: 28rpx;
+  margin-bottom: 140rpx;
   display: flex;
   height: auto;
   flex-direction: column;

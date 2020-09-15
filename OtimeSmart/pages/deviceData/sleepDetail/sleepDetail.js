@@ -83,7 +83,18 @@ Page({
       id: deviceInfo.macAddress
     }).then(res => {
       if (res.data.length == 0) {
-        baseTool.showToast("该日期暂无睡眠数据")
+        // baseTool.showToast("该日期暂无睡眠数据")
+        that.setData({
+          hasData: true,
+          totalTime: 0,
+          shallowTime:  0,
+          deepTime: 0,
+          soberTime: 0,
+          startTime: 0,
+          middleTime: 0,
+          endTime: 0,
+          actionDataArray: []
+        })
         return
       }
       let dataObject = res.data[0]

@@ -11,7 +11,7 @@ page {
   color: white;
   font-size: 30rpx;
   margin-top: 20%;
-  /* align-items: center; */
+  align-items: center;
   /* justify-content: center; */
   margin-left: 5%;
 }
