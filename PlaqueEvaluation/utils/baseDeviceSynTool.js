@@ -2,6 +2,7 @@ const baseTool = require('./baseTool.js')
 const baseMessageHandler = require('./baseMessageHandler.js')
 const baseHexConvertTool = require('./baseHexConvertTool.js')
 const bleCommandManager = require('../manager/bleCommandManager.js')
+const { isNull } = require('util')
 /**
  * Mac 地址
  */
@@ -49,6 +50,14 @@ let endSynTimer = -2
  */
 let endSynFlag = false
 
+
+let DeviceTimer = -1
+
+let callBackObject = {
+  callBack: null,
+  deviceStopTimer: true,
+  deviceTimer: 0
+}
 
 /**
  * 消息类型
@@ -174,6 +183,11 @@ let deviceSynMessageType = {
     name: "DeviceSynTypeMacAddressError",
     text: "mac 地址错误"
   },
+  DeviceSynDataNULL: {
+    code: 2013,
+    name: "DeviceSynDataNULL",
+    text: "设备数据接收超时"
+  },
   BleTypeReceiveSuccess: 3,
 }
 
@@ -278,6 +292,7 @@ function foundDevice() {
     if (stopTimer == true) {
       return
     }
+    removeCallBack()
     wx.stopBluetoothDevicesDiscovery({
       success: function (res) {
         baseMessageHandler.sendMessage('deviceSynMessage', deviceSynMessageType.DeviceSynTypeSearchTimeOut)
@@ -393,6 +408,8 @@ function notifyBLECharacteristicValueChange(deviceId = '') {
 function deviceCharacteristicValueChange () {
     let that = this
     wx.onBLECharacteristicValueChange(function(res) {
+      // 清除设备定时器
+      removeCallBack()
       let values = new Uint8Array(res.value)
       let hex = baseHexConvertTool.arrayBufferToHexString(res.value).toLowerCase()
       baseTool.print([hex, '通知信息'])
@@ -550,6 +567,49 @@ function saveSynDeviceDataList(synDeviceDataList = []) {
   baseTool.setValueForKey(synDeviceDataList, "synDeviceDataList")
 }
 
+function registerCallBack(callBack = Function) {
+  // baseTool.print(["回调对象", callBackObject])
+  if (callBackObject.callBack != null) {
+    baseTool.print("注册不合法")
+    return
+  }
+  callBackObject = {
+    callBack: callBack,
+    deviceStopTimer: false,
+    deviceTimer: 0
+  }
+  // 开启定时器
+  let deviceTimer = setTimeout((res) => {
+    // 定时器结束
+    baseTool.print([res, '定时器停止工作', callBackObject.callBack])
+    let deviceStopTimer = callBackObject.deviceStopTimer
+    let deviceTimer = callBackObject.deviceTimer
+    clearTimeout(deviceTimer)
+    baseTool.print([res, '定时器停止工作', callBackObject, deviceStopTimer, deviceTimer])
+    // 根据设备命令状态判断
+    if (deviceStopTimer == true) {
+      return
+    }
+    // 设备超时
+    callBackObject.deviceStopTimer = true
+    // 失败回调
+    let failCallBack = callBackObject.callBack
+    failCallBack("fail")
+    // 删除
+  }, 8000)
+  callBackObject.deviceTimer = deviceTimer
+  baseTool.print(["注册定时器", callBackObject.deviceTimer])
+}
+/**
+ * 删除回调
+ */
+function removeCallBack() {
+  clearTimeout(callBackObject.deviceTimer)
+  callBackObject.deviceTimer = 0
+  callBackObject.callBack = null
+  callBackObject.deviceStopTimer = true
+}
+
 module.exports = {
   reLaunchBluetoothFlow: reLaunchBluetoothFlow,
   connectDeviceFlow: connectDeviceFlow,
@@ -560,5 +620,7 @@ module.exports = {
   clearDeviceData: clearDeviceData,
   configGameInfo: configGameInfo,
   getSynDeviceDataList: getSynDeviceDataList,
-  saveSynDeviceDataList: saveSynDeviceDataList
+  saveSynDeviceDataList: saveSynDeviceDataList,
+  registerCallBack: registerCallBack,
+  removeCallBack: removeCallBack
 }

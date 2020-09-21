@@ -73,6 +73,8 @@
     <view class="menu-list-row" catchtap="menuListRowClick" data-row="2">结束当前测评</view>
     <view class="menu-white-line" />
     <view class="menu-list-row" catchtap="menuListRowClick" data-row="3">查看公众号二维码</view>
+    <view class="menu-white-line" />
+    <view class="menu-list-row" catchtap="menuListRowClick" data-row="4">{{currentActionType == 1000 ? "已分配设备数据": "所有数据"}}</view>
   </view>
   <view class="menu-item-list1" wx:if='{{!hasData && isHaveDevice}}'>
     <view class="menu-list-row" catchtap="menuListRowClick" data-row="0">测评教学视频</view>

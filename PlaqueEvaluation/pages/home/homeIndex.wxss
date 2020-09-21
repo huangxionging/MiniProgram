@@ -121,7 +121,7 @@ page {
   margin-right: 90rpx;
   margin-top: 90rpx;
   width: 280rpx;
-  height: 403rpx;
+  height: 505rpx;
   background-color: #4c4c4c;
   border-radius: 12rpx;
   color: white;

@@ -85,10 +85,23 @@ Component({
         section: that.dataset.section,
         row: that.dataset.row
       }
-      that.triggerEvent('deleteRowClick', {
-        indexPath: indexPath,
-        playerId: that.data.data.playerId
+      let content = "是否删除" + that.data.data.name
+      baseTool.showAlertInfoWithCallBack({
+        title: "删除提醒",
+        content: content,
+        showCancel: true,
+        cancelText: "确定",
+        confirmText: "我再想想"
+      }, (res) => {
+        if (res.type == 0) {
+          that.triggerEvent('deleteRowClick', {
+            indexPath: indexPath,
+            playerId: that.data.data.playerId,
+            deviceNote: that.data.data.name
+          })
+        }
       })
+      
     },
     selectDevceClick: function(e) {
       let that = this

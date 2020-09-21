@@ -27,6 +27,7 @@ Page({
     bindingCount: 0,
     brushCount: 0,
     noBindingCount: 0,
+    currentActionType: 1000, // 1000 表示目前显示所有数据, 1001 表示目前显示已分配设备数据
     currentDeviceObject: {} // 当前设备信息
   },
 
@@ -70,7 +71,6 @@ Page({
     that.removeCallBack()
   },
   onPageScroll: function(e) {
-    baseTool.print(e)
     let that = this
 
     if (that.data.showMenu == true) {
@@ -313,32 +313,42 @@ Page({
     let that = this
     let row = parseInt(res.currentTarget.dataset.row)
     baseTool.print(row)
+    let currentActionType = that.data.currentActionType
+    currentActionType = 2001 - currentActionType
     switch (row) {
       case 0:
         {
           wx.navigateTo({
             url: '/pages/contest/contestVideoPlay/contestVideoPlay',
           })
-          break;
+          break
         }
       case 1:
         {
           wx.navigateTo({
             url: '/pages/my/brushContestList/brushContestList'
           })
-          break;
+          break
         }
       case 2:
         {
           that.endClick()
-          break;
+          break
         }
       case 3:
         {
           wx.navigateTo({
             url: '/pages/contest/publicNumberQRCode/publicNumberQRCode',
           })
+          break
         }
+      case 4: {
+        that.setData({
+          currentActionType: currentActionType
+        })
+        that.getPlayers()
+        break
+      }
     }
     that.setData({
       showMenu: false
@@ -386,11 +396,15 @@ Page({
       let brushCount = res.brushCount
       let bindingCount = res.bindingCount
       let noBindingCount = res.noBindingCount
+      let currentActionType = that.data.currentActionType
       if (papPlayerList) {
         let rowDataArray = papSectionDataArray[0].rowDataArray
         rowDataArray.length = 0;
         for (let index = 0; index < papPlayerList.length; ++index) {
           let itemObject = papPlayerList[index]
+          if (currentActionType == 1001 && itemObject.status != 1) {
+            continue
+          }
           rowDataArray.push({
             state: itemObject.status,
             stateText: stateArray[itemObject.status],
@@ -433,7 +447,7 @@ Page({
         //   }
         // })
       }
-
+baseTool.print(papSectionDataArray)
       that.setData({
         hasData: hasData,
         loadDone: loadDone,
@@ -583,6 +597,12 @@ Page({
     that.setData({
       isSyncNow: true,
       currentDeviceObject: deviceObject
+    })
+    // 注册回调
+    baseDeviceSynTool.registerCallBack(function(){
+      baseDeviceSynTool.removeCallBack()
+      that.temporaryData.synDeviceIndex++
+      that.synDeviceObject()
     })
   },
   synDeviceArray: [],
